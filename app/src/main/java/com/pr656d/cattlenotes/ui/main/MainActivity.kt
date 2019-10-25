@@ -7,11 +7,6 @@ import com.pr656d.cattlenotes.ui.base.BaseActivity
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
-
     override fun provideLayoutId(): Int = R.layout.activity_main
 
     override fun injectDependencies(activityComponent: ActivityComponent) =

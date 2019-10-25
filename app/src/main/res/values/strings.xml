@@ -11,6 +11,9 @@
     <string name="permission_denied">Permission Denied</string>
     <string name="network_login_again">Please log in again</string>
 
+    <!--  Image content description  -->
+    <string name="logo">Application logo</string>
+
     <!--  Login & Signup  -->
     <string name="email_field_hint">Enter your email</string>
     <string name="name_field_hint">Enter your name</string>

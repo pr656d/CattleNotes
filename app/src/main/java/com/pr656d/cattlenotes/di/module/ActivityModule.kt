@@ -5,6 +5,7 @@ import com.mindorks.bootcamp.instagram.utils.ViewModelProviderFactory
 import com.mindorks.bootcamp.instagram.utils.rx.SchedulerProvider
 import com.pr656d.cattlenotes.ui.base.BaseActivity
 import com.pr656d.cattlenotes.ui.main.MainViewModel
+import com.pr656d.cattlenotes.ui.splash.SplashViewModel
 import com.pr656d.cattlenotes.utils.network.NetworkHelper
 import dagger.Module
 import dagger.Provides
@@ -22,4 +23,14 @@ class ActivityModule(private val activity: BaseActivity<*>) {
         activity, ViewModelProviderFactory(MainViewModel::class) {
             MainViewModel(schedulerProvider, compositeDisposable, networkHelper)
         }).get(MainViewModel::class.java)
+
+    @Provides
+    fun provideSplashViewModel(
+        schedulerProvider: SchedulerProvider,
+        compositeDisposable: CompositeDisposable,
+        networkHelper: NetworkHelper
+    ): SplashViewModel = ViewModelProviders.of(
+        activity, ViewModelProviderFactory(SplashViewModel::class) {
+            SplashViewModel(schedulerProvider, compositeDisposable, networkHelper)
+        }).get(SplashViewModel::class.java)
 }
