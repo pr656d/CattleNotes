@@ -32,8 +32,7 @@ ext {
     // Sdk and Tools
     min_sdk_version = 21
     target_sdk_version = 29
-    compile_sdk_version = 28
-    build_tools_version = "29.0.2"
+    compile_sdk_version = 29
 
     // Core
     app_compat_version = '1.1.0'
@@ -65,7 +64,7 @@ ext {
     okhttp_version = '3.11.0'
 
     // Dagger
-    dagger_version = '2.25'
+    dagger_version = '2.25.2'
 
     // Tests
     junit_version = '4.12'
