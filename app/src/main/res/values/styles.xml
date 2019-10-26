@@ -66,7 +66,8 @@
     <item name="windowNoTitle">true</item>
     <item name="android:fontFamily">@font/roboto_regular</item>
     <item name="fontFamily">@font/roboto_regular</item>
-    <item name="android:textColor">@color/black</item>
+    <item name="android:textColorHint">@color/white</item>
+    <item name="buttonStyle">@style/FirebaseButton</item>
   </style>
 
   <style name="AppTheme.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
@@ -132,6 +133,10 @@
   <style name="AppTheme.Button" parent="Widget.MaterialComponents.Button">
     <item name="fontFamily">@font/roboto_bold</item>
     <item name="android:fontFamily">@font/roboto_bold</item>
+  </style>
+
+  <style name="FirebaseButton" parent="FirebaseUI.Button">
+    <item name="android:textColor">@color/black</item>
   </style>
 
   <style name="AppTheme.OutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">

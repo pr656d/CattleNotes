@@ -36,7 +36,8 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
                                 AuthUI.IdpConfig.EmailBuilder().build(),
                                 AuthUI.IdpConfig.PhoneBuilder().build(),
                                 AuthUI.IdpConfig.GoogleBuilder().build(),
-                                AuthUI.IdpConfig.FacebookBuilder().build()
+                                AuthUI.IdpConfig.FacebookBuilder().build(),
+                                AuthUI.IdpConfig.AnonymousBuilder().build()
                             ))
                         .setLogo(R.drawable.logo)
                         .setTheme(R.style.FirebaseTheme)

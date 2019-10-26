@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">cattle NOTES</string>
+    <string name="app_name">Cattle NOTES</string>
 
     <!--  Network  -->
     <string name="network_connection_error">Internet connection lost, please retry again</string>
