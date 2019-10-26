@@ -17,7 +17,12 @@ class LoginViewModel(
     private val _launchFirebaseLoginUI: MutableLiveData<Event<Unit>> = MutableLiveData()
     val launchFirebaseLoginUI: LiveData<Event<Unit>> = _launchFirebaseLoginUI
 
+    private val _launchMain: MutableLiveData<Event<Unit>> = MutableLiveData()
+    val launchMain: LiveData<Event<Unit>> = _launchMain
+
     override fun onCreate() { }
 
     fun onLoginClick() = _launchFirebaseLoginUI.postValue(Event(Unit))
+
+    fun onLoginSuccess() = _launchMain.postValue(Event(Unit))
 }

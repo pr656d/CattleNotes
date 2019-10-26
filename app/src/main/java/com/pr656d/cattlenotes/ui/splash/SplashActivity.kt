@@ -9,7 +9,6 @@ import com.pr656d.cattlenotes.di.component.ActivityComponent
 import com.pr656d.cattlenotes.ui.base.BaseActivity
 import com.pr656d.cattlenotes.ui.login_signup.LoginActivity
 import com.pr656d.cattlenotes.ui.main.MainActivity
-import com.pr656d.cattlenotes.utils.log.Logger
 import javax.inject.Inject
 
 class SplashActivity : BaseActivity<SplashViewModel>() {
@@ -34,7 +33,7 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
         viewModel.launchMain.observe(this, Observer {
             it.getIfNotHandled()?.run {
                 startActivity(
-                    Intent(applicationContext, MainActivity::class.java)
+                    Intent(this@SplashActivity, MainActivity::class.java)
                 )
             }
         })
@@ -42,7 +41,7 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
         viewModel.launchLogin.observe(this, Observer {
             it.getIfNotHandled()?.run {
                 startActivity(
-                    Intent(applicationContext, LoginActivity::class.java)
+                    Intent(this@SplashActivity, LoginActivity::class.java)
                 )
             }
         })

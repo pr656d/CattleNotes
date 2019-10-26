@@ -1,11 +1,15 @@
 package com.pr656d.cattlenotes.ui.login_signup
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.di.component.ActivityComponent
 import com.pr656d.cattlenotes.ui.base.BaseActivity
+import com.pr656d.cattlenotes.ui.main.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
@@ -27,6 +31,13 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
 
     override fun setupObservers() {
         super.setupObservers()
+
+        viewModel.launchMain.observe(this, Observer {
+            it.getIfNotHandled()?.run {
+                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                finish()
+            }
+        })
 
         viewModel.launchFirebaseLoginUI.observe(this, Observer {
             it.getIfNotHandled()?.run {
@@ -50,5 +61,20 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
 
     override fun setupView(savedInstanceState: Bundle?) {
         btnLogin.setOnClickListener { viewModel.onLoginClick() }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            CODE_SIGN_IN -> {
+                val response = IdpResponse.fromResultIntent(data)
+                if (resultCode == Activity.RESULT_OK) {
+                    viewModel.onLoginSuccess()
+                } else {
+                    response?.error?.errorCode?.let { showMessage(it) }
+                }
+            }
+        }
     }
 }
