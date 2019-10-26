@@ -49,7 +49,6 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
-        Logger.d(TAG, "CURRENT USER: ${auth.currentUser}")
         viewModel.setFirebaseUser(auth.currentUser)
     }
 }

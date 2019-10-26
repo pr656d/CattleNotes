@@ -38,6 +38,8 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
                                 AuthUI.IdpConfig.GoogleBuilder().build(),
                                 AuthUI.IdpConfig.FacebookBuilder().build()
                             ))
+                        .setLogo(R.drawable.logo)
+                        .setTheme(R.style.FirebaseTheme)
                         .build(),
                     CODE_SIGN_IN
                 )

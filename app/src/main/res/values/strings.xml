@@ -11,6 +11,10 @@
     <string name="permission_denied">Permission Denied</string>
     <string name="network_login_again">Please log in again</string>
 
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">2560588260930494</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb2560588260930494</string>
+
     <!--  Image content description  -->
     <string name="logo">Application logo</string>
 
