@@ -61,13 +61,19 @@
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorSecondary">@color/colorSecondary</item>
     <item name="colorAccent">@color/colorAccent</item>
+    <item name="buttonStyle">@style/FirebaseButton</item>
     <item name="android:windowBackground">@drawable/gradient_bg</item>
     <item name="windowActionBar">false</item>
     <item name="windowNoTitle">true</item>
     <item name="android:fontFamily">@font/roboto_regular</item>
     <item name="fontFamily">@font/roboto_regular</item>
     <item name="android:textColorHint">@color/white</item>
-    <item name="buttonStyle">@style/FirebaseButton</item>
+    <item name="editTextColor">@color/white</item>
+    <item name="android:textColor">@color/white</item>
+
+    <item name="colorControlNormal">@color/colorAccent</item>
+    <item name="colorControlActivated">@color/colorAccent</item>
+    <item name="colorControlHighlight">@color/colorPrimaryDark</item>
   </style>
 
   <style name="AppTheme.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
