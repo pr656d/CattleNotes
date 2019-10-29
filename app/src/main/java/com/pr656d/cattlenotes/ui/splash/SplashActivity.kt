@@ -63,7 +63,7 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
                             AuthUI.IdpConfig.FacebookBuilder().build(),
                             AuthUI.IdpConfig.AnonymousBuilder().build()
                         ))
-                        .setLogo(R.drawable.logo)
+                        .setLogo(R.drawable.logo_640)
                         .setTheme(R.style.FirebaseTheme)
                         .build(),
                     CODE_SIGN_IN
