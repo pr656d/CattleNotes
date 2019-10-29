@@ -19,24 +19,30 @@ class SplashViewModel(
     private val _launchMain: MutableLiveData<Event<Unit>> = MutableLiveData()
     val launchMain: LiveData<Event<Unit>> = _launchMain
 
-    private val _launchLogin: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val launchLogin: LiveData<Event<Unit>> = _launchLogin
-
     private val _launchFirebaseLoginUI: MutableLiveData<Event<Unit>> = MutableLiveData()
     val launchFirebaseLoginUI: LiveData<Event<Unit>> = _launchFirebaseLoginUI
+
+    private val _loginStatus: MutableLiveData<Boolean> = MutableLiveData()
+    val loginStatus: LiveData<Boolean> = _loginStatus
 
     // Activity will set this authUI at setupView()
     private var _firebaseUser: FirebaseUser? = null
 
     fun setFirebaseUser(user: FirebaseUser?) { _firebaseUser = user }
 
-    fun onLoginSuccess() = _launchMain.postValue(Event(Unit))
+    fun onLoginSuccess() {
+        _loginStatus.postValue(true)
+        _launchMain.postValue(Event(Unit))
+    }
+
+    fun onLoginClick() = _launchFirebaseLoginUI.postValue(Event(Unit))
+
+    fun onLoginFail() = _loginStatus.postValue(false)
 
     override fun onCreate() {
         if (_firebaseUser != null) {
             _launchMain.postValue(Event(Unit))
         } else {
-//            _launchLogin.postValue(Event(Unit))
             _launchFirebaseLoginUI.postValue(Event(Unit))
         }
     }

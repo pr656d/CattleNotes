@@ -59,6 +59,7 @@
   <style name="SplashTheme" parent="AppThemeFullscreen">
     <item name="android:windowBackground">@drawable/splash_screen</item>
     <item name="android:background">@color/transparent</item>
+    <item name="android:transition">@android:anim/fade_out</item>
   </style>
 
   <style name="FirebaseTheme" parent="FirebaseUI">

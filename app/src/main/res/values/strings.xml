@@ -10,6 +10,7 @@
     <string name="server_connection_error">Not able to connect, please retry again</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="network_login_again">Please log in again</string>
+    <string name="try_again_text">Try again</string>
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">2560588260930494</string>

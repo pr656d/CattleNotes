@@ -6,7 +6,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.mindorks.bootcamp.instagram.utils.ViewModelProviderFactory
 import com.mindorks.bootcamp.instagram.utils.rx.SchedulerProvider
 import com.pr656d.cattlenotes.ui.base.BaseActivity
-import com.pr656d.cattlenotes.ui.login.LoginViewModel
 import com.pr656d.cattlenotes.ui.main.MainViewModel
 import com.pr656d.cattlenotes.ui.splash.SplashViewModel
 import com.pr656d.cattlenotes.utils.network.NetworkHelper
@@ -42,14 +41,4 @@ class ActivityModule(private val activity: BaseActivity<*>) {
         activity, ViewModelProviderFactory(MainViewModel::class) {
             MainViewModel(schedulerProvider, compositeDisposable, networkHelper)
         }).get(MainViewModel::class.java)
-
-    @Provides
-    fun provideLoginViewModel(
-        schedulerProvider: SchedulerProvider,
-        compositeDisposable: CompositeDisposable,
-        networkHelper: NetworkHelper
-    ): LoginViewModel = ViewModelProviders.of(
-        activity, ViewModelProviderFactory(LoginViewModel::class) {
-            LoginViewModel(schedulerProvider, compositeDisposable, networkHelper)
-        }).get(LoginViewModel::class.java)
 }
