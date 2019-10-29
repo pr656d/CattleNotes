@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.login_signup
+package com.pr656d.cattlenotes.ui.login
 
 import android.app.Activity
 import android.content.Intent

@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.login_signup
+package com.pr656d.cattlenotes.ui.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,7 +20,7 @@ class LoginViewModel(
     private val _launchMain: MutableLiveData<Event<Unit>> = MutableLiveData()
     val launchMain: LiveData<Event<Unit>> = _launchMain
 
-    override fun onCreate() { }
+    override fun onCreate() = _launchFirebaseLoginUI.postValue(Event(Unit))
 
     fun onLoginClick() = _launchFirebaseLoginUI.postValue(Event(Unit))
 

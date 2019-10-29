@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ui.splash.SplashActivity"
-            android:noHistory="true">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -26,7 +26,7 @@
         </activity>
 
         <activity android:name=".ui.main.MainActivity" />
-        <activity android:name=".ui.login_signup.LoginActivity" />
+        <activity android:name=".ui.login.LoginActivity" />
     </application>
 
 </manifest>

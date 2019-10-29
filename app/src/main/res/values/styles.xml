@@ -56,6 +56,11 @@
     <item name="colorControlHighlight">@color/colorAccent</item>
   </style>
 
+  <style name="SplashTheme" parent="AppThemeFullscreen">
+    <item name="android:windowBackground">@drawable/splash_screen</item>
+    <item name="android:background">@color/transparent</item>
+  </style>
+
   <style name="FirebaseTheme" parent="FirebaseUI">
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
