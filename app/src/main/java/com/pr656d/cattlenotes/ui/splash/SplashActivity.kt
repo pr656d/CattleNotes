@@ -20,7 +20,7 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
     companion object {
         const val TAG = "SplashActivity"
 
-        const val CODE_SIGN_IN = 1
+        const val CODE_SIGN_IN = 111
     }
 
     @Inject

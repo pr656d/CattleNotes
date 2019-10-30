@@ -10,4 +10,5 @@
   <color name="grey">#999999</color>
   <color name="grey_light">#AAAAAA</color>
   <color name="transparent">#00000000</color>
+  <color name="fui_linkColor">@color/colorSecondary</color>
 </resources>
