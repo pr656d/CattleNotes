@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">Cattle NOTES</string>
 
+    <!--  General  -->
+    <string name="please_wait_text">Please wait&#8230;</string>
+
     <!--  Network  -->
     <string name="network_connection_error">Internet connection lost, please retry again</string>
+    <string name="network_not_available">Internet connection not available, Please connect and try again</string>
     <string name="network_default_error">Something wrong happened, please retry again</string>
     <string name="network_internal_error">Our systems got an error, please retry again</string>
     <string name="network_server_not_available">Our services are under maintenance, please retry after some time
@@ -10,7 +14,7 @@
     <string name="server_connection_error">Not able to connect, please retry again</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="network_login_again">Please log in again</string>
-    <string name="try_again_text">Try again</string>
+    <string name="try_login_again_text">Try logging in again</string>
 
     <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
     <string name="facebook_application_id" translatable="false">2560588260930494</string>
@@ -21,6 +25,7 @@
 
     <!--  Login  -->
     <string name="login_button_text">Login</string>
+    <string name="login_message">Please login to continue</string>
     <string name="name_field_empty">Name can\'t be empty</string>
     <string name="email_field_empty">Email can\'t be empty</string>
     <string name="password_field_empty">Password can\'t be empty</string>
