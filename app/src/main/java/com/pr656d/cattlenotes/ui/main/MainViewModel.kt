@@ -14,28 +14,30 @@ class MainViewModel(
     networkHelper: NetworkHelper
 ) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
 
-    private val _cattleNavigation = MutableLiveData<Event<Unit>>()
-    val cattleNavigation: LiveData<Event<Unit>> = _cattleNavigation
-
-    private val _timelineNavigation = MutableLiveData<Event<Unit>>()
-    val timelineNavigation: LiveData<Event<Unit>> = _timelineNavigation
-
-    private val _milkingNavigation = MutableLiveData<Event<Unit>>()
-    val milkingNavigation: LiveData<Event<Unit>> = _milkingNavigation
-
-    private val _cashFlowNavigation = MutableLiveData<Event<Unit>>()
-    val cashFlowNavigation: LiveData<Event<Unit>> = _cashFlowNavigation
-
-    override fun onCreate() {
-        _cattleNavigation.postValue(Event(Unit))
+    enum class MainFragmentNavigation {
+        CATTLE_FRAGMENT,
+        TIMELINE_FRAGMENT,
+        MILKING_FRAGMENT,
+        CASHFLOW_FRAGMENT
     }
 
-    fun onCattleSelected() = _cattleNavigation.postValue(Event(Unit))
+    private val _fragmentNavigation = MutableLiveData<Event<MainFragmentNavigation>>()
+    val fragmentNavigation: LiveData<Event<MainFragmentNavigation>> = _fragmentNavigation
 
-    fun onTimelineSelected() = _timelineNavigation.postValue(Event(Unit))
+    override fun onCreate() {
+        _fragmentNavigation.postValue(Event(MainFragmentNavigation.CATTLE_FRAGMENT))
+    }
 
-    fun onMilkingSelected() = _milkingNavigation.postValue(Event(Unit))
+    fun onCattleSelected() =
+        _fragmentNavigation.postValue(Event(MainFragmentNavigation.CATTLE_FRAGMENT))
 
-    fun onCashFlowSelected() = _cashFlowNavigation.postValue(Event(Unit))
+    fun onTimelineSelected() =
+        _fragmentNavigation.postValue(Event(MainFragmentNavigation.TIMELINE_FRAGMENT))
+
+    fun onMilkingSelected() =
+        _fragmentNavigation.postValue(Event(MainFragmentNavigation.MILKING_FRAGMENT))
+
+    fun onCashFlowSelected() =
+        _fragmentNavigation.postValue(Event(MainFragmentNavigation.CASHFLOW_FRAGMENT))
 
 }

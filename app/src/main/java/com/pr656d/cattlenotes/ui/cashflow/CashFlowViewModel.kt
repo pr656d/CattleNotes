@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.expense
+package com.pr656d.cattlenotes.ui.cashflow
 
 import com.mindorks.bootcamp.instagram.utils.rx.SchedulerProvider
 import com.pr656d.cattlenotes.ui.base.BaseViewModel

@@ -7,9 +7,10 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.di.component.ActivityComponent
 import com.pr656d.cattlenotes.ui.base.BaseActivity
 import com.pr656d.cattlenotes.ui.cattle.CattleFragment
-import com.pr656d.cattlenotes.ui.expense.CashFlowFragment
+import com.pr656d.cattlenotes.ui.cashflow.CashFlowFragment
 import com.pr656d.cattlenotes.ui.milking.MilkingFragment
 import com.pr656d.cattlenotes.ui.timeline.TimelineFragment
+import com.pr656d.cattlenotes.ui.main.MainViewModel.MainFragmentNavigation
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity<MainViewModel>() {
@@ -27,23 +28,20 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override fun injectDependencies(activityComponent: ActivityComponent) =
         activityComponent.inject(this)
 
+    override fun setup() { }
+
     override fun setupObservers() {
         super.setupObservers()
 
-        viewModel.cattleNavigation.observe(this, Observer {
-            it.getIfNotHandled()?.run { switchFragments(CattleFragment.TAG) }
-        })
-
-        viewModel.timelineNavigation.observe(this, Observer {
-            it.getIfNotHandled()?.run { switchFragments(TimelineFragment.TAG) }
-        })
-
-        viewModel.milkingNavigation.observe(this, Observer {
-            it.getIfNotHandled()?.run { switchFragments(MilkingFragment.TAG) }
-        })
-
-        viewModel.cashFlowNavigation.observe(this, Observer {
-            it.getIfNotHandled()?.run { switchFragments(CashFlowFragment.TAG) }
+        viewModel.fragmentNavigation.observe(this, Observer {
+            it.getIfNotHandled()?.run {
+                when (this) {
+                    MainFragmentNavigation.CATTLE_FRAGMENT -> switchFragments(CattleFragment.TAG)
+                    MainFragmentNavigation.TIMELINE_FRAGMENT -> switchFragments(TimelineFragment.TAG)
+                    MainFragmentNavigation.MILKING_FRAGMENT -> switchFragments(MilkingFragment.TAG)
+                    MainFragmentNavigation.CASHFLOW_FRAGMENT -> switchFragments(CashFlowFragment.TAG)
+                }
+            }
         })
     }
 

@@ -5,6 +5,7 @@ import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.firebase.ui.auth.util.ui.PreambleHandler.setup
 import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.cattlenotes.di.component.ActivityComponent
 import com.pr656d.cattlenotes.di.component.DaggerActivityComponent
@@ -20,6 +21,7 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies(buildActivityComponent())
         super.onCreate(savedInstanceState)
+        setup()
         setContentView(provideLayoutId())
         setupObservers()
         setupView(savedInstanceState)
@@ -61,4 +63,6 @@ abstract class BaseActivity<VM : BaseViewModel> : AppCompatActivity() {
     protected abstract fun injectDependencies(activityComponent: ActivityComponent)
 
     protected abstract fun setupView(savedInstanceState: Bundle?)
+
+    protected abstract fun setup()
 }

@@ -1,6 +1,5 @@
 package com.pr656d.cattlenotes.ui.splash
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthUI
@@ -10,6 +9,8 @@ import com.pr656d.cattlenotes.di.component.ActivityComponent
 import com.pr656d.cattlenotes.ui.base.BaseActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.main.MainActivity
+import com.pr656d.cattlenotes.ui.splash.SplashViewModel.LaunchDestination
+import com.pr656d.cattlenotes.utils.common.startActivity
 import javax.inject.Inject
 
 class SplashActivity : BaseActivity<SplashViewModel>() {
@@ -29,28 +30,22 @@ class SplashActivity : BaseActivity<SplashViewModel>() {
     override fun injectDependencies(activityComponent: ActivityComponent) =
         activityComponent.inject(this)
 
+    override fun setup() {
+        viewModel.setFirebaseUser(auth.currentUser)
+    }
+
     override fun setupObservers() {
         super.setupObservers()
 
-        viewModel.launchMain.observe(this, Observer {
+        viewModel.launchDestination.observe(this, Observer {
             it.getIfNotHandled()?.run {
-                startActivity(
-                    Intent(this@SplashActivity, MainActivity::class.java)
-                )
-                finish()
-            }
-        })
-
-        viewModel.launchLogin.observe(this, Observer {
-            it.getIfNotHandled()?.run {
-                startActivity(
-                    Intent(applicationContext, LoginActivity::class.java)
-                )
+                when (this) {
+                    LaunchDestination.LOGIN_ACTIVITY -> startActivity(LoginActivity::class.java)
+                    LaunchDestination.MAIN_ACTIVITY -> startActivity(MainActivity::class.java)
+                }
             }
         })
     }
 
-    override fun setupView(savedInstanceState: Bundle?) {
-        viewModel.setFirebaseUser(auth.currentUser)
-    }
+    override fun setupView(savedInstanceState: Bundle?) { }
 }

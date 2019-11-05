@@ -5,7 +5,7 @@ import com.mindorks.bootcamp.instagram.utils.ViewModelProviderFactory
 import com.mindorks.bootcamp.instagram.utils.rx.SchedulerProvider
 import com.pr656d.cattlenotes.ui.base.BaseFragment
 import com.pr656d.cattlenotes.ui.cattle.CattleViewModel
-import com.pr656d.cattlenotes.ui.expense.CashFlowViewModel
+import com.pr656d.cattlenotes.ui.cashflow.CashFlowViewModel
 import com.pr656d.cattlenotes.ui.milking.MilkingViewModel
 import com.pr656d.cattlenotes.ui.timeline.TimelineViewModel
 import com.pr656d.cattlenotes.utils.network.NetworkHelper

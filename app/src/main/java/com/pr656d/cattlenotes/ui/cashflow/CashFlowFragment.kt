@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.expense
+package com.pr656d.cattlenotes.ui.cashflow
 
 import android.os.Bundle
 import android.view.View

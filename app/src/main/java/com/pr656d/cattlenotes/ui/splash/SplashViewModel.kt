@@ -15,22 +15,24 @@ class SplashViewModel(
     networkHelper: NetworkHelper
 ) : BaseViewModel(schedulerProvider, compositeDisposable, networkHelper) {
 
-    private val _launchMain = MutableLiveData<Event<Unit>>()
-    val launchMain: LiveData<Event<Unit>> = _launchMain
+    enum class LaunchDestination {
+        MAIN_ACTIVITY,
+        LOGIN_ACTIVITY
+    }
 
-    private val _launchLogin: MutableLiveData<Event<Unit>> = MutableLiveData()
-    val launchLogin: LiveData<Event<Unit>> = _launchLogin
+    private val _launchDestination = MutableLiveData<Event<LaunchDestination>>()
+    val launchDestination: LiveData<Event<LaunchDestination>> = _launchDestination
 
-    // Activity will set this user at setupView()
+    // Activity will set this user at setup()
     private var firebaseUser: FirebaseUser? = null
 
     fun setFirebaseUser(user: FirebaseUser?) { firebaseUser = user }
 
     override fun onCreate() {
         if (firebaseUser != null) {
-            _launchMain.postValue(Event(Unit))
+            _launchDestination.postValue(Event(LaunchDestination.MAIN_ACTIVITY))
         } else {
-            _launchLogin.postValue(Event(Unit))
+            _launchDestination.postValue(Event(LaunchDestination.LOGIN_ACTIVITY))
         }
     }
 }

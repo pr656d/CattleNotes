@@ -32,6 +32,8 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
     override fun injectDependencies(activityComponent: ActivityComponent) =
         activityComponent.inject(this)
 
+    override fun setup() { }
+
     override fun setupObservers() {
         super.setupObservers()
 
