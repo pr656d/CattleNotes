@@ -69,7 +69,7 @@ ext {
     okhttp_version = '3.11.0'
 
     // Dagger
-    dagger_version = '2.25.2'
+    dagger_version = '2.24'
 
     // Firebase
     firebase_uiauth_version = '4.3.1'
