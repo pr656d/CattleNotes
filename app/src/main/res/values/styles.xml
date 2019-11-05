@@ -56,7 +56,7 @@
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
-    <style name="SplashTheme" parent="AppTheme">
+    <style name="LaunchTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:background">@color/transparent</item>
         <item name="android:transition">@android:anim/fade_out</item>

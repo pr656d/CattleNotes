@@ -7,7 +7,7 @@ import dagger.android.DaggerApplication
 /**
  * Initialization of libraries.
  */
-class MainApplication : DaggerApplication() {
+class CattleNotesApplication : DaggerApplication() {
 
     /**
      * Tell Dagger which [AndroidInjector] to use - in our case

@@ -1,8 +1,11 @@
 package com.pr656d.cattlenotes.di
 
-import com.pr656d.cattlenotes.di.ActivityScoped
-import com.pr656d.cattlenotes.ui.MainActivity
-import com.pr656d.cattlenotes.ui.MainModule
+import com.pr656d.cattlenotes.ui.launch.LaunchModule
+import com.pr656d.cattlenotes.ui.launch.LauncherActivity
+import com.pr656d.cattlenotes.ui.login.LoginActivity
+import com.pr656d.cattlenotes.ui.login.LoginModule
+import com.pr656d.cattlenotes.ui.main.MainActivity
+import com.pr656d.cattlenotes.ui.main.MainModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -20,7 +23,14 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBindingModule {
 
     @ActivityScoped
-    @ContributesAndroidInjector(modules = [MainModule::class])
-    internal abstract fun launcherActivity(): MainActivity
+    @ContributesAndroidInjector(modules = [LaunchModule::class])
+    internal abstract fun launcherActivity(): LauncherActivity
 
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = [LoginModule::class])
+    internal abstract fun loginActivity(): LoginActivity
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = [MainModule::class])
+    internal abstract fun mainActivity(): MainActivity
 }

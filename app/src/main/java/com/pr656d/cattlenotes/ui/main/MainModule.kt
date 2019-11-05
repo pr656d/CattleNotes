@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui
+package com.pr656d.cattlenotes.ui.main
 
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.di.ViewModelKey

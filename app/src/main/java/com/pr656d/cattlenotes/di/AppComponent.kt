@@ -1,6 +1,6 @@
 package com.pr656d.cattlenotes.di
 
-import com.pr656d.cattlenotes.MainApplication
+import com.pr656d.cattlenotes.CattleNotesApplication
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -23,9 +23,9 @@ import javax.inject.Singleton
         ViewModelModule::class
     ]
 )
-interface AppComponent : AndroidInjector<MainApplication> {
+interface AppComponent : AndroidInjector<CattleNotesApplication> {
     @Component.Factory
     interface Factory {
-        fun create(@BindsInstance application: MainApplication): AppComponent
+        fun create(@BindsInstance application: CattleNotesApplication): AppComponent
     }
 }

@@ -1,9 +1,14 @@
 package com.pr656d.cattlenotes.di
 
 import android.content.Context
-import com.pr656d.cattlenotes.MainApplication
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.pr656d.cattlenotes.CattleNotesApplication
+import com.pr656d.cattlenotes.utils.network.NetworkHelper
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 
 /**
  * Defines all the classes that need to be provided in the scope of the app.
@@ -15,7 +20,17 @@ import dagger.Provides
 class AppModule {
 
     @Provides
-    fun provideContext(application: MainApplication): Context {
+    fun provideContext(application: CattleNotesApplication): Context {
         return application.applicationContext
     }
+
+    @Provides
+    fun provideAuthUI(): AuthUI = AuthUI.getInstance()
+
+    @Provides
+    fun provideFirebaseAuth(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
+    @Singleton
+    @Provides
+    fun provideNetworkHelper(context: Context): NetworkHelper = NetworkHelper(context)
 }

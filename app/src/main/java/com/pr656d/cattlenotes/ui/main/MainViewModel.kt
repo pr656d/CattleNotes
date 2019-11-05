@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui
+package com.pr656d.cattlenotes.ui.main
 
 import androidx.lifecycle.ViewModel
 import javax.inject.Inject

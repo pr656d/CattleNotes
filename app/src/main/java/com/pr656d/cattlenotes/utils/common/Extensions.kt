@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes
+package com.pr656d.cattlenotes.utils.common
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModel

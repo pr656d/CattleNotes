@@ -8,7 +8,7 @@ import javax.inject.Provider
 /**
  * ViewModelFactory which uses Dagger to create the instances.
  */
-class MainViewModelFactory @Inject constructor(
+class CattleNotesViewModelFactory @Inject constructor(
     private val creators: @JvmSuppressWildcards Map<Class<out ViewModel>, Provider<ViewModel>>
 ) : ViewModelProvider.Factory {
 

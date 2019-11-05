@@ -1,9 +1,9 @@
-package com.pr656d.cattlenotes.ui
+package com.pr656d.cattlenotes.ui.main
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.viewModelProvider
+import com.pr656d.cattlenotes.utils.common.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
