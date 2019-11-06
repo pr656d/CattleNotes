@@ -1,9 +1,12 @@
 package com.pr656d.cattlenotes.ui.login
 
 import androidx.lifecycle.ViewModel
+import com.firebase.ui.auth.AuthUI
+import com.pr656d.cattlenotes.shared.di.ActivityScoped
 import com.pr656d.cattlenotes.shared.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.multibindings.IntoMap
 
 /**

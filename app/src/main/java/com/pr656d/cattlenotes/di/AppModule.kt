@@ -5,6 +5,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.CattleNotesApplication
+import com.pr656d.cattlenotes.data.local.db.AppDatabase
 import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
 import dagger.Module
 import dagger.Provides
@@ -29,6 +30,10 @@ class AppModule {
 
     @Provides
     fun provideFirebaseAuth(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
+    @Singleton
+    @Provides
+    fun providesAppDatabase(context: Context): AppDatabase = AppDatabase.buildDatabase(context)
 
     @Singleton
     @Provides

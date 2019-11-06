@@ -32,7 +32,11 @@ abstract class ActivityBindingModule {
     internal abstract fun launcherActivity(): LauncherActivity
 
     @ActivityScoped
-    @ContributesAndroidInjector(modules = [LoginModule::class])
+    @ContributesAndroidInjector(
+        modules = [
+            LoginModule::class
+        ]
+    )
     internal abstract fun loginActivity(): LoginActivity
 
     @ActivityScoped
