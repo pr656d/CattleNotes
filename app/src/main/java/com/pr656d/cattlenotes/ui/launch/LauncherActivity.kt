@@ -8,7 +8,7 @@ import com.pr656d.cattlenotes.ui.launch.LaunchDestination.MAIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.launch.LaunchDestination.LOGIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.utils.common.EventObserver
-import com.pr656d.cattlenotes.utils.common.viewModelProvider
+import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 

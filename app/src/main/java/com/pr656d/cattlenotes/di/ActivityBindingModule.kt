@@ -1,11 +1,16 @@
 package com.pr656d.cattlenotes.di
 
+import com.pr656d.cattlenotes.shared.di.ActivityScoped
+import com.pr656d.cattlenotes.ui.cashflow.CashflowModule
+import com.pr656d.cattlenotes.ui.cattle.CattleModule
 import com.pr656d.cattlenotes.ui.launch.LaunchModule
 import com.pr656d.cattlenotes.ui.launch.LauncherActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.login.LoginModule
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.ui.main.MainModule
+import com.pr656d.cattlenotes.ui.milking.MilkingModule
+import com.pr656d.cattlenotes.ui.timeline.TimelineModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -31,6 +36,16 @@ abstract class ActivityBindingModule {
     internal abstract fun loginActivity(): LoginActivity
 
     @ActivityScoped
-    @ContributesAndroidInjector(modules = [MainModule::class])
+    @ContributesAndroidInjector(
+        modules = [
+            // activity
+            MainModule::class,
+            // fragments
+            CattleModule::class,
+            TimelineModule::class,
+            MilkingModule::class,
+            CashflowModule::class
+        ]
+    )
     internal abstract fun mainActivity(): MainActivity
 }

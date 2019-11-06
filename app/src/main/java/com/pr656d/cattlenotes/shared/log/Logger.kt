@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.utils.log
+package com.pr656d.cattlenotes.shared.log
 
 import com.pr656d.cattlenotes.BuildConfig
 import timber.log.Timber

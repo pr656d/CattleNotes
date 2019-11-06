@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.di
+package com.pr656d.cattlenotes.shared.di
 
 import androidx.lifecycle.ViewModel
 import dagger.MapKey

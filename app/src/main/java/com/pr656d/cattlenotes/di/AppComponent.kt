@@ -1,6 +1,7 @@
 package com.pr656d.cattlenotes.di
 
 import com.pr656d.cattlenotes.CattleNotesApplication
+import com.pr656d.cattlenotes.shared.di.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector

@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.utils.display
+package com.pr656d.cattlenotes.shared.utils.display
 
 import android.content.Context
 import android.graphics.PorterDuff

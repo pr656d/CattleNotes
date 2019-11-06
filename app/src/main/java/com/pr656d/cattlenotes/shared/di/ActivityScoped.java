@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.di;
+package com.pr656d.cattlenotes.shared.di;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.utils.network
+package com.pr656d.cattlenotes.shared.utils.network
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

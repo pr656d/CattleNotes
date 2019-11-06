@@ -1,7 +1,6 @@
-package com.pr656d.cattlenotes.di
+package com.pr656d.cattlenotes.shared.di
 
 import androidx.lifecycle.ViewModelProvider
-import com.pr656d.cattlenotes.CattleNotesViewModelFactory
 import dagger.Binds
 import dagger.Module
 

@@ -1,9 +1,13 @@
 package com.pr656d.cattlenotes.ui.main
 
 import androidx.lifecycle.ViewModel
-import com.pr656d.cattlenotes.di.ViewModelKey
+import com.pr656d.cattlenotes.shared.di.FragmentScoped
+import com.pr656d.cattlenotes.shared.di.ViewModelKey
+import com.pr656d.cattlenotes.ui.cashflow.CashflowFragment
+import com.pr656d.cattlenotes.ui.cashflow.CashflowModule
 import dagger.Binds
 import dagger.Module
+import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**

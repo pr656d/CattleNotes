@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes
+package com.pr656d.cattlenotes.shared.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

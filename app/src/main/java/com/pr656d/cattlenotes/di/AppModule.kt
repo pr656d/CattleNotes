@@ -5,7 +5,7 @@ import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.CattleNotesApplication
-import com.pr656d.cattlenotes.utils.network.NetworkHelper
+import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
