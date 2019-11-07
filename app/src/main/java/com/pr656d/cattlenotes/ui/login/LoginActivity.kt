@@ -4,19 +4,18 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.ui.main.MainActivity
-import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.shared.utils.display.Toaster
-import dagger.android.support.DaggerAppCompatActivity
+import com.pr656d.cattlenotes.ui.base.BaseActivity
+import com.pr656d.cattlenotes.ui.main.MainActivity
+import com.pr656d.cattlenotes.utils.common.EventObserver
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
-class LoginActivity : DaggerAppCompatActivity() {
+class LoginActivity : BaseActivity<LoginViewModel>() {
 
     companion object {
         const val TAG = "LoginActivity"
@@ -24,23 +23,17 @@ class LoginActivity : DaggerAppCompatActivity() {
         const val CODE_SIGN_IN = 111
     }
 
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-
     @Inject lateinit var authUI: AuthUI
 
-    private lateinit var viewModel: LoginViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
+    override fun setupViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
-
-        setupObservers()
-        setupView()
     }
 
-    private fun setupObservers() {
+    override fun provideLayoutId(): Int = R.layout.activity_login
+
+    override fun setupObservers() {
+        super.setupObservers()
+
         viewModel.launchFirebaseAuthUI.observe(this, EventObserver {
             startActivityForResult(
                 authUI.createSignInIntentBuilder()
@@ -68,7 +61,7 @@ class LoginActivity : DaggerAppCompatActivity() {
         })
     }
 
-    private fun setupView() {
+    override fun setupView(savedInstanceState: Bundle?) {
         btnLogin.setOnClickListener { viewModel.onLoginClick() }
     }
 

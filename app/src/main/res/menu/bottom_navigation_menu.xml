@@ -27,10 +27,10 @@
         android:id="@+id/itemMilking" />
 
     <item
-        android:title="@string/menu_expense"
+        android:title="@string/menu_cashflow"
         app:showAsAction="always"
         android:icon="@drawable/selector_cashflow"
-        android:titleCondensed="@string/menu_expense"
+        android:titleCondensed="@string/menu_cashflow"
         android:id="@+id/itemExpense" />
 
 </menu>

@@ -15,6 +15,8 @@ import androidx.room.RoomDatabase
     exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
+    abstract fun animalDao(): AnimalDao
+
     companion object {
         private const val databaseName = "cattlenotes-db"
 

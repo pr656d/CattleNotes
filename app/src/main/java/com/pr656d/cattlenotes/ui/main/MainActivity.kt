@@ -2,50 +2,41 @@ package com.pr656d.cattlenotes.ui.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
+import com.pr656d.cattlenotes.ui.base.BaseActivity
+import com.pr656d.cattlenotes.ui.cashflow.CashflowFragment
 import com.pr656d.cattlenotes.ui.cattle.CattleFragment
 import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.*
-import com.pr656d.cattlenotes.utils.common.EventObserver
-import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
-import com.pr656d.cattlenotes.ui.cashflow.CashflowFragment
 import com.pr656d.cattlenotes.ui.milking.MilkingFragment
 import com.pr656d.cattlenotes.ui.timeline.TimelineFragment
-import dagger.android.support.DaggerAppCompatActivity
+import com.pr656d.cattlenotes.utils.common.EventObserver
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
-class MainActivity : DaggerAppCompatActivity() {
+class MainActivity : BaseActivity<MainViewModel>() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private lateinit var viewModel: MainViewModel
     private var activeFragment: Fragment? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    override fun provideLayoutId(): Int = R.layout.activity_main
 
+    override fun setupViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
-
-        setupObservers()
-        setupView()
     }
 
-    private fun setupObservers() {
+    override fun setupObservers() {
+        super.setupObservers()
 
         viewModel.fragmentNavigation.observe(this, EventObserver { navigateTo ->
             when (navigateTo) {
                 CATTLE_FRAGMENT -> switchFragments(CattleFragment.TAG)
                 TIMELINE_FRAGMENT -> switchFragments(TimelineFragment.TAG)
                 MILKING_FRAGMENT -> switchFragments(MilkingFragment.TAG)
-                CASHFLOW_FRAGMENT -> switchFragments(CattleFragment.TAG)
+                CASHFLOW_FRAGMENT -> switchFragments(CashflowFragment.TAG)
             }
         })
     }
 
-    private fun setupView() {
+    override fun setupView(savedInstanceState: Bundle?) {
         bottomNavigation.run {
             itemIconTintList = null
             setOnNavigationItemSelectedListener {

@@ -3,12 +3,12 @@ package com.pr656d.cattlenotes.ui.launch
 import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
-import com.pr656d.cattlenotes.ui.main.MainActivity
-import com.pr656d.cattlenotes.ui.launch.LaunchDestination.MAIN_ACTIVITY
-import com.pr656d.cattlenotes.ui.launch.LaunchDestination.LOGIN_ACTIVITY
-import com.pr656d.cattlenotes.ui.login.LoginActivity
-import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
+import com.pr656d.cattlenotes.ui.launch.LaunchDestination.LOGIN_ACTIVITY
+import com.pr656d.cattlenotes.ui.launch.LaunchDestination.MAIN_ACTIVITY
+import com.pr656d.cattlenotes.ui.login.LoginActivity
+import com.pr656d.cattlenotes.ui.main.MainActivity
+import com.pr656d.cattlenotes.utils.common.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -16,12 +16,6 @@ import javax.inject.Inject
  * A 'Trampoline' activity for sending users to an appropriate screen on launch.
  */
 class LauncherActivity : DaggerAppCompatActivity() {
-
-    companion object {
-        const val TAG = "LauncherActivity"
-
-
-    }
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 

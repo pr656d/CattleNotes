@@ -11,6 +11,9 @@ interface AnimalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(animal: AnimalEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(animal: List<AnimalEntity>)
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     fun update(animal: AnimalEntity)
 

@@ -36,10 +36,18 @@
     <string name="menu_cattle">Cattle</string>
     <string name="menu_timeline">Timeline</string>
     <string name="menu_milking">Milking</string>
-    <string name="menu_expense">Expenses</string>
+    <string name="menu_cashflow">Cashflow</string>
 
     <!--  Logout  -->
     <string name="logout_error">Can\'t logout. Try again</string>
     <string name="logging_out">Logging Out&#8230;</string>
 
+    <!--  item_cattle  -->
+    <string name="calving">%1$d calving</string>
+
+    <!--  Cattle  -->
+    <string name="cattle_text">Cattle</string>
+    <string name="timeline_text">Timeline</string>
+    <string name="milking_text">Milking</string>
+    <string name="cashflow_text">Cashflow</string>
 </resources>

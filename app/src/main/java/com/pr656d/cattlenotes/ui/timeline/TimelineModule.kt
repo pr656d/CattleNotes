@@ -5,8 +5,8 @@ import com.pr656d.cattlenotes.shared.di.FragmentScoped
 import com.pr656d.cattlenotes.shared.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
 import dagger.android.AndroidInjector
+import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**

@@ -2,34 +2,30 @@ package com.pr656d.cattlenotes.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.CATTLE_FRAGMENT
-import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.TIMELINE_FRAGMENT
-import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.MILKING_FRAGMENT
-import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.CASHFLOW_FRAGMENT
+import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
+import com.pr656d.cattlenotes.ui.base.BaseViewModel
+import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.*
 import com.pr656d.cattlenotes.utils.common.Event
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor() : ViewModel() {
+class MainViewModel @Inject constructor(
+    networkHelper: NetworkHelper
+) : BaseViewModel(networkHelper) {
 
     private val _fragmentNavigation = MutableLiveData<Event<MainFragmentNavigation>>()
     val fragmentNavigation: LiveData<Event<MainFragmentNavigation>> = _fragmentNavigation
 
-    init {
+    override fun onCreate() {
         _fragmentNavigation.postValue(Event(CATTLE_FRAGMENT))
     }
 
-    fun onCattleSelected() =
-        _fragmentNavigation.postValue(Event(CATTLE_FRAGMENT))
+    fun onCattleSelected() = _fragmentNavigation.postValue(Event(CATTLE_FRAGMENT))
 
-    fun onTimelineSelected() =
-        _fragmentNavigation.postValue(Event(TIMELINE_FRAGMENT))
+    fun onTimelineSelected() = _fragmentNavigation.postValue(Event(TIMELINE_FRAGMENT))
 
-    fun onMilkingSelected() =
-        _fragmentNavigation.postValue(Event(MILKING_FRAGMENT))
+    fun onMilkingSelected() = _fragmentNavigation.postValue(Event(MILKING_FRAGMENT))
 
-    fun onCashFlowSelected() =
-        _fragmentNavigation.postValue(Event(CASHFLOW_FRAGMENT))
+    fun onCashFlowSelected() = _fragmentNavigation.postValue(Event(CASHFLOW_FRAGMENT))
 }
 
 enum class MainFragmentNavigation {

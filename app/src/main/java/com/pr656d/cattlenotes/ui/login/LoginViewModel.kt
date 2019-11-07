@@ -8,11 +8,12 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.utils.common.Event
 import com.pr656d.cattlenotes.utils.common.Resource
 import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
+import com.pr656d.cattlenotes.ui.base.BaseViewModel
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-    private val networkHelper: NetworkHelper
-) : ViewModel() {
+    networkHelper: NetworkHelper
+) : BaseViewModel(networkHelper) {
 
     private val _launchFirebaseLoginUI: MutableLiveData<Event<Unit>> = MutableLiveData()
     val launchFirebaseAuthUI: LiveData<Event<Unit>> = _launchFirebaseLoginUI
@@ -24,7 +25,7 @@ class LoginViewModel @Inject constructor(
     val loginStatus: LiveData<Resource<Int>> = _loginStatus
 
     fun onLoginClick() {
-        if (networkHelper.isNetworkConnected())
+        if (checkInternetConnection())
             _launchFirebaseLoginUI.postValue(Event(Unit))
         else
             _loginStatus.postValue(Resource.error(R.string.network_not_available))
@@ -36,4 +37,6 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onLoginFail() = _loginStatus.postValue(Resource.error(R.string.try_login_again_text))
+
+    override fun onCreate() { }
 }

@@ -3,8 +3,6 @@ package com.pr656d.cattlenotes.ui.cashflow
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.shared.di.FragmentScoped
 import com.pr656d.cattlenotes.shared.di.ViewModelKey
-import com.pr656d.cattlenotes.ui.cattle.CattleFragment
-import com.pr656d.cattlenotes.ui.cattle.CattleViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector
