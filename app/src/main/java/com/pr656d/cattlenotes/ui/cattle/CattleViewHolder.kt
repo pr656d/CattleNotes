@@ -16,6 +16,7 @@ class CattleViewHolder(
         itemView.tvTagNumber.text = data.tagNumber
         itemView.tvName.text = data.name
         itemView.tvGroup.text = data.group?.displayName
+        itemView.tvType.text = data.type.displayName
     }
 
     override fun setupView(view: View) {
