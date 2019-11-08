@@ -30,7 +30,8 @@ data class Cattle(
     enum class CattleType(val displayName: String) {
         COW("Cow"),
         BUFFALO("Buffalo"),
-        BULL("Bull")
+        BULL("Bull"),
+        NONE("none")
     }
 
     /**
@@ -38,10 +39,11 @@ data class Cattle(
      */
     enum class CattleBreed(val displayName: String) {
         HF("HF"),
-        JERRY("Jerry"),
+        JERSY("Jerry"),
         GIR("Gir"),
         KANKREJ("Kankrej"),
-        SHAHIVAL("Shahival")
+        SHAHIVAL("Shahival"),
+        NONE("none")
     }
 
     /**
@@ -52,6 +54,7 @@ data class Cattle(
         MILKING("Milking"),
         DRY("Dry"),
         CALF_MALE("Calf male"),
-        CALF_FEMALE("Calf female")
+        CALF_FEMALE("Calf female"),
+        NONE("none")
     }
 }

@@ -11,6 +11,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.*
+import com.pr656d.cattlenotes.data.local.db.CattleEntity
+import com.pr656d.cattlenotes.model.Cattle
 import java.time.ZonedDateTime
 
 
@@ -91,4 +93,60 @@ fun <T> MutableLiveData<T>.setValueIfNew(newValue: T) {
 // region ZonedDateTime
 @RequiresApi(Build.VERSION_CODES.O)
 fun ZonedDateTime.toEpochMilli() = this.toInstant().toEpochMilli()
+// endregion
+
+// region converter
+
+fun Cattle.toCattleEntity(): CattleEntity =
+    CattleEntity(
+        this.tagNumber, this.name, this.type.displayName, this.breed?.displayName,
+        this.group?.displayName, this.calving, this.aiDate, this.repeatHeatDate,
+        this.pregnancyCheckDate, this.dryOffDate
+    )
+
+fun CattleEntity.toCattle(): Cattle =
+    Cattle(
+        this.tagNumber, this.name, this.type.convertToType(), this.breed?.convertToBreed(),
+        this.group?.convertToGroup(), this.calving, this.aiDate, this.repeatHeatDate,
+        this.pregnancyCheckDate, this.dryOffDate
+    )
+
+fun List<CattleEntity>.toCattleList(): List<Cattle> =
+    arrayListOf<Cattle>().apply {
+        this@toCattleList.forEach { add(it.toCattle()) }
+    }
+
+fun List<Cattle>.toCattleEntityList(): List<CattleEntity> =
+    arrayListOf<CattleEntity>().apply {
+        this@toCattleEntityList.forEach { add(it.toCattleEntity()) }
+    }
+
+fun String.convertToType(): Cattle.CattleType =
+    when (this) {
+        Cattle.CattleType.COW.displayName -> Cattle.CattleType.COW
+        Cattle.CattleType.BUFFALO.displayName -> Cattle.CattleType.BUFFALO
+        Cattle.CattleType.BULL.displayName -> Cattle.CattleType.BULL
+        else -> Cattle.CattleType.NONE
+    }
+
+fun String.convertToBreed(): Cattle.CattleBreed =
+    when (this) {
+        Cattle.CattleBreed.HF.displayName -> Cattle.CattleBreed.HF
+        Cattle.CattleBreed.JERSY.displayName -> Cattle.CattleBreed.JERSY
+        Cattle.CattleBreed.GIR.displayName -> Cattle.CattleBreed.GIR
+        Cattle.CattleBreed.KANKREJ.displayName -> Cattle.CattleBreed.KANKREJ
+        Cattle.CattleBreed.SHAHIVAL.displayName -> Cattle.CattleBreed.SHAHIVAL
+        else -> Cattle.CattleBreed.NONE
+    }
+
+fun String.convertToGroup(): Cattle.CattleGroup =
+    when (this) {
+        Cattle.CattleGroup.HEIFER.displayName -> Cattle.CattleGroup.HEIFER
+        Cattle.CattleGroup.MILKING.displayName -> Cattle.CattleGroup.MILKING
+        Cattle.CattleGroup.DRY.displayName -> Cattle.CattleGroup.DRY
+        Cattle.CattleGroup.CALF_MALE.displayName -> Cattle.CattleGroup.CALF_MALE
+        Cattle.CattleGroup.CALF_FEMALE.displayName -> Cattle.CattleGroup.CALF_FEMALE
+        else -> Cattle.CattleGroup.NONE
+    }
+
 // endregion

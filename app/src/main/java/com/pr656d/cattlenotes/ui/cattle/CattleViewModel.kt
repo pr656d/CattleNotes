@@ -5,12 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
-import com.pr656d.cattlenotes.shared.utils.common.setValueIfNew
 import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
+import com.pr656d.cattlenotes.utils.rx.RxSchedulerProvider
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 class CattleViewModel @Inject constructor(
     networkHelper: NetworkHelper,
+    private val compositeDisposable: CompositeDisposable,
+    private val schedulerProvider: RxSchedulerProvider,
     private val cattleDataRepository: CattleDataRepository
 ) : BaseViewModel(networkHelper) {
 
@@ -18,14 +21,21 @@ class CattleViewModel @Inject constructor(
     val cattleList: LiveData<List<Cattle>> = _cattleList
 
     override fun onCreate() {
-        _cattleList.setValueIfNew(
-            arrayListOf<Cattle>().apply {
-                for (i in 0..10)
-                    add(Cattle(tagNumber = "123456789001", name = "Janki",
-                        breed = Cattle.CattleBreed.KANKREJ,
-                        group = Cattle.CattleGroup.MILKING,
-                        type = Cattle.CattleType.COW, calving = 3))
-            }
+        compositeDisposable.add(
+            cattleDataRepository.loadSampleData()
+                .subscribeOn(schedulerProvider.io())
+                .subscribe {
+                    cattleDataRepository.getAllCattle()
+                        .subscribeOn(schedulerProvider.io())
+                        .subscribe { list, _ ->
+                            _cattleList.postValue(list)
+                        }
+                }
         )
+    }
+
+    override fun onCleared() {
+        compositeDisposable.clear() // Clear manually
+        super.onCleared()
     }
 }

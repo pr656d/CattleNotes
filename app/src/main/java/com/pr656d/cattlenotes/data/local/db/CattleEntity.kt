@@ -9,7 +9,7 @@ import com.pr656d.cattlenotes.model.Cattle
 /**]
  * This class represents [Cattle] data to store in database.
  */
-@Entity(tableName = "animals")
+@Entity(tableName = "cattle")
 data class CattleEntity(
 
     /**
@@ -61,26 +61,26 @@ data class CattleEntity(
      */
     @SerializedName("ai_date")
     @ColumnInfo(name = "ai_date")
-    val aiDate: String?,
+    val aiDate: String? = null,
 
     /**
      * Depends on AI date.
      */
     @SerializedName("repeat_heat_date")
     @ColumnInfo(name = "repeat_heat_date")
-    val repeatHeatDate: String?,
+    val repeatHeatDate: String? = null,
 
     /**
      * Depends on repeat heat status.
      */
     @SerializedName("pregnancy_check_date")
     @ColumnInfo(name = "pregnancy_check_date")
-    val pregnancyCheckDate: String?,
+    val pregnancyCheckDate: String? = null,
 
     /**
      * Depends on pregnancy check status.
      */
     @SerializedName("dry_off_date")
     @ColumnInfo(name = "dry_off_date")
-    val dryOffDate: String?
+    val dryOffDate: String? = null
 )
