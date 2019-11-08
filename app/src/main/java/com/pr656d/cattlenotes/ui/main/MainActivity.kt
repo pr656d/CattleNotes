@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
-import com.pr656d.cattlenotes.ui.base.BaseActivity
+import com.pr656d.cattlenotes.shared.base.BaseActivity
 import com.pr656d.cattlenotes.ui.cashflow.CashflowFragment
 import com.pr656d.cattlenotes.ui.cattle.CattleFragment
 import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.*

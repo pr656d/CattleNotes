@@ -1,14 +1,13 @@
 package com.pr656d.cattlenotes.di
 
 import android.content.Context
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.cattlenotes.data.local.db.AppDatabase
-import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
-import com.pr656d.cattlenotes.utils.rx.RxSchedulerProvider
-import com.pr656d.cattlenotes.utils.rx.SchedulerProvider
+import com.pr656d.cattlenotes.data.local.prefs.CattleNotesSharedPreferences
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -34,6 +33,13 @@ class AppModule {
     @Provides
     fun provideFirebaseAuth(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
+    @Provides
+    fun provideSharedPreferences(application: CattleNotesApplication) =
+        application.getSharedPreferences(
+            CattleNotesSharedPreferences.preferencesName,
+            Context.MODE_PRIVATE
+        )
+
     @Singleton
     @Provides
     fun providesAppDatabase(context: Context): AppDatabase = AppDatabase.buildDatabase(context)
@@ -42,9 +48,5 @@ class AppModule {
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
     @Provides
-    fun provideSchedulerProvider(): SchedulerProvider = RxSchedulerProvider()
-
-    @Singleton
-    @Provides
-    fun provideNetworkHelper(context: Context): NetworkHelper = NetworkHelper(context)
+    fun provideLinearLayoutManager(context: Context) = LinearLayoutManager(context)
 }

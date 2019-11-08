@@ -3,16 +3,16 @@ package com.pr656d.cattlenotes.model
 /**
  * Describes a animal.
  */
-data class Animal(
+data class Cattle(
     val tagNumber: String,
 
     var name: String? = null,
 
-    var type: AnimalType,
+    var type: CattleType,
 
-    var breed: AnimalBreed? = null,
+    var breed: CattleBreed? = null,
 
-    var group: AnimalGroup? = null,
+    var group: CattleGroup? = null,
 
     var calving: Int = 0,
 
@@ -27,7 +27,7 @@ data class Animal(
     /**
      * Represents type of animal e.g. cow, bull etc.
      */
-    enum class AnimalType(val displayName: String) {
+    enum class CattleType(val displayName: String) {
         COW("Cow"),
         BUFFALO("Buffalo"),
         BULL("Bull")
@@ -36,7 +36,7 @@ data class Animal(
     /**
      * Represents breed of animal e.g. HF, Jerry, Gir etc.
      */
-    enum class AnimalBreed(val displayName: String) {
+    enum class CattleBreed(val displayName: String) {
         HF("HF"),
         JERRY("Jerry"),
         GIR("Gir"),
@@ -47,7 +47,7 @@ data class Animal(
     /**
      * Represents group of animal e.g. heifer, milking etc.
      */
-    enum class AnimalGroup(val displayName: String) {
+    enum class CattleGroup(val displayName: String) {
         HEIFER("Heifer"),
         MILKING("Milking"),
         DRY("Dry"),

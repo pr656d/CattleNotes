@@ -4,13 +4,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.pr656d.cattlenotes.model.Animal
+import com.pr656d.cattlenotes.model.Cattle
 
 /**]
- * This class represents [Animal] data to store in database.
+ * This class represents [Cattle] data to store in database.
  */
 @Entity(tableName = "animals")
-data class AnimalEntity(
+data class CattleEntity(
 
     /**
      * Unique string identifying animal.
@@ -21,35 +21,35 @@ data class AnimalEntity(
     val tagNumber: String,
 
     /**
-     * Animal name. Name can be null.
+     * Cattle name. Name can be null.
      */
     @SerializedName("name")
     @ColumnInfo(name = "name")
     val name: String? = null,
 
     /**
-     * Animal type [Animal.AnimalType] as string e.g. cow, buffalo etc.
+     * Cattle type [Cattle.CattleType] as string e.g. cow, buffalo etc.
      */
     @SerializedName("type")
     @ColumnInfo(name = "type")
     val type: String,
 
     /**
-     * Animal breed [Animal.AnimalBreed] as string e.g. HF, Gir etc.
+     * Cattle breed [Cattle.CattleBreed] as string e.g. HF, Gir etc.
      */
     @SerializedName("breed")
     @ColumnInfo(name = "breed")
     val breed: String? = null,
 
     /**
-     * Animal group [Animal.AnimalGroup] as string e.g. Dry, Milking etc.
+     * Cattle group [Cattle.CattleGroup] as string e.g. Dry, Milking etc.
      */
     @SerializedName("group")
     @ColumnInfo(name = "group")
     val group: String? = null,
 
     /**
-     * Animal calving count of integer type.
+     * Cattle calving count of integer type.
      * Counted on basis of pregnancy cycle completed successfully.
      */
     @SerializedName("calving")

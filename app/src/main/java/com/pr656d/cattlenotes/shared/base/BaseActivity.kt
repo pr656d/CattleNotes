@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.base
+package com.pr656d.cattlenotes.shared.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes

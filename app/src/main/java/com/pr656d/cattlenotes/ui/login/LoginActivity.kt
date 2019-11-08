@@ -9,7 +9,7 @@ import com.firebase.ui.auth.IdpResponse
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.shared.utils.display.Toaster
-import com.pr656d.cattlenotes.ui.base.BaseActivity
+import com.pr656d.cattlenotes.shared.base.BaseActivity
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import kotlinx.android.synthetic.main.activity_login.*

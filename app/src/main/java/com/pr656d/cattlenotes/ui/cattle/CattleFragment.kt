@@ -2,9 +2,13 @@ package com.pr656d.cattlenotes.ui.cattle
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
-import com.pr656d.cattlenotes.ui.base.BaseFragment
+import kotlinx.android.synthetic.main.fragment_cattle.*
+import javax.inject.Inject
 
 class CattleFragment : BaseFragment<CattleViewModel>() {
 
@@ -19,11 +23,28 @@ class CattleFragment : BaseFragment<CattleViewModel>() {
         }
     }
 
+    @Inject lateinit var cattleAdapter: CattleAdapter
+
+    @Inject lateinit var linearLayoutManager: LinearLayoutManager
+
     override fun setupViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 
     override fun provideLayoutId(): Int = R.layout.fragment_cattle
 
-    override fun setupView(view: View) { }
+    override fun setupObservers() {
+        super.setupObservers()
+
+        viewModel.cattleList.observe(this, Observer {
+            cattleAdapter.updateList(it)
+        })
+    }
+
+    override fun setupView(view: View) {
+        rvCattle.apply {
+            adapter = cattleAdapter
+            layoutManager = linearLayoutManager
+        }
+    }
 }

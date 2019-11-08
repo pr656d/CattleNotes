@@ -3,12 +3,11 @@ package com.pr656d.cattlenotes.ui.login
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.utils.common.Event
 import com.pr656d.cattlenotes.utils.common.Resource
 import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
-import com.pr656d.cattlenotes.ui.base.BaseViewModel
+import com.pr656d.cattlenotes.shared.base.BaseViewModel
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(

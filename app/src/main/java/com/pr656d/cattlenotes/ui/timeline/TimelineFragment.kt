@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
-import com.pr656d.cattlenotes.ui.base.BaseFragment
+import com.pr656d.cattlenotes.shared.base.BaseFragment
 
 class TimelineFragment : BaseFragment<TimelineViewModel>() {
 

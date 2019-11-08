@@ -3,7 +3,7 @@ package com.pr656d.cattlenotes.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
-import com.pr656d.cattlenotes.ui.base.BaseViewModel
+import com.pr656d.cattlenotes.shared.base.BaseViewModel
 import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.*
 import com.pr656d.cattlenotes.utils.common.Event
 import javax.inject.Inject

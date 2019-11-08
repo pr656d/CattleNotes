@@ -9,13 +9,13 @@ import androidx.room.RoomDatabase
  * The [Room] database for this app.
  */
 @Database(entities = [
-    AnimalEntity::class
+    CattleEntity::class
 ],
     version = 1,
     exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun animalDao(): AnimalDao
+    abstract fun cattleDao(): CattleDao
 
     companion object {
         private const val databaseName = "cattlenotes-db"

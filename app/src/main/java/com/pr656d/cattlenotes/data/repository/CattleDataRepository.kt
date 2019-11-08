@@ -1,19 +1,19 @@
 package com.pr656d.cattlenotes.data.repository
 
-import com.pr656d.cattlenotes.data.local.db.AnimalEntity
 import com.pr656d.cattlenotes.data.local.db.AppDatabase
-import com.pr656d.cattlenotes.model.Animal
+import com.pr656d.cattlenotes.data.local.db.CattleEntity
+import com.pr656d.cattlenotes.model.Cattle
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-open class AnimalDataRepository @Inject constructor(
+open class CattleDataRepository @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
 
-    fun addAnimal(animal: Animal) {
-        appDatabase.animalDao().insert(
-            AnimalEntity(
+    fun addAnimal(animal: Cattle) {
+        appDatabase.cattleDao().insert(
+            CattleEntity(
                 animal.tagNumber,
                 animal.name,
                 animal.type.displayName,

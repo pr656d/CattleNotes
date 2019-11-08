@@ -3,20 +3,20 @@ package com.pr656d.cattlenotes.data.local.db
 import androidx.room.*
 
 /**
- * The Data Access Object for the [AnimalEntity] class.
+ * The Data Access Object for the [CattleEntity] class.
  */
 @Dao
-interface AnimalDao {
+interface CattleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(animal: AnimalEntity)
+    fun insert(animal: CattleEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(animal: List<AnimalEntity>)
+    fun insertAll(animal: List<CattleEntity>)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(animal: AnimalEntity)
+    fun update(animal: CattleEntity)
 
     @Delete
-    fun delete(animal: AnimalEntity)
+    fun delete(animal: CattleEntity)
 }
