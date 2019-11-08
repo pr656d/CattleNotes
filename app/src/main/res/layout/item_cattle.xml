@@ -24,21 +24,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_end="16dp" />
+        app:layout_constraintGuide_end="8dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="16dp" />
+        app:layout_constraintGuide_begin="8dp" />
 
     <ImageView
         android:id="@+id/ivImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_cattle"
+        android:src="@drawable/ic_cattle_unselected"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
         app:layout_constraintTop_toTopOf="@+id/guidelineTop"
@@ -46,12 +46,13 @@
 
     <TextView
         android:id="@+id/tvTagNumber"
-        style="@style/AppTheme.Headline6"
+        style="@style/AppTheme.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:textAlignment="textStart"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/tvName"
         app:layout_constraintStart_toEndOf="@+id/ivImage"
         app:layout_constraintTop_toTopOf="@+id/guidelineTop"
         tools:text="123456789012" />
@@ -62,7 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/grey_light"
-        android:textStyle="bold"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
         app:layout_constraintTop_toTopOf="@+id/guidelineTop"
@@ -82,13 +83,9 @@
         style="@style/AppTheme.Body1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:textColor="@color/grey"
-        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
-        app:layout_constraintTop_toBottomOf="@+id/tvTagNumber"
-        app:layout_constraintVertical_bias="1.0"
         tools:text="Name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
