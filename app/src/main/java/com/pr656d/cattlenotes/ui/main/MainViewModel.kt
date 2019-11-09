@@ -2,8 +2,8 @@ package com.pr656d.cattlenotes.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
+import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
 import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.*
 import com.pr656d.cattlenotes.utils.common.Event
 import javax.inject.Inject
@@ -26,11 +26,14 @@ class MainViewModel @Inject constructor(
     fun onMilkingSelected() = _fragmentNavigation.postValue(Event(MILKING_FRAGMENT))
 
     fun onCashFlowSelected() = _fragmentNavigation.postValue(Event(CASHFLOW_FRAGMENT))
+
+    fun onSettingsSelected() = _fragmentNavigation.postValue(Event(SETTINGS_ACTIVITY))
 }
 
 enum class MainFragmentNavigation {
     CATTLE_FRAGMENT,
     TIMELINE_FRAGMENT,
     MILKING_FRAGMENT,
-    CASHFLOW_FRAGMENT
+    CASHFLOW_FRAGMENT,
+    SETTINGS_ACTIVITY
 }

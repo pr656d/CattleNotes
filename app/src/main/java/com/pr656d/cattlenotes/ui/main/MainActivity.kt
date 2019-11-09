@@ -50,18 +50,31 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
             setOnMenuItemClickListener { menuItem ->
                 /**
-                 * When another item is clicked change icon of active menu icon to unselected.
+                 * When another item is clicked change icon of [activeMenuItem] to unselected.
                  */
-                activeMenuItem.let {
-                    menu.findItem(it.itemId).apply {
-                        when (itemId) {
-                            R.id.itemCattle -> R.drawable.ic_cattle_unselected
-                            R.id.itemTimeline -> R.drawable.ic_timeline_unselected
-                            R.id.itemMilking -> R.drawable.ic_milking_unselected
-                            R.id.itemCashflow -> R.drawable.ic_cashflow_unselected
-                            else -> null
-                        }?.let { icon -> setIcon(icon) }
-                    }
+                activeMenuItem.let { activeItem ->
+                    /**
+                     * When clicked item is not
+                     * [R.id.itemCattle],[R.id.itemTimeline],[R.id.itemMilking],[R.id.itemCashflow]
+                     * then don't set [activeMenuItem]'s icon as unselected.
+                     *
+                     * new activity will be started for others.
+                     */
+                    if (
+                        menuItem.itemId == R.id.itemCattle ||
+                        menuItem.itemId == R.id.itemTimeline ||
+                        menuItem.itemId == R.id.itemMilking ||
+                        menuItem.itemId == R.id.itemCashflow
+                    )
+                        menu.findItem(activeItem.itemId).apply {
+                            when (itemId) {
+                                R.id.itemCattle -> R.drawable.ic_cattle_unselected
+                                R.id.itemTimeline -> R.drawable.ic_timeline_unselected
+                                R.id.itemMilking -> R.drawable.ic_milking_unselected
+                                R.id.itemCashflow -> R.drawable.ic_cashflow_unselected
+                                else -> null
+                            }?.let { icon -> setIcon(icon) }
+                        }
                 }
 
                 val result = when (menuItem.itemId) {
@@ -85,10 +98,26 @@ class MainActivity : BaseActivity<MainViewModel>() {
                         menuItem.setIcon(R.drawable.ic_cashflow_selected)
                         true
                     }
+                    R.id.itemSettings -> {
+                        viewModel.onSettingsSelected()
+                        true
+                    }
                     else -> false
                 }
 
-                if (result) { activeMenuItem = menuItem }
+                /**
+                 * Don't update [activeMenuItem] for any other than below list
+                 * [R.id.itemCattle],[R.id.itemTimeline],[R.id.itemMilking],[R.id.itemCashflow]
+                 *
+                 * Also result should be true
+                 */
+                if (result && (
+                            menuItem.itemId == R.id.itemCattle ||
+                            menuItem.itemId == R.id.itemTimeline ||
+                            menuItem.itemId == R.id.itemMilking ||
+                            menuItem.itemId == R.id.itemCashflow
+                            )
+                ) { activeMenuItem = menuItem }
 
                 result
             }
