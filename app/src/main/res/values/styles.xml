@@ -32,10 +32,6 @@
     textAppearanceOverline	    Medium all caps 12sp
     -->
 
-    <style name="AppTheme.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
-
-    </style>
-
     <style name="AppTheme.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:fontFamily">@font/roboto_bold</item>
@@ -115,6 +111,9 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
+
+    <style name="AppTheme.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" />
+
 
     <style name="AppTheme.AppBarLight" parent="Widget.Design.AppBarLayout">
         <item name="android:background">@color/white</item>

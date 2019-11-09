@@ -1,6 +1,7 @@
 package com.pr656d.cattlenotes.ui.main
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseActivity
@@ -16,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity<MainViewModel>() {
 
     private var activeFragment: Fragment? = null
+    private lateinit var activeMenuItem: MenuItem
 
     override fun provideLayoutId(): Int = R.layout.activity_main
 
@@ -38,26 +40,57 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     override fun setupView(savedInstanceState: Bundle?) {
         bottomAppBar.run {
-            setOnMenuItemClickListener {
-                when (it.itemId) {
+            /**
+             * When app launches first time set active menu item as cattle item.
+             * and set it's icon as selected
+             */
+            activeMenuItem = menu.findItem(R.id.itemCattle).apply {
+                setIcon(R.drawable.ic_cattle_selected)
+            }
+
+            setOnMenuItemClickListener { menuItem ->
+                /**
+                 * When another item is clicked change icon of active menu icon to unselected.
+                 */
+                activeMenuItem.let {
+                    menu.findItem(it.itemId).apply {
+                        when (itemId) {
+                            R.id.itemCattle -> R.drawable.ic_cattle_unselected
+                            R.id.itemTimeline -> R.drawable.ic_timeline_unselected
+                            R.id.itemMilking -> R.drawable.ic_milking_unselected
+                            R.id.itemCashflow -> R.drawable.ic_cashflow_unselected
+                            else -> null
+                        }?.let { icon -> setIcon(icon) }
+                    }
+                }
+
+                val result = when (menuItem.itemId) {
                     R.id.itemCattle -> {
                         viewModel.onCattleSelected()
+                        menuItem.setIcon(R.drawable.ic_cattle_selected)
                         true
                     }
                     R.id.itemTimeline -> {
                         viewModel.onTimelineSelected()
+                        menuItem.setIcon(R.drawable.ic_timeline_selected)
                         true
                     }
                     R.id.itemMilking -> {
                         viewModel.onMilkingSelected()
+                        menuItem.setIcon(R.drawable.ic_milking_selected)
                         true
                     }
                     R.id.itemCashflow -> {
                         viewModel.onCashFlowSelected()
+                        menuItem.setIcon(R.drawable.ic_cashflow_selected)
                         true
                     }
                     else -> false
                 }
+
+                if (result) { activeMenuItem = menuItem }
+
+                result
             }
         }
     }
@@ -70,7 +103,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
             activeFragment?.tag -> return
 
             CattleFragment.TAG -> {
-                fragment = supportFragmentManager.findFragmentByTag(CattleFragment.TAG) as CattleFragment?
+                fragment =
+                    supportFragmentManager.findFragmentByTag(CattleFragment.TAG) as CattleFragment?
                 if (fragment == null) {
                     fragment = CattleFragment.newInstance()
                     fragmentTransaction.add(R.id.fragment_container, fragment, CattleFragment.TAG)
@@ -78,7 +112,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
             }
 
             TimelineFragment.TAG -> {
-                fragment = supportFragmentManager.findFragmentByTag(TimelineFragment.TAG) as TimelineFragment?
+                fragment =
+                    supportFragmentManager.findFragmentByTag(TimelineFragment.TAG) as TimelineFragment?
                 if (fragment == null) {
                     fragment = TimelineFragment.newInstance()
                     fragmentTransaction.add(R.id.fragment_container, fragment, TimelineFragment.TAG)
@@ -86,7 +121,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
             }
 
             MilkingFragment.TAG -> {
-                fragment = supportFragmentManager.findFragmentByTag(MilkingFragment.TAG) as MilkingFragment?
+                fragment =
+                    supportFragmentManager.findFragmentByTag(MilkingFragment.TAG) as MilkingFragment?
                 if (fragment == null) {
                     fragment = MilkingFragment.newInstance()
                     fragmentTransaction.add(R.id.fragment_container, fragment, MilkingFragment.TAG)
@@ -94,7 +130,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
             }
 
             CashflowFragment.TAG -> {
-                fragment = supportFragmentManager.findFragmentByTag(CashflowFragment.TAG) as CashflowFragment?
+                fragment =
+                    supportFragmentManager.findFragmentByTag(CashflowFragment.TAG) as CashflowFragment?
                 if (fragment == null) {
                     fragment = CashflowFragment.newInstance()
                     fragmentTransaction.add(R.id.fragment_container, fragment, CashflowFragment.TAG)

@@ -6,7 +6,7 @@
     <item
         android:title="@string/menu_cattle"
         app:showAsAction="always"
-        android:icon="@drawable/selector_cattle"
+        android:icon="@drawable/ic_cattle_unselected"
         android:titleCondensed="@string/menu_cattle"
         android:checkable="true"
         android:id="@+id/itemCattle"
@@ -15,21 +15,21 @@
     <item
         android:title="@string/menu_timeline"
         app:showAsAction="always"
-        android:icon="@drawable/selector_timeline"
+        android:icon="@drawable/ic_timeline_unselected"
         android:titleCondensed="@string/menu_timeline"
         android:id="@+id/itemTimeline" />
 
     <item
         android:title="@string/menu_milking"
         app:showAsAction="always"
-        android:icon="@drawable/selector_milking"
+        android:icon="@drawable/ic_milking_unselected"
         android:titleCondensed="@string/menu_milking"
         android:id="@+id/itemMilking" />
 
     <item
         android:title="@string/menu_cashflow"
         app:showAsAction="always"
-        android:icon="@drawable/selector_cashflow"
+        android:icon="@drawable/ic_cashflow_unselected"
         android:titleCondensed="@string/menu_cashflow"
         android:id="@+id/itemCashflow" />
 
