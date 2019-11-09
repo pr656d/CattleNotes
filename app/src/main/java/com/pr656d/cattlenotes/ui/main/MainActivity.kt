@@ -16,6 +16,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity<MainViewModel>() {
 
+    companion object {
+        const val TAG = "MainActivity"
+    }
+
     private var activeFragment: Fragment? = null
     private lateinit var activeMenuItem: MenuItem
 
@@ -46,6 +50,11 @@ class MainActivity : BaseActivity<MainViewModel>() {
              */
             activeMenuItem = menu.findItem(R.id.itemCattle).apply {
                 setIcon(R.drawable.ic_cattle_selected)
+            }
+
+            setNavigationOnClickListener {
+                MainNavigationDrawerFragment.newInstance()
+                    .show(supportFragmentManager, MainNavigationDrawerFragment.TAG)
             }
 
             setOnMenuItemClickListener { menuItem ->
@@ -98,10 +107,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
                         menuItem.setIcon(R.drawable.ic_cashflow_selected)
                         true
                     }
-                    R.id.itemSettings -> {
-                        viewModel.onSettingsSelected()
-                        true
-                    }
                     else -> false
                 }
 
@@ -132,8 +137,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
             activeFragment?.tag -> return
 
             CattleFragment.TAG -> {
-                fragment =
-                    supportFragmentManager.findFragmentByTag(CattleFragment.TAG) as CattleFragment?
+                fragment = supportFragmentManager.findFragmentByTag(CattleFragment.TAG) as CattleFragment?
                 if (fragment == null) {
                     fragment = CattleFragment.newInstance()
                     fragmentTransaction.add(R.id.fragment_container, fragment, CattleFragment.TAG)
@@ -141,8 +145,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
             }
 
             TimelineFragment.TAG -> {
-                fragment =
-                    supportFragmentManager.findFragmentByTag(TimelineFragment.TAG) as TimelineFragment?
+                fragment = supportFragmentManager.findFragmentByTag(TimelineFragment.TAG) as TimelineFragment?
                 if (fragment == null) {
                     fragment = TimelineFragment.newInstance()
                     fragmentTransaction.add(R.id.fragment_container, fragment, TimelineFragment.TAG)
@@ -150,8 +153,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
             }
 
             MilkingFragment.TAG -> {
-                fragment =
-                    supportFragmentManager.findFragmentByTag(MilkingFragment.TAG) as MilkingFragment?
+                fragment = supportFragmentManager.findFragmentByTag(MilkingFragment.TAG) as MilkingFragment?
                 if (fragment == null) {
                     fragment = MilkingFragment.newInstance()
                     fragmentTransaction.add(R.id.fragment_container, fragment, MilkingFragment.TAG)
@@ -159,8 +161,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
             }
 
             CashflowFragment.TAG -> {
-                fragment =
-                    supportFragmentManager.findFragmentByTag(CashflowFragment.TAG) as CashflowFragment?
+                fragment = supportFragmentManager.findFragmentByTag(CashflowFragment.TAG) as CashflowFragment?
                 if (fragment == null) {
                     fragment = CashflowFragment.newInstance()
                     fragmentTransaction.add(R.id.fragment_container, fragment, CashflowFragment.TAG)

@@ -38,6 +38,8 @@
     <string name="menu_milking">Milking</string>
     <string name="menu_cashflow">Cashflow</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_info">About this app</string>
+    <string name="menu_open_source_licences">Open-source licences</string>
 
     <!--  Logout  -->
     <string name="logout_error">Can\'t logout. Try again</string>
