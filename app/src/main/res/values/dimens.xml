@@ -10,4 +10,6 @@
 
     <dimen name="photo_width_normal">50dp</dimen>
     <dimen name="photo_height_normal">50dp</dimen>
+
+    <dimen name="no_elevation">0dp</dimen>
 </resources>
