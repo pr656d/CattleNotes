@@ -31,6 +31,13 @@
         app:showAsAction="always"
         android:icon="@drawable/selector_cashflow"
         android:titleCondensed="@string/menu_cashflow"
-        android:id="@+id/itemExpense" />
+        android:id="@+id/itemCashflow" />
+
+    <item
+        android:title="@string/menu_settings"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_settings_white"
+        android:titleCondensed="@string/menu_settings"
+        android:id="@+id/itemSettings"/>
 
 </menu>

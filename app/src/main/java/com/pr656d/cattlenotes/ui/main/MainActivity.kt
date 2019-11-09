@@ -3,8 +3,8 @@ package com.pr656d.cattlenotes.ui.main
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.shared.base.BaseActivity
+import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.ui.cashflow.CashflowFragment
 import com.pr656d.cattlenotes.ui.cattle.CattleFragment
 import com.pr656d.cattlenotes.ui.main.MainFragmentNavigation.*
@@ -37,9 +37,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
-        bottomNavigation.run {
-            itemIconTintList = null
-            setOnNavigationItemSelectedListener {
+        bottomAppBar.run {
+            setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.itemCattle -> {
                         viewModel.onCattleSelected()
@@ -53,7 +52,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
                         viewModel.onMilkingSelected()
                         true
                     }
-                    R.id.itemExpense -> {
+                    R.id.itemCashflow -> {
                         viewModel.onCashFlowSelected()
                         true
                     }
