@@ -14,6 +14,7 @@ buildscript {
         // in the individual module build.gradle files
         // For Firebase
         classpath 'com.google.gms:google-services:4.3.2'
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.0'
     }
 }
 
@@ -73,6 +74,9 @@ ext {
 
     // Dagger
     dagger_version = '2.25.2'
+
+    // Open-source licenses
+    open_source_licences_version = '17.0.0'
 
     // Firebase
     firebase_uiauth_version = '4.3.1'

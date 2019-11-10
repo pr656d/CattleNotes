@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
+
 android {
     compileSdkVersion rootProject.ext.compile_sdk_version
 
@@ -95,6 +97,9 @@ dependencies {
 
     // Debugging
     debugImplementation "com.amitshekhar.android:debug-db:$debug_db_version"
+
+    // Open-source licences
+    implementation "com.google.android.gms:play-services-oss-licenses:$open_source_licences_version"
 
     // Local Unit tests
     testImplementation "junit:junit:$junit_version"
