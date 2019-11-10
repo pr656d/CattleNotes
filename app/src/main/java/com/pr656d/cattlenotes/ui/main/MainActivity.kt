@@ -63,9 +63,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
                  */
                 activeMenuItem.let { activeItem ->
                     /**
-                     * When clicked item is not
+                     * When clicked item is from below list
                      * [R.id.itemCattle],[R.id.itemTimeline],[R.id.itemMilking],[R.id.itemCashflow]
-                     * then don't set [activeMenuItem]'s icon as unselected.
+                     * then set [activeMenuItem]'s icon as unselected
+                     * and set [tvTitle]
                      *
                      * new activity will be started for others.
                      */
@@ -77,10 +78,25 @@ class MainActivity : BaseActivity<MainViewModel>() {
                     )
                         menu.findItem(activeItem.itemId).apply {
                             when (itemId) {
-                                R.id.itemCattle -> R.drawable.ic_cattle_unselected
-                                R.id.itemTimeline -> R.drawable.ic_timeline_unselected
-                                R.id.itemMilking -> R.drawable.ic_milking_unselected
-                                R.id.itemCashflow -> R.drawable.ic_cashflow_unselected
+                                R.id.itemCattle -> {
+                                    tvTitle.setText(R.string.cattle_text)
+                                    R.drawable.ic_cattle_unselected
+                                }
+
+                                R.id.itemTimeline -> {
+                                    tvTitle.setText(R.string.timeline_text)
+                                    R.drawable.ic_timeline_unselected
+                                }
+
+                                R.id.itemMilking -> {
+                                    tvTitle.setText(R.string.milking_text)
+                                    R.drawable.ic_milking_unselected
+                                }
+
+                                R.id.itemCashflow -> {
+                                    tvTitle.setText(R.string.cashflow_text)
+                                    R.drawable.ic_cashflow_unselected
+                                }
                                 else -> null
                             }?.let { icon -> setIcon(icon) }
                         }

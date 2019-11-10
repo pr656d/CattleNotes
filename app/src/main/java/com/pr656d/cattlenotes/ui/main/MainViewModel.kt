@@ -26,14 +26,11 @@ class MainViewModel @Inject constructor(
     fun onMilkingSelected() = _fragmentNavigation.postValue(Event(MILKING_FRAGMENT))
 
     fun onCashFlowSelected() = _fragmentNavigation.postValue(Event(CASHFLOW_FRAGMENT))
-
-    fun onSettingsSelected() = _fragmentNavigation.postValue(Event(SETTINGS_ACTIVITY))
 }
 
 enum class MainFragmentNavigation {
     CATTLE_FRAGMENT,
     TIMELINE_FRAGMENT,
     MILKING_FRAGMENT,
-    CASHFLOW_FRAGMENT,
-    SETTINGS_ACTIVITY
+    CASHFLOW_FRAGMENT
 }
