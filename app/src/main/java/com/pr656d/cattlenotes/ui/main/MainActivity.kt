@@ -2,10 +2,11 @@ package com.pr656d.cattlenotes.ui.main
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.annotation.IntegerRes
+import androidx.annotation.IdRes
 import androidx.navigation.Navigation
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseActivity
+import com.pr656d.cattlenotes.shared.utils.common.navigateTo
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,6 +22,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     override fun setupViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
+    }
+
+    override fun onBackPressed() {
+        finish()
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
@@ -42,29 +47,25 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 if (isValidDestination(item.itemId))
                     when (item.itemId) {
                         R.id.itemCattle -> {
-                            Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
-                                .navigate(R.id.cattleScreen)
+                            navigateTo(R.id.nav_host_fragment, R.id.cattleScreen)
                             tvTitle.setText(R.string.cattle)
                             item.setIcon(R.drawable.ic_cattle_selected)
                             true
                         }
                         R.id.itemTimeline -> {
-                            Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
-                                .navigate(R.id.timelineScreen)
+                            navigateTo(R.id.nav_host_fragment, R.id.timelineScreen)
                             tvTitle.setText(R.string.timeline)
                             item.setIcon(R.drawable.ic_timeline_selected)
                             true
                         }
                         R.id.itemMilking -> {
-                            Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
-                                .navigate(R.id.milkingScreen)
+                            navigateTo(R.id.nav_host_fragment, R.id.milkingScreen)
                             tvTitle.setText(R.string.milking)
                             item.setIcon(R.drawable.ic_milking_selected)
                             true
                         }
                         R.id.itemCashflow -> {
-                            Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
-                                .navigate(R.id.cashflowScreen)
+                            navigateTo(R.id.nav_host_fragment, R.id.cashflowScreen)
                             tvTitle.setText(R.string.cashflow)
                             item.setIcon(R.drawable.ic_cashflow_selected)
                             true
@@ -95,13 +96,13 @@ class MainActivity : BaseActivity<MainViewModel>() {
         }
     }
 
-    private fun isValidDestination(@IntegerRes itemId: Int): Boolean =
+    private fun isValidDestination(@IdRes itemId: Int): Boolean =
         Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
             .currentDestination?.id != when(itemId) {
                 R.id.itemCattle -> R.id.cattleScreen
                 R.id.itemTimeline -> R.id.timelineScreen
                 R.id.itemMilking -> R.id.milkingScreen
                 R.id.itemCashflow -> R.id.cashflowScreen
-                else -> null
+                else -> -1  // I don't want to pass null here
         }
 }

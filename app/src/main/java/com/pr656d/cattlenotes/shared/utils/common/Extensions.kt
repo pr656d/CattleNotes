@@ -4,6 +4,7 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.*
+import androidx.navigation.Navigation
 import com.pr656d.cattlenotes.data.local.db.CattleEntity
 import com.pr656d.cattlenotes.model.Cattle
 import java.time.ZonedDateTime
@@ -148,5 +150,17 @@ fun String.convertToGroup(): Cattle.CattleGroup =
         Cattle.CattleGroup.CALF_FEMALE.displayName -> Cattle.CattleGroup.CALF_FEMALE
         else -> Cattle.CattleGroup.NONE
     }
+
+// endregion
+
+// region Nav controller
+
+fun FragmentActivity.navigateTo(@IdRes host: Int, @IdRes destination: Int) {
+    Navigation.findNavController(this, host).navigate(destination)
+}
+
+fun Fragment.navigateTo(@IdRes host: Int, @IdRes destination: Int) {
+    Navigation.findNavController(this.requireActivity(), host).navigate(destination)
+}
 
 // endregion

@@ -1,6 +1,5 @@
 package com.pr656d.cattlenotes.ui.cattle
 
-import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,13 +13,6 @@ class CattleFragment : BaseFragment<CattleViewModel>() {
 
     companion object {
         const val TAG = "CattleFragment"
-
-        fun newInstance(): CattleFragment {
-            val args = Bundle()
-            val instance = CattleFragment()
-            instance.arguments = args
-            return instance
-        }
     }
 
     @Inject lateinit var cattleAdapter: CattleAdapter
