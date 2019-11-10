@@ -16,7 +16,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll">
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -40,26 +40,16 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
+        style="@style/AppTheme.MainBottomAppBar"
         android:id="@+id/bottomAppBar"
-        style="@style/AppTheme.BottomAppBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:fitsSystemWindows="true"
-        app:fabAlignmentMode="center"
-        app:fabCradleMargin="@dimen/margin_zero"
-        app:fabCradleRoundedCornerRadius="@dimen/margin_zero"
-        app:fabCradleVerticalOffset="@dimen/fab_vertical_offset"
-        app:hideOnScroll="true"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:menu="@menu/menu_main_bottom_navigation"
-        app:navigationIcon="@drawable/ic_menu_black" />
+        android:layout_height="wrap_content"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/AppTheme.AddFabButton"
         android:id="@+id/fabButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_color_primary"
         app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,16 +9,6 @@
     android:fitsSystemWindows="true"
     app:layout_behavior="@string/bottom_sheet_behavior">
 
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription" />
-
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nvMain"
         style="@style/AppTheme.NavigationDrawer"
@@ -27,7 +17,7 @@
         android:layout_gravity="bottom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivLogo"
+        app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_main_bottom_navigation_drawer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

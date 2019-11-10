@@ -112,9 +112,25 @@
         <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
 
-    <style name="AppTheme.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" />
+    <style name="AppTheme.MainBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" >
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="fabAlignmentMode">center</item>
+        <item name="fabCradleMargin">@dimen/margin_zero</item>
+        <item name="fabCradleRoundedCornerRadius">@dimen/margin_zero</item>
+        <item name="fabCradleVerticalOffset">@dimen/fab_vertical_offset</item>
+        <item name="hideOnScroll">true</item>
+        <item name="layout_scrollFlags">scroll|enterAlways</item>
+        <item name="menu">@menu/menu_main_bottom_navigation</item>
+        <item name="navigationIcon">@drawable/ic_menu_black</item>
+    </style>
 
     <style name="AppTheme.NavigationDrawer" parent="Widget.MaterialComponents.BottomNavigationView" />
+
+    <style name="AppTheme.AddFabButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:src">@drawable/ic_add_black</item>
+        <item name="backgroundTint">@color/colorPrimary</item>
+    </style>
 
     <style name="AppTheme.AppBarLight" parent="Widget.Design.AppBarLayout">
         <item name="android:background">@color/white</item>
