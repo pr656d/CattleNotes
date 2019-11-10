@@ -66,9 +66,6 @@ class MainActivity : BaseActivity<MainViewModel>() {
                      * When clicked item is from below list
                      * [R.id.itemCattle],[R.id.itemTimeline],[R.id.itemMilking],[R.id.itemCashflow]
                      * then set [activeMenuItem]'s icon as unselected
-                     * and set [tvTitle]
-                     *
-                     * new activity will be started for others.
                      */
                     if (
                         menuItem.itemId == R.id.itemCattle ||
@@ -78,25 +75,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
                     )
                         menu.findItem(activeItem.itemId).apply {
                             when (itemId) {
-                                R.id.itemCattle -> {
-                                    tvTitle.setText(R.string.cattle_text)
-                                    R.drawable.ic_cattle_unselected
-                                }
-
-                                R.id.itemTimeline -> {
-                                    tvTitle.setText(R.string.timeline_text)
-                                    R.drawable.ic_timeline_unselected
-                                }
-
-                                R.id.itemMilking -> {
-                                    tvTitle.setText(R.string.milking_text)
-                                    R.drawable.ic_milking_unselected
-                                }
-
-                                R.id.itemCashflow -> {
-                                    tvTitle.setText(R.string.cashflow_text)
-                                    R.drawable.ic_cashflow_unselected
-                                }
+                                R.id.itemCattle -> R.drawable.ic_cattle_unselected
+                                R.id.itemTimeline -> R.drawable.ic_timeline_unselected
+                                R.id.itemMilking -> R.drawable.ic_milking_unselected
+                                R.id.itemCashflow -> R.drawable.ic_cashflow_unselected
                                 else -> null
                             }?.let { icon -> setIcon(icon) }
                         }
@@ -105,21 +87,25 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 val result = when (menuItem.itemId) {
                     R.id.itemCattle -> {
                         viewModel.onCattleSelected()
+                        tvTitle.setText(R.string.cattle_text)
                         menuItem.setIcon(R.drawable.ic_cattle_selected)
                         true
                     }
                     R.id.itemTimeline -> {
                         viewModel.onTimelineSelected()
+                        tvTitle.setText(R.string.timeline_text)
                         menuItem.setIcon(R.drawable.ic_timeline_selected)
                         true
                     }
                     R.id.itemMilking -> {
                         viewModel.onMilkingSelected()
+                        tvTitle.setText(R.string.milking_text)
                         menuItem.setIcon(R.drawable.ic_milking_selected)
                         true
                     }
                     R.id.itemCashflow -> {
                         viewModel.onCashFlowSelected()
+                        tvTitle.setText(R.string.cashflow_text)
                         menuItem.setIcon(R.drawable.ic_cashflow_selected)
                         true
                     }
