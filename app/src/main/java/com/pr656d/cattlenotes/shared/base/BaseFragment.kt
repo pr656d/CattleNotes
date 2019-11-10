@@ -49,10 +49,6 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
 
     fun showMessage(@StringRes resId: Int) = showMessage(getString(resId))
 
-    fun goBack() {
-        if (activity is BaseActivity<*>) (activity as BaseActivity<*>).goBack()
-    }
-
     @LayoutRes
     protected abstract fun provideLayoutId(): Int
 

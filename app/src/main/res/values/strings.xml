@@ -32,14 +32,14 @@
     <string name="email_field_invalid">Not a valid email</string>
     <string name="password_field_small_length">Password less than 6 digits</string>
 
-    <!--  menu  -->
-    <string name="menu_cattle">Cattle</string>
-    <string name="menu_timeline">Timeline</string>
-    <string name="menu_milking">Milking</string>
-    <string name="menu_cashflow">Cashflow</string>
-    <string name="menu_settings">Settings</string>
-    <string name="menu_info">About this app</string>
-    <string name="menu_open_source_licences">Open-source licences</string>
+    <!--  Texts  -->
+    <string name="cattle">Cattle</string>
+    <string name="timeline">Timeline</string>
+    <string name="milking">Milking</string>
+    <string name="cashflow">Cashflow</string>
+    <string name="settings">Settings</string>
+    <string name="about_this_app">About this app</string>
+    <string name="open_source_licences">Open-source licences</string>
 
     <!--  Logout  -->
     <string name="logout_error">Can\'t logout. Try again</string>
@@ -47,10 +47,4 @@
 
     <!--  item_cattle  -->
     <string name="calving">%1$d calving</string>
-
-    <!--  Cattle  -->
-    <string name="cattle_text">Cattle</string>
-    <string name="timeline_text">Timeline</string>
-    <string name="milking_text">Milking</string>
-    <string name="cashflow_text">Cashflow</string>
 </resources>

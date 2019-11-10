@@ -4,33 +4,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="@string/menu_cattle"
+        android:title="@string/cattle"
         app:showAsAction="always"
         android:icon="@drawable/ic_cattle_unselected"
-        android:titleCondensed="@string/menu_cattle"
+        android:titleCondensed="@string/cattle"
         android:checkable="true"
         android:id="@+id/itemCattle"
         tools:ignore="AlwaysShowAction" />
 
     <item
-        android:title="@string/menu_timeline"
+        android:title="@string/timeline"
         app:showAsAction="always"
         android:icon="@drawable/ic_timeline_unselected"
-        android:titleCondensed="@string/menu_timeline"
+        android:titleCondensed="@string/timeline"
         android:id="@+id/itemTimeline" />
 
     <item
-        android:title="@string/menu_milking"
+        android:title="@string/milking"
         app:showAsAction="always"
         android:icon="@drawable/ic_milking_unselected"
-        android:titleCondensed="@string/menu_milking"
+        android:titleCondensed="@string/milking"
         android:id="@+id/itemMilking" />
 
     <item
-        android:title="@string/menu_cashflow"
+        android:title="@string/cashflow"
         app:showAsAction="always"
         android:icon="@drawable/ic_cashflow_unselected"
-        android:titleCondensed="@string/menu_cashflow"
+        android:titleCondensed="@string/cashflow"
         android:id="@+id/itemCashflow" />
 
 </menu>

@@ -41,7 +41,7 @@ class MainNavigationDrawerFragment : BottomSheetDialogFragment() {
                         true
                     }
                     R.id.itemOpenSourceLicenses -> {
-                        OssLicensesMenuActivity.setActivityTitle(getString(R.string.menu_open_source_licences))
+                        OssLicensesMenuActivity.setActivityTitle(getString(R.string.open_source_licences))
                         startActivity(Intent(context, OssLicensesMenuActivity::class.java))
                         true
                     }

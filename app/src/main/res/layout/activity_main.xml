@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/margin_small"
                 android:paddingBottom="@dimen/margin_small"
-                android:text="@string/cattle_text"
+                android:text="@string/cattle"
                 android:textSize="36sp"
                 android:layout_gravity="center"/>
 
@@ -33,10 +33,13 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <fragment
+        android:id="@+id/nav_host_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/main_nav_graph"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
