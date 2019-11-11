@@ -11,7 +11,7 @@ class CashflowFragment : BaseFragment<CashflowViewModel>() {
         const val TAG = "CashflowFragment"
     }
 
-    override fun setupViewModel() {
+    override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 

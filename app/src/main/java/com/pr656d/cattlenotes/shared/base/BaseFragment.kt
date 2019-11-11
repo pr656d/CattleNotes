@@ -21,7 +21,7 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupViewModel()
+        initViewModel()
         setupObservers()
         viewModel.onCreate()
     }
@@ -57,5 +57,5 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
     /**
      * Class implementation required to initialize viewmodel.
      */
-    protected abstract fun setupViewModel()
+    protected abstract fun initViewModel()
 }

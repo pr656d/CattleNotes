@@ -8,6 +8,8 @@ apply plugin: 'kotlin-kapt'
 
 apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
 android {
     compileSdkVersion rootProject.ext.compile_sdk_version
 
@@ -31,106 +33,118 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin_version"
 
     // JARs
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Android Support Library
-    implementation "androidx.appcompat:appcompat:$app_compat_version"
+    implementation "androidx.appcompat:appcompat:$rootProject.app_compat_version"
+
+    // Core ktx
+    implementation "androidx.core:core-ktx:$rootProject.core_ktx_version"
 
     // Constraint Layout
-    implementation "androidx.constraintlayout:constraintlayout:$constraint_version"
+    implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraint_version"
 
     // Material Design
-    implementation "com.google.android.material:material:$material_version"
+    implementation "com.google.android.material:material:$rootProject.material_version"
 
     // Navigation controller
-    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$rootProject.nav_version"
 
     // RecyclerView
-    implementation "androidx.recyclerview:recyclerview:$support_library_version"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.support_library_version"
 
     // CardView
-    implementation "androidx.cardview:cardview:$support_library_version"
+    implementation "androidx.cardview:cardview:$rootProject.support_library_version"
 
     // ViewModel and LiveData
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycle_version"
 
     // Lifecycle Annotations
-    kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-compiler:$rootProject.lifecycle_version"
 
     // Multidex
-    implementation "androidx.multidex:multidex:$multidex_version"
+    implementation "androidx.multidex:multidex:$rootProject.multidex_version"
 
     // Dagger
-    implementation "com.google.dagger:dagger-android:$dagger_version"
-    implementation "com.google.dagger:dagger-android-support:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    implementation "com.google.dagger:dagger-android:$rootProject.dagger_version"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.dagger_version"
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.dagger_version"
 
     // Database
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
+    implementation "androidx.room:room-runtime:$rootProject.room_version"
+    kapt "androidx.room:room-compiler:$rootProject.room_version"
+    implementation "androidx.room:room-rxjava2:$rootProject.room_version"
 
     // Image
-    implementation "com.github.bumptech.glide:glide:$glide_version"
-    kapt "com.github.bumptech.glide:compiler:$glide_version"
+    implementation "com.github.bumptech.glide:glide:$rootProject.glide_version"
+    kapt "com.github.bumptech.glide:compiler:$rootProject.glide_version"
 
     // Networking
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
-    implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:1.0.0"
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofit_version"
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttp_version"
+    implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.retrofit2_rxjava2_adapter"
 
     // Reactive
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava_version"
     implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroid_version"
 
     // logger
-    implementation "com.jakewharton.timber:timber:$timber_version"
+    implementation "com.jakewharton.timber:timber:$rootProject.timber_version"
 
     // Parser
-    implementation "com.google.code.gson:gson:$gson_version"
+    implementation "com.google.code.gson:gson:$rootProject.gson_version"
 
     // Debugging
-    debugImplementation "com.amitshekhar.android:debug-db:$debug_db_version"
+    debugImplementation "com.amitshekhar.android:debug-db:$rootProject.debug_db_version"
 
     // Open-source licences
-    implementation "com.google.android.gms:play-services-oss-licenses:$open_source_licences_version"
+    implementation "com.google.android.gms:play-services-oss-licenses:$rootProject.open_source_licences_version"
 
     // Local Unit tests
-    testImplementation "junit:junit:$junit_version"
-    testImplementation "org.mockito:mockito-core:$mockito_version"
-    kaptTest "com.google.dagger:dagger-compiler:$dagger_version"
-    testImplementation "android.arch.core:core-testing:$core_testing_version"
-    testImplementation "org.hamcrest:hamcrest-library:$hamcrest_version"
+    testImplementation "junit:junit:$rootProject.junit_version"
+    testImplementation "org.mockito:mockito-core:$rootProject.mockito_version"
+    kaptTest "com.google.dagger:dagger-compiler:$rootProject.dagger_version"
+    testImplementation "android.arch.core:core-testing:$rootProject.core_testing_version"
+    testImplementation "org.hamcrest:hamcrest-library:$rootProject.hamcrest_version"
 
     // UI Testing
-    androidTestImplementation "androidx.test:runner:$test_runner_version"
-    androidTestImplementation "androidx.test.ext:junit:$test_ext_runner_version"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:$espresso_version"
-    androidTestImplementation "org.mockito:mockito-core:$mockito_version"
-    kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
+    androidTestImplementation "androidx.test:runner:$rootProject.test_runner_version"
+    androidTestImplementation "androidx.test.ext:junit:$rootProject.test_ext_runner_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espresso_version"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espresso_version"
+    androidTestImplementation "org.mockito:mockito-core:$rootProject.mockito_version"
+    kaptAndroidTest "com.google.dagger:dagger-compiler:$rootProject.dagger_version"
 
     // Para camera
-    implementation "com.mindorks:paracamera:$paracamera_version"
+    implementation "com.mindorks:paracamera:$rootProject.paracamera_version"
 
     // Firebase
-    implementation "com.google.firebase:firebase-auth:$firebase_auth_version"
-    implementation "com.firebaseui:firebase-ui-auth:$firebase_uiauth_version"
-    implementation "com.google.firebase:firebase-analytics:$firebase_analytics_version"
-    implementation "com.google.firebase:firebase-database:$firebase_database_version"
+    implementation "com.google.firebase:firebase-auth:$rootProject.firebase_auth_version"
+    implementation "com.firebaseui:firebase-ui-auth:$rootProject.firebase_uiauth_version"
+    implementation "com.google.firebase:firebase-analytics:$rootProject.firebase_analytics_version"
+    implementation "com.google.firebase:firebase-database:$rootProject.firebase_database_version"
     // Required only if Facebook login support is required
     // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
-    implementation "com.facebook.android:facebook-android-sdk:$facebook_sdk_version"
+    implementation "com.facebook.android:facebook-android-sdk:$rootProject.facebook_sdk_version"
 }
 
 apply plugin: 'com.google.gms.google-services'

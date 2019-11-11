@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.milking
+package com.pr656d.cattlenotes.ui.timeline
 
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.shared.di.FragmentScoped
@@ -10,25 +10,25 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**
- * Module where classes needed to create the [MilkingModule] are defined.
+ * Module where classes needed to create the [TimelineBuilderModule] are defined.
  */
 @Module
 @Suppress("UNUSED")
-internal abstract class MilkingModule {
+internal abstract class TimelineBuilderModule {
 
     /**
-     * Generates an [AndroidInjector] for the [MilkingFragment].
+     * Generates an [AndroidInjector] for the [TimelineFragment].
      */
     @FragmentScoped
     @ContributesAndroidInjector
-    internal abstract fun contributeMilkingFragment(): MilkingFragment
+    internal abstract fun contributeTimelineFragment(): TimelineFragment
 
     /**
      * The ViewModels are created by Dagger in a map. Via the @ViewModelKey, we define that we
-     * want to get a [MilkingViewModel] class.
+     * want to get a [TimelineViewModel] class.
      */
     @Binds
     @IntoMap
-    @ViewModelKey(MilkingViewModel::class)
-    internal abstract fun bindMilkingViewModel(viewModel: MilkingViewModel): ViewModel
+    @ViewModelKey(TimelineViewModel::class)
+    internal abstract fun bindTimelineViewModel(viewModel: TimelineViewModel): ViewModel
 }

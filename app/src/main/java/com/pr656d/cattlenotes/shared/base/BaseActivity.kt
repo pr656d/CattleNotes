@@ -19,8 +19,8 @@ abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(provideLayoutId())
-        activityScreenMode()
-        setupViewModel()
+        setActivityScreenOrientation()
+        initViewModel()
         setupObservers()
         setupView(savedInstanceState)
         viewModel.onCreate()
@@ -40,7 +40,7 @@ abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
 
     fun showMessage(@StringRes resId: Int) = showMessage(getString(resId))
 
-    private fun activityScreenMode(allowLandscape: Boolean = false) {
+    private fun setActivityScreenOrientation(allowLandscape: Boolean = false) {
         /**
          * Default android screen mode allows landscape. To get rid of it and
          * force all activities to be in portrait mode.
@@ -58,5 +58,5 @@ abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
     /**
      * Class implementation required to initialize viewmodel.
      */
-    protected abstract fun setupViewModel()
+    protected abstract fun initViewModel()
 }

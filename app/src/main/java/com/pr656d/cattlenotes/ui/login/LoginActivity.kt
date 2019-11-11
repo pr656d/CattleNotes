@@ -25,7 +25,7 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
 
     @Inject lateinit var authUI: AuthUI
 
-    override fun setupViewModel() {
+    override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 

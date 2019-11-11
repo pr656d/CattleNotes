@@ -11,7 +11,7 @@ class MilkingFragment : BaseFragment<MilkingViewModel>() {
         const val TAG = "MilkingFragment"
     }
 
-    override fun setupViewModel() {
+    override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 

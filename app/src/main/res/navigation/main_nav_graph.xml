@@ -9,7 +9,23 @@
         android:id="@+id/cattleScreen"
         android:name="com.pr656d.cattlenotes.ui.cattle.CattleFragment"
         android:label="@string/cattle"
-        tools:layout="@layout/fragment_cattle" />
+        tools:layout="@layout/fragment_cattle">
+
+        <action
+            android:id="@+id/navigate_to_cattle_detail"
+            app:destination="@id/cattle_details_activity" />
+    </fragment>
+
+    <activity
+        android:id="@+id/cattle_details_activity"
+        android:name="com.pr656d.cattlenotes.ui.cattle.details.CattleDetailsActivity"
+        android:label="Cattle Details"
+        tools:layout="@layout/activity_cattle_details">
+
+        <argument
+            android:name="cattle_tag_number"
+            app:argType="string"/>
+    </activity>
 
     <fragment
         android:id="@+id/timelineScreen"

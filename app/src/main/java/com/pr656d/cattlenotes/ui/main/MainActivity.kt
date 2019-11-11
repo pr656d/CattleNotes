@@ -20,7 +20,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     override fun provideLayoutId(): Int = R.layout.activity_main
 
-    override fun setupViewModel() {
+    override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 
@@ -47,25 +47,25 @@ class MainActivity : BaseActivity<MainViewModel>() {
                 if (isValidDestination(item.itemId))
                     when (item.itemId) {
                         R.id.itemCattle -> {
-                            navigateTo(R.id.nav_host_fragment, R.id.cattleScreen)
+                            navigateTo(destination = R.id.cattleScreen)
                             tvTitle.setText(R.string.cattle)
                             item.setIcon(R.drawable.ic_cattle_selected)
                             true
                         }
                         R.id.itemTimeline -> {
-                            navigateTo(R.id.nav_host_fragment, R.id.timelineScreen)
+                            navigateTo(destination = R.id.timelineScreen)
                             tvTitle.setText(R.string.timeline)
                             item.setIcon(R.drawable.ic_timeline_selected)
                             true
                         }
                         R.id.itemMilking -> {
-                            navigateTo(R.id.nav_host_fragment, R.id.milkingScreen)
+                            navigateTo(destination = R.id.milkingScreen)
                             tvTitle.setText(R.string.milking)
                             item.setIcon(R.drawable.ic_milking_selected)
                             true
                         }
                         R.id.itemCashflow -> {
-                            navigateTo(R.id.nav_host_fragment, R.id.cashflowScreen)
+                            navigateTo(destination = R.id.cashflowScreen)
                             tvTitle.setText(R.string.cashflow)
                             item.setIcon(R.drawable.ic_cashflow_selected)
                             true

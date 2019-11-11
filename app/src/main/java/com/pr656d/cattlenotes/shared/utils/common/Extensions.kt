@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.*
 import androidx.navigation.Navigation
+import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.local.db.CattleEntity
 import com.pr656d.cattlenotes.model.Cattle
 import java.time.ZonedDateTime
@@ -155,11 +156,11 @@ fun String.convertToGroup(): Cattle.CattleGroup =
 
 // region Nav controller
 
-fun FragmentActivity.navigateTo(@IdRes host: Int, @IdRes destination: Int) {
+fun FragmentActivity.navigateTo(@IdRes host: Int = R.id.nav_host_fragment, @IdRes destination: Int) {
     Navigation.findNavController(this, host).navigate(destination)
 }
 
-fun Fragment.navigateTo(@IdRes host: Int, @IdRes destination: Int) {
+fun Fragment.navigateTo(@IdRes host: Int = R.id.nav_host_fragment, @IdRes destination: Int) {
     Navigation.findNavController(this.requireActivity(), host).navigate(destination)
 }
 

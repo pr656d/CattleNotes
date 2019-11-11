@@ -2,24 +2,32 @@ package com.pr656d.cattlenotes.ui.cattle
 
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.fragment.findNavController
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_cattle.*
-import javax.inject.Inject
 
 class CattleFragment : BaseFragment<CattleViewModel>() {
 
     companion object {
         const val TAG = "CattleFragment"
+
+        const val KEY_CATTLE_TAG_NUMBER = "key_cattle_tag_number"
     }
 
-    @Inject lateinit var cattleAdapter: CattleAdapter
+    private var cattleAdapter: CattleAdapter
 
-    @Inject lateinit var linearLayoutManager: LinearLayoutManager
+    init {
+        cattleAdapter = CattleAdapter(object: CattleListClickListener {
+            override fun onClick(tagNumber: String) {
+                val action = CattleFragmentDirections.navigateToCattleDetail(tagNumber)
+                findNavController().navigate(action)
+            }
+        })
+    }
 
-    override fun setupViewModel() {
+    override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 
@@ -34,9 +42,10 @@ class CattleFragment : BaseFragment<CattleViewModel>() {
     }
 
     override fun setupView(view: View) {
-        rvCattle.apply {
-            adapter = cattleAdapter
-            layoutManager = linearLayoutManager
-        }
+        rvCattle.apply { adapter = cattleAdapter }
     }
+}
+
+interface CattleListClickListener {
+    fun onClick(tagNumber: String)
 }

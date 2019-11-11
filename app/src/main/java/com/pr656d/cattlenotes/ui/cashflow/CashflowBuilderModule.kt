@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.timeline
+package com.pr656d.cattlenotes.ui.cashflow
 
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.shared.di.FragmentScoped
@@ -10,25 +10,25 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**
- * Module where classes needed to create the [TimelineModule] are defined.
+ * Module where classes needed to create the [CashflowBuilderModule] are defined.
  */
 @Module
 @Suppress("UNUSED")
-internal abstract class TimelineModule {
+internal abstract class CashflowBuilderModule {
 
     /**
-     * Generates an [AndroidInjector] for the [TimelineFragment].
+     * Generates an [AndroidInjector] for the [CashflowFragment].
      */
     @FragmentScoped
     @ContributesAndroidInjector
-    internal abstract fun contributeTimelineFragment(): TimelineFragment
+    internal abstract fun contributeCashflowFragment(): CashflowFragment
 
     /**
      * The ViewModels are created by Dagger in a map. Via the @ViewModelKey, we define that we
-     * want to get a [TimelineViewModel] class.
+     * want to get a [CashflowViewModel] class.
      */
     @Binds
     @IntoMap
-    @ViewModelKey(TimelineViewModel::class)
-    internal abstract fun bindTimelineViewModel(viewModel: TimelineViewModel): ViewModel
+    @ViewModelKey(CashflowViewModel::class)
+    internal abstract fun bindCashflowViewModel(viewModel: CashflowViewModel): ViewModel
 }

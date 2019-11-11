@@ -9,10 +9,16 @@ import kotlinx.android.synthetic.main.item_cattle.view.*
 
 class CattleViewHolder(
     parent: ViewGroup,
-    adapter: CattleAdapter
+    private val listener: CattleListClickListener
 ) : BaseItemViewHolder<Cattle>(R.layout.item_cattle, parent) {
 
+    private lateinit var tagNumber: String
+
     override fun bind(data: Cattle) {
+        // Save to use for click listener
+        tagNumber = data.tagNumber
+
+        // Bind views
         itemView.tvTagNumber.text = data.tagNumber
         itemView.tvName.text = data.name
         itemView.tvGroup.text = data.group?.displayName
@@ -20,6 +26,8 @@ class CattleViewHolder(
     }
 
     override fun setupView(view: View) {
-
+        view.layout_cattle_item.setOnClickListener {
+            listener.onClick(tagNumber)
+        }
     }
 }

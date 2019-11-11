@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.cashflow
+package com.pr656d.cattlenotes.ui.cattle
 
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.shared.di.FragmentScoped
@@ -10,25 +10,25 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**
- * Module where classes needed to create the [CashflowModule] are defined.
+ * Module where classes needed to create the [CattleBuilderModule] are defined.
  */
 @Module
 @Suppress("UNUSED")
-internal abstract class CashflowModule {
+internal abstract class CattleBuilderModule {
 
     /**
-     * Generates an [AndroidInjector] for the [CashflowFragment].
+     * Generates an [AndroidInjector] for the [CattleFragment].
      */
     @FragmentScoped
     @ContributesAndroidInjector
-    internal abstract fun contributeCashflowFragment(): CashflowFragment
+    internal abstract fun contributeCattleFragment(): CattleFragment
 
     /**
      * The ViewModels are created by Dagger in a map. Via the @ViewModelKey, we define that we
-     * want to get a [CashflowViewModel] class.
+     * want to get a [CattleViewModel] class.
      */
     @Binds
     @IntoMap
-    @ViewModelKey(CashflowViewModel::class)
-    internal abstract fun bindCashflowViewModel(viewModel: CashflowViewModel): ViewModel
+    @ViewModelKey(CattleViewModel::class)
+    internal abstract fun bindCattleViewModel(viewModel: CattleViewModel): ViewModel
 }
