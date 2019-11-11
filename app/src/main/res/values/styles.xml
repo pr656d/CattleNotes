@@ -115,11 +115,9 @@
     <style name="AppTheme.MainBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" >
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:layout_gravity">bottom</item>
-        <item name="fabAlignmentMode">center</item>
-        <item name="fabCradleMargin">@dimen/margin_zero</item>
-        <item name="fabCradleRoundedCornerRadius">@dimen/margin_zero</item>
-        <item name="fabCradleVerticalOffset">@dimen/fab_vertical_offset</item>
+        <item name="fabAlignmentMode">end</item>
         <item name="hideOnScroll">true</item>
+        <item name="fabCradleVerticalOffset">@dimen/margin_normal</item>
         <item name="layout_scrollFlags">scroll|enterAlways</item>
         <item name="menu">@menu/menu_main_bottom_navigation</item>
         <item name="navigationIcon">@drawable/ic_menu_black</item>
