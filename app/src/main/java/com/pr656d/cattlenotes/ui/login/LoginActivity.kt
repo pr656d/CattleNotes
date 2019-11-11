@@ -53,7 +53,7 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
 
         viewModel.launchMain.observe(this, EventObserver {
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-            overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         })
 
