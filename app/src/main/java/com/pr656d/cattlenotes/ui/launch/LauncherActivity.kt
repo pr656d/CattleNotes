@@ -29,7 +29,7 @@ class LauncherActivity : DaggerAppCompatActivity() {
                 MAIN_ACTIVITY -> startActivity(Intent(this, MainActivity::class.java))
                 LOGIN_ACTIVITY -> startActivity(Intent(this, LoginActivity::class.java))
             }
-            overridePendingTransition(R.anim.fade_in_short, R.anim.fade_out)
+            overridePendingTransition(R.anim.activity_fade_in, R.anim.activity_fade_out)
         })
     }
 }
