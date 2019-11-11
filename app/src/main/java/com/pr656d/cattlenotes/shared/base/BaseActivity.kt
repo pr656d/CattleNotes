@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.shared.base
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
@@ -18,6 +19,7 @@ abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(provideLayoutId())
+        activityScreenMode()
         setupViewModel()
         setupObservers()
         setupView(savedInstanceState)
@@ -37,6 +39,16 @@ abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
     fun showMessage(message: String) = Toaster.show(applicationContext, message)
 
     fun showMessage(@StringRes resId: Int) = showMessage(getString(resId))
+
+    private fun activityScreenMode(allowLandscape: Boolean = false) {
+        /**
+         * Default android screen mode allows landscape. To get rid of it and
+         * force all activities to be in portrait mode.
+         *
+         * If landscape needed then override this function and pass true to allow landscape mode.
+         */
+        if (!allowLandscape) requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+    }
 
     @LayoutRes
     protected abstract fun provideLayoutId(): Int

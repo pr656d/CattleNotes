@@ -129,7 +129,6 @@
 
     <style name="AppTheme.AddFabButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="android:src">@drawable/ic_add_black</item>
-        <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.AppBarLight" parent="Widget.Design.AppBarLayout">
