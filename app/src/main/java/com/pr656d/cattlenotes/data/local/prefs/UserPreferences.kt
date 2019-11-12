@@ -9,7 +9,7 @@ class UserPreferences @Inject constructor(private val prefs: SharedPreferences)
     : CattleNotesSharedPreferences {
 
     companion object {
-        const val KEY_USER_LOGGED_IN = "prefs-key-user-logged-in"
+        const val KEY_USER_LOGGED_IN = "prefs_key_user_logged_in"
     }
 
     fun getUserLoggedIn(): Boolean = prefs.getBoolean(KEY_USER_LOGGED_IN, false)

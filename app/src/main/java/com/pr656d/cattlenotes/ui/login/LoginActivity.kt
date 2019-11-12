@@ -49,6 +49,7 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
                     .build(),
                 CODE_SIGN_IN
             )
+            btnLogin.isEnabled = false
         })
 
         viewModel.launchMain.observe(this, EventObserver {
@@ -79,6 +80,7 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
                         Toaster.show(this, getString(it))
                     }
                     viewModel.onLoginFail()
+                    btnLogin.isEnabled = true
                 }
             }
         }

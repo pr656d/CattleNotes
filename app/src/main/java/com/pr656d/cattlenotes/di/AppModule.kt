@@ -1,8 +1,8 @@
 package com.pr656d.cattlenotes.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.CattleNotesApplication
@@ -23,22 +23,16 @@ import javax.inject.Singleton
 class AppModule {
 
     @Provides
-    fun provideContext(application: CattleNotesApplication): Context {
-        return application.applicationContext
-    }
+    fun provideContext(application: CattleNotesApplication): Context = application.applicationContext
 
+    @Singleton
     @Provides
-    fun provideAuthUI(): AuthUI = AuthUI.getInstance()
+    fun provideFirebaseAuthUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
+    @Singleton
     @Provides
-    fun provideFirebaseAuth(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
-
-    @Provides
-    fun provideSharedPreferences(application: CattleNotesApplication) =
-        application.getSharedPreferences(
-            CattleNotesSharedPreferences.preferencesName,
-            Context.MODE_PRIVATE
-        )
+    fun provideSharedPreferences(application: CattleNotesApplication): SharedPreferences =
+        CattleNotesSharedPreferences.build(application)
 
     @Singleton
     @Provides

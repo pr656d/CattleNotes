@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.launch
+package com.pr656d.cattlenotes.ui.main
 
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.shared.di.ViewModelKey
@@ -11,14 +11,14 @@ import dagger.multibindings.IntoMap
  */
 @Module
 @Suppress("UNUSED")
-internal abstract class LaunchModule {
+internal abstract class MainBindingModule {
 
     /**
      * The ViewModels are created by Dagger in a map. Via the @ViewModelKey, we define that we
-     * want to get a [LaunchViewModel] class.
+     * want to get a [MainViewModel] class.
      */
     @Binds
     @IntoMap
-    @ViewModelKey(LaunchViewModel::class)
-    internal abstract fun bindLaunchViewModel(viewModel: LaunchViewModel): ViewModel
+    @ViewModelKey(MainViewModel::class)
+    internal abstract fun bindLaunchViewModel(viewModel: MainViewModel): ViewModel
 }
