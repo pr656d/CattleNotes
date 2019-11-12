@@ -14,18 +14,9 @@ class CattleFragment : BaseFragment<CattleViewModel>() {
         const val TAG = "CattleFragment"
     }
 
-    private var cattleAdapter: CattleAdapter
+    private lateinit var cattleAdapter: CattleAdapter
 
-    init {
-        cattleAdapter = CattleAdapter(object: CattleListClickListener {
-            override fun onClick(tagNumber: String) {
-                val action = CattleFragmentDirections.navigateToCattleDetail(tagNumber)
-                findNavController().navigate(action)
-            }
-        })
-    }
-
-    override fun initViewModel() {
+    override fun init() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 
@@ -44,7 +35,15 @@ class CattleFragment : BaseFragment<CattleViewModel>() {
     }
 
     override fun setupView(view: View) {
-        rvCattle.apply { adapter = cattleAdapter }
+        rvCattle.run {
+            cattleAdapter = CattleAdapter(object: CattleListClickListener {
+                override fun onClick(tagNumber: String) {
+                    val action = CattleFragmentDirections.navigateToCattleDetail(tagNumber)
+                    findNavController().navigate(action)
+                }
+            })
+            adapter = cattleAdapter
+        }
     }
 }
 

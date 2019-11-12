@@ -20,7 +20,7 @@ abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(provideLayoutId())
         setActivityScreenOrientation()
-        initViewModel()
+        init()
         setupObservers()
         setupView(savedInstanceState)
         viewModel.onCreate()
@@ -58,5 +58,5 @@ abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
     /**
      * Class implementation required to initialize viewmodel.
      */
-    protected abstract fun initViewModel()
+    protected abstract fun init()
 }

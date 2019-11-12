@@ -20,7 +20,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     override fun provideLayoutId(): Int = R.layout.activity_main
 
-    override fun initViewModel() {
+    override fun init() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 

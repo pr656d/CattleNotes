@@ -25,13 +25,6 @@ import javax.inject.Singleton
     ]
 )
 interface AppComponent : AndroidInjector<CattleNotesApplication> {
-    /**
-     * [MainDataManager] used for data caching.
-     *
-     * Fragments are created every time if we switch to another activity/fragment.
-     * That will fetch data again from the database.
-     */
-    fun mainDataManager(): MainDataManager
 
     @Component.Factory
     interface Factory {

@@ -11,7 +11,7 @@ class TimelineFragment : BaseFragment<TimelineViewModel>() {
         const val TAG = "TimelineFragment"
     }
 
-    override fun initViewModel() {
+    override fun init() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 

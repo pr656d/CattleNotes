@@ -47,4 +47,7 @@
 
     <!--  item_cattle  -->
     <string name="calving">%1$d calving</string>
+
+    <!--  Cattle details  -->
+    <string name="cattle_details">Cattle details</string>
 </resources>
