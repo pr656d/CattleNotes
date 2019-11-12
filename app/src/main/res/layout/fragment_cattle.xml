@@ -1,15 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.recyclerview.widget.RecyclerView
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/rvCattle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/rv_clip_bottom_padding"
-    android:clipToPadding="false"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    app:layoutManager="LinearLayoutManager"
-    tools:itemCount="20"
-    tools:listitem="@layout/item_cattle" />
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <ProgressBar
+        style="@style/progressBarBlack"
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCattle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/rv_clip_bottom_padding"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layoutManager="LinearLayoutManager"
+        tools:itemCount="20"
+        tools:listitem="@layout/item_cattle" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

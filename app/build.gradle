@@ -45,7 +45,6 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin_version"
 
     // JARs
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -53,8 +52,12 @@ dependencies {
     // Android Support Library
     implementation "androidx.appcompat:appcompat:$rootProject.app_compat_version"
 
-    // Core ktx
+    // Kotlin
     implementation "androidx.core:core-ktx:$rootProject.core_ktx_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlin_version"
+
+    // Coroutine
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$rootProject.coroutine_core_version"
 
     // Constraint Layout
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraint_version"
@@ -76,7 +79,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycle_version"
 
     // Lifecycle Annotations
-    kapt "androidx.lifecycle:lifecycle-compiler:$rootProject.lifecycle_version"
+    kapt "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycle_version"
 
     // Multidex
     implementation "androidx.multidex:multidex:$rootProject.multidex_version"
@@ -87,10 +90,10 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$rootProject.dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$rootProject.dagger_version"
 
-    // Database
+    // Room
     implementation "androidx.room:room-runtime:$rootProject.room_version"
+    implementation "androidx.room:room-ktx:$rootProject.room_version"
     kapt "androidx.room:room-compiler:$rootProject.room_version"
-    implementation "androidx.room:room-rxjava2:$rootProject.room_version"
 
     // Image
     implementation "com.github.bumptech.glide:glide:$rootProject.glide_version"
@@ -102,10 +105,6 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttp_version"
     implementation "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$rootProject.retrofit2_rxjava2_adapter"
-
-    // Reactive
-    implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjava_version"
-    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxandroid_version"
 
     // logger
     implementation "com.jakewharton.timber:timber:$rootProject.timber_version"

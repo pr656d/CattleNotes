@@ -1,8 +1,6 @@
 package com.pr656d.cattlenotes.data.local.db
 
 import androidx.room.*
-import io.reactivex.Completable
-import io.reactivex.Single
 
 /**
  * The Data Access Object for the [CattleEntity] class.
@@ -11,17 +9,17 @@ import io.reactivex.Single
 interface CattleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(cattle: CattleEntity): Completable
+    suspend fun insert(cattle: CattleEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(cattle: List<CattleEntity>): Completable
+    suspend fun insertAll(cattle: List<CattleEntity>)
 
     @Query("SELECT * FROM cattle")
-    fun getAll(): Single<List<CattleEntity>>
+    suspend fun getAll(): List<CattleEntity>
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun update(cattle: CattleEntity): Completable
+    suspend fun update(cattle: CattleEntity)
 
     @Delete
-    fun delete(cattle: CattleEntity): Completable
+    suspend fun delete(cattle: CattleEntity)
 }

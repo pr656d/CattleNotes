@@ -12,8 +12,6 @@ class CattleFragment : BaseFragment<CattleViewModel>() {
 
     companion object {
         const val TAG = "CattleFragment"
-
-        const val KEY_CATTLE_TAG_NUMBER = "key_cattle_tag_number"
     }
 
     private var cattleAdapter: CattleAdapter
@@ -38,6 +36,10 @@ class CattleFragment : BaseFragment<CattleViewModel>() {
 
         viewModel.cattleList.observe(this, Observer {
             cattleAdapter.updateList(it)
+        })
+
+        viewModel.isLoading.observe(this, Observer {
+            progressBar.visibility = if (it) View.VISIBLE else View.GONE
         })
     }
 

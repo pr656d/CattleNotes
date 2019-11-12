@@ -6,8 +6,6 @@ import com.pr656d.cattlenotes.shared.utils.common.LoadSampleData
 import com.pr656d.cattlenotes.shared.utils.common.toCattleEntity
 import com.pr656d.cattlenotes.shared.utils.common.toCattleEntityList
 import com.pr656d.cattlenotes.shared.utils.common.toCattleList
-import io.reactivex.Completable
-import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -16,21 +14,21 @@ open class CattleDataRepository @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
 
-    fun loadSampleData(): Completable =
-        appDatabase.cattleDao().insertAll(LoadSampleData.getListOfCattleEntity())
+     suspend fun loadSampleData() =
+         appDatabase.cattleDao().insertAll(LoadSampleData.getListOfCattleEntity())
 
-    fun addCattle(cattle: Cattle): Completable =
+    suspend fun addCattle(cattle: Cattle) =
         appDatabase.cattleDao().insert(cattle.toCattleEntity())
 
-    fun addAllCattle(cattleList: List<Cattle>): Completable =
+    suspend fun addAllCattle(cattleList: List<Cattle>) =
         appDatabase.cattleDao().insertAll(cattleList.toCattleEntityList())
 
-    fun getAllCattle(): Single<List<Cattle>> =
-        appDatabase.cattleDao().getAll().map { it.toCattleList() }
+    suspend fun getAllCattle(): List<Cattle> =
+        appDatabase.cattleDao().getAll().toCattleList()
 
-    fun deleteCattle(cattle: Cattle): Completable =
+    suspend fun deleteCattle(cattle: Cattle) =
         appDatabase.cattleDao().delete(cattle.toCattleEntity())
 
-    fun updateCattle(cattle: Cattle): Completable =
+    suspend fun updateCattle(cattle: Cattle) =
         appDatabase.cattleDao().update(cattle.toCattleEntity())
 }
