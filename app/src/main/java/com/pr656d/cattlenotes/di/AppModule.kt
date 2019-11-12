@@ -25,7 +25,6 @@ class AppModule {
     @Provides
     fun provideContext(application: CattleNotesApplication): Context = application.applicationContext
 
-    @Singleton
     @Provides
     fun provideFirebaseAuthUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
