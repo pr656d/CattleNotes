@@ -26,7 +26,7 @@
                 android:paddingTop="@dimen/margin_small"
                 android:paddingBottom="@dimen/margin_small"
                 android:text="@string/cattle"
-                android:textSize="36sp"
+                android:textSize="@dimen/title_text_size"
                 android:layout_gravity="center"/>
 
         </androidx.appcompat.widget.Toolbar>
