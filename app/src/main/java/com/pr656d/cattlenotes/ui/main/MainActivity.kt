@@ -48,25 +48,21 @@ class MainActivity : BaseActivity<MainViewModel>() {
                     when (item.itemId) {
                         R.id.itemCattle -> {
                             navigateTo(destination = R.id.cattleScreen)
-                            tvTitle.setText(R.string.cattle)
                             item.setIcon(R.drawable.ic_cattle_selected)
                             true
                         }
                         R.id.itemTimeline -> {
                             navigateTo(destination = R.id.timelineScreen)
-                            tvTitle.setText(R.string.timeline)
                             item.setIcon(R.drawable.ic_timeline_selected)
                             true
                         }
                         R.id.itemMilking -> {
                             navigateTo(destination = R.id.milkingScreen)
-                            tvTitle.setText(R.string.milking)
                             item.setIcon(R.drawable.ic_milking_selected)
                             true
                         }
                         R.id.itemCashflow -> {
                             navigateTo(destination = R.id.cashflowScreen)
-                            tvTitle.setText(R.string.cashflow)
                             item.setIcon(R.drawable.ic_cashflow_selected)
                             true
                         }

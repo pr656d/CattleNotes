@@ -112,13 +112,20 @@
         <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
 
+
+    <style name="AppTheme.ToolbarTitle" parent="AppTheme.Body1">
+        <item name="android:paddingTop">@dimen/margin_small</item>
+        <item name="android:paddingBottom">@dimen/margin_small</item>
+        <item name="android:textSize">@dimen/title_text</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
     <style name="AppTheme.MainBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" >
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:layout_gravity">bottom</item>
         <item name="fabAlignmentMode">end</item>
         <item name="hideOnScroll">true</item>
         <item name="fabCradleVerticalOffset">@dimen/margin_normal</item>
-        <item name="layout_scrollFlags">scroll|enterAlways</item>
         <item name="menu">@menu/menu_main_bottom_navigation</item>
         <item name="navigationIcon">@drawable/ic_menu_black</item>
     </style>
@@ -132,6 +139,7 @@
     <style name="AppTheme.AppBarLight" parent="Widget.Design.AppBarLayout">
         <item name="android:background">@color/white</item>
         <item name="android:fitsSystemWindows">true</item>
+        <item name="android:elevation">@dimen/no_elevation</item>
     </style>
 
     <style name="progressBarBlack" parent="Widget.AppCompat.ProgressBar">
