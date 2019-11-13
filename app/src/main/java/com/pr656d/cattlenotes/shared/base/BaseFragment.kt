@@ -23,7 +23,6 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
         super.onCreate(savedInstanceState)
         init()
         setupObservers()
-        viewModel.onCreate()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =

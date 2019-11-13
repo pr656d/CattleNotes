@@ -23,7 +23,6 @@ abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
         init()
         setupObservers()
         setupView(savedInstanceState)
-        viewModel.onCreate()
     }
 
     protected open fun setupObservers() {

@@ -9,7 +9,7 @@ import com.pr656d.cattlenotes.model.Cattle
 /**]
  * This class represents [Cattle] data to store in database.
  */
-@Entity(tableName = "cattle")
+@Entity(tableName = "cattle_list")
 data class CattleEntity(
 
     /**
@@ -34,6 +34,10 @@ data class CattleEntity(
     @ColumnInfo(name = "type")
     val type: String,
 
+    @SerializedName("image_url")
+    @ColumnInfo(name = "image_url")
+    val imageUrl: String? = null,
+
     /**
      * Cattle breed [Cattle.CattleBreed] as string e.g. HF, Gir etc.
      */
@@ -55,6 +59,10 @@ data class CattleEntity(
     @SerializedName("calving")
     @ColumnInfo(name = "calving")
     val calving: Int = 0,
+
+    @SerializedName("date_of_birth")
+    @ColumnInfo(name = "date_of_birth")
+    val dateOfBirth: String? = null,
 
     /**
      * Artificial Insemination date in millis as String.
@@ -82,5 +90,17 @@ data class CattleEntity(
      */
     @SerializedName("dry_off_date")
     @ColumnInfo(name = "dry_off_date")
-    val dryOffDate: String? = null
+    val dryOffDate: String? = null,
+
+    @SerializedName("calving_date")
+    @ColumnInfo(name = "calving_date")
+    val calvingDate: String? = null,
+
+    @SerializedName("purchase_amount")
+    @ColumnInfo(name = "purchase_amount")
+    val purchaseAmount: Long? = 0,
+
+    @SerializedName("purchase_date")
+    @ColumnInfo(name = "purchase_date")
+    val purchaseDate: String? = null
 )

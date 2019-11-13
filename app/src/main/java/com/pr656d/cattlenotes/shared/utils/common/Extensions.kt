@@ -102,16 +102,18 @@ fun ZonedDateTime.toEpochMilli() = this.toInstant().toEpochMilli()
 
 fun Cattle.toCattleEntity(): CattleEntity =
     CattleEntity(
-        this.tagNumber, this.name, this.type.displayName, this.breed?.displayName,
-        this.group?.displayName, this.calving, this.aiDate, this.repeatHeatDate,
-        this.pregnancyCheckDate, this.dryOffDate
+        this.tagNumber, this.name, this.type.displayName, this.imageUrl, this.breed?.displayName,
+        this.group?.displayName, this.calving,this.dateOfBirth, this.aiDate,
+        this.repeatHeatDate, this.pregnancyCheckDate, this.dryOffDate, this.calvingDate,
+        this.purchaseAmount, this.purchaseDate
     )
 
 fun CattleEntity.toCattle(): Cattle =
     Cattle(
-        this.tagNumber, this.name, this.type.convertToType(), this.breed?.convertToBreed(),
-        this.group?.convertToGroup(), this.calving, this.aiDate, this.repeatHeatDate,
-        this.pregnancyCheckDate, this.dryOffDate
+        this.tagNumber, this.name, this.type.convertToType(), this.imageUrl,
+        this.breed?.convertToBreed(), this.group?.convertToGroup(), this.calving, this.dateOfBirth,
+        this.aiDate, this.repeatHeatDate, this.pregnancyCheckDate, this.dryOffDate,
+        this.calvingDate, this.purchaseAmount, this.purchaseDate
     )
 
 fun List<CattleEntity>.toCattleList(): List<Cattle> =

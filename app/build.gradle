@@ -62,6 +62,9 @@ dependencies {
     // Constraint Layout
     implementation "androidx.constraintlayout:constraintlayout:$rootProject.constraint_version"
 
+    // Support design
+    implementation "com.android.support:design:$rootProject.support_design_version"
+
     // Material Design
     implementation "com.google.android.material:material:$rootProject.material_version"
 

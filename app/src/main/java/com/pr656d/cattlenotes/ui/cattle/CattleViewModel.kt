@@ -7,6 +7,7 @@ import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
 import com.pr656d.cattlenotes.shared.data.CacheData
+import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,15 +26,21 @@ class CattleViewModel @Inject constructor(
     private val _loading = MutableLiveData<Boolean>()
     val isLoading = _loading
 
-    override fun onCreate() {
-        cacheData.getCattleList()?.let {
-            if (it.isNotEmpty())
-                _cattleList.postValue(it)
-            return
-        }
-        fetchCattleList()
+    init {
+        if (!checkCacheData()) fetchCattleList()
     }
 
+    private fun checkCacheData(): Boolean {
+        cacheData.getCattleList()?.let {
+            if (it.isNotEmpty()) {
+                _cattleList.postValue(it)
+                return true
+            }
+        }
+        return false
+    }
+
+    // TODO Remove this function when add option is working
     private fun loadSampleData() {
         viewModelScope.launch {
             cattleDataRepository.loadSampleData()
@@ -49,6 +56,7 @@ class CattleViewModel @Inject constructor(
                 _cattleList.postValue(list)
                 cacheData.setCattleList(list)
                 _loading.postValue(false)
+                Logger.d(CattleFragment.TAG, "updated list: ${list.count()}")
             }
         }
     }

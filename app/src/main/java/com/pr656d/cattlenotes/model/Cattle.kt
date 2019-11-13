@@ -10,11 +10,15 @@ data class Cattle(
 
     var type: CattleType,
 
+    var imageUrl: String? = null,
+
     var breed: CattleBreed? = null,
 
     var group: CattleGroup? = null,
 
     var calving: Int = 0,
+
+    var dateOfBirth: String? = null,
 
     var aiDate: String? = null,
 
@@ -22,7 +26,13 @@ data class Cattle(
 
     var pregnancyCheckDate: String? = null,
 
-    var dryOffDate: String? = null
+    var dryOffDate: String? = null,
+
+    val calvingDate: String? = null,
+
+    val purchaseAmount: Long? = 0,
+
+    val purchaseDate: String? = null
 ) {
     /**
      * Represents type of animal e.g. cow, bull etc.

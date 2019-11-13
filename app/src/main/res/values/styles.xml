@@ -164,8 +164,4 @@
     <style name="progressBarBlack" parent="Widget.AppCompat.ProgressBar">
         <item name="android:indeterminateTint">@color/colorPrimary</item>
     </style>
-
-    <style name="AppTheme.TextInputEditText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
-        <item name="android:textColor">@drawable/selector_edit_text_color</item>
-    </style>
 </resources>

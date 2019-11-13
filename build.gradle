@@ -24,6 +24,9 @@ buildscript {
         // Navigation controller
         nav_version = '2.1.0'
 
+        // support design
+        support_design_version = '28.0.0'
+
         // Material
         material_version = '1.2.0-alpha01'
 

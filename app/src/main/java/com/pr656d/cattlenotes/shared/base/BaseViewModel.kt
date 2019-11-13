@@ -46,6 +46,4 @@ abstract class BaseViewModel(
     protected open fun forcedLogoutUser() {
         // do something
     }
-
-    abstract fun onCreate()
 }

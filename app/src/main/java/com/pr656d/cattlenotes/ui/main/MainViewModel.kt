@@ -6,6 +6,4 @@ import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
     networkHelper: NetworkHelper
-) : BaseViewModel(networkHelper) {
-    override fun onCreate() {}
-}
+) : BaseViewModel(networkHelper)
