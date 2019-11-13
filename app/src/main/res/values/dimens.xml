@@ -15,5 +15,5 @@
     <dimen name="photo_height_normal">50dp</dimen>
 
     <dimen name="no_elevation">0dp</dimen>
-    <dimen name="rv_clip_bottom_padding">100dp</dimen>
+    <dimen name="appbar_height">120dp</dimen>
 </resources>

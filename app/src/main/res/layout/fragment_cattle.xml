@@ -42,7 +42,7 @@
         android:id="@+id/rvCattle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/rv_clip_bottom_padding"
+        android:paddingBottom="@dimen/appbar_height"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layoutManager="LinearLayoutManager"

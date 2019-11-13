@@ -50,4 +50,17 @@
 
     <!--  Cattle details  -->
     <string name="cattle_details">Cattle details</string>
+    <string name="tag_number">Tag Number</string>
+    <string name="name">Name</string>
+    <string name="breed">Breed</string>
+    <string name="type">Type</string>
+    <string name="group">Group</string>
+    <string name="date_of_birth">Date of birth</string>
+    <string name="calving_text">Calving</string>
+    <string name="purchase_amount">Purchase amount (\u20B9)</string>
+    <string name="purchase_date">Purchase date</string>
+    <string name="artificial_insemination">Artificial insemination</string>
+    <string name="repeat_heat">Repeat heat</string>
+    <string name="pregnancy_check">Pregnancy check</string>
+    <string name="dry_off">Dry off</string>
 </resources>

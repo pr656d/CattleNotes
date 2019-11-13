@@ -63,10 +63,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@+id/tvTagNumber"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
         app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
-        app:layout_constraintTop_toTopOf="@+id/tvTagNumber"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toTopOf="@+id/guidelineTop"
         tools:text="Name" />
 
     <TextView
@@ -74,9 +73,11 @@
         style="@style/AppTheme.Body2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_small"
         android:textColor="@color/grey_light"
         app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-        app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
+        app:layout_constraintStart_toEndOf="@+id/tvGroup"
+        app:layout_constraintTop_toTopOf="@+id/tvGroup"
         tools:text="Cow" />
 
     <TextView
@@ -85,9 +86,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/grey_light"
-        app:layout_constraintBottom_toBottomOf="@+id/tvType"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
-        app:layout_constraintTop_toTopOf="@+id/tvType"
+        app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+        app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
         tools:text="Milking" />
 
     <View

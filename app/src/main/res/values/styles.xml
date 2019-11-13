@@ -126,7 +126,18 @@
         <item name="fabAlignmentMode">end</item>
         <item name="hideOnScroll">true</item>
         <item name="fabCradleVerticalOffset">@dimen/margin_normal</item>
-        <item name="menu">@menu/menu_main_bottom_navigation</item>
+        <item name="menu">@menu/menu_main_appbar</item>
+        <item name="navigationIcon">@drawable/ic_menu_black</item>
+    </style>
+
+
+    <style name="AppTheme.CattleDetailsBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" >
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:layout_gravity">bottom</item>
+        <item name="fabAlignmentMode">end</item>
+        <item name="hideOnScroll">true</item>
+        <item name="fabCradleVerticalOffset">@dimen/margin_normal</item>
+        <item name="menu">@menu/menu_cattle_details_appbar</item>
         <item name="navigationIcon">@drawable/ic_menu_black</item>
     </style>
 
@@ -136,14 +147,25 @@
         <item name="android:src">@drawable/ic_add_black</item>
     </style>
 
+    <style name="AppTheme.SaveFabButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:src">@drawable/ic_check_black</item>
+    </style>
+
+    <style name="AppTheme.EditFabButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:src">@drawable/ic_edit_black</item>
+    </style>
+
     <style name="AppTheme.AppBarLight" parent="Widget.Design.AppBarLayout">
         <item name="android:background">@color/white</item>
         <item name="android:fitsSystemWindows">true</item>
-        <item name="android:elevation">@dimen/no_elevation</item>
+        <item name="elevation">@dimen/no_elevation</item>
     </style>
 
     <style name="progressBarBlack" parent="Widget.AppCompat.ProgressBar">
         <item name="android:indeterminateTint">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.TextInputEditText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:textColor">@drawable/selector_edit_text_color</item>
+    </style>
 </resources>
