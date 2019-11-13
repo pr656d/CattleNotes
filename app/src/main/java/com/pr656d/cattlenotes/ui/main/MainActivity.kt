@@ -29,6 +29,15 @@ class MainActivity : BaseActivity<MainViewModel>() {
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
+        fabButton.setOnClickListener {
+            when (activeMenuItem.itemId) {
+                R.id.itemCattle -> navigateTo(R.id.nav_host_fragment, R.id.addCattleScreen)
+                R.id.itemMilking -> { }
+                R.id.itemCashflow -> { }
+            }
+
+        }
+
         bottomAppBar.run {
             /**
              * When app launches first time set active menu item as cattle item.
@@ -44,25 +53,28 @@ class MainActivity : BaseActivity<MainViewModel>() {
             }
 
             setOnMenuItemClickListener { item ->
+                fabButton.isEnabled = true
+
                 if (isValidDestination(item.itemId))
                     when (item.itemId) {
                         R.id.itemCattle -> {
-                            navigateTo(destination = R.id.cattleScreen)
+                            navigateTo(R.id.nav_host_fragment, R.id.cattleScreen)
                             item.setIcon(R.drawable.ic_cattle_selected)
                             true
                         }
                         R.id.itemTimeline -> {
-                            navigateTo(destination = R.id.timelineScreen)
+                            navigateTo(R.id.nav_host_fragment, R.id.timelineScreen)
+                            fabButton.isEnabled = false
                             item.setIcon(R.drawable.ic_timeline_selected)
                             true
                         }
                         R.id.itemMilking -> {
-                            navigateTo(destination = R.id.milkingScreen)
+                            navigateTo(R.id.nav_host_fragment, R.id.milkingScreen)
                             item.setIcon(R.drawable.ic_milking_selected)
                             true
                         }
                         R.id.itemCashflow -> {
-                            navigateTo(destination = R.id.cashflowScreen)
+                            navigateTo(R.id.nav_host_fragment, R.id.cashflowScreen)
                             item.setIcon(R.drawable.ic_cashflow_selected)
                             true
                         }
@@ -94,11 +106,11 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
     private fun isValidDestination(@IdRes itemId: Int): Boolean =
         Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
-            .currentDestination?.id != when(itemId) {
-                R.id.itemCattle -> R.id.cattleScreen
-                R.id.itemTimeline -> R.id.timelineScreen
-                R.id.itemMilking -> R.id.milkingScreen
-                R.id.itemCashflow -> R.id.cashflowScreen
-                else -> -1  // I don't want to pass null here
+            .currentDestination?.id != when (itemId) {
+            R.id.itemCattle -> R.id.cattleScreen
+            R.id.itemTimeline -> R.id.timelineScreen
+            R.id.itemMilking -> R.id.milkingScreen
+            R.id.itemCashflow -> R.id.cashflowScreen
+            else -> -1  // I don't want to pass null here
         }
 }

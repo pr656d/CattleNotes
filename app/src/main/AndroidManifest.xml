@@ -37,6 +37,8 @@
 
         <activity android:name=".ui.cattle.details.CattleDetailsActivity" />
 
+        <activity android:name=".ui.cattle.add.AddEditCattleActivity" />
+
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />

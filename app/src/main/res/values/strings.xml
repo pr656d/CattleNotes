@@ -63,4 +63,7 @@
     <string name="repeat_heat">Repeat heat</string>
     <string name="pregnancy_check">Pregnancy check</string>
     <string name="dry_off">Dry off</string>
+
+    <!--  Add cattle  -->
+    <string name="add_cattle">Add new cattle</string>
 </resources>

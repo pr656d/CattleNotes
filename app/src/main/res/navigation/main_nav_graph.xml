@@ -13,13 +13,19 @@
 
         <action
             android:id="@+id/navigate_to_cattle_detail"
-            app:destination="@id/cattle_details_activity" />
+            app:destination="@id/cattleDetailsScreen" />
     </fragment>
 
     <activity
-        android:id="@+id/cattle_details_activity"
+        android:id="@+id/addCattleScreen"
+        android:name="com.pr656d.cattlenotes.ui.cattle.add.AddEditCattleActivity"
+        android:label="@string/add_cattle"
+        tools:layout="@layout/activity_add_edit_cattle" />
+
+    <activity
+        android:id="@+id/cattleDetailsScreen"
         android:name="com.pr656d.cattlenotes.ui.cattle.details.CattleDetailsActivity"
-        android:label="Cattle Details"
+        android:label="@string/cattle_details"
         tools:layout="@layout/activity_cattle_details">
 
         <argument

@@ -158,7 +158,7 @@ fun String.convertToGroup(): Cattle.CattleGroup =
 
 // region Nav controller
 
-fun FragmentActivity.navigateTo(@IdRes host: Int = R.id.nav_host_fragment, @IdRes destination: Int) {
+fun FragmentActivity.navigateTo(@IdRes host: Int, @IdRes destination: Int) {
     Navigation.findNavController(this, host).navigate(destination)
 }
 

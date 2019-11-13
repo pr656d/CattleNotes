@@ -3,6 +3,8 @@ package com.pr656d.cattlenotes.di
 import com.pr656d.cattlenotes.shared.di.ActivityScoped
 import com.pr656d.cattlenotes.ui.cashflow.CashflowBindingModule
 import com.pr656d.cattlenotes.ui.cattle.CattleBindingModule
+import com.pr656d.cattlenotes.ui.cattle.add.AddEditCattleActivity
+import com.pr656d.cattlenotes.ui.cattle.add.AddEditCattleBindingModule
 import com.pr656d.cattlenotes.ui.cattle.details.CattleDetailsActivity
 import com.pr656d.cattlenotes.ui.cattle.details.CattleDetailsBindingModule
 import com.pr656d.cattlenotes.ui.launch.LaunchBindingModule
@@ -60,4 +62,8 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(modules = [CattleDetailsBindingModule::class])
     internal abstract fun cattleDetailsActivity(): CattleDetailsActivity
+
+    @ActivityScoped
+    @ContributesAndroidInjector(modules = [AddEditCattleBindingModule::class])
+    internal abstract fun addEditCattleActivity(): AddEditCattleActivity
 }

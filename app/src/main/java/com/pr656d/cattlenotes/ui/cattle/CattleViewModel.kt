@@ -32,25 +32,15 @@ class CattleViewModel @Inject constructor(
 
     private fun checkCacheData(): Boolean {
         cacheData.getCattleList()?.let {
-            if (it.isNotEmpty()) {
-                _cattleList.postValue(it)
-                return true
-            }
+            _cattleList.postValue(it)
+            return true
         }
         return false
     }
 
-    // TODO Remove this function when add option is working
-    private fun loadSampleData() {
-        viewModelScope.launch {
-            cattleDataRepository.loadSampleData()
-        }
-    }
-
-    fun fetchCattleList() {
+    private fun fetchCattleList() {
         _loading.postValue(true)
         viewModelScope.launch {
-            loadSampleData()    // TODO Remove this when add option is working
             val list = cattleDataRepository.getAllCattle()
             withContext(Dispatchers.Main) {
                 _cattleList.postValue(list)
