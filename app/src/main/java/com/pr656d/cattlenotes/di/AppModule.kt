@@ -10,7 +10,6 @@ import com.pr656d.cattlenotes.data.local.db.AppDatabase
 import com.pr656d.cattlenotes.data.local.prefs.CattleNotesSharedPreferences
 import dagger.Module
 import dagger.Provides
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Singleton
 
 /**
@@ -36,9 +35,6 @@ class AppModule {
     @Singleton
     @Provides
     fun providesAppDatabase(context: Context): AppDatabase = AppDatabase.buildDatabase(context)
-
-    @Provides
-    fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
     @Provides
     fun provideLinearLayoutManager(context: Context) = LinearLayoutManager(context)

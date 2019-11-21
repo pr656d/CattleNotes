@@ -17,5 +17,7 @@ class TimelineFragment : BaseFragment<TimelineViewModel>() {
 
     override fun provideLayoutId(): Int = R.layout.fragment_timeline
 
+    override fun setupObservers() { }
+
     override fun setupView(view: View) { }
 }

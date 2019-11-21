@@ -28,6 +28,8 @@ class MainActivity : BaseActivity<MainViewModel>() {
         finish()
     }
 
+    override fun setupObservers() { }
+
     override fun setupView(savedInstanceState: Bundle?) {
         fabButton.setOnClickListener {
             when (activeMenuItem.itemId) {

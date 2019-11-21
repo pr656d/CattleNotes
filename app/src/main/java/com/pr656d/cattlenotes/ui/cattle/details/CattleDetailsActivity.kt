@@ -25,8 +25,6 @@ class CattleDetailsActivity : BaseActivity<CattleDetailsViewModel>() {
     }
 
     override fun setupObservers() {
-        super.setupObservers()
-
         viewModel.cattle.observe(this, EventObserver {
             bindData(it)
         })

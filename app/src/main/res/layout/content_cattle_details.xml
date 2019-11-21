@@ -61,6 +61,7 @@
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutTagNumber"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -74,7 +75,6 @@
                 android:id="@+id/editTextTagNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -82,6 +82,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -95,7 +96,6 @@
                 android:id="@+id/editTextName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -103,6 +103,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutBreed"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -117,7 +118,6 @@
                 android:id="@+id/editTextBreed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -125,6 +125,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutType"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -139,7 +140,6 @@
                 android:id="@+id/editTextType"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -147,6 +147,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutGroup"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -160,7 +161,6 @@
                 android:id="@+id/editTextGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -168,6 +168,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutDateOfBirth"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -181,7 +182,6 @@
                 android:id="@+id/editTextDateOfBirth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -189,6 +189,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutCalving"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -202,7 +203,6 @@
                 android:id="@+id/editTextCalving"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -210,6 +210,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutAiDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -223,7 +224,6 @@
                 android:id="@+id/editTextAiDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -231,6 +231,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutRepeatHeatDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -244,7 +245,6 @@
                 android:id="@+id/editTextRepeatHeatDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -252,6 +252,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutPregnancyCheckDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -265,13 +266,13 @@
                 android:id="@+id/editTextPregnancyCheckDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
                 tools:text="10/05/2018" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutDryOffDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -285,7 +286,6 @@
                 android:id="@+id/editTextDryOffDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -293,6 +293,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutCalvingDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -306,7 +307,6 @@
                 android:id="@+id/editTextCalvingDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -314,6 +314,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutPurchaseAmount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -328,7 +329,6 @@
                 android:id="@+id/editTextPurchaseAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"
@@ -336,6 +336,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutPurchaseDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -349,7 +350,6 @@
                 android:id="@+id/editTextPurchaseDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
                 android:enabled="false"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color"

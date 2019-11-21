@@ -21,8 +21,6 @@ class AddEditCattleActivity : BaseActivity<AddEditCattleViewModel>() {
     }
 
     override fun setupObservers() {
-        super.setupObservers()
-
         viewModel.loading.observe(this, Observer {
 
         })

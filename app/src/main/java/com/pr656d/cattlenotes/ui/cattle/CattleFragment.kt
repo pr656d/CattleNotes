@@ -23,8 +23,6 @@ class CattleFragment : BaseFragment<CattleViewModel>() {
     override fun provideLayoutId(): Int = R.layout.fragment_cattle
 
     override fun setupObservers() {
-        super.setupObservers()
-
         viewModel.cattleList.observe(this, Observer {
             cattleAdapter.updateList(it)
         })

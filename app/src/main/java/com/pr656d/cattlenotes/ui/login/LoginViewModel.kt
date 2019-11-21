@@ -11,8 +11,8 @@ import com.pr656d.cattlenotes.utils.common.Resource
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-    networkHelper: NetworkHelper
-) : BaseViewModel(networkHelper) {
+    private val networkHelper: NetworkHelper
+) : BaseViewModel() {
 
     private val _launchFirebaseLoginUI: MutableLiveData<Event<Unit>> = MutableLiveData()
     val launchFirebaseAuthUI: LiveData<Event<Unit>> = _launchFirebaseLoginUI
@@ -24,7 +24,7 @@ class LoginViewModel @Inject constructor(
     val loginStatus: LiveData<Resource<Int>> = _loginStatus
 
     fun onLoginClick() {
-        if (checkInternetConnection())
+        if (networkHelper.isNetworkConnected())
             _launchFirebaseLoginUI.postValue(Event(Unit))
         else
             _loginStatus.postValue(Resource.error(R.string.network_not_available))

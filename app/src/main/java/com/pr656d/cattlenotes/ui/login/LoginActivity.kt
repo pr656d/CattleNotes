@@ -32,8 +32,6 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
     override fun provideLayoutId(): Int = R.layout.activity_login
 
     override fun setupObservers() {
-        super.setupObservers()
-
         viewModel.launchFirebaseAuthUI.observe(this, EventObserver {
             startActivityForResult(
                 authUI.createSignInIntentBuilder()

@@ -8,17 +8,15 @@ import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
 import com.pr656d.cattlenotes.shared.data.CacheData
 import com.pr656d.cattlenotes.shared.log.Logger
-import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CattleViewModel @Inject constructor(
-    networkHelper: NetworkHelper,
     private val cattleDataRepository: CattleDataRepository,
     private val cacheData: CacheData
-) : BaseViewModel(networkHelper) {
+) : BaseViewModel() {
 
     private val _cattleList = MutableLiveData<List<Cattle>>()
     val cattleList: LiveData<List<Cattle>> = _cattleList

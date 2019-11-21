@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pr656d.cattlenotes.shared.utils.common.inflate
 import com.pr656d.cattlenotes.shared.utils.display.Toaster
@@ -28,16 +27,6 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         container?.inflate(provideLayoutId())
 
-    protected open fun setupObservers() {
-        viewModel.messageString.observe(this, Observer {
-            it.data?.run { showMessage(this) }
-        })
-
-        viewModel.messageStringId.observe(this, Observer {
-            it.data?.run { showMessage(this) }
-        })
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupView(view)
@@ -52,6 +41,8 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
     protected abstract fun provideLayoutId(): Int
 
     protected abstract fun setupView(view: View)
+
+    protected abstract fun setupObservers()
 
     /**
      * Class implementation required to initialize viewmodel.

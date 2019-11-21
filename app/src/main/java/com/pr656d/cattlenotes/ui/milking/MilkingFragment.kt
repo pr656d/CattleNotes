@@ -17,5 +17,7 @@ class MilkingFragment : BaseFragment<MilkingViewModel>() {
 
     override fun provideLayoutId(): Int = R.layout.fragment_milking
 
+    override fun setupObservers() { }
+
     override fun setupView(view: View) { }
 }
