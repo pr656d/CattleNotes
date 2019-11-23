@@ -12,8 +12,9 @@ import javax.inject.Singleton
 class CacheData @Inject constructor() {
 
     private val _cattleList = MediatorLiveData<List<Cattle>>()
+    val cattleList: List<Cattle>? = _cattleList.value
 
-    fun setCattleList(list: List<Cattle>) {_cattleList.postValue(list)}
-
-    fun getCattleList(): List<Cattle>? = _cattleList.value
+    fun setCattleList(list: List<Cattle>) {
+        _cattleList.postValue(list)
+    }
 }

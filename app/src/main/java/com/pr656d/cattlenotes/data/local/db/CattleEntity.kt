@@ -28,7 +28,7 @@ data class CattleEntity(
     val name: String? = null,
 
     /**
-     * Cattle type [Cattle.CattleType] as string e.g. cow, buffalo etc.
+     * Cattle type as string e.g. cow, buffalo etc.
      */
     @SerializedName("type")
     @ColumnInfo(name = "type")
@@ -39,14 +39,14 @@ data class CattleEntity(
     val imageUrl: String? = null,
 
     /**
-     * Cattle breed [Cattle.CattleBreed] as string e.g. HF, Gir etc.
+     * Cattle breed as string e.g. HF, Gir etc.
      */
     @SerializedName("breed")
     @ColumnInfo(name = "breed")
     val breed: String? = null,
 
     /**
-     * Cattle group [Cattle.CattleGroup] as string e.g. Dry, Milking etc.
+     * Cattle group as string e.g. Dry, Milking etc.
      */
     @SerializedName("group")
     @ColumnInfo(name = "group")

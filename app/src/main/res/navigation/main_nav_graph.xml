@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/cattleScreen"
-        android:name="com.pr656d.cattlenotes.ui.cattle.CattleFragment"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.CattleFragment"
         android:label="@string/cattle"
         tools:layout="@layout/fragment_cattle">
 
@@ -18,35 +18,36 @@
 
     <activity
         android:id="@+id/addCattleScreen"
-        android:name="com.pr656d.cattlenotes.ui.cattle.add.AddEditCattleActivity"
+        android:name="com.pr656d.cattlenotes.ui.cattle_add.AddCattleActivity"
         android:label="@string/add_cattle"
-        tools:layout="@layout/activity_add_edit_cattle" />
+        tools:layout="@layout/activity_add_cattle" />
 
     <activity
         android:id="@+id/cattleDetailsScreen"
-        android:name="com.pr656d.cattlenotes.ui.cattle.details.CattleDetailsActivity"
+        android:name="com.pr656d.cattlenotes.ui.cattle_details.CattleDetailsActivity"
         android:label="@string/cattle_details"
         tools:layout="@layout/activity_cattle_details">
 
         <argument
-            android:name="cattle_tag_number"
-            app:argType="string"/>
+            android:name="cattle"
+            app:argType="com.pr656d.cattlenotes.model.Cattle" />
     </activity>
 
     <fragment
         android:id="@+id/timelineScreen"
-        android:name="com.pr656d.cattlenotes.ui.timeline.TimelineFragment"
+        android:name="com.pr656d.cattlenotes.ui.main.timeline.TimelineFragment"
         android:label="@string/timeline"
         tools:layout="@layout/fragment_timeline" />
+
     <fragment
         android:id="@+id/milkingScreen"
-        android:name="com.pr656d.cattlenotes.ui.milking.MilkingFragment"
+        android:name="com.pr656d.cattlenotes.ui.main.milking.MilkingFragment"
         android:label="@string/milking"
         tools:layout="@layout/fragment_milking" />
 
     <fragment
         android:id="@+id/cashflowScreen"
-        android:name="com.pr656d.cattlenotes.ui.cashflow.CashflowFragment"
+        android:name="com.pr656d.cattlenotes.ui.main.cashflow.CashflowFragment"
         android:label="@string/cashflow"
         tools:layout="@layout/fragment_cashflow" />
 

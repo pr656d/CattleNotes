@@ -102,16 +102,16 @@ fun ZonedDateTime.toEpochMilli() = this.toInstant().toEpochMilli()
 
 fun Cattle.toCattleEntity(): CattleEntity =
     CattleEntity(
-        this.tagNumber, this.name, this.type.displayName, this.imageUrl, this.breed?.displayName,
-        this.group?.displayName, this.calving,this.dateOfBirth, this.aiDate,
+        this.tagNumber, this.name, this.type, this.imageUrl, this.breed,
+        this.group, this.calving,this.dateOfBirth, this.aiDate,
         this.repeatHeatDate, this.pregnancyCheckDate, this.dryOffDate, this.calvingDate,
         this.purchaseAmount, this.purchaseDate
     )
 
 fun CattleEntity.toCattle(): Cattle =
     Cattle(
-        this.tagNumber, this.name, this.type.convertToType(), this.imageUrl,
-        this.breed?.convertToBreed(), this.group?.convertToGroup(), this.calving, this.dateOfBirth,
+        this.tagNumber, this.name, this.type, this.imageUrl,
+        this.breed, this.group, this.calving, this.dateOfBirth,
         this.aiDate, this.repeatHeatDate, this.pregnancyCheckDate, this.dryOffDate,
         this.calvingDate, this.purchaseAmount, this.purchaseDate
     )
@@ -126,34 +126,6 @@ fun List<Cattle>.toCattleEntityList(): List<CattleEntity> =
         this@toCattleEntityList.forEach { add(it.toCattleEntity()) }
     }
 
-fun String.convertToType(): Cattle.CattleType =
-    when (this) {
-        Cattle.CattleType.COW.displayName -> Cattle.CattleType.COW
-        Cattle.CattleType.BUFFALO.displayName -> Cattle.CattleType.BUFFALO
-        Cattle.CattleType.BULL.displayName -> Cattle.CattleType.BULL
-        else -> Cattle.CattleType.NONE
-    }
-
-fun String.convertToBreed(): Cattle.CattleBreed =
-    when (this) {
-        Cattle.CattleBreed.HF.displayName -> Cattle.CattleBreed.HF
-        Cattle.CattleBreed.JERSY.displayName -> Cattle.CattleBreed.JERSY
-        Cattle.CattleBreed.GIR.displayName -> Cattle.CattleBreed.GIR
-        Cattle.CattleBreed.KANKREJ.displayName -> Cattle.CattleBreed.KANKREJ
-        Cattle.CattleBreed.SHAHIVAL.displayName -> Cattle.CattleBreed.SHAHIVAL
-        else -> Cattle.CattleBreed.NONE
-    }
-
-fun String.convertToGroup(): Cattle.CattleGroup =
-    when (this) {
-        Cattle.CattleGroup.HEIFER.displayName -> Cattle.CattleGroup.HEIFER
-        Cattle.CattleGroup.MILKING.displayName -> Cattle.CattleGroup.MILKING
-        Cattle.CattleGroup.DRY.displayName -> Cattle.CattleGroup.DRY
-        Cattle.CattleGroup.CALF_MALE.displayName -> Cattle.CattleGroup.CALF_MALE
-        Cattle.CattleGroup.CALF_FEMALE.displayName -> Cattle.CattleGroup.CALF_FEMALE
-        else -> Cattle.CattleGroup.NONE
-    }
-
 // endregion
 
 // region Nav controller
@@ -162,7 +134,7 @@ fun FragmentActivity.navigateTo(@IdRes host: Int, @IdRes destination: Int) {
     Navigation.findNavController(this, host).navigate(destination)
 }
 
-fun Fragment.navigateTo(@IdRes host: Int = R.id.nav_host_fragment, @IdRes destination: Int) {
+fun Fragment.navigateTo(@IdRes host: Int = R.id.nav_host_main, @IdRes destination: Int) {
     Navigation.findNavController(this.requireActivity(), host).navigate(destination)
 }
 

@@ -59,8 +59,8 @@
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutTagNumber"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
@@ -74,13 +74,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -94,13 +93,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
-                android:textColor="@drawable/selector_edit_text_color"/>
+                android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutBreed"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -115,13 +113,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
-                android:textColor="@drawable/selector_edit_text_color"/>
+                android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutType"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_small"
@@ -136,18 +133,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
-                android:textColor="@drawable/selector_edit_text_color"/>
+                android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutGroup"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
-            android:hint="@string/group"
             android:layout_marginEnd="@dimen/margin_small"
+            android:hint="@string/group"
             app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@+id/layoutBreed">
@@ -157,13 +153,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutDateOfBirth"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/date_of_birth"
@@ -177,8 +172,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
-                android:textColor="@drawable/selector_edit_text_color"/>
+                android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -193,8 +187,8 @@
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutCalving"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/total_calving"
@@ -208,13 +202,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
-                android:textColor="@drawable/selector_edit_text_color"/>
+                android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutAiDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -228,8 +221,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
-                android:textColor="@drawable/selector_edit_text_color"/>
+                android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -244,8 +236,8 @@
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutRepeatHeatDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -259,8 +251,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
-                android:textColor="@drawable/selector_edit_text_color"/>
+                android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -275,8 +266,8 @@
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutPregnancyCheckDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -290,8 +281,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
-                android:textColor="@drawable/selector_edit_text_color"/>
+                android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -306,8 +296,8 @@
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutDryOffDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -321,7 +311,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -337,8 +326,8 @@
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutCalvingDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -352,8 +341,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
-                android:textColor="@drawable/selector_edit_text_color"/>
+                android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
@@ -368,8 +356,8 @@
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutPurchaseAmount"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -384,13 +372,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/layoutPurchaseDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/purchase_date"
@@ -404,7 +391,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -423,10 +409,10 @@
             android:id="@+id/viewSpacing"
             android:layout_width="match_parent"
             android:layout_height="@dimen/appbar_height"
-            app:layout_constraintTop_toBottomOf="@id/layoutPurchaseAmount"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutPurchaseAmount" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

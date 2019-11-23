@@ -56,14 +56,18 @@
     <string name="type">Type</string>
     <string name="group">Group</string>
     <string name="date_of_birth">Date of birth</string>
-    <string name="calving_text">Calving</string>
+    <string name="total_calving">Total calving</string>
+    <string name="calving_date">Calving date</string>
     <string name="purchase_amount">Purchase amount (\u20B9)</string>
     <string name="purchase_date">Purchase date</string>
-    <string name="artificial_insemination">Artificial insemination</string>
-    <string name="repeat_heat">Repeat heat</string>
-    <string name="pregnancy_check">Pregnancy check</string>
-    <string name="dry_off">Dry off</string>
+    <string name="artificial_insemination">Artificial insemination date</string>
+    <string name="repeat_heat">Repeat heat date</string>
+    <string name="pregnancy_check">Pregnancy check date</string>
+    <string name="dry_off">Dry off date</string>
 
     <!--  Add cattle  -->
     <string name="add_cattle">Add new cattle</string>
+
+    <!--  Edit cattle details  -->
+    <string name="edit_cattle_details">Edit cattle details</string>
 </resources>
