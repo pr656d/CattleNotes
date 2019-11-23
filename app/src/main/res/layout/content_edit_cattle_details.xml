@@ -162,6 +162,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/date_of_birth"
+            app:endIconDrawable="@drawable/ic_date_grey"
+            app:endIconMode="custom"
             app:layout_constraintBottom_toBottomOf="@+id/layoutGroup"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
             app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
@@ -174,17 +176,6 @@
                 android:maxLines="1"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/icDateDOB"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:src="@drawable/ic_date_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/layoutDateOfBirth"
-            app:layout_constraintEnd_toEndOf="@+id/layoutDateOfBirth"
-            app:layout_constraintTop_toTopOf="@+id/layoutDateOfBirth"
-            tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutCalving"
@@ -202,6 +193,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:inputType="number"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -212,6 +204,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/artificial_insemination"
+            app:endIconDrawable="@drawable/ic_date_grey"
+            app:endIconMode="custom"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@+id/layoutDateOfBirth">
@@ -221,19 +215,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:focusable="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/icDateAi"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:src="@drawable/ic_date_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/layoutAiDate"
-            app:layout_constraintEnd_toEndOf="@+id/layoutAiDate"
-            app:layout_constraintTop_toTopOf="@+id/layoutAiDate"
-            tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutRepeatHeatDate"
@@ -242,6 +226,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/repeat_heat"
+            app:endIconDrawable="@drawable/ic_date_grey"
+            app:endIconMode="custom"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@+id/layoutAiDate">
@@ -251,19 +237,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:focusable="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/icDateRepeatHeat"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:src="@drawable/ic_date_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/layoutRepeatHeatDate"
-            app:layout_constraintEnd_toEndOf="@+id/layoutRepeatHeatDate"
-            app:layout_constraintTop_toTopOf="@+id/layoutRepeatHeatDate"
-            tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutPregnancyCheckDate"
@@ -272,6 +248,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/pregnancy_check"
+            app:endIconDrawable="@drawable/ic_date_grey"
+            app:endIconMode="custom"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@+id/layoutRepeatHeatDate">
@@ -281,19 +259,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:focusable="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/icDatePregnancyCheck"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:src="@drawable/ic_date_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/layoutPregnancyCheckDate"
-            app:layout_constraintEnd_toEndOf="@+id/layoutPregnancyCheckDate"
-            app:layout_constraintTop_toTopOf="@+id/layoutPregnancyCheckDate"
-            tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDryOffDate"
@@ -302,6 +270,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/dry_off"
+            app:endIconDrawable="@drawable/ic_date_grey"
+            app:endIconMode="custom"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@+id/layoutPregnancyCheckDate">
@@ -311,19 +281,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:focusable="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/icDateDryOff"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:src="@drawable/ic_date_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/layoutDryOffDate"
-            app:layout_constraintEnd_toEndOf="@+id/layoutDryOffDate"
-            app:layout_constraintTop_toTopOf="@+id/layoutDryOffDate"
-            tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutCalvingDate"
@@ -332,6 +292,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/calving_date"
+            app:endIconDrawable="@drawable/ic_date_grey"
+            app:endIconMode="custom"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toBottomOf="@+id/layoutDryOffDate">
@@ -341,19 +303,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:focusable="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/icDateCalving"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:src="@drawable/ic_date_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/layoutCalvingDate"
-            app:layout_constraintEnd_toEndOf="@+id/layoutCalvingDate"
-            app:layout_constraintTop_toTopOf="@+id/layoutCalvingDate"
-            tools:ignore="ContentDescription" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutPurchaseAmount"
@@ -372,6 +324,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:inputType="number"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -381,6 +334,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/purchase_date"
+            app:endIconDrawable="@drawable/ic_date_grey"
+            app:endIconMode="custom"
             app:layout_constraintBottom_toBottomOf="@+id/layoutPurchaseAmount"
             app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
             app:layout_constraintStart_toStartOf="@+id/guidelineCenter"
@@ -391,19 +346,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:focusable="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/icDatePurchase"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/margin_small"
-            android:src="@drawable/ic_date_grey"
-            app:layout_constraintBottom_toBottomOf="@+id/layoutPurchaseDate"
-            app:layout_constraintEnd_toEndOf="@+id/layoutPurchaseDate"
-            app:layout_constraintTop_toTopOf="@+id/layoutPurchaseDate"
-            tools:ignore="ContentDescription" />
 
         <View
             android:id="@+id/viewSpacing"

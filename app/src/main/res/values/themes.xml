@@ -60,4 +60,10 @@
         <item name="android:textColor">@color/black</item>
     </style>
 
+    <style name="DatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
 </resources>
