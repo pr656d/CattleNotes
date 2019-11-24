@@ -67,6 +67,12 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
     override fun setupView(savedInstanceState: Bundle?) {
         Logger.d(TAG, "initial: ${viewModel.getMode()}")
 
+        if (args.cattle != null) {
+            args.cattle!!.bindView()
+        } else {
+            viewModel.changeMode()
+        }
+
         fabButton.setOnClickListener {
             viewModel.changeMode()
         }
@@ -139,12 +145,6 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
                 requestFocus()
                 showDatePickerDialogAndSetText()
             }
-        }
-
-        if (args.cattle != null) {
-            args.cattle!!.bindView()
-        } else {
-            viewModel.changeMode()
         }
     }
 
