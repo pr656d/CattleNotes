@@ -41,17 +41,17 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
             override fun onHidden(fab: FloatingActionButton?) {
                 super.onHidden(fab)
                 bottomAppBar.toggleFabAlignment()
-                bottomAppBar.replaceMenu(
-                    if (viewModel.getMode())
-                        R.menu.menu_cattle_edit_details_appbar
-                    else
-                        R.menu.menu_cattle_details_appbar
-                )
                 fab?.setImageDrawable(
-                    if (viewModel.getMode())
+                    if (viewModel.isInEditMode())
                         getDrawable(R.drawable.ic_check_black)
                     else
                         getDrawable(R.drawable.ic_edit_black)
+                )
+                bottomAppBar.replaceMenu(
+                    if (viewModel.isInEditMode())
+                        R.menu.menu_cattle_edit_details_appbar
+                    else
+                        R.menu.menu_cattle_details_appbar
                 )
                 fab?.show()
             }
@@ -62,27 +62,23 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
         viewModel.editMode.observe(this, EventObserver {
             setMode(it)
         })
+
+        viewModel.cattle.observe(this, EventObserver {
+            it.bindView()
+        })
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
-        if (args.cattle != null) {
-            args.cattle!!.bindView()
-        } else {
+        if (args.cattle != null)
+            viewModel.setCattle(args.cattle!!)
+        else
             viewModel.changeMode()
-        }
 
-        fabButton.setOnClickListener {
-            viewModel.changeMode()
-        }
+        fabButton.setOnClickListener { viewModel.changeMode() }
 
-        bottomAppBar.setNavigationOnClickListener {
-            if (viewModel.getMode())
-                viewModel.changeMode()
-            else
-                finish()
-        }
+        bottomAppBar.setNavigationOnClickListener { onBackPressed() }
 
-        editTextDateOfBirth.apply {
+        val configureEditTextForDateInput: TextInputEditText.() -> Unit = {
             inputType = InputType.TYPE_NULL
             setOnClickListener {
                 isFocusableInTouchMode = true
@@ -91,59 +87,19 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
             }
         }
 
-        editTextAiDate.apply {
-            inputType = InputType.TYPE_NULL
-            setOnClickListener {
-                isFocusableInTouchMode = true
-                requestFocus()
-                showDatePickerDialogAndSetText()
-            }
-        }
+        editTextDateOfBirth.apply { configureEditTextForDateInput() }
 
-        editTextRepeatHeatDate.apply {
-            inputType = InputType.TYPE_NULL
-            setOnClickListener {
-                isFocusableInTouchMode = true
-                requestFocus()
-                showDatePickerDialogAndSetText()
-            }
-        }
+        editTextAiDate.apply { configureEditTextForDateInput() }
 
-        editTextPregnancyCheckDate.apply {
-            inputType = InputType.TYPE_NULL
-            setOnClickListener {
-                isFocusableInTouchMode = true
-                requestFocus()
-                showDatePickerDialogAndSetText()
-            }
-        }
+        editTextRepeatHeatDate.apply { configureEditTextForDateInput() }
 
-        editTextDryOffDate.apply {
-            inputType = InputType.TYPE_NULL
-            setOnClickListener {
-                isFocusableInTouchMode = true
-                requestFocus()
-                showDatePickerDialogAndSetText()
-            }
-        }
+        editTextPregnancyCheckDate.apply { configureEditTextForDateInput() }
 
-        editTextCalvingDate.apply {
-            inputType = InputType.TYPE_NULL
-            setOnClickListener {
-                isFocusableInTouchMode = true
-                requestFocus()
-                showDatePickerDialogAndSetText()
-            }
-        }
+        editTextDryOffDate.apply { configureEditTextForDateInput() }
 
-        editTextPurchaseDate.apply {
-            inputType = InputType.TYPE_NULL
-            setOnClickListener {
-                isFocusableInTouchMode = true
-                requestFocus()
-                showDatePickerDialogAndSetText()
-            }
-        }
+        editTextCalvingDate.apply { configureEditTextForDateInput() }
+
+        editTextPurchaseDate.apply { configureEditTextForDateInput() }
 
         editTextPurchaseAmount.apply {
             setOnFocusChangeListener { _, hasFocus ->
@@ -180,6 +136,13 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
         return true
     }
 
+    override fun onBackPressed() {
+        if (viewModel.isInEditMode())
+            viewModel.changeMode()
+        else
+            super.onBackPressed()
+    }
+
     private fun setMode(editMode: Boolean) {
         /**
          * [validIDs] list contains IDs of [TextInputEditText]
@@ -203,7 +166,8 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
                 view.apply {
                     val editText = view.editText!!
                     editText.isEnabled = editMode
-                    if (validIDs.contains(editText.id)) editText.isFocusableInTouchMode = false
+                    if (validIDs.contains(editText.id))
+                        editText.isFocusableInTouchMode = false
                 }
             }
         }
@@ -211,17 +175,19 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
         fabButton.hide(addVisibilityChanged)
         invalidateOptionsMenu()
 
-        if (editMode) {
-            if (args.cattle == null) tvTitle.setText(R.string.add_cattle)
-            else tvTitle.setText(R.string.edit_cattle_details)
-        } else {
-            tvTitle.setText(R.string.cattle_details)
-        }
+        tvTitle.setText(
+            when(editMode) {
+                true ->
+                    if (args.cattle == null) R.string.add_cattle
+                    else R.string.edit_cattle_details
+                false -> R.string.cattle_details
+            }
+        )
     }
 
     private fun BottomAppBar.toggleFabAlignment() {
         fabAlignmentMode =
-            if (viewModel.getMode()) BottomAppBar.FAB_ALIGNMENT_MODE_END
+            if (viewModel.isInEditMode()) BottomAppBar.FAB_ALIGNMENT_MODE_END
             else BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
     }
 
@@ -240,9 +206,8 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
             DialogInterface.BUTTON_NEGATIVE,
             getString(com.pr656d.cattlenotes.R.string.cancel)
         ) { _, which ->
-            if (which == DialogInterface.BUTTON_NEGATIVE) {
+            if (which == DialogInterface.BUTTON_NEGATIVE)
                 isFocusableInTouchMode = false
-            }
         }
         dialog.show()
     }
