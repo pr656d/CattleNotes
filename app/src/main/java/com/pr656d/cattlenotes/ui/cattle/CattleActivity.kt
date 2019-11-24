@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.text.InputType
 import android.view.Menu
+import android.view.ViewTreeObserver
 import androidx.core.view.forEach
 import androidx.navigation.navArgs
 import com.google.android.material.bottomappbar.BottomAppBar
@@ -14,13 +15,13 @@ import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseActivity
-import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
 import kotlinx.android.synthetic.main.activity_cattle_details.*
 import kotlinx.android.synthetic.main.content_cattle_details.*
 import java.util.*
+
 
 class CattleActivity : BaseActivity<CattleViewModel>() {
 
@@ -59,14 +60,11 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
 
     override fun setupObservers() {
         viewModel.editMode.observe(this, EventObserver {
-            Logger.d(TAG, "Observer received editMode : $it")
             setMode(it)
         })
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
-        Logger.d(TAG, "initial: ${viewModel.getMode()}")
-
         if (args.cattle != null) {
             args.cattle!!.bindView()
         } else {
@@ -146,6 +144,35 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
                 showDatePickerDialogAndSetText()
             }
         }
+
+        editTextPurchaseAmount.apply {
+            setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus)
+                    nsvCattleDetails.viewTreeObserver.addOnGlobalLayoutListener(
+                        object : ViewTreeObserver.OnGlobalLayoutListener {
+                            override fun onGlobalLayout() {
+                                val scrollViewHeight = nsvCattleDetails.height
+
+                                if (scrollViewHeight > 0) {
+                                    nsvCattleDetails.viewTreeObserver
+                                        .removeOnGlobalLayoutListener(this)
+
+                                    val lastView =
+                                        nsvCattleDetails.getChildAt(nsvCattleDetails.childCount - 1)
+                                    val lastViewBottom =
+                                        lastView.bottom + nsvCattleDetails.paddingBottom
+                                    val deltaScrollY =
+                                        lastViewBottom - scrollViewHeight - nsvCattleDetails.scrollY
+                                    /* If you want to see the scroll animation, call this. */
+                                    nsvCattleDetails.smoothScrollBy(0, deltaScrollY)
+                                    /* If you don't want, call this. */
+                                    nsvCattleDetails.scrollBy(0, deltaScrollY)
+                                }
+                            }
+                        }
+                    )
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -162,8 +189,12 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
          * So now reset them to false.
          */
         val validIDs = intArrayOf(
-            R.id.editTextDateOfBirth, R.id.editTextAiDate, R.id.editTextRepeatHeatDate,
-            R.id.editTextPregnancyCheckDate, R.id.editTextDryOffDate, R.id.editTextCalvingDate,
+            R.id.editTextDateOfBirth,
+            R.id.editTextAiDate,
+            R.id.editTextRepeatHeatDate,
+            R.id.editTextPregnancyCheckDate,
+            R.id.editTextDryOffDate,
+            R.id.editTextCalvingDate,
             R.id.editTextPurchaseDate
         )
 
@@ -189,12 +220,9 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
     }
 
     private fun BottomAppBar.toggleFabAlignment() {
-        fabAlignmentMode = if (viewModel.getMode())
-            BottomAppBar.FAB_ALIGNMENT_MODE_END
-        else
-            BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
-//        currentFabAlignmentMode = fabAlignmentMode
-//        fabAlignmentMode = currentFabAlignmentMode.xor(1)
+        fabAlignmentMode =
+            if (viewModel.getMode()) BottomAppBar.FAB_ALIGNMENT_MODE_END
+            else BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
     }
 
     private fun TextInputEditText.showDatePickerDialogAndSetText() {
@@ -210,7 +238,7 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
         )
         dialog.setButton(
             DialogInterface.BUTTON_NEGATIVE,
-            getString(R.string.cancel)
+            getString(com.pr656d.cattlenotes.R.string.cancel)
         ) { _, which ->
             if (which == DialogInterface.BUTTON_NEGATIVE) {
                 isFocusableInTouchMode = false
