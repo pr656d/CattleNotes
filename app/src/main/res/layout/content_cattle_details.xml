@@ -4,10 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/bottomAppBar"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view_cattle_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -74,6 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,6 +96,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,6 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,6 +138,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:enabled="false"
+                android:textColor="@drawable/selector_edit_text_color" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutCalving"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/total_calving"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutType"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+            app:layout_constraintStart_toStartOf="@+id/guidelineRightPartition"
+            app:layout_constraintTop_toTopOf="@+id/layoutType">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextCalving"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:enabled="false"
+                android:inputType="number"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,6 +180,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -174,26 +202,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:textColor="@drawable/selector_edit_text_color" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutCalving"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/total_calving"
-            app:layout_constraintBottom_toBottomOf="@+id/layoutType"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
-            app:layout_constraintStart_toStartOf="@+id/guidelineRightPartition"
-            app:layout_constraintTop_toTopOf="@+id/layoutType">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextCalving"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:inputType="number"
+                android:enabled="false"
+                android:focusable="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -215,7 +225,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:focusable="false"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -237,7 +247,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:focusable="false"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -259,7 +269,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:focusable="false"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -281,7 +291,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:focusable="false"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -303,7 +313,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:focusable="false"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -324,6 +334,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:enabled="false"
                 android:inputType="number"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -346,7 +357,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:focusable="false"
+                android:enabled="false"
                 android:textColor="@drawable/selector_edit_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 

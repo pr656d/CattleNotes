@@ -1,10 +1,8 @@
 package com.pr656d.cattlenotes.di
 
 import com.pr656d.cattlenotes.shared.di.ActivityScoped
-import com.pr656d.cattlenotes.ui.cattle_details.CattleDetailsActivity
-import com.pr656d.cattlenotes.ui.cattle_details.CattleDetailsActivityBindingModule
-import com.pr656d.cattlenotes.ui.cattle_details.details.CattleDetailsFragmentBindingModule
-import com.pr656d.cattlenotes.ui.cattle_details.edit.EditCattleBindingModule
+import com.pr656d.cattlenotes.ui.cattle.CattleActivity
+import com.pr656d.cattlenotes.ui.cattle.CattleBindingModule
 import com.pr656d.cattlenotes.ui.launch.LaunchBindingModule
 import com.pr656d.cattlenotes.ui.launch.LauncherActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
@@ -13,9 +11,7 @@ import com.pr656d.cattlenotes.ui.login.LoginModule
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.ui.main.MainBindingModule
 import com.pr656d.cattlenotes.ui.main.cashflow.CashflowBindingModule
-import com.pr656d.cattlenotes.ui.main.cattle.CattleBindingModule
-import com.pr656d.cattlenotes.ui.cattle_add.AddCattleActivity
-import com.pr656d.cattlenotes.ui.cattle_add.AddCattleBindingModule
+import com.pr656d.cattlenotes.ui.main.cattle.CattleListBindingModule
 import com.pr656d.cattlenotes.ui.main.milking.MilkingBindingModule
 import com.pr656d.cattlenotes.ui.main.timeline.TimelineBindingModule
 import dagger.Module
@@ -53,7 +49,7 @@ abstract class ActivityBindingModule {
             // activity
             MainBindingModule::class,
             // fragments
-            CattleBindingModule::class,
+            CattleListBindingModule::class,
             TimelineBindingModule::class,
             MilkingBindingModule::class,
             CashflowBindingModule::class
@@ -62,18 +58,7 @@ abstract class ActivityBindingModule {
     internal abstract fun mainActivity(): MainActivity
 
     @ActivityScoped
-    @ContributesAndroidInjector(
-        modules = [
-            // activity
-            CattleDetailsActivityBindingModule::class,
-            // fragments
-            CattleDetailsFragmentBindingModule::class,
-            EditCattleBindingModule::class
-        ]
-    )
-    internal abstract fun cattleDetailsActivity(): CattleDetailsActivity
+    @ContributesAndroidInjector(modules = [CattleBindingModule::class])
+    internal abstract fun cattleDetailsActivity(): CattleActivity
 
-    @ActivityScoped
-    @ContributesAndroidInjector(modules = [AddCattleBindingModule::class])
-    internal abstract fun addEditCattleActivity(): AddCattleActivity
 }

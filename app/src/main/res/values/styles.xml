@@ -133,25 +133,15 @@
 
     <style name="AppTheme.CattleDetailsBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" >
         <item name="android:layout_gravity">bottom</item>
-        <item name="fabAlignmentMode">end</item>
+        <item name="fabAlignmentMode">center</item>
         <item name="hideOnScroll">true</item>
         <item name="fabCradleVerticalOffset">@dimen/margin_normal</item>
-        <item name="menu">@menu/menu_cattle_details_appbar</item>
-        <item name="navigationIcon">@drawable/ic_menu_black</item>
     </style>
 
     <style name="AppTheme.NavigationDrawer" parent="Widget.MaterialComponents.BottomNavigationView" />
 
     <style name="AppTheme.AddFabButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="android:src">@drawable/ic_add_black</item>
-    </style>
-
-    <style name="AppTheme.SaveFabButton" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="android:src">@drawable/ic_check_black</item>
-    </style>
-
-    <style name="AppTheme.EditFabButton" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="android:src">@drawable/ic_edit_black</item>
     </style>
 
     <style name="AppTheme.AppBarLight" parent="Widget.Design.AppBarLayout">

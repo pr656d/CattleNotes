@@ -36,11 +36,11 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        style="@style/AppTheme.SaveFabButton"
         android:id="@+id/fabButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_large"
-        android:layout_gravity="end|bottom"/>
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_check_black"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

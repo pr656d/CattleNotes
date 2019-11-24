@@ -35,11 +35,8 @@
         <activity android:name=".ui.login.LoginActivity"
             android:theme="@style/LoginTheme"/>
 
-        <activity android:name="com.pr656d.cattlenotes.ui.cattle_details.CattleDetailsActivity"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <activity android:name="com.pr656d.cattlenotes.ui.cattle_add.AddCattleActivity"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name="com.pr656d.cattlenotes.ui.cattle.CattleActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"/>
 
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"

@@ -33,11 +33,10 @@ class MainActivity : BaseActivity<MainViewModel>() {
     override fun setupView(savedInstanceState: Bundle?) {
         fabButton.setOnClickListener {
             when (activeMenuItem.itemId) {
-                R.id.itemCattle -> navigateTo(R.id.nav_host_main, R.id.addCattleScreen)
+                R.id.itemCattle -> navigateTo(R.id.nav_host_main, R.id.navigate_to_cattle_activity)
                 R.id.itemMilking -> { }
                 R.id.itemCashflow -> { }
             }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
 
         bottomAppBar.run {

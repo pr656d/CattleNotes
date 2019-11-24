@@ -8,7 +8,6 @@
         app:showAsAction="always"
         android:icon="@drawable/ic_cattle_unselected"
         android:titleCondensed="@string/cattle"
-        android:checkable="true"
         android:id="@+id/itemCattle"
         tools:ignore="AlwaysShowAction" />
 

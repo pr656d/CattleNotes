@@ -7,7 +7,7 @@ import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseItemViewHolder
 import kotlinx.android.synthetic.main.item_cattle.view.*
 
-class CattleViewHolder(
+class CattleListViewHolder(
     parent: ViewGroup,
     private val listener: CattleListClickListener
 ) : BaseItemViewHolder<Cattle>(R.layout.item_cattle, parent) {

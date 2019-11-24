@@ -12,25 +12,21 @@
         tools:layout="@layout/fragment_cattle">
 
         <action
-            android:id="@+id/navigate_to_cattle_detail"
+            android:id="@+id/navigate_to_cattle_activity"
             app:destination="@id/cattleDetailsScreen" />
     </fragment>
 
     <activity
-        android:id="@+id/addCattleScreen"
-        android:name="com.pr656d.cattlenotes.ui.cattle_add.AddCattleActivity"
-        android:label="@string/add_cattle"
-        tools:layout="@layout/activity_add_cattle" />
-
-    <activity
         android:id="@+id/cattleDetailsScreen"
-        android:name="com.pr656d.cattlenotes.ui.cattle_details.CattleDetailsActivity"
+        android:name="com.pr656d.cattlenotes.ui.cattle.CattleActivity"
         android:label="@string/cattle_details"
         tools:layout="@layout/activity_cattle_details">
 
         <argument
             android:name="cattle"
-            app:argType="com.pr656d.cattlenotes.model.Cattle" />
+            app:argType="com.pr656d.cattlenotes.model.Cattle"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </activity>
 
     <fragment

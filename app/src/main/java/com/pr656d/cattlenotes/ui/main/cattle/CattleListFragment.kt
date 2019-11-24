@@ -9,13 +9,13 @@ import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import kotlinx.android.synthetic.main.fragment_cattle.*
 
-class CattleFragment : BaseFragment<CattleViewModel>() {
+class CattleFragment : BaseFragment<CattleListViewModel>() {
 
     companion object {
         const val TAG = "CattleFragment"
     }
 
-    private lateinit var cattleAdapter: CattleAdapter
+    private lateinit var cattleAdapter: CattleListAdapter
 
     override fun init() {
         viewModel = viewModelProvider(viewModelFactory)
@@ -35,9 +35,9 @@ class CattleFragment : BaseFragment<CattleViewModel>() {
 
     override fun setupView(view: View) {
         rvCattle.run {
-            cattleAdapter = CattleAdapter(object: CattleListClickListener {
+            cattleAdapter = CattleListAdapter(object: CattleListClickListener {
                 override fun onClick(cattle: Cattle) {
-                    val action = CattleFragmentDirections.navigateToCattleDetail(cattle)
+                    val action = CattleFragmentDirections.navigateToCattleActivity(cattle)
                     findNavController().navigate(action)
                 }
             })

@@ -3,6 +3,9 @@
 
     <!--  General  -->
     <string name="please_wait_text">Please wait&#8230;</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="back">Back</string>
 
     <!--  Network  -->
     <string name="network_connection_error">Internet connection lost, please retry again</string>
@@ -64,6 +67,7 @@
     <string name="repeat_heat">Repeat heat date</string>
     <string name="pregnancy_check">Pregnancy check date</string>
     <string name="dry_off">Dry off date</string>
+    <string name="delete">Delete</string>
 
     <!--  Add cattle  -->
     <string name="add_cattle">Add new cattle</string>
