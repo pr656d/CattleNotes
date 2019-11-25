@@ -173,7 +173,6 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
         }
 
         fabButton.hide(addVisibilityChanged)
-        invalidateOptionsMenu()
 
         tvTitle.setText(
             when(editMode) {
