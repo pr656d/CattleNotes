@@ -3,31 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@+id/cattleScreen">
+    app:startDestination="@+id/cattleListScreen">
 
     <fragment
-        android:id="@+id/cattleScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.CattleFragment"
+        android:id="@+id/cattleListScreen"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.CattleListFragment"
         android:label="@string/cattle"
-        tools:layout="@layout/fragment_cattle">
+        tools:layout="@layout/fragment_cattle_list">
 
         <action
-            android:id="@+id/navigate_to_cattle_activity"
-            app:destination="@id/cattleDetailsScreen" />
+            android:id="@+id/navigate_to_cattle_details"
+            app:destination="@id/cattleDetailsScreen"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+            app:enterAnim="@android:anim/fade_in"
+            app:exitAnim="@android:anim/fade_out" />
     </fragment>
 
-    <activity
+    <fragment
         android:id="@+id/cattleDetailsScreen"
-        android:name="com.pr656d.cattlenotes.ui.cattle.CattleActivity"
+        android:name="com.pr656d.cattlenotes.ui.cattle.CattleDetailsFragment"
         android:label="@string/cattle_details"
-        tools:layout="@layout/activity_cattle_details">
+        tools:layout="@layout/fragment_cattle_details">
 
         <argument
             android:name="cattle"
             app:argType="com.pr656d.cattlenotes.model.Cattle"
             app:nullable="true"
             android:defaultValue="@null" />
-    </activity>
+    </fragment>
 
     <fragment
         android:id="@+id/timelineScreen"
@@ -46,5 +50,10 @@
         android:name="com.pr656d.cattlenotes.ui.main.cashflow.CashflowFragment"
         android:label="@string/cashflow"
         tools:layout="@layout/fragment_cashflow" />
+
+    <dialog
+        android:id="@+id/mainBottomNavigationDrawer"
+        android:name="com.pr656d.cattlenotes.ui.main.MainBottomNavigationSheet"
+        tools:layout="@layout/main_navigation_drawer"/>
 
 </navigation>

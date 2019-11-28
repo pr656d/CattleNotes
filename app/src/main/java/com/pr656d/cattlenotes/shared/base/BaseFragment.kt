@@ -16,22 +16,22 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    @Inject lateinit var viewModel: VM
+    protected lateinit var viewModel: VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         init()
-        setupObservers()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        container?.inflate(provideLayoutId())
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return container?.inflate(provideLayoutId())
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupView(view)
+        setupView()
+        setupObservers()
     }
-
 
     fun showMessage(message: String) = context?.let { Toaster.show(it, message) }
 
@@ -40,7 +40,7 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
     @LayoutRes
     protected abstract fun provideLayoutId(): Int
 
-    protected abstract fun setupView(view: View)
+    protected abstract fun setupView()
 
     protected abstract fun setupObservers()
 

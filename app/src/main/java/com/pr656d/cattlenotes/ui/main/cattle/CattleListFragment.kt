@@ -1,15 +1,15 @@
 package com.pr656d.cattlenotes.ui.main.cattle
 
 import android.view.View
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
-import kotlinx.android.synthetic.main.fragment_cattle.*
+import kotlinx.android.synthetic.main.fragment_cattle_list.*
 
-class CattleFragment : BaseFragment<CattleListViewModel>() {
+class CattleListFragment : BaseFragment<CattleListViewModel>() {
 
     companion object {
         const val TAG = "CattleFragment"
@@ -21,23 +21,23 @@ class CattleFragment : BaseFragment<CattleListViewModel>() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 
-    override fun provideLayoutId(): Int = R.layout.fragment_cattle
+    override fun provideLayoutId(): Int = R.layout.fragment_cattle_list
 
     override fun setupObservers() {
-        viewModel.cattleList.observe(this, Observer {
+        viewModel.cattleList.observe(viewLifecycleOwner) {
             cattleAdapter.updateList(it)
-        })
+        }
 
-        viewModel.isLoading.observe(this, Observer {
+        viewModel.isLoading.observe(viewLifecycleOwner) {
             progressBar.visibility = if (it) View.VISIBLE else View.GONE
-        })
+        }
     }
 
-    override fun setupView(view: View) {
+    override fun setupView() {
         rvCattle.run {
             cattleAdapter = CattleListAdapter(object: CattleListClickListener {
                 override fun onClick(cattle: Cattle) {
-                    val action = CattleFragmentDirections.navigateToCattleActivity(cattle)
+                    val action = CattleListFragmentDirections.navigateToCattleDetails(cattle)
                     findNavController().navigate(action)
                 }
             })

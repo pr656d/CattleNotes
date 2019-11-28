@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class CattleViewModel @Inject constructor(
+class CattleDetailsViewModel @Inject constructor(
     private val cattleDataRepository: CattleDataRepository
 ) : BaseViewModel() {
 

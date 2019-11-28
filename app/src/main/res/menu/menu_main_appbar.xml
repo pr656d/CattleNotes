@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <item
-        android:title="@string/cattle"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_cattle_unselected"
-        android:titleCondensed="@string/cattle"
-        android:id="@+id/itemCattle"
-        tools:ignore="AlwaysShowAction" />
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@id/cattleListScreen"
+            android:checkable="true"
+            android:icon="@drawable/ic_cattle_selector"
+            android:title="@string/cattle"
+            android:titleCondensed="@string/cattle"
+            android:checked="true"
+            app:showAsAction="always"
+            tools:ignore="AlwaysShowAction" />
 
-    <item
-        android:title="@string/timeline"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_timeline_unselected"
-        android:titleCondensed="@string/timeline"
-        android:id="@+id/itemTimeline" />
+        <item
+            android:id="@id/timelineScreen"
+            android:checkable="true"
+            android:icon="@drawable/ic_timeline_unselected"
+            android:title="@string/timeline"
+            android:titleCondensed="@string/timeline"
+            app:showAsAction="always" />
 
-    <item
-        android:title="@string/milking"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_milking_unselected"
-        android:titleCondensed="@string/milking"
-        android:id="@+id/itemMilking" />
+        <item
+            android:id="@id/milkingScreen"
+            android:checkable="true"
+            android:icon="@drawable/ic_milking_unselected"
+            android:title="@string/milking"
+            android:titleCondensed="@string/milking"
+            app:showAsAction="always" />
 
-    <item
-        android:title="@string/cashflow"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_cashflow_unselected"
-        android:titleCondensed="@string/cashflow"
-        android:id="@+id/itemCashflow" />
-
+        <item
+            android:id="@id/cashflowScreen"
+            android:checkable="true"
+            android:icon="@drawable/ic_cashflow_unselected"
+            android:title="@string/cashflow"
+            android:titleCondensed="@string/cashflow"
+            app:showAsAction="always" />
+    </group>
 </menu>

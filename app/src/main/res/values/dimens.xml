@@ -6,7 +6,7 @@
     <dimen name="margin_large">32dp</dimen>
     <dimen name="margin_zero">0dp</dimen>
 
-    <dimen name="title_text">32sp</dimen>
+    <dimen name="title_size">32sp</dimen>
 
     <dimen name="spacing_normal">8dp</dimen>
     <dimen name="spacing_micro">4dp</dimen>

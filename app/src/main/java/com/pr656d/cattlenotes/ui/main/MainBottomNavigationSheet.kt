@@ -9,14 +9,14 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.utils.display.Toaster
-import kotlinx.android.synthetic.main.fragment_main_navigation_drawer.*
+import kotlinx.android.synthetic.main.main_navigation_drawer.*
 
-class MainNavigationDrawerFragment : BottomSheetDialogFragment() {
+class MainBottomNavigationSheet : BottomSheetDialogFragment() {
 
     companion object {
-        const val TAG = "MainNavigationDrawerFragment"
+        const val TAG = "MainBottomNavigationSheet"
 
-        fun newInstance(): MainNavigationDrawerFragment = MainNavigationDrawerFragment()
+        fun newInstance(): MainBottomNavigationSheet = MainBottomNavigationSheet()
     }
 
     override fun onCreateView(
@@ -24,7 +24,7 @@ class MainNavigationDrawerFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? =
-        inflater.inflate(R.layout.fragment_main_navigation_drawer, container, false)
+        inflater.inflate(R.layout.main_navigation_drawer, container, false)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

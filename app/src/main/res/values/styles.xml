@@ -116,7 +116,7 @@
     <style name="AppTheme.ToolbarTitle" parent="AppTheme.Body1">
         <item name="android:paddingTop">@dimen/margin_small</item>
         <item name="android:paddingBottom">@dimen/margin_small</item>
-        <item name="android:textSize">@dimen/title_text</item>
+        <item name="android:textSize">@dimen/title_size</item>
         <item name="android:layout_gravity">center</item>
     </style>
 
@@ -124,12 +124,10 @@
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:layout_gravity">bottom</item>
         <item name="fabAlignmentMode">end</item>
-        <item name="hideOnScroll">true</item>
         <item name="fabCradleVerticalOffset">@dimen/margin_normal</item>
-        <item name="menu">@menu/menu_main_appbar</item>
         <item name="navigationIcon">@drawable/ic_menu_black</item>
+        <item name="menu">@menu/menu_main_appbar</item>
     </style>
-
 
     <style name="AppTheme.CattleDetailsBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" >
         <item name="android:layout_gravity">bottom</item>
@@ -152,5 +150,9 @@
 
     <style name="progressBarBlack" parent="Widget.AppCompat.ProgressBar">
         <item name="android:indeterminateTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppTheme.Toolbar.TitleText">
+        <item name="android:textSize">@dimen/title_size</item>
     </style>
 </resources>

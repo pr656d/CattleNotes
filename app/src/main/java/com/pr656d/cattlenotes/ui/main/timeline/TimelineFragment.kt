@@ -1,6 +1,5 @@
 package com.pr656d.cattlenotes.ui.main.timeline
 
-import android.view.View
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
@@ -19,5 +18,5 @@ class TimelineFragment : BaseFragment<TimelineViewModel>() {
 
     override fun setupObservers() { }
 
-    override fun setupView(view: View) { }
+    override fun setupView() { }
 }

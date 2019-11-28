@@ -1,8 +1,7 @@
 package com.pr656d.cattlenotes.di
 
 import com.pr656d.cattlenotes.shared.di.ActivityScoped
-import com.pr656d.cattlenotes.ui.cattle.CattleActivity
-import com.pr656d.cattlenotes.ui.cattle.CattleBindingModule
+import com.pr656d.cattlenotes.ui.cattle.CattleDetailsBindingModule
 import com.pr656d.cattlenotes.ui.launch.LaunchBindingModule
 import com.pr656d.cattlenotes.ui.launch.LauncherActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
@@ -50,15 +49,11 @@ abstract class ActivityBindingModule {
             MainBindingModule::class,
             // fragments
             CattleListBindingModule::class,
+            CattleDetailsBindingModule::class,
             TimelineBindingModule::class,
             MilkingBindingModule::class,
             CashflowBindingModule::class
         ]
     )
     internal abstract fun mainActivity(): MainActivity
-
-    @ActivityScoped
-    @ContributesAndroidInjector(modules = [CattleBindingModule::class])
-    internal abstract fun cattleDetailsActivity(): CattleActivity
-
 }

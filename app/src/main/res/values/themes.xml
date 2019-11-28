@@ -33,7 +33,7 @@
     </style>
 
     <!--  LoginTheme  -->
-    <style name="LoginTheme" parent="LaunchTheme">
+    <style name="ThemeOverlay.LoginTheme" parent="LaunchTheme">
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 

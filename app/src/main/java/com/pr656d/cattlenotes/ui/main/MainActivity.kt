@@ -1,12 +1,15 @@
 package com.pr656d.cattlenotes.ui.main
 
 import android.os.Bundle
-import android.view.MenuItem
-import androidx.annotation.IdRes
-import androidx.navigation.Navigation
+import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseActivity
-import com.pr656d.cattlenotes.shared.utils.common.navigateTo
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -16,102 +19,82 @@ class MainActivity : BaseActivity<MainViewModel>() {
         const val TAG = "MainActivity"
     }
 
-    private lateinit var activeMenuItem: MenuItem
+    private val navController by lazy { findNavController(R.id.nav_host_main) }
+    private val topLevelDestinations by lazy {
+        hashSetOf(
+            R.id.cattleListScreen, R.id.timelineScreen, R.id.milkingScreen,
+            R.id.cashflowScreen
+        )
+    }
+
+    private val testCattle by lazy {
+        Cattle("123456789012", "Janki", "HF")
+    }
 
     override fun provideLayoutId(): Int = R.layout.activity_main
 
     override fun init() {
         viewModel = viewModelProvider(viewModelFactory)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            bottomAppBar.apply {
+                when {
+                    topLevelDestinations.contains(destination.id) -> {
+                        fabButton.setImageDrawable(getDrawable(R.drawable.ic_add_black))
+                        fabAnimationMode = BottomAppBar.FAB_ANIMATION_MODE_SLIDE
+                        fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
+                        setNavigationIcon(R.drawable.ic_menu_black)
+                        replaceMenu(R.menu.menu_main_appbar)
+                    }
+                }
+            }
+            viewModel.setActiveMenuItem(destination.id)
+        }
     }
 
-    override fun onBackPressed() {
-        finish()
+    override fun setupObservers() {
+        viewModel.activeMenuItem.observe(this, Observer { menuItem ->
+            bottomAppBar.apply {
+                menuItem.previousItem?.let {
+                    menu.findItem(it.itemId)?.setIcon(it.unselectedIcon)
+                }
+                menuItem.currentItem.let {
+                    menu.findItem(it.itemId)?.setIcon(it.selectedIcon)
+                }
+            }
+        })
     }
-
-    override fun setupObservers() { }
 
     override fun setupView(savedInstanceState: Bundle?) {
+        NavigationUI.setupWithNavController(
+            toolbar,
+            navController,
+            AppBarConfiguration(topLevelDestinations)
+        )
+
         fabButton.setOnClickListener {
-            when (activeMenuItem.itemId) {
-                R.id.itemCattle -> navigateTo(R.id.nav_host_main, R.id.navigate_to_cattle_activity)
-                R.id.itemMilking -> { }
-                R.id.itemCashflow -> { }
+            when (navController.currentDestination?.id) {
+                R.id.cattleListScreen ->
+                    navController.navigate(R.id.cattleDetailsScreen)
+
+                R.id.timelineScreen -> {
+                }
+
+                R.id.milkingScreen -> {
+                }
+
+                R.id.cashflowScreen -> {
+                }
             }
         }
 
         bottomAppBar.run {
-            /**
-             * When app launches first time set active menu item as cattle item.
-             * and set it's icon as selected
-             */
-            activeMenuItem = menu.findItem(R.id.itemCattle).apply {
-                setIcon(R.drawable.ic_cattle_selected)
-            }
-
             setNavigationOnClickListener {
-                MainNavigationDrawerFragment.newInstance()
-                    .show(supportFragmentManager, MainNavigationDrawerFragment.TAG)
+                navController.navigate(R.id.mainBottomNavigationDrawer)
             }
-
-            setOnMenuItemClickListener { item ->
-                fabButton.isEnabled = true
-
-                if (isValidDestination(item.itemId))
-                    when (item.itemId) {
-                        R.id.itemCattle -> {
-                            navigateTo(R.id.nav_host_main, R.id.cattleScreen)
-                            item.setIcon(R.drawable.ic_cattle_selected)
-                            true
-                        }
-                        R.id.itemTimeline -> {
-                            navigateTo(R.id.nav_host_main, R.id.timelineScreen)
-                            fabButton.isEnabled = false
-                            item.setIcon(R.drawable.ic_timeline_selected)
-                            true
-                        }
-                        R.id.itemMilking -> {
-                            navigateTo(R.id.nav_host_main, R.id.milkingScreen)
-                            item.setIcon(R.drawable.ic_milking_selected)
-                            true
-                        }
-                        R.id.itemCashflow -> {
-                            navigateTo(R.id.nav_host_main, R.id.cashflowScreen)
-                            item.setIcon(R.drawable.ic_cashflow_selected)
-                            true
-                        }
-                        else -> false
-                    }.also {
-                        /**
-                         * If it's true then we are sure that the clicked item is from
-                         * [R.id.itemCattle],[R.id.itemTimeline],[R.id.itemMilking],[R.id.itemCashflow]
-                         * So now change icon of [activeMenuItem] as unselected
-                         * then set [activeMenuItem] as [item]
-                         */
-                        if (it) {
-                            menu.findItem(activeMenuItem.itemId).apply {
-                                when (itemId) {
-                                    R.id.itemCattle -> R.drawable.ic_cattle_unselected
-                                    R.id.itemTimeline -> R.drawable.ic_timeline_unselected
-                                    R.id.itemMilking -> R.drawable.ic_milking_unselected
-                                    R.id.itemCashflow -> R.drawable.ic_cashflow_unselected
-                                    else -> null
-                                }?.let { icon -> setIcon(icon) }
-                            }
-                            activeMenuItem = item
-                        }
-                    }
-                else false
+            setOnMenuItemClickListener { menuItem ->
+                menuItem.onNavDestinationSelected(navController)
             }
         }
     }
-
-    private fun isValidDestination(@IdRes itemId: Int): Boolean =
-        Navigation.findNavController(this@MainActivity, R.id.nav_host_main)
-            .currentDestination?.id != when (itemId) {
-            R.id.itemCattle -> R.id.cattleScreen
-            R.id.itemTimeline -> R.id.timelineScreen
-            R.id.itemMilking -> R.id.milkingScreen
-            R.id.itemCashflow -> R.id.cashflowScreen
-            else -> -1  // I don't want to pass null here
-        }
 }

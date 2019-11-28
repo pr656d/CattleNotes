@@ -2,56 +2,59 @@ package com.pr656d.cattlenotes.ui.cattle
 
 import android.app.DatePickerDialog
 import android.content.DialogInterface
-import android.os.Bundle
 import android.text.InputType
-import android.view.Menu
 import android.view.ViewTreeObserver
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.forEach
-import androidx.navigation.navArgs
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
-import com.pr656d.cattlenotes.shared.base.BaseActivity
+import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
-import kotlinx.android.synthetic.main.activity_cattle_details.*
-import kotlinx.android.synthetic.main.content_cattle_details.*
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_cattle_details.*
 import java.util.*
 
-
-class CattleActivity : BaseActivity<CattleViewModel>() {
+class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
 
     companion object {
         const val TAG = "CattleActivity"
     }
 
-    private val args by navArgs<CattleActivityArgs>()
+    private val args by navArgs<CattleDetailsFragmentArgs>()
     private lateinit var addVisibilityChanged: FloatingActionButton.OnVisibilityChangedListener
 
-    override fun provideLayoutId(): Int = R.layout.activity_cattle_details
+    override fun provideLayoutId(): Int = R.layout.fragment_cattle_details
 
     override fun init() {
         viewModel = viewModelProvider(viewModelFactory)
 
+        requireActivity().bottomAppBar.navigationIcon = null
+
         addVisibilityChanged = object : FloatingActionButton.OnVisibilityChangedListener() {
             override fun onHidden(fab: FloatingActionButton?) {
                 super.onHidden(fab)
-                bottomAppBar.toggleFabAlignment()
+                requireActivity().bottomAppBar.apply {
+                    replaceMenu(
+                        if (viewModel.isInEditMode())
+                            R.menu.menu_cattle_edit_details_appbar
+                        else
+                            R.menu.menu_cattle_details_appbar
+                    )
+                    toggleFabAlignment()
+                }
+                requireActivity().bottomAppBar.toggleFabAlignment()
                 fab?.setImageDrawable(
                     if (viewModel.isInEditMode())
-                        getDrawable(R.drawable.ic_check_black)
+                        getDrawable(requireContext(), R.drawable.ic_check_black)
                     else
-                        getDrawable(R.drawable.ic_edit_black)
-                )
-                bottomAppBar.replaceMenu(
-                    if (viewModel.isInEditMode())
-                        R.menu.menu_cattle_edit_details_appbar
-                    else
-                        R.menu.menu_cattle_details_appbar
+                        getDrawable(requireContext(), R.drawable.ic_edit_black)
                 )
                 fab?.show()
             }
@@ -68,15 +71,23 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
         })
     }
 
-    override fun setupView(savedInstanceState: Bundle?) {
+    override fun setupView() {
         if (args.cattle != null)
             viewModel.setCattle(args.cattle!!)
         else
             viewModel.changeMode()
 
-        fabButton.setOnClickListener { viewModel.changeMode() }
-
-        bottomAppBar.setNavigationOnClickListener { onBackPressed() }
+        requireActivity().toolbar.setTitle(
+            if (viewModel.isInEditMode()) {
+                if (args.cattle != null)
+                    R.string.edit_cattle_details
+                else
+                    R.string.add_cattle
+            }
+            else {
+                R.string.cattle_details
+            }
+        )
 
         val configureEditTextForDateInput: TextInputEditText.() -> Unit = {
             inputType = InputType.TYPE_NULL
@@ -131,18 +142,6 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_cattle_details_appbar, menu)
-        return true
-    }
-
-    override fun onBackPressed() {
-        if (viewModel.isInEditMode())
-            viewModel.changeMode()
-        else
-            super.onBackPressed()
-    }
-
     private fun setMode(editMode: Boolean) {
         /**
          * [validIDs] list contains IDs of [TextInputEditText]
@@ -172,16 +171,8 @@ class CattleActivity : BaseActivity<CattleViewModel>() {
             }
         }
 
-        fabButton.hide(addVisibilityChanged)
-
-        tvTitle.setText(
-            when(editMode) {
-                true ->
-                    if (args.cattle == null) R.string.add_cattle
-                    else R.string.edit_cattle_details
-                false -> R.string.cattle_details
-            }
-        )
+        requireActivity().fabButton.hide(addVisibilityChanged)
+        requireActivity().invalidateOptionsMenu()
     }
 
     private fun BottomAppBar.toggleFabAlignment() {
