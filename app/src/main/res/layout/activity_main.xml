@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:titleTextAppearance="@style/AppTheme.Toolbar.TitleText"
-            app:layout_scrollFlags="scroll">
+            app:layout_scrollFlags="noScroll">
 
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>

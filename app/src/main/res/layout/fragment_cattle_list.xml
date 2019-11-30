@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.main.MainActivity">
 
     <ProgressBar
         style="@style/progressBarBlack"
@@ -18,7 +19,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCattle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingBottom="@dimen/appbar_height"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

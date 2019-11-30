@@ -74,8 +74,7 @@ class MainActivity : BaseActivity<MainViewModel>() {
 
         fabButton.setOnClickListener {
             when (navController.currentDestination?.id) {
-                R.id.cattleListScreen ->
-                    navController.navigate(R.id.cattleDetailsScreen)
+                R.id.cattleListScreen -> navController.navigate(R.id.cattleAddScreen)
 
                 R.id.timelineScreen -> {
                 }
