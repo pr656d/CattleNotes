@@ -1,15 +1,15 @@
-package com.pr656d.cattlenotes.ui.main.cattle.list
+package com.pr656d.cattlenotes.ui.main.cattle
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseItemViewHolder
 import kotlinx.android.synthetic.main.item_cattle.view.*
 
 class CattleListViewHolder(
-    parent: ViewGroup
+    parent: ViewGroup,
+    private val listener: CattleListClickListener
 ) : BaseItemViewHolder<Cattle>(R.layout.item_cattle, parent) {
 
     private lateinit var cattle: Cattle
@@ -27,8 +27,7 @@ class CattleListViewHolder(
 
     override fun setupView(view: View) {
         view.layout_cattle_item.setOnClickListener {
-            val action = CattleListFragmentDirections.actionCattleListScreenToCattleDetailsScreen(cattle)
-            view.findNavController().navigate(action)
+            listener.onClick(cattle)
         }
     }
 }

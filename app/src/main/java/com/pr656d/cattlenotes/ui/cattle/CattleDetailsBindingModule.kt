@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.main.cattle.details
+package com.pr656d.cattlenotes.ui.cattle
 
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.shared.di.FragmentScoped

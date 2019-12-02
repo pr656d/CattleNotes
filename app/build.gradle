@@ -69,6 +69,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navigationControllerVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.viewModelKtxVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$rootProject.liveDataKtxVersion"
+    implementation "com.google.firebase:firebase-common-ktx:$rootProject.firebaseCommonKtxVersion"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlinVersion"

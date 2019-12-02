@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/cattleListScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.list.CattleListFragment"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.CattleListFragment"
         android:label="@string/cattle"
         tools:layout="@layout/fragment_cattle_list">
 
         <action
-            android:id="@+id/action_cattleListScreen_to_cattleDetailsScreen"
+            android:id="@+id/navigate_to_cattle_details"
             app:destination="@id/cattleDetailsScreen"
             app:popEnterAnim="@android:anim/fade_in"
             app:popExitAnim="@android:anim/fade_out"
@@ -22,46 +22,9 @@
 
     <fragment
         android:id="@+id/cattleDetailsScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragment"
+        android:name="com.pr656d.cattlenotes.ui.cattle.CattleDetailsFragment"
         android:label="@string/cattle_details"
         tools:layout="@layout/fragment_cattle_details">
-
-        <action
-            android:id="@+id/action_cattleDetailsScreen_to_cattleEditScreen"
-            app:destination="@id/cattleEditScreen"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
-
-        <argument
-            android:name="cattle"
-            app:argType="com.pr656d.cattlenotes.model.Cattle"
-            app:nullable="true"
-            android:defaultValue="@null" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/cattleAddScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.add.CattleAddFragment"
-        android:label="@string/add_cattle"
-        tools:layout="@layout/fragment_add_cattle">
-
-        <action
-            android:id="@+id/action_cattleAddScreen_to_cattleDetailsScreen"
-            app:destination="@id/cattleDetailsScreen"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popUpTo="@id/cattleDetailsScreen" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/cattleEditScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.edit.CattleEditDetailsFragment"
-        android:label="@string/edit_cattle_details"
-        tools:layout="@layout/fragment_edit_cattle_details">
 
         <argument
             android:name="cattle"
