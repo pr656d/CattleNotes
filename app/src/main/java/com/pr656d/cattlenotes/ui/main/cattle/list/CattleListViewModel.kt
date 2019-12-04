@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.main.cattle
+package com.pr656d.cattlenotes.ui.main.cattle.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

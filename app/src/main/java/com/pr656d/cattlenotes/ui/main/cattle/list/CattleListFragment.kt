@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.main.cattle
+package com.pr656d.cattlenotes.ui.main.cattle.list
 
 import android.view.View
 import androidx.lifecycle.observe
@@ -17,7 +17,7 @@ class CattleListFragment : BaseFragment<CattleListViewModel>() {
 
     private lateinit var cattleAdapter: CattleListAdapter
 
-    override fun init() {
+    override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 
@@ -35,13 +35,18 @@ class CattleListFragment : BaseFragment<CattleListViewModel>() {
 
     override fun setupView() {
         rvCattle.run {
-            cattleAdapter = CattleListAdapter(object: CattleListClickListener {
+            cattleAdapter = CattleListAdapter(object : CattleListClickListener {
                 override fun onClick(cattle: Cattle) {
                     val action = CattleListFragmentDirections.navigateToCattleDetails(cattle)
                     findNavController().navigate(action)
                 }
             })
             adapter = cattleAdapter
+        }
+
+        fabButtonAddCattle.setOnClickListener {
+            val action = CattleListFragmentDirections.navigateToAddCattle()
+            findNavController().navigate(action)
         }
     }
 }

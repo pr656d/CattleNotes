@@ -121,7 +121,6 @@
                     android:id="@+id/exposedDropDownBreed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@drawable/selector_edit_text_color"
                     android:editable="false"
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -142,7 +141,6 @@
                     android:id="@+id/exposedDropDownType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@drawable/selector_edit_text_color"
                     android:editable="false"
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -184,7 +182,6 @@
                     android:id="@+id/exposedDropDownGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@drawable/selector_edit_text_color"
                     android:editable="false"
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -368,6 +365,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/margin_large"
-        android:src="@drawable/ic_edit_black" />
+        android:src="@drawable/ic_check_black" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

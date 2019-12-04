@@ -30,19 +30,16 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.main.MainActivity" />
-
-        <activity android:name=".ui.login.LoginActivity"
+        <activity
+            android:name=".ui.login.LoginActivity"
             android:theme="@style/ThemeOverlay.LoginTheme"/>
 
-        <activity android:name="com.pr656d.cattlenotes.ui.cattle.CattleDetailsFragment"
-            android:windowSoftInputMode="stateVisible|adjustResize"/>
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
 
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-        <activity
-            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
     </application>
 

@@ -7,9 +7,13 @@
 
     <fragment
         android:id="@+id/cattleListScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.CattleListFragment"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.list.CattleListFragment"
         android:label="@string/cattle"
         tools:layout="@layout/fragment_cattle_list">
+
+        <action
+            android:id="@+id/navigate_to_add_cattle"
+            app:destination="@id/addCattleScreen" />
 
         <action
             android:id="@+id/navigate_to_cattle_details"
@@ -22,7 +26,7 @@
 
     <fragment
         android:id="@+id/cattleDetailsScreen"
-        android:name="com.pr656d.cattlenotes.ui.cattle.CattleDetailsFragment"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragment"
         android:label="@string/cattle_details"
         tools:layout="@layout/fragment_cattle_details">
 
@@ -32,6 +36,32 @@
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>
+
+    <fragment
+        android:id="@+id/addCattleScreen"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment"
+        android:label="@string/add_cattle"
+        tools:layout="@layout/fragment_add_cattle">
+
+        <action
+            android:id="@+id/navigate_to_progress_dialog"
+            app:destination="@id/progressDialogScreen" />
+
+        <action
+            android:id="@+id/navigate_to_cattle_details"
+            app:destination="@id/cattleDetailsScreen"
+            app:popUpTo="@id/cattleListScreen"/>
+    </fragment>
+
+    <dialog
+        android:id="@+id/progressDialogScreen"
+        android:name="com.pr656d.cattlenotes.shared.ui.dialog.ProgressDialog"
+        tools:layout="@layout/progress_dialog">
+
+        <argument
+            android:name="message"
+            app:argType="integer"/>
+    </dialog>
 
     <fragment
         android:id="@+id/timelineScreen"

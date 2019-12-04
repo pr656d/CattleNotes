@@ -1,14 +1,15 @@
-package com.pr656d.cattlenotes.ui.cattle
+package com.pr656d.cattlenotes.ui.main.cattle.details
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.text.InputType
 import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.forEach
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
@@ -28,37 +29,11 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
     }
 
     private val args by navArgs<CattleDetailsFragmentArgs>()
-    private lateinit var addVisibilityChanged: FloatingActionButton.OnVisibilityChangedListener
 
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_details
 
-    override fun init() {
+    override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
-
-        requireActivity().bottomAppBar.navigationIcon = null
-
-        addVisibilityChanged = object : FloatingActionButton.OnVisibilityChangedListener() {
-            override fun onHidden(fab: FloatingActionButton?) {
-                super.onHidden(fab)
-                requireActivity().bottomAppBar.apply {
-                    replaceMenu(
-                        if (viewModel.isInEditMode())
-                            R.menu.menu_cattle_edit_details_appbar
-                        else
-                            R.menu.menu_cattle_details_appbar
-                    )
-                    toggleFabAlignment()
-                }
-                requireActivity().bottomAppBar.toggleFabAlignment()
-                fab?.setImageDrawable(
-                    if (viewModel.isInEditMode())
-                        getDrawable(requireContext(), R.drawable.ic_check_black)
-                    else
-                        getDrawable(requireContext(), R.drawable.ic_edit_black)
-                )
-                fab?.show()
-            }
-        }
     }
 
     override fun setupObservers() {
@@ -77,21 +52,39 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
         else
             viewModel.changeMode()
 
-        requireActivity().toolbar.setTitle(
-            if (viewModel.isInEditMode()) {
-                if (args.cattle != null)
-                    R.string.edit_cattle_details
-                else
-                    R.string.add_cattle
-            }
-            else {
-                R.string.cattle_details
-            }
+        exposedDropDownBreed.setAdapter(
+            ArrayAdapter<String>(
+                requireContext(),
+                R.layout.dropdown_menu_popup_item,
+                resources.getStringArray(R.array.list_breed)
+            )
         )
+
+        exposedDropDownType.setAdapter(
+            ArrayAdapter<String>(
+                requireContext(),
+                R.layout.dropdown_menu_popup_item,
+                resources.getStringArray(R.array.list_type)
+            )
+        )
+
+        exposedDropDownGroup.setAdapter(
+            ArrayAdapter<String>(
+                requireContext(),
+                R.layout.dropdown_menu_popup_item,
+                resources.getStringArray(R.array.list_group)
+            )
+        )
+
+        fabButtonCattleDetails.setOnClickListener {
+            viewModel.changeMode()
+        }
 
         val configureEditTextForDateInput: TextInputEditText.() -> Unit = {
             inputType = InputType.TYPE_NULL
             setOnClickListener {
+                val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view?.windowToken, 0)
                 isFocusableInTouchMode = true
                 requestFocus()
                 showDatePickerDialogAndSetText()
@@ -115,42 +108,45 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
         editTextPurchaseAmount.apply {
             setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus)
-                    nsvCattleDetails.viewTreeObserver.addOnGlobalLayoutListener(
+                    nsvCattleDetails.apply { viewTreeObserver.addOnGlobalLayoutListener(
                         object : ViewTreeObserver.OnGlobalLayoutListener {
                             override fun onGlobalLayout() {
-                                val scrollViewHeight = nsvCattleDetails.height
+                                val scrollViewHeight = height
 
                                 if (scrollViewHeight > 0) {
-                                    nsvCattleDetails.viewTreeObserver
-                                        .removeOnGlobalLayoutListener(this)
+                                    viewTreeObserver.removeOnGlobalLayoutListener(this)
 
-                                    val lastView =
-                                        nsvCattleDetails.getChildAt(nsvCattleDetails.childCount - 1)
-                                    val lastViewBottom =
-                                        lastView.bottom + nsvCattleDetails.paddingBottom
-                                    val deltaScrollY =
-                                        lastViewBottom - scrollViewHeight - nsvCattleDetails.scrollY
+                                    val lastView = getChildAt(childCount - 1)
+                                    val lastViewBottom = lastView.bottom + paddingBottom
+                                    val deltaScrollY = lastViewBottom - scrollViewHeight - scrollY
                                     /* If you want to see the scroll animation, call this. */
-                                    nsvCattleDetails.smoothScrollBy(0, deltaScrollY)
+                                    smoothScrollBy(0, deltaScrollY)
                                     /* If you don't want, call this. */
-                                    nsvCattleDetails.scrollBy(0, deltaScrollY)
+                                    // scrollBy(0, deltaScrollY)
                                 }
                             }
                         }
-                    )
+                    )}
             }
         }
     }
 
     private fun setMode(editMode: Boolean) {
+        requireActivity().toolbar.setTitle(
+            if (viewModel.isInEditMode())
+                R.string.edit_cattle_details
+            else
+                R.string.cattle_details
+        )
+
         /**
-         * [validIDs] list contains IDs of [TextInputEditText]
-         * which [isFocusableInTouchMode] property is being changed manually
-         * because [DatePickerDialog] is shown in place of soft keyboard.
+         * validIDs list contains IDs of [TextInputEditText]
+         * which [TextInputEditText.isFocusableInTouchMode] property is being changed manually
+         * [DatePickerDialog] is shown in place of soft keyboard.
          *
          * So now reset them to false.
          */
-        val validIDs = intArrayOf(
+        val editTextForDateInput = intArrayOf(
             R.id.editTextDateOfBirth,
             R.id.editTextAiDate,
             R.id.editTextRepeatHeatDate,
@@ -160,25 +156,31 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
             R.id.editTextPurchaseDate
         )
 
+        val textInputLayoutForExposedDropDownMenu = intArrayOf(
+            R.id.layoutBreed, R.id.layoutType, R.id.layoutGroup
+        )
+
         view_cattle_details.forEach { view ->
             if (view is TextInputLayout) {
                 view.apply {
                     val editText = view.editText!!
                     editText.isEnabled = editMode
-                    if (validIDs.contains(editText.id))
+                    if (editTextForDateInput.contains(editText.id)) {
                         editText.isFocusableInTouchMode = false
+                        view.isStartIconVisible = editMode
+                    }
+                    if (textInputLayoutForExposedDropDownMenu.contains(view.id))
+                        view.isEndIconVisible = editMode
                 }
             }
         }
 
-        requireActivity().fabButton.hide(addVisibilityChanged)
-        requireActivity().invalidateOptionsMenu()
-    }
-
-    private fun BottomAppBar.toggleFabAlignment() {
-        fabAlignmentMode =
-            if (viewModel.isInEditMode()) BottomAppBar.FAB_ALIGNMENT_MODE_END
-            else BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+        fabButtonCattleDetails.setImageDrawable(
+            if (viewModel.isInEditMode())
+                getDrawable(requireContext(), R.drawable.ic_check_black)
+            else
+                getDrawable(requireContext(), R.drawable.ic_edit_black)
+        )
     }
 
     private fun TextInputEditText.showDatePickerDialogAndSetText() {
@@ -194,7 +196,7 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
         )
         dialog.setButton(
             DialogInterface.BUTTON_NEGATIVE,
-            getString(com.pr656d.cattlenotes.R.string.cancel)
+            getString(R.string.cancel)
         ) { _, which ->
             if (which == DialogInterface.BUTTON_NEGATIVE)
                 isFocusableInTouchMode = false
@@ -205,10 +207,10 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
     private fun getCattle(): Cattle {
         val tagNumber = editTextTagNumber.text.toString()
         val name = editTextName.text.toString()
-        val type = editTextBreed.text.toString()
+        val type = exposedDropDownType.text.toString()
         val imageUrl = null
-        val breed = editTextBreed.text.toString()
-        val group = editTextGroup.text.toString()
+        val breed = exposedDropDownBreed.text.toString()
+        val group = exposedDropDownGroup.text.toString()
         val calving = editTextCalving.text.toString().toInt()
         val dateOfBirth = editTextDateOfBirth.text.toString()
         val aiDate = editTextAiDate.text.toString()
@@ -229,10 +231,10 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
     private fun Cattle.bindView() {
         editTextTagNumber.setText(this.tagNumber)
         editTextName.setText(this.name)
-        editTextBreed.setText(this.breed)
-        editTextType.setText(this.type)
+        exposedDropDownBreed.setText(this.breed)
+        exposedDropDownType.setText(this.type)
         editTextCalving.setText(this.calving.toString())
-        editTextGroup.setText(this.group)
+        exposedDropDownGroup.setText(this.group)
         editTextDateOfBirth.setText(this.dateOfBirth)
         editTextAiDate.setText(this.aiDate)
         editTextRepeatHeatDate.setText(this.repeatHeatDate)

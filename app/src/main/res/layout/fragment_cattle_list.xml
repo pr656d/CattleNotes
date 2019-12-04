@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <ProgressBar
-        style="@style/progressBarBlack"
+        style="@style/progressBar"
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,12 +18,20 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCattle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingBottom="@dimen/appbar_height"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layoutManager="LinearLayoutManager"
         tools:itemCount="20"
         tools:listitem="@layout/item_cattle" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabButtonAddCattle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_large"
+        android:layout_gravity="bottom|center"
+        android:src="@drawable/ic_add_black" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

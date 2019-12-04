@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.main.cattle
+package com.pr656d.cattlenotes.ui.main.cattle.list
 
 import android.view.ViewGroup
 import com.pr656d.cattlenotes.model.Cattle
@@ -9,5 +9,8 @@ class CattleListAdapter(
 ): BaseAdapter<Cattle, CattleListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CattleListViewHolder =
-        CattleListViewHolder(parent, listener)
+        CattleListViewHolder(
+            parent,
+            listener
+        )
 }

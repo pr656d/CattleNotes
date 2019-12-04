@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="list_breed">
+        <item>HF</item>
+        <item>Jersey</item>
+        <item>Gir</item>
+        <item>Kankrej</item>
+        <item>Shahival</item>
+    </string-array>
+    
+    <string-array name="list_type">
+        <item>Cow</item>
+        <item>Buffalo</item>
+        <item>Bull</item>
+    </string-array>
+    
+    <string-array name="list_group">
+        <item>Heifer</item>
+        <item>Milking</item>
+        <item>Dry</item>
+        <item>Calf female</item>
+        <item>Calf male</item>
+    </string-array>
+    
+</resources>

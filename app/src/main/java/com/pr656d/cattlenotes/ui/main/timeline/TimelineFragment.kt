@@ -10,7 +10,7 @@ class TimelineFragment : BaseFragment<TimelineViewModel>() {
         const val TAG = "TimelineFragment"
     }
 
-    override fun init() {
+    override fun initViewModel() {
         viewModel = viewModelProvider(viewModelFactory)
     }
 

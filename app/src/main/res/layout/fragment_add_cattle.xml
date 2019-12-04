@@ -121,7 +121,6 @@
                     android:id="@+id/exposedDropDownBreed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@drawable/selector_edit_text_color"
                     android:editable="false"
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -142,7 +141,6 @@
                     android:id="@+id/exposedDropDownType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@drawable/selector_edit_text_color"
                     android:editable="false"
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -162,7 +160,6 @@
                     android:id="@+id/editTextCalving"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:inputType="number"
                     android:maxLines="1"
                     android:textColor="@drawable/selector_edit_text_color" />
@@ -184,7 +181,6 @@
                     android:id="@+id/exposedDropDownGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@drawable/selector_edit_text_color"
                     android:editable="false"
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -205,7 +201,6 @@
                     android:id="@+id/editTextDateOfBirth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:focusable="false"
                     android:maxLines="1"
                     android:textColor="@drawable/selector_edit_text_color" />
@@ -227,7 +222,7 @@
                     android:id="@+id/editTextAiDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
+                    android:focusable="false"
                     android:maxLines="1"
                     android:textColor="@drawable/selector_edit_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -248,7 +243,7 @@
                     android:id="@+id/editTextRepeatHeatDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
+                    android:focusable="false"
                     android:maxLines="1"
                     android:textColor="@drawable/selector_edit_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -269,7 +264,7 @@
                     android:id="@+id/editTextPregnancyCheckDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
+                    android:focusable="false"
                     android:maxLines="1"
                     android:textColor="@drawable/selector_edit_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -290,7 +285,7 @@
                     android:id="@+id/editTextDryOffDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
+                    android:focusable="false"
                     android:maxLines="1"
                     android:textColor="@drawable/selector_edit_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -311,7 +306,7 @@
                     android:id="@+id/editTextCalvingDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
+                    android:focusable="false"
                     android:maxLines="1"
                     android:textColor="@drawable/selector_edit_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -353,21 +348,20 @@
                     android:id="@+id/editTextPurchaseDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
+                    android:focusable="false"
                     android:maxLines="1"
                     android:textColor="@drawable/selector_edit_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabButtonCattleDetails"
+        android:id="@+id/fabButtonAddCattle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/margin_large"
-        android:src="@drawable/ic_edit_black" />
+        android:src="@drawable/ic_check_black" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

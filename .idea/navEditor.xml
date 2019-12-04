@@ -109,13 +109,39 @@
             <LayoutPositions>
               <option name="myPositions">
                 <map>
+                  <entry key="addCattleScreen">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="395" />
+                            <option name="y" value="124" />
+                          </Point>
+                        </option>
+                        <option name="myPositions">
+                          <map>
+                            <entry key="navigate_to_cattle_details">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                            <entry key="navigate_to_progress_dialog">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
+                          </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
                   <entry key="cashflowScreen">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="368" />
+                            <option name="x" value="17" />
+                            <option name="y" value="344" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -126,8 +152,8 @@
                       <LayoutPositions>
                         <option name="myPosition">
                           <Point>
-                            <option name="x" value="12" />
-                            <option name="y" value="12" />
+                            <option name="x" value="390" />
+                            <option name="y" value="-203" />
                           </Point>
                         </option>
                       </LayoutPositions>
@@ -144,6 +170,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="navigate_to_add_cattle">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="navigate_to_cattle_details">
                               <value>
                                 <LayoutPositions />
@@ -173,6 +204,18 @@
                           <Point>
                             <option name="x" value="16" />
                             <option name="y" value="709" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="progressDialogScreen">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="757" />
+                            <option name="y" value="-117" />
                           </Point>
                         </option>
                       </LayoutPositions>
