@@ -23,6 +23,7 @@
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layoutManager="LinearLayoutManager"
+        android:orientation="vertical"
         tools:itemCount="20"
         tools:listitem="@layout/item_cattle" />
 

@@ -46,4 +46,6 @@ class CattleListViewModel @Inject constructor(
             }
         }
     }
+
+    fun refreshCattleList() = fetchCattleList()
 }

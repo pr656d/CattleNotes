@@ -20,5 +20,14 @@ internal abstract class MainBindingModule {
     @Binds
     @IntoMap
     @ViewModelKey(MainViewModel::class)
-    internal abstract fun bindLaunchViewModel(viewModel: MainViewModel): ViewModel
+    internal abstract fun bindMainViewModel(viewModel: MainViewModel): ViewModel
+
+    /**
+     * The ViewModels are created by Dagger in a map. Via the @ViewModelKey, we define that we
+     * want to get a [MainSharedViewModel] class.
+     */
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainSharedViewModel::class)
+    internal abstract fun bindMainSharedViewModel(viewModel: MainSharedViewModel): ViewModel
 }

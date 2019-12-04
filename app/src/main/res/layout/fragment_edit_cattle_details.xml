@@ -83,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -163,7 +163,7 @@
                     android:enabled="false"
                     android:inputType="number"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -205,7 +205,7 @@
                     android:enabled="false"
                     android:focusable="false"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -226,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -247,7 +247,7 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -268,7 +268,7 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -289,7 +289,7 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -310,7 +310,7 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -331,7 +331,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -352,7 +352,7 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:maxLines="1"
-                    android:textColor="@drawable/selector_edit_text_color" />
+                    android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
