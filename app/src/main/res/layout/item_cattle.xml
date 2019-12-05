@@ -6,6 +6,8 @@
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
     app:cardCornerRadius="0dp"
     app:rippleColor="@color/rippleColor">
 

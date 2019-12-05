@@ -7,6 +7,10 @@
     <string name="ok">OK</string>
     <string name="back">Back</string>
 
+    <!--  Transition name  -->
+    <string name="sharedElementCattleItemLayout">transition_cattle_details</string>
+    <string name="sharedElementImageView">ImageView</string>
+
     <!--  Network  -->
     <string name="network_connection_error">Internet connection lost, please retry again</string>
     <string name="network_not_available">Internet connection not available, Please connect and try again</string>
