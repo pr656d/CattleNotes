@@ -3,19 +3,19 @@ package com.pr656d.cattlenotes.ui.login
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseActivity
-import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import kotlinx.android.synthetic.main.activity_login.*
 import javax.inject.Inject
 
-class LoginActivity : BaseActivity<LoginViewModel>() {
+class LoginActivity : BaseActivity() {
 
     companion object {
         const val TAG = "LoginActivity"
@@ -23,11 +23,9 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
         const val CODE_SIGN_IN = 111
     }
 
-    @Inject lateinit var authUI: AuthUI
+    private val viewModel by viewModels<LoginViewModel> { viewModelFactory }
 
-    override fun init() {
-        viewModel = viewModelProvider(viewModelFactory)
-    }
+    @Inject lateinit var authUI: AuthUI
 
     override fun provideLayoutId(): Int = R.layout.activity_login
 

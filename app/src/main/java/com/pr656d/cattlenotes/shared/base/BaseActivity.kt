@@ -9,17 +9,14 @@ import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
+abstract class BaseActivity : DaggerAppCompatActivity() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    protected lateinit var viewModel: VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(provideLayoutId())
         setActivityScreenOrientation()
-        init()
         setupObservers()
         setupView(savedInstanceState)
     }
@@ -44,9 +41,4 @@ abstract class BaseActivity<VM : BaseViewModel> : DaggerAppCompatActivity() {
     protected abstract fun setupView(savedInstanceState: Bundle?)
 
     abstract fun setupObservers()
-
-    /**
-     * Class implementation required to initialize viewmodel.
-     */
-    protected abstract fun init()
 }

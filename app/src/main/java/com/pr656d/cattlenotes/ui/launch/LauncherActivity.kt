@@ -2,8 +2,8 @@ package com.pr656d.cattlenotes.ui.launch
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
-import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.ui.launch.LaunchDestination.LOGIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.launch.LaunchDestination.MAIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.login.LoginActivity
@@ -22,7 +22,7 @@ class LauncherActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel: LaunchViewModel = viewModelProvider(viewModelFactory)
+        val viewModel by viewModels<LaunchViewModel> { viewModelFactory }
         viewModel.launchDestination.observe(this, EventObserver { destination ->
             when (destination) {
                 MAIN_ACTIVITY -> startActivity(Intent(this, MainActivity::class.java))

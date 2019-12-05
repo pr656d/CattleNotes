@@ -1,18 +1,17 @@
 package com.pr656d.cattlenotes.ui.main
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.onNavDestinationSelected
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseActivity
-import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : BaseActivity<MainViewModel>() {
+class MainActivity : BaseActivity() {
 
     companion object {
         const val TAG = "MainActivity"
@@ -26,15 +25,9 @@ class MainActivity : BaseActivity<MainViewModel>() {
         )
     }
 
-    private val testCattle by lazy {
-        Cattle("123456789012", "Janki", "HF")
-    }
+    private val viewModel by viewModels<MainViewModel> { viewModelFactory }
 
     override fun provideLayoutId(): Int = R.layout.activity_main
-
-    override fun init() {
-        viewModel = viewModelProvider(viewModelFactory)
-    }
 
     override fun setupObservers() {
         viewModel.activeMenuItem.observe(this, Observer { menuItem ->

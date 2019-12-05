@@ -36,5 +36,4 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onLoginFail() = _loginStatus.postValue(Resource.error(R.string.try_login_again_text))
-
 }
