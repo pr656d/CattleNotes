@@ -4,16 +4,15 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.text.InputType
-import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseFragment
-import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.ui.main.MainSharedViewModel
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
@@ -32,22 +31,17 @@ import kotlinx.android.synthetic.main.fragment_cattle_details.editTextTagNumber
 import kotlinx.android.synthetic.main.fragment_cattle_details.exposedDropDownBreed
 import kotlinx.android.synthetic.main.fragment_cattle_details.exposedDropDownGroup
 import kotlinx.android.synthetic.main.fragment_cattle_details.exposedDropDownType
-import kotlinx.android.synthetic.main.fragment_cattle_details.nsvCattleDetails
 import java.util.*
 
-class AddCattleFragment : BaseFragment<AddCattleViewModel>() {
+class AddCattleFragment : BaseFragment() {
 
     companion object {
         const val TAG = "CattleActivity"
     }
 
-    private val mainSharedViewModel by activityViewModels<MainSharedViewModel> { viewModelFactory }
+    private val viewModel by viewModels<AddCattleViewModel> { viewModelFactory }
 
     override fun provideLayoutId(): Int = R.layout.fragment_add_cattle
-
-    override fun initViewModel() {
-        viewModel = viewModelProvider(viewModelFactory)
-    }
 
     override fun setupObservers() {
         viewModel.launchCattleDetails.observe(viewLifecycleOwner, EventObserver {
@@ -55,6 +49,7 @@ class AddCattleFragment : BaseFragment<AddCattleViewModel>() {
             findNavController().navigate(action)
         })
 
+        val mainSharedViewModel by activityViewModels<MainSharedViewModel> { viewModelFactory }
         viewModel.saving.observe(viewLifecycleOwner, EventObserver {
             if (it) {
                 mainSharedViewModel.refreshCattleList()
@@ -119,31 +114,6 @@ class AddCattleFragment : BaseFragment<AddCattleViewModel>() {
         editTextCalvingDate.apply { configureEditTextForDateInput() }
 
         editTextPurchaseDate.apply { configureEditTextForDateInput() }
-
-        editTextPurchaseAmount.apply {
-            setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus)
-                    nsvCattleDetails.apply { viewTreeObserver.addOnGlobalLayoutListener(
-                        object : ViewTreeObserver.OnGlobalLayoutListener {
-                            override fun onGlobalLayout() {
-                                val scrollViewHeight = height
-
-                                if (scrollViewHeight > 0) {
-                                    viewTreeObserver.removeOnGlobalLayoutListener(this)
-
-                                    val lastView = getChildAt(childCount - 1)
-                                    val lastViewBottom = lastView.bottom + paddingBottom
-                                    val deltaScrollY = lastViewBottom - scrollViewHeight - scrollY
-                                    /* If you want to see the scroll animation, call this. */
-                                    smoothScrollBy(0, deltaScrollY)
-                                    /* If you don't want, call this. */
-                                    // scrollBy(0, deltaScrollY)
-                                }
-                            }
-                        }
-                    )}
-            }
-        }
     }
 
     private fun TextInputEditText.showDatePickerDialogAndSetText() {
@@ -189,22 +159,5 @@ class AddCattleFragment : BaseFragment<AddCattleViewModel>() {
             group, calving, dateOfBirth, aiDate, repeatHeatDate,
             pregnancyDate, dryOffDate, calvingDate, purchaseAmount, purchaseDate
         )
-    }
-
-    private fun Cattle.bindView() {
-        editTextTagNumber.setText(this.tagNumber)
-        editTextName.setText(this.name)
-        exposedDropDownBreed.setText(this.breed)
-        exposedDropDownType.setText(this.type)
-        editTextCalving.setText(this.calving.toString())
-        exposedDropDownGroup.setText(this.group)
-        editTextDateOfBirth.setText(this.dateOfBirth)
-        editTextAiDate.setText(this.aiDate)
-        editTextRepeatHeatDate.setText(this.repeatHeatDate)
-        editTextPregnancyCheckDate.setText(this.pregnancyCheckDate)
-        editTextDryOffDate.setText(this.dryOffDate)
-        editTextCalvingDate.setText(this.calvingDate)
-        editTextPurchaseAmount.setText(this.purchaseAmount.toString())
-        editTextPurchaseDate.setText(this.purchaseDate)
     }
 }

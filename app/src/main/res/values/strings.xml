@@ -52,7 +52,7 @@
     <string name="calving">%1$d calving</string>
 
     <!--  Cattle list  -->
-    <string name="cattle_list_empty">Your cattle list is empty.</string>
+    <string name="cattle_list_empty">Click &#43; icon to add new cattle.</string>
 
     <!--  Cattle details  -->
     <string name="cattle_details">Cattle details</string>

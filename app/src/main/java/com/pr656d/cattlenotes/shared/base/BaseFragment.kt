@@ -11,11 +11,9 @@ import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
+abstract class BaseFragment : DaggerFragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    protected lateinit var viewModel: VM
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(provideLayoutId(), container, false)
@@ -23,7 +21,6 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
         setupView()
         setupObservers()
     }
@@ -38,9 +35,4 @@ abstract class BaseFragment<VM : BaseViewModel> : DaggerFragment() {
     protected abstract fun setupView()
 
     protected abstract fun setupObservers()
-
-    /**
-     * Class implementation required to initialize viewmodel.
-     */
-    protected abstract fun initViewModel()
 }

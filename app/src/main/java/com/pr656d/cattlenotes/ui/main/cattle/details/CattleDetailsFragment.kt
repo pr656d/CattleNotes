@@ -9,32 +9,57 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.forEach
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseFragment
-import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_cattle_details.*
 import java.util.*
 
-class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
+class CattleDetailsFragment : BaseFragment() {
 
     companion object {
         const val TAG = "CattleActivity"
     }
 
+    private val viewModel by viewModels<CattleDetailsViewModel> { viewModelFactory }
+
     private val args by navArgs<CattleDetailsFragmentArgs>()
+    private val setupDropDownAdapters: () -> Unit by lazy {
+        {
+            exposedDropDownBreed.setAdapter(
+                ArrayAdapter<String>(
+                    requireContext(),
+                    R.layout.dropdown_menu_popup_item,
+                    resources.getStringArray(R.array.list_breed)
+                )
+            )
+
+            exposedDropDownType.setAdapter(
+                ArrayAdapter<String>(
+                    requireContext(),
+                    R.layout.dropdown_menu_popup_item,
+                    resources.getStringArray(R.array.list_type)
+                )
+            )
+
+            exposedDropDownGroup.setAdapter(
+                ArrayAdapter<String>(
+                    requireContext(),
+                    R.layout.dropdown_menu_popup_item,
+                    resources.getStringArray(R.array.list_group)
+                )
+            )
+        }
+    }
 
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_details
-
-    override fun initViewModel() {
-        viewModel = viewModelProvider(viewModelFactory)
-    }
 
     override fun setupObservers() {
         viewModel.editMode.observe(this, EventObserver {
@@ -51,30 +76,6 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
             viewModel.setCattle(args.cattle!!)
         else
             viewModel.changeMode()
-
-        exposedDropDownBreed.setAdapter(
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.dropdown_menu_popup_item,
-                resources.getStringArray(R.array.list_breed)
-            )
-        )
-
-        exposedDropDownType.setAdapter(
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.dropdown_menu_popup_item,
-                resources.getStringArray(R.array.list_type)
-            )
-        )
-
-        exposedDropDownGroup.setAdapter(
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.dropdown_menu_popup_item,
-                resources.getStringArray(R.array.list_group)
-            )
-        )
 
         fabButtonCattleDetails.setOnClickListener {
             viewModel.changeMode()
@@ -175,12 +176,16 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
             }
         }
 
-        fabButtonCattleDetails.setImageDrawable(
-            if (viewModel.isInEditMode())
-                getDrawable(requireContext(), R.drawable.ic_check_black)
-            else
-                getDrawable(requireContext(), R.drawable.ic_edit_black)
-        )
+        fabButtonCattleDetails.apply {
+            hide()
+            setImageDrawable(
+                if (viewModel.isInEditMode())
+                    getDrawable(requireContext(), R.drawable.ic_check_black)
+                else
+                    getDrawable(requireContext(), R.drawable.ic_edit_black)
+            )
+            show()
+        }
     }
 
     private fun TextInputEditText.showDatePickerDialogAndSetText() {
@@ -243,5 +248,7 @@ class CattleDetailsFragment : BaseFragment<CattleDetailsViewModel>() {
         editTextCalvingDate.setText(this.calvingDate)
         editTextPurchaseAmount.setText(this.purchaseAmount.toString())
         editTextPurchaseDate.setText(this.purchaseDate)
+
+        setupDropDownAdapters()
     }
 }
