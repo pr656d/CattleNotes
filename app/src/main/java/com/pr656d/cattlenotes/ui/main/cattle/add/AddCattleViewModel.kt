@@ -25,10 +25,16 @@ class AddCattleViewModel @Inject constructor(
     fun saveCattle(cattle: Cattle) {
         _saving.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            cattleDataRepository.addCattle(cattle)
-            withContext(Dispatchers.Main) {
-                _saving.postValue(false)
-                _launchCattleDetails.postValue(cattle)
+            try {
+                cattleDataRepository.addCattle(cattle)
+                withContext(Dispatchers.Main) {
+                    _saving.postValue(false)
+                    _launchCattleDetails.postValue(cattle)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    _saving.postValue(false)
+                }
             }
         }
     }

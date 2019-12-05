@@ -7,12 +7,14 @@ import android.text.InputType
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
+import com.pr656d.cattlenotes.ui.main.MainSharedViewModel
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
 import kotlinx.android.synthetic.main.fragment_add_cattle.*
@@ -39,6 +41,8 @@ class AddCattleFragment : BaseFragment<AddCattleViewModel>() {
         const val TAG = "CattleActivity"
     }
 
+    private val mainSharedViewModel by activityViewModels<MainSharedViewModel> { viewModelFactory }
+
     override fun provideLayoutId(): Int = R.layout.fragment_add_cattle
 
     override fun initViewModel() {
@@ -53,6 +57,7 @@ class AddCattleFragment : BaseFragment<AddCattleViewModel>() {
 
         viewModel.saving.observe(viewLifecycleOwner, EventObserver {
             if (it) {
+                mainSharedViewModel.refreshCattleList()
                 val action = AddCattleFragmentDirections.navigateToProgressDialog(R.string.please_wait_text)
                 findNavController().navigate(action)
             } else {

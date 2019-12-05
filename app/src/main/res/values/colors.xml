@@ -4,6 +4,7 @@
   <color name="colorPrimaryDark">#00574B</color>
   <color name="colorSecondary">#FFDE03</color>
   <color name="colorAccent">#FFFFFF</color>
+  <color name="rippleColor">#20008577</color>
 
   <color name="black">#000000</color>
   <color name="white">#FFFFFF</color>

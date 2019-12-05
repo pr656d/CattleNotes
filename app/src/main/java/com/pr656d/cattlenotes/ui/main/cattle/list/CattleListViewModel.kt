@@ -35,17 +35,21 @@ class CattleListViewModel @Inject constructor(
         return false
     }
 
+    fun refreshCattleList() = fetchCattleList()
+
     private fun fetchCattleList() {
         _loading.postValue(true)
         viewModelScope.launch(Dispatchers.IO) {
-            val list = cattleDataRepository.getAllCattle()
-            withContext(Dispatchers.Main) {
-                _cattleList.postValue(list)
-                cacheData.setCattleList(list)
+            try {
+                val list = cattleDataRepository.getAllCattle()
+                withContext(Dispatchers.Main) {
+                    _cattleList.postValue(list)
+                    cacheData.setCattleList(list)
+                    _loading.postValue(false)
+                }
+            } catch (e: Exception) {
                 _loading.postValue(false)
             }
         }
     }
-
-    fun refreshCattleList() = fetchCattleList()
 }
