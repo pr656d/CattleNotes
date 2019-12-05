@@ -51,6 +51,9 @@
     <!--  item_cattle  -->
     <string name="calving">%1$d calving</string>
 
+    <!--  Cattle list  -->
+    <string name="cattle_list_empty">Your cattle list is empty.</string>
+
     <!--  Cattle details  -->
     <string name="cattle_details">Cattle details</string>
     <string name="tag_number">Tag Number</string>

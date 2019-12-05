@@ -6,7 +6,6 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
-import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.shared.utils.common.viewModelProvider
 import com.pr656d.cattlenotes.ui.main.MainSharedViewModel
 import com.pr656d.cattlenotes.utils.common.EventObserver
@@ -29,23 +28,30 @@ class CattleListFragment : BaseFragment<CattleListViewModel>() {
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_list
 
     override fun setupObservers() {
-        viewModel.cattleList.observe(viewLifecycleOwner) {
-            Logger.d(TAG, "updateList() : ${it.size}")
-            cattleAdapter.updateList(it)
-        }
-
-        viewModel.isLoading.observe(viewLifecycleOwner) {
-            rvCattle.visibility = if (it) View.GONE else View.VISIBLE
-            progressBar.visibility = if (it) View.VISIBLE else View.GONE
-        }
-
         mainSharedViewModel.refreshCattleList.observe(viewLifecycleOwner, EventObserver {
             viewModel.refreshCattleList()
         })
+
+        viewModel.cattleList.observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                cattleAdapter.updateList(it)
+                tvEmptyListMessage.visibility = View.GONE
+                rvCattleList.visibility = View.VISIBLE
+            } else {
+                rvCattleList.visibility = View.GONE
+                tvEmptyListMessage.visibility = View.VISIBLE
+            }
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            rvCattleList.visibility = if (it) View.GONE else View.VISIBLE
+            progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        }
+
     }
 
     override fun setupView() {
-        rvCattle.run {
+        rvCattleList.run {
             cattleAdapter = CattleListAdapter()
             adapter = cattleAdapter
         }

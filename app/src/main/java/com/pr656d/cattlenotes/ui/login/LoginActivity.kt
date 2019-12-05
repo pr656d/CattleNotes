@@ -47,7 +47,6 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
                     .build(),
                 CODE_SIGN_IN
             )
-            btnLogin.isEnabled = false
         })
 
         viewModel.launchMain.observe(this, EventObserver {
@@ -62,7 +61,12 @@ class LoginActivity : BaseActivity<LoginViewModel>() {
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
-        btnLogin.setOnClickListener { viewModel.onLoginClick() }
+        btnLogin.apply {
+            setOnClickListener {
+                isEnabled = false
+                viewModel.onLoginClick()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

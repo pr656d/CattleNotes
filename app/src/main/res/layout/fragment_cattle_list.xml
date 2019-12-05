@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ProgressBar
-        style="@style/progressBar"
         android:id="@+id/progressBar"
+        style="@style/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCattle"
+        android:id="@+id/rvCattleList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="@dimen/appbar_height"
         android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layoutManager="LinearLayoutManager"
         android:orientation="vertical"
+        android:paddingBottom="@dimen/appbar_height"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:itemCount="20"
         tools:listitem="@layout/item_cattle" />
 
@@ -31,8 +30,22 @@
         android:id="@+id/fabButtonAddCattle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_large"
         android:layout_gravity="bottom|center"
+        android:layout_margin="@dimen/margin_large"
         android:src="@drawable/ic_add_black" />
+
+    <TextView
+        android:id="@+id/tvEmptyListMessage"
+        style="@style/AppTheme.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/margin_large"
+        android:text="@string/cattle_list_empty"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:visibility="gone"
+        app:layout_anchor="@+id/rvCattleList"
+        app:layout_anchorGravity="center" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

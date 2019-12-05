@@ -17,7 +17,7 @@ class CattleListViewModel @Inject constructor(
     private val cacheData: CacheData
 ) : BaseViewModel() {
 
-    private val _cattleList = MutableLiveData<List<Cattle>>()
+    private val _cattleList by lazy { MutableLiveData<List<Cattle>>() }
     val cattleList: LiveData<List<Cattle>> = _cattleList
 
     private val _loading = MutableLiveData<Boolean>()
