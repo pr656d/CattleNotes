@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.text.InputType
-import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
@@ -68,6 +67,11 @@ class CattleDetailsFragment : BaseFragment() {
 
         viewModel.cattle.observe(this, EventObserver {
             it.bindView()
+            /**
+             * Dropdown don't show full list when it's text is set manually.
+             * Need to override adapter again.
+             */
+            setupDropDownAdapters()
         })
     }
 
@@ -81,55 +85,21 @@ class CattleDetailsFragment : BaseFragment() {
             viewModel.changeMode()
         }
 
-        val configureEditTextForDateInput: TextInputEditText.() -> Unit = {
-            inputType = InputType.TYPE_NULL
-            setOnClickListener {
-                val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view?.windowToken, 0)
-                isFocusableInTouchMode = true
-                requestFocus()
-                showDatePickerDialogAndSetText()
-            }
-        }
+        setupDropDownAdapters()
 
-        editTextDateOfBirth.apply { configureEditTextForDateInput() }
+        editTextDateOfBirth.setupForDateInput()
 
-        editTextAiDate.apply { configureEditTextForDateInput() }
+        editTextAiDate.setupForDateInput()
 
-        editTextRepeatHeatDate.apply { configureEditTextForDateInput() }
+        editTextRepeatHeatDate.setupForDateInput()
 
-        editTextPregnancyCheckDate.apply { configureEditTextForDateInput() }
+        editTextPregnancyCheckDate.setupForDateInput()
 
-        editTextDryOffDate.apply { configureEditTextForDateInput() }
+        editTextDryOffDate.setupForDateInput()
 
-        editTextCalvingDate.apply { configureEditTextForDateInput() }
+        editTextCalvingDate.setupForDateInput()
 
-        editTextPurchaseDate.apply { configureEditTextForDateInput() }
-
-        editTextPurchaseAmount.apply {
-            setOnFocusChangeListener { _, hasFocus ->
-                if (hasFocus)
-                    nsvCattleDetails.apply { viewTreeObserver.addOnGlobalLayoutListener(
-                        object : ViewTreeObserver.OnGlobalLayoutListener {
-                            override fun onGlobalLayout() {
-                                val scrollViewHeight = height
-
-                                if (scrollViewHeight > 0) {
-                                    viewTreeObserver.removeOnGlobalLayoutListener(this)
-
-                                    val lastView = getChildAt(childCount - 1)
-                                    val lastViewBottom = lastView.bottom + paddingBottom
-                                    val deltaScrollY = lastViewBottom - scrollViewHeight - scrollY
-                                    /* If you want to see the scroll animation, call this. */
-                                    smoothScrollBy(0, deltaScrollY)
-                                    /* If you don't want, call this. */
-                                    // scrollBy(0, deltaScrollY)
-                                }
-                            }
-                        }
-                    )}
-            }
-        }
+        editTextPurchaseDate.setupForDateInput()
     }
 
     private fun setMode(editMode: Boolean) {
@@ -141,11 +111,15 @@ class CattleDetailsFragment : BaseFragment() {
         )
 
         /**
-         * validIDs list contains IDs of [TextInputEditText]
-         * which [TextInputEditText.isFocusableInTouchMode] property is being changed manually
-         * [DatePickerDialog] is shown in place of soft keyboard.
+         * Problem:
+         * Can't handle end icon click for ExposedDropDownMenu even when using enabled property
+         * directly from XML.
+         * One solution is to hide the icon of ExposedDropDownMenu but view theme doesn't match
+         * for all views.
          *
-         * So now reset them to false.
+         * Solution:
+         * Hide all start and end icon from [TextInputLayout] while not in edit mode.
+         * When in edit mode show the icons.
          */
         val editTextForDateInput = intArrayOf(
             R.id.editTextDateOfBirth,
@@ -161,18 +135,29 @@ class CattleDetailsFragment : BaseFragment() {
             R.id.layoutBreed, R.id.layoutType, R.id.layoutGroup
         )
 
+        /**
+         * Iterate through parent view to find [TextInputLayout].
+         */
         view_cattle_details.forEach { view ->
             if (view is TextInputLayout) {
                 view.apply {
-                    val editText = view.editText!!
-                    editText.isEnabled = editMode
-                    if (editTextForDateInput.contains(editText.id)) {
-                        editText.isFocusableInTouchMode = false
-                        view.isStartIconVisible = editMode
+                    /**
+                     * [TextInputLayout] has [TextInputEditText] as child.
+                     * To access it we have to use [TextInputLayout.editText].
+                     */
+                    view.editText?.run {
+                        this.isEnabled = editMode
+                        // Check edit text is type date input category.
+                        if (editTextForDateInput.contains(this.id)) {
+                            // Set start icon visibility.
+                            view.isStartIconVisible = editMode
+                        }
                     }
-                    if (textInputLayoutForExposedDropDownMenu.contains(view.id))
-                        view.isEndIconVisible = editMode
                 }
+
+                // check view is type of ExposedDropDownMenu layout category.
+                if (textInputLayoutForExposedDropDownMenu.contains(view.id))
+                    view.isEndIconVisible = editMode    // Set end icon visibility.
             }
         }
 
@@ -188,25 +173,51 @@ class CattleDetailsFragment : BaseFragment() {
         }
     }
 
-    private fun TextInputEditText.showDatePickerDialogAndSetText() {
-        val dialog = DatePickerDialog(
-            context, R.style.DatePicker,
-            DatePickerDialog.OnDateSetListener { _, yyyy, mm, dd ->
-                setText(parseToString(dd, mm, yyyy))
-                isFocusableInTouchMode = false
-            },
-            Calendar.getInstance().get(Calendar.YEAR),
-            Calendar.getInstance().get(Calendar.MONTH),
-            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        )
-        dialog.setButton(
-            DialogInterface.BUTTON_NEGATIVE,
-            getString(R.string.cancel)
-        ) { _, which ->
-            if (which == DialogInterface.BUTTON_NEGATIVE)
-                isFocusableInTouchMode = false
+
+    /**
+     * To match view theme dates shows as [TextInputEditText].
+     *
+     * focus is handled manually for date editTexts.
+     */
+    private fun TextInputEditText.setupForDateInput() {
+        // Set input type as null to stop keyboard from opening.
+        inputType = InputType.TYPE_NULL
+
+        isFocusableInTouchMode = false  // Initially set to false.
+
+        setOnClickListener {
+            // Hide the soft keyboard if open.
+            (requireActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                .hideSoftInputFromWindow(view?.windowToken, 0)
+
+            // Set focusable to true.
+            isFocusableInTouchMode = true
+            // Take view in focus.
+            requestFocus()
+
+            // Create date picker dialog.
+            val dialog = DatePickerDialog(
+                context, R.style.DatePicker,
+                DatePickerDialog.OnDateSetListener { _, yyyy, mm, dd ->
+                    setText(parseToString(dd, mm, yyyy))
+                    // After picking date reset focusable to false.
+                    isFocusableInTouchMode = false
+                },
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+            )
+            // Add cancel button click handler.
+            dialog.setButton(
+                DialogInterface.BUTTON_NEGATIVE,
+                getString(R.string.cancel)
+            ) { _, which ->
+                if (which == DialogInterface.BUTTON_NEGATIVE)
+                    isFocusableInTouchMode = false  // Reset focus to false.
+            }
+            dialog.show()   // Show the dialog.
         }
-        dialog.show()
     }
 
     private fun getCattle(): Cattle {
@@ -248,7 +259,5 @@ class CattleDetailsFragment : BaseFragment() {
         editTextCalvingDate.setText(this.calvingDate)
         editTextPurchaseAmount.setText(this.purchaseAmount.toString())
         editTextPurchaseDate.setText(this.purchaseDate)
-
-        setupDropDownAdapters()
     }
 }

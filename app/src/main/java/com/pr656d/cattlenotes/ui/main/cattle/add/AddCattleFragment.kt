@@ -90,51 +90,67 @@ class AddCattleFragment : BaseFragment() {
             viewModel.saveCattle(getCattle())
         }
 
-        val configureEditTextForDateInput: TextInputEditText.() -> Unit = {
-            inputType = InputType.TYPE_NULL
-            setOnClickListener {
-                val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(view?.windowToken, 0)
-                isFocusableInTouchMode = true
-                requestFocus()
-                showDatePickerDialogAndSetText()
-            }
-        }
+        editTextDateOfBirth.setupForDateInput()
 
-        editTextDateOfBirth.apply { configureEditTextForDateInput() }
+        editTextAiDate.setupForDateInput()
 
-        editTextAiDate.apply { configureEditTextForDateInput() }
+        editTextRepeatHeatDate.setupForDateInput()
 
-        editTextRepeatHeatDate.apply { configureEditTextForDateInput() }
+        editTextPregnancyCheckDate.setupForDateInput()
 
-        editTextPregnancyCheckDate.apply { configureEditTextForDateInput() }
+        editTextDryOffDate.setupForDateInput()
 
-        editTextDryOffDate.apply { configureEditTextForDateInput() }
+        editTextCalvingDate.setupForDateInput()
 
-        editTextCalvingDate.apply { configureEditTextForDateInput() }
-
-        editTextPurchaseDate.apply { configureEditTextForDateInput() }
+        editTextPurchaseDate.setupForDateInput()
     }
 
-    private fun TextInputEditText.showDatePickerDialogAndSetText() {
-        val dialog = DatePickerDialog(
-            context, R.style.DatePicker,
-            DatePickerDialog.OnDateSetListener { _, yyyy, mm, dd ->
-                setText(parseToString(dd, mm, yyyy))
-                isFocusableInTouchMode = false
-            },
-            Calendar.getInstance().get(Calendar.YEAR),
-            Calendar.getInstance().get(Calendar.MONTH),
-            Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        )
-        dialog.setButton(
-            DialogInterface.BUTTON_NEGATIVE,
-            getString(R.string.cancel)
-        ) { _, which ->
-            if (which == DialogInterface.BUTTON_NEGATIVE)
-                isFocusableInTouchMode = false
+    /**
+     * To match view theme dates shows as [TextInputEditText].
+     *
+     * focus is handled manually for date editTexts.
+     */
+    private fun TextInputEditText.setupForDateInput() {
+        // Set input type as null to stop keyboard from opening.
+        inputType = InputType.TYPE_NULL
+
+        isFocusableInTouchMode = false  // Initially set to false
+
+        setOnClickListener {
+            // Hide the soft keyboard if open.
+            (requireActivity()
+                .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+                .hideSoftInputFromWindow(view?.windowToken, 0)
+
+            // Set focusable to true.
+            isFocusableInTouchMode = true
+            // Take view in focus.
+            requestFocus()
+
+            // Create date picker dialog.
+            val dialog = DatePickerDialog(
+                context, R.style.DatePicker,
+                DatePickerDialog.OnDateSetListener { _, yyyy, mm, dd ->
+                    setText(parseToString(dd, mm, yyyy))
+                    // After picking date reset focusable to false.
+                    isFocusableInTouchMode = false
+                },
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+            )
+            // Cancel button click handler.
+            dialog.setButton(
+                DialogInterface.BUTTON_NEGATIVE,
+                getString(R.string.cancel)
+            ) { _, which ->
+                // Reset focus to false.
+                if (which == DialogInterface.BUTTON_NEGATIVE)
+                    isFocusableInTouchMode = false
+            }
+
+            dialog.show()   // Show the dialog.
         }
-        dialog.show()
     }
 
     private fun getCattle(): Cattle {
