@@ -41,6 +41,34 @@ class AddCattleFragment : BaseFragment() {
 
     private val viewModel by viewModels<AddCattleViewModel> { viewModelFactory }
 
+    private val setupDropDownAdapters: () -> Unit by lazy {
+        {
+            exposedDropDownBreed.setAdapter(
+                ArrayAdapter<String>(
+                    requireContext(),
+                    R.layout.dropdown_menu_popup_item,
+                    resources.getStringArray(R.array.list_breed)
+                )
+            )
+
+            exposedDropDownType.setAdapter(
+                ArrayAdapter<String>(
+                    requireContext(),
+                    R.layout.dropdown_menu_popup_item,
+                    resources.getStringArray(R.array.list_type)
+                )
+            )
+
+            exposedDropDownGroup.setAdapter(
+                ArrayAdapter<String>(
+                    requireContext(),
+                    R.layout.dropdown_menu_popup_item,
+                    resources.getStringArray(R.array.list_group)
+                )
+            )
+        }
+    }
+
     override fun provideLayoutId(): Int = R.layout.fragment_add_cattle
 
     override fun setupObservers() {
@@ -62,29 +90,7 @@ class AddCattleFragment : BaseFragment() {
     }
 
     override fun setupView() {
-        exposedDropDownBreed.setAdapter(
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.dropdown_menu_popup_item,
-                resources.getStringArray(R.array.list_breed)
-            )
-        )
-
-        exposedDropDownType.setAdapter(
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.dropdown_menu_popup_item,
-                resources.getStringArray(R.array.list_type)
-            )
-        )
-
-        exposedDropDownGroup.setAdapter(
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.dropdown_menu_popup_item,
-                resources.getStringArray(R.array.list_group)
-            )
-        )
+        setupDropDownAdapters()
 
         fabButtonAddCattle.setOnClickListener {
             viewModel.saveCattle(getCattle())
@@ -148,7 +154,6 @@ class AddCattleFragment : BaseFragment() {
                 if (which == DialogInterface.BUTTON_NEGATIVE)
                     isFocusableInTouchMode = false
             }
-
             dialog.show()   // Show the dialog.
         }
     }
