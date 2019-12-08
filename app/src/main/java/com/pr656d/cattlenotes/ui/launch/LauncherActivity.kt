@@ -31,4 +31,11 @@ class LauncherActivity : DaggerAppCompatActivity() {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         })
     }
+
+    override fun onBackPressed() {
+        /**
+         * While [LauncherActivity] is showing if we press back then it neither go to next screen
+         * nor close the app. It stuck on [LauncherActivity].
+         */
+    }
 }
