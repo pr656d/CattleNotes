@@ -78,7 +78,10 @@
 
     <!--  Add cattle  -->
     <string name="add_cattle">Add new cattle</string>
-
     <!--  Edit cattle details  -->
     <string name="edit_cattle_details">Edit cattle details</string>
+    <string name="error_already_exists">Already exists</string>
+    <string name="error_empty_field">This field can\'t be empty</string>
+    <string name="error_contain_digits_only">This field should contain digits only</string>
+    <string name="error_cattle_save_error">Can\'t save cattle, Please try again</string>
 </resources>

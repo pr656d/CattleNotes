@@ -6,19 +6,27 @@ import android.content.DialogInterface
 import android.text.InputType
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.forEach
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseFragment
+import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
+import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragmentDirections
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_cattle_details.*
+import kotlinx.android.synthetic.main.layout_cattle_details.*
 import java.util.*
 
 class CattleDetailsFragment : BaseFragment() {
@@ -30,33 +38,6 @@ class CattleDetailsFragment : BaseFragment() {
     private val viewModel by viewModels<CattleDetailsViewModel> { viewModelFactory }
 
     private val args by navArgs<CattleDetailsFragmentArgs>()
-    private val setupDropDownAdapters: () -> Unit by lazy {
-        {
-            exposedDropDownBreed.setAdapter(
-                ArrayAdapter<String>(
-                    requireContext(),
-                    R.layout.dropdown_menu_popup_item,
-                    resources.getStringArray(R.array.list_breed)
-                )
-            )
-
-            exposedDropDownType.setAdapter(
-                ArrayAdapter<String>(
-                    requireContext(),
-                    R.layout.dropdown_menu_popup_item,
-                    resources.getStringArray(R.array.list_type)
-                )
-            )
-
-            exposedDropDownGroup.setAdapter(
-                ArrayAdapter<String>(
-                    requireContext(),
-                    R.layout.dropdown_menu_popup_item,
-                    resources.getStringArray(R.array.list_group)
-                )
-            )
-        }
-    }
 
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_details
 
@@ -73,6 +54,36 @@ class CattleDetailsFragment : BaseFragment() {
              */
             setupDropDownAdapters()
         })
+
+        val handleError: TextInputLayout.(messageId: Int) -> Unit = { messageId: Int ->
+            isErrorEnabled = if (messageId != CattleValidator.VALID_MESSAGE_ID) {
+                error = getString(messageId)
+                true
+            } else { false }
+        }
+
+        viewModel.showErrorTagNumber.observe(viewLifecycleOwner) {
+            layoutTagNumber.handleError(it)
+        }
+
+        viewModel.showErrorType.observe(viewLifecycleOwner) {
+            layoutType.handleError(it)
+        }
+
+        viewModel.showErrorTotalCalving.observe(viewLifecycleOwner) {
+            layoutCalving.handleError(it)
+        }
+
+        viewModel.saving.observe(viewLifecycleOwner) {
+            if (it) {
+                val action = AddCattleFragmentDirections.navigateToProgressDialog(R.string.please_wait_text)
+                findNavController().navigate(action)
+            } else {
+                if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
+                    findNavController().navigateUp()
+            }
+        }
+
     }
 
     override fun setupView() {
@@ -82,24 +93,76 @@ class CattleDetailsFragment : BaseFragment() {
             viewModel.changeMode()
 
         fabButtonCattleDetails.setOnClickListener {
-            viewModel.changeMode()
+            if (viewModel.isInEditMode())
+                viewModel.saveCattle()
+            else
+                viewModel.changeMode()
         }
 
         setupDropDownAdapters()
 
-        editTextDateOfBirth.setupForDateInput()
+        editTextTagNumber.addTextChangedListener {
+            viewModel.setTagNumber(it.toString())
+        }
 
-        editTextAiDate.setupForDateInput()
+        editTextName.addTextChangedListener {
+            viewModel.setName(it.toString())
+        }
 
-        editTextRepeatHeatDate.setupForDateInput()
+        editTextCalving.addTextChangedListener {
+            viewModel.setTotalCalving(it.toString())
+        }
 
-        editTextPregnancyCheckDate.setupForDateInput()
+        exposedDropDownBreed.addTextChangedListener {
+            viewModel.setBreed(it.toString())
+        }
 
-        editTextDryOffDate.setupForDateInput()
+        exposedDropDownType.addTextChangedListener {
+            viewModel.setType(it.toString())
+        }
 
-        editTextCalvingDate.setupForDateInput()
+        exposedDropDownGroup.addTextChangedListener {
+            viewModel.setGroup(it.toString())
+        }
 
-        editTextPurchaseDate.setupForDateInput()
+        editTextPurchaseAmount.addTextChangedListener {
+            viewModel.setPurchaseAmount(it.toString().toLong())
+        }
+
+        editTextDateOfBirth.apply {
+            setupForDateInput()
+            addTextChangedListener { viewModel.setDob(it.toString()) }
+        }
+
+        editTextAiDate.apply {
+            setupForDateInput()
+            addTextChangedListener { viewModel.setAiDate(it.toString()) }
+        }
+
+        editTextRepeatHeatDate.apply {
+            setupForDateInput()
+            addTextChangedListener { viewModel.setRepeatHeatDate(it.toString()) }
+        }
+
+        editTextPregnancyCheckDate.apply {
+            setupForDateInput()
+            addTextChangedListener { viewModel.setPregnancyCheckDate(it.toString()) }
+        }
+
+        editTextDryOffDate.apply {
+            setupForDateInput()
+            addTextChangedListener { viewModel.setDryOffDate(it.toString()) }
+        }
+
+        editTextCalvingDate.apply {
+            setupForDateInput()
+            addTextChangedListener { viewModel.setCalvingDate(it.toString()) }
+        }
+
+        editTextPurchaseDate.apply {
+            setupForDateInput()
+            addTextChangedListener { viewModel.setPurchaseDate(it.toString()) }
+        }
     }
 
     private fun setMode(editMode: Boolean) {
@@ -135,29 +198,34 @@ class CattleDetailsFragment : BaseFragment() {
             R.id.layoutBreed, R.id.layoutType, R.id.layoutGroup
         )
 
+        val applyProperties: TextInputLayout.() -> Unit = {
+            /**
+             * [TextInputLayout] has [TextInputEditText] as child.
+             * To access it we have to use [TextInputLayout.editText].
+             */
+            editText?.run {
+                this.isEnabled = editMode
+                // Check edit text is type date input category.
+                if (editTextForDateInput.contains(this.id)) {
+                    // Set start icon visibility.
+                    isStartIconVisible = editMode
+                }
+            }
+
+            // check view is type of ExposedDropDownMenu layout category.
+            if (textInputLayoutForExposedDropDownMenu.contains(id))
+                isEndIconVisible = editMode    // Set end icon visibility.
+        }
+
         /**
          * Iterate through parent view to find [TextInputLayout].
+         * Parent also have [LinearLayout] which contains some child views.
+         * Iterate through those too.
          */
         view_cattle_details.forEach { view ->
-            if (view is TextInputLayout) {
-                view.apply {
-                    /**
-                     * [TextInputLayout] has [TextInputEditText] as child.
-                     * To access it we have to use [TextInputLayout.editText].
-                     */
-                    view.editText?.run {
-                        this.isEnabled = editMode
-                        // Check edit text is type date input category.
-                        if (editTextForDateInput.contains(this.id)) {
-                            // Set start icon visibility.
-                            view.isStartIconVisible = editMode
-                        }
-                    }
-                }
-
-                // check view is type of ExposedDropDownMenu layout category.
-                if (textInputLayoutForExposedDropDownMenu.contains(view.id))
-                    view.isEndIconVisible = editMode    // Set end icon visibility.
+            if (view is TextInputLayout) view.applyProperties()
+            else if (view is LinearLayout) view.forEach {
+                if (it is TextInputLayout) it.applyProperties()
             }
         }
 
@@ -220,44 +288,55 @@ class CattleDetailsFragment : BaseFragment() {
         }
     }
 
-    private fun getCattle(): Cattle {
-        val tagNumber = editTextTagNumber.text.toString()
-        val name = editTextName.text.toString()
-        val type = exposedDropDownType.text.toString()
-        val imageUrl = null
-        val breed = exposedDropDownBreed.text.toString()
-        val group = exposedDropDownGroup.text.toString()
-        val calving = editTextCalving.text.toString().toInt()
-        val dateOfBirth = editTextDateOfBirth.text.toString()
-        val aiDate = editTextAiDate.text.toString()
-        val repeatHeatDate = editTextRepeatHeatDate.text.toString()
-        val pregnancyDate = editTextPregnancyCheckDate.text.toString()
-        val dryOffDate = editTextDryOffDate.text.toString()
-        val calvingDate = editTextCalvingDate.text.toString()
-        val purchaseAmount = editTextPurchaseAmount.text.toString().toLong()
-        val purchaseDate = editTextPurchaseDate.text.toString()
-
-        return Cattle(
-            tagNumber, name, type, imageUrl, breed,
-            group, calving, dateOfBirth, aiDate, repeatHeatDate,
-            pregnancyDate, dryOffDate, calvingDate, purchaseAmount, purchaseDate
-        )
+    private fun Cattle.bindView() {
+        val setTextIfNotSame: EditText.(newValue: String?) -> Unit = { newValue: String? ->
+            if (text.toString() != newValue) {
+                setText(newValue)
+            }
+        }
+        editTextTagNumber.setTextIfNotSame(tagNumber.toString())
+        editTextName.setTextIfNotSame(name)
+        exposedDropDownBreed.setTextIfNotSame(breed)
+        exposedDropDownType.setTextIfNotSame(type)
+        editTextCalving.setTextIfNotSame(calving.toString())
+        exposedDropDownGroup.setTextIfNotSame(group)
+        editTextDateOfBirth.setTextIfNotSame(dateOfBirth)
+        editTextAiDate.setTextIfNotSame(aiDate)
+        editTextRepeatHeatDate.setTextIfNotSame(repeatHeatDate)
+        editTextPregnancyCheckDate.setTextIfNotSame(pregnancyCheckDate)
+        editTextDryOffDate.setTextIfNotSame(dryOffDate)
+        editTextCalvingDate.setTextIfNotSame(calvingDate)
+        /**
+         * [NumberFormatException] will be thrown if you pass null for [TextInputEditText.setText]
+         * which has input type as number.
+         */
+        purchaseAmount?.let { editTextPurchaseAmount.setTextIfNotSame(it.toString()) }
+        editTextPurchaseDate.setTextIfNotSame(purchaseDate)
     }
 
-    private fun Cattle.bindView() {
-        editTextTagNumber.setText(this.tagNumber)
-        editTextName.setText(this.name)
-        exposedDropDownBreed.setText(this.breed)
-        exposedDropDownType.setText(this.type)
-        editTextCalving.setText(this.calving.toString())
-        exposedDropDownGroup.setText(this.group)
-        editTextDateOfBirth.setText(this.dateOfBirth)
-        editTextAiDate.setText(this.aiDate)
-        editTextRepeatHeatDate.setText(this.repeatHeatDate)
-        editTextPregnancyCheckDate.setText(this.pregnancyCheckDate)
-        editTextDryOffDate.setText(this.dryOffDate)
-        editTextCalvingDate.setText(this.calvingDate)
-        editTextPurchaseAmount.setText(this.purchaseAmount.toString())
-        editTextPurchaseDate.setText(this.purchaseDate)
+    private fun setupDropDownAdapters() {
+        exposedDropDownBreed.setAdapter(
+            ArrayAdapter<String>(
+                requireContext(),
+                R.layout.dropdown_menu_popup_item,
+                resources.getStringArray(R.array.list_breed)
+            )
+        )
+
+        exposedDropDownType.setAdapter(
+            ArrayAdapter<String>(
+                requireContext(),
+                R.layout.dropdown_menu_popup_item,
+                resources.getStringArray(R.array.list_type)
+            )
+        )
+
+        exposedDropDownGroup.setAdapter(
+            ArrayAdapter<String>(
+                requireContext(),
+                R.layout.dropdown_menu_popup_item,
+                resources.getStringArray(R.array.list_group)
+            )
+        )
     }
 }

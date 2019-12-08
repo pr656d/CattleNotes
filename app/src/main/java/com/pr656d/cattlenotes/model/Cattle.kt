@@ -8,7 +8,7 @@ import kotlinx.android.parcel.Parcelize
  */
 @Parcelize
 data class Cattle(
-    val tagNumber: String,
+    val tagNumber: Long,
 
     var name: String? = null,
 
@@ -34,7 +34,7 @@ data class Cattle(
 
     var calvingDate: String? = null,
 
-    var purchaseAmount: Long? = 0,
+    var purchaseAmount: Long? = null,
 
     var purchaseDate: String? = null
 ): Parcelable

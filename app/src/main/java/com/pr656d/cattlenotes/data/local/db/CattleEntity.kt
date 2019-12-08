@@ -18,7 +18,7 @@ data class CattleEntity(
     @PrimaryKey
     @SerializedName("tagNumber")
     @ColumnInfo(name = "tagNumber")
-    val tagNumber: String,
+    val tagNumber: Long,
 
     /**
      * Cattle name. Name can be null.
@@ -98,7 +98,7 @@ data class CattleEntity(
 
     @SerializedName("purchase_amount")
     @ColumnInfo(name = "purchase_amount")
-    val purchaseAmount: Long? = 0,
+    val purchaseAmount: Long? = null,
 
     @SerializedName("purchase_date")
     @ColumnInfo(name = "purchase_date")

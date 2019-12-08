@@ -34,6 +34,10 @@
         android:label="@string/cattle_details"
         tools:layout="@layout/fragment_cattle_details">
 
+        <action
+            android:id="@+id/navigate_to_progress_dialog"
+            app:destination="@id/progressDialogScreen" />
+
         <argument
             android:name="cattle"
             app:argType="com.pr656d.cattlenotes.model.Cattle"

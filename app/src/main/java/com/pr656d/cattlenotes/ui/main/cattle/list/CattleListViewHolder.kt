@@ -19,7 +19,7 @@ class CattleListViewHolder(
         cattle = data
 
         // Bind views
-        itemView.tvTagNumber.text = data.tagNumber
+        itemView.tvTagNumber.text = data.tagNumber.toString()
         itemView.tvName.text = data.name
         itemView.tvGroup.text = data.group
         itemView.tvType.text = data.type
