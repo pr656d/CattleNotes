@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.data.local.prefs.UserPreferences
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
 import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
 import com.pr656d.cattlenotes.utils.common.Event
@@ -11,7 +12,8 @@ import com.pr656d.cattlenotes.utils.common.Resource
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-    private val networkHelper: NetworkHelper
+    private val networkHelper: NetworkHelper,
+    private val userPreferences: UserPreferences
 ) : BaseViewModel() {
 
     private val _launchFirebaseLoginUI: MutableLiveData<Event<Unit>> = MutableLiveData()
@@ -31,9 +33,13 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onLoginSuccess() {
+        userPreferences.setUserLoggedIn(true)
         _loginStatus.postValue(Resource.loading(R.string.please_wait_text))
         _launchMain.postValue(Event(Unit))
     }
 
-    fun onLoginFail() = _loginStatus.postValue(Resource.error(R.string.try_login_again_text))
+    fun onLoginFail() {
+        userPreferences.setUserLoggedIn(false)
+        _loginStatus.postValue(Resource.error(R.string.try_login_again_text))
+    }
 }

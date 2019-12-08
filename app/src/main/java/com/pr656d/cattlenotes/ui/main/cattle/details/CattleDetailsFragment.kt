@@ -9,8 +9,10 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.forEach
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -21,6 +23,7 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
+import com.pr656d.cattlenotes.ui.main.MainSharedViewModel
 import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragmentDirections
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
@@ -42,6 +45,11 @@ class CattleDetailsFragment : BaseFragment() {
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_details
 
     override fun setupObservers() {
+        val mainSharedViewModel by activityViewModels<MainSharedViewModel> { viewModelFactory }
+        viewModel.refreshCattleListScreen.observe(viewLifecycleOwner) {
+            mainSharedViewModel.refreshCattleList()
+        }
+
         viewModel.editMode.observe(viewLifecycleOwner) {
             setMode(it)
         }
@@ -62,15 +70,15 @@ class CattleDetailsFragment : BaseFragment() {
             } else { false }
         }
 
-        viewModel.showErrorTagNumber.observe(viewLifecycleOwner) {
+        viewModel.showErrorOnTagNumber.observe(viewLifecycleOwner) {
             layoutTagNumber.handleError(it)
         }
 
-        viewModel.showErrorType.observe(viewLifecycleOwner) {
+        viewModel.showErrorOnType.observe(viewLifecycleOwner) {
             layoutType.handleError(it)
         }
 
-        viewModel.showErrorTotalCalving.observe(viewLifecycleOwner) {
+        viewModel.showErrorOnTotalCalving.observe(viewLifecycleOwner) {
             layoutCalving.handleError(it)
         }
 
@@ -126,7 +134,13 @@ class CattleDetailsFragment : BaseFragment() {
         }
 
         editTextPurchaseAmount.addTextChangedListener {
-            viewModel.setPurchaseAmount(it.toString().toLong())
+            val amount = it.toString()
+            viewModel.setPurchaseAmount(
+                if (amount.isNotBlank() && amount.isDigitsOnly())
+                    amount.toLong()
+                else
+                    null
+            )
         }
 
         editTextDateOfBirth.apply {

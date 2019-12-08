@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -9,6 +10,8 @@ import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.onNavDestinationSelected
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseActivity
+import com.pr656d.cattlenotes.ui.login.LoginActivity
+import com.pr656d.cattlenotes.utils.common.EventObserver
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
@@ -30,6 +33,13 @@ class MainActivity : BaseActivity() {
     override fun provideLayoutId(): Int = R.layout.activity_main
 
     override fun setupObservers() {
+        viewModel.redirectToLoginScreen.observe(this, EventObserver {
+            startActivity(
+                Intent(this, LoginActivity::class.java)
+            )
+            finish()
+        })
+
         viewModel.activeMenuItem.observe(this, Observer { menuItem ->
             bottomAppBar.apply {
                 menuItem.previousItem?.let {

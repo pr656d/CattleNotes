@@ -13,7 +13,7 @@ class UserPreferences @Inject constructor(private val prefs: SharedPreferences)
         const val KEY_USER_FIRST_APP_LAUNCH = "prefs_key_user_first_launch"
     }
 
-    fun getUserLoggedIn(): Boolean = prefs.getBoolean(KEY_USER_LOGGED_IN, false)
+    fun isUserLoggedIn(): Boolean = prefs.getBoolean(KEY_USER_LOGGED_IN, false)
 
     fun setUserLoggedIn(value: Boolean) = prefs.edit().putBoolean(KEY_USER_LOGGED_IN, value).apply()
 

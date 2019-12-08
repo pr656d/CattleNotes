@@ -24,76 +24,79 @@ class AddCattleViewModel @Inject constructor(
     private val _launchCattleDetails by lazy { MutableLiveData<Cattle>() }
     val launchCattleDetails = Transformations.map(_launchCattleDetails) { Event(it) }
 
+    private val _refreshCattleListScreen by lazy { MutableLiveData<Unit>() }
+    val refreshCattleListScreen = _refreshCattleListScreen
+
     // Start : Holding UI data
 
     private val _tagNumber by lazy { MutableLiveData<String>() }
     val tagNumber: LiveData<String> = _tagNumber
-    fun setTagNumber(s: String) = _tagNumber.postValue(s)
+    fun setTagNumber(value: String) = _tagNumber.postValue(value)
     val showErrorOnTagNumber: LiveData<Int> = Transformations.map(_tagNumber) {
         validateTagNumber(it)
     }
 
     private val _name by lazy { MutableLiveData<String>() }
     val name: LiveData<String> = _name
-    fun setName(s: String) = _name.postValue(s)
+    fun setName(value: String) = _name.postValue(value)
 
     private val _totalCalving by lazy { MutableLiveData<String>() }
     private val totalCalving: LiveData<String> = _totalCalving
-    fun setTotalCalving(s: String) = _totalCalving.postValue(s)
+    fun setTotalCalving(value: String) = _totalCalving.postValue(value)
     val showErrorOnTotalCalving: LiveData<Int> = Transformations.map(_totalCalving) {
         validateTotalCalving(it)
     }
 
     private val _breed by lazy { MutableLiveData<String>() }
     val breed: LiveData<String> = _breed
-    fun setBreed(s: String) = _breed.postValue(s)
+    fun setBreed(value: String) = _breed.postValue(value)
 
     private val _type by lazy { MutableLiveData<String>() }
     val type: LiveData<String> = _type
-    fun setType(s: String) = _type.postValue(s)
+    fun setType(value: String) = _type.postValue(value)
     val showErrorOnType: LiveData<Int> = Transformations.map(_type) {
         validateType(it)
     }
 
     private val _imageUrl by lazy { MutableLiveData<String>() }
     private val imageUrl: LiveData<String> = _imageUrl
-    fun setImageUrl(s: String) = _imageUrl.postValue(s)
+    fun setImageUrl(value: String) = _imageUrl.postValue(value)
 
     private val _group by lazy { MutableLiveData<String>() }
     val group: LiveData<String> = _group
-    fun setGroup(s: String) = _group.postValue(s)
+    fun setGroup(value: String) = _group.postValue(value)
 
     private val _dob by lazy { MutableLiveData<String>() }
     private val dob: LiveData<String> = _dob
-    fun setDob(s: String) = _dob.postValue(s)
+    fun setDob(value: String) = _dob.postValue(value)
 
     private val _aiDate by lazy { MutableLiveData<String>() }
     private val aiDate: LiveData<String> = _aiDate
-    fun setAiDate(s: String) = _aiDate.postValue(s)
+    fun setAiDate(value: String) = _aiDate.postValue(value)
 
     private val _repeatHeatDate by lazy { MutableLiveData<String>() }
     private val repeatHeatDate: LiveData<String> = _repeatHeatDate
-    fun setRepeatHeatDate(s: String) = _repeatHeatDate.postValue(s)
+    fun setRepeatHeatDate(value: String) = _repeatHeatDate.postValue(value)
 
     private val _pregnancyCheckDate by lazy { MutableLiveData<String>() }
     private val pregnancyCheckDate: LiveData<String> = _pregnancyCheckDate
-    fun setPregnancyCheckDate(s: String) = _pregnancyCheckDate.postValue(s)
+    fun setPregnancyCheckDate(value: String) = _pregnancyCheckDate.postValue(value)
 
     private val _dryOffDate by lazy { MutableLiveData<String>() }
     private val dryOffDate: LiveData<String> = _dryOffDate
-    fun setDryOffDate(s: String) = _dryOffDate.postValue(s)
+    fun setDryOffDate(value: String) = _dryOffDate.postValue(value)
 
     private val _calvingDate by lazy { MutableLiveData<String>() }
     private val calvingDate: LiveData<String> = _calvingDate
-    fun setCalvingDate(s: String) = _calvingDate.postValue(s)
+    fun setCalvingDate(value: String) = _calvingDate.postValue(value)
 
     private val _purchaseAmount by lazy { MutableLiveData<Long?>(null) }
     private val purchaseAmount: LiveData<Long?> = _purchaseAmount
-    fun setPurchaseAmount(s: Long?) = _purchaseAmount.postValue(s)
+    fun setPurchaseAmount(value: Long?) = _purchaseAmount.postValue(value)
 
     private val _purchaseDate by lazy { MutableLiveData<String>() }
     private val purchaseDate: LiveData<String> = _purchaseDate
-    fun setPurchaseDate(s: String) = _purchaseDate.postValue(s)
+    fun setPurchaseDate(value: String) = _purchaseDate.postValue(value)
 
     // End : Holding UI data
 
@@ -133,6 +136,7 @@ class AddCattleViewModel @Inject constructor(
                     val cattle = getCattle()
                     cattleDataRepository.addCattle(cattle)
                     _saving.postValue(false)
+                    _refreshCattleListScreen.postValue(Unit)
                     _launchCattleDetails.postValue(cattle)
                 } catch (e: Exception) {
                     _saving.postValue(false)

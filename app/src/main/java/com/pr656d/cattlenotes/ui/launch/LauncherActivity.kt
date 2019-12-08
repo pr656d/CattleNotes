@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
-import com.pr656d.cattlenotes.ui.launch.LaunchDestination.LOGIN_ACTIVITY
-import com.pr656d.cattlenotes.ui.launch.LaunchDestination.MAIN_ACTIVITY
+import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
+import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.utils.common.EventObserver

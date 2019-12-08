@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.text.InputType
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import androidx.core.text.isDigitsOnly
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -15,7 +16,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
-import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
 import com.pr656d.cattlenotes.ui.main.MainSharedViewModel
 import com.pr656d.cattlenotes.utils.common.EventObserver
@@ -36,9 +36,11 @@ class AddCattleFragment : BaseFragment() {
 
     override fun setupObservers() {
         val mainSharedViewModel by activityViewModels<MainSharedViewModel> { viewModelFactory }
-        viewModel.launchCattleDetails.observe(viewLifecycleOwner, EventObserver {
+        viewModel.refreshCattleListScreen.observe(viewLifecycleOwner) {
             mainSharedViewModel.refreshCattleList()
-            Logger.d(TAG, "launchCattleDetails: $it")
+        }
+
+        viewModel.launchCattleDetails.observe(viewLifecycleOwner, EventObserver {
             val action = AddCattleFragmentDirections.navigateToCattleDetails(it)
             findNavController().navigate(action)
         })
@@ -103,7 +105,13 @@ class AddCattleFragment : BaseFragment() {
         }
 
         editTextPurchaseAmount.addTextChangedListener {
-            viewModel.setPurchaseAmount(it.toString().toLong())
+            val amount = it.toString()
+            viewModel.setPurchaseAmount(
+                if (amount.isNotBlank() && amount.isDigitsOnly())
+                    amount.toLong()
+                else
+                    null
+            )
         }
 
         editTextDateOfBirth.apply {
