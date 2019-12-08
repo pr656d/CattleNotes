@@ -17,13 +17,13 @@ class LaunchViewModel @Inject constructor(
     val launchDestination: LiveData<Event<LaunchDestination>> = _launchDestination
 
     init {
-        if (firebaseUser != null) {
-            _launchDestination.postValue(Event(MAIN_ACTIVITY))
-        } else {
-            _launchDestination.postValue(Event(LOGIN_ACTIVITY))
-        }
+        _launchDestination.postValue(
+            Event(
+                if (firebaseUser != null) MAIN_ACTIVITY
+                else LOGIN_ACTIVITY
+            )
+        )
     }
-
 }
 
 enum class LaunchDestination {

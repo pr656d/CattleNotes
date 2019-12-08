@@ -42,9 +42,9 @@ class CattleDetailsFragment : BaseFragment() {
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_details
 
     override fun setupObservers() {
-        viewModel.editMode.observe(this, EventObserver {
+        viewModel.editMode.observe(viewLifecycleOwner) {
             setMode(it)
-        })
+        }
 
         viewModel.cattle.observe(this, EventObserver {
             it.bindView()

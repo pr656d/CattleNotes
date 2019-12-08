@@ -26,16 +26,11 @@ class CattleDetailsViewModel @Inject constructor(
     val saving = _saving
 
     private val _editMode = MutableLiveData<Boolean>(false)
-    val editMode: LiveData<Event<Boolean>> = Transformations.map(_editMode) { Event(it) }
+    val editMode: LiveData<Boolean> = _editMode
 
     fun isInEditMode(): Boolean = _editMode.value!!
 
-    fun changeMode() {
-        if (_editMode.value!!)
-            _editMode.postValue(false)
-        else
-            _editMode.postValue(true)
-    }
+    fun changeMode() = _editMode.postValue(_editMode.value!!.not())
 
     // Start : Holding UI data
 
@@ -145,6 +140,7 @@ class CattleDetailsViewModel @Inject constructor(
                     _saving.postValue(true)
                     cattleDataRepository.updateCattle(newCattle)
                     _cattle.postValue(newCattle)
+                    changeMode()
                     _saving.postValue(false)
                 } catch (e: Exception) {
                     _saving.postValue(false)
