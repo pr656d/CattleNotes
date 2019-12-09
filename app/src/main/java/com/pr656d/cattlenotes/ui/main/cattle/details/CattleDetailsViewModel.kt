@@ -153,6 +153,7 @@ class CattleDetailsViewModel @Inject constructor(
                         _cattle.value = newCattle
                         _refreshCattleListScreen.value = Unit
                         toggleSaving()
+                        changeMode()
                     }
                 } catch (e: Exception) {
                     toggleSaving()
