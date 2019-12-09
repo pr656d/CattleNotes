@@ -1,8 +1,7 @@
 package com.pr656d.cattlenotes.utils.common
 
-import android.app.Activity
+import android.content.Context
 import android.os.Build
-import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 
 
@@ -10,7 +9,7 @@ import java.text.SimpleDateFormat
 /**
  * Convert to local format and return string.
  */
-fun Activity.parseToString(dayOfMonth: Int, month: Int, year: Int): String? =
+fun Context.parseToString(dayOfMonth: Int, month: Int, year: Int): String =
     SimpleDateFormat(
         "dd/MM/yyyy",
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
@@ -18,20 +17,8 @@ fun Activity.parseToString(dayOfMonth: Int, month: Int, year: Int): String? =
         else
             resources.configuration.locale
     ).run {
-        parse("$dayOfMonth/$month/$year")?.let {
-            format(it)
-        }
-    }
-
-fun Fragment.parseToString(dayOfMonth: Int, month: Int, year: Int): String =
-    SimpleDateFormat(
-        "dd/MM/yyyy",
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            resources.configuration.locales.get(0)
-        else
-            resources.configuration.locale
-    ).run {
-        format(parse("$dayOfMonth/$month/$year")!!)
+        // In Android SDK API index of month start from 0. +1 to get correct month.
+        format(parse("$dayOfMonth/${month+1}/$year")!!)
     }
 
 // end region

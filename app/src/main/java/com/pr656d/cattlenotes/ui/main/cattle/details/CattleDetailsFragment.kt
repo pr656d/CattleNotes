@@ -282,7 +282,7 @@ class CattleDetailsFragment : BaseFragment() {
             val dialog = DatePickerDialog(
                 context, R.style.DatePicker,
                 DatePickerDialog.OnDateSetListener { _, yyyy, mm, dd ->
-                    setText(parseToString(dd, mm, yyyy))
+                    setText(requireContext().parseToString(dd, mm, yyyy))
                     // After picking date reset focusable to false.
                     isFocusableInTouchMode = false
                 },
