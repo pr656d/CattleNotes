@@ -12,6 +12,7 @@ import com.pr656d.cattlenotes.utils.common.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CattleDetailsViewModel @Inject constructor(
@@ -22,7 +23,7 @@ class CattleDetailsViewModel @Inject constructor(
     val cattle: LiveData<Event<Cattle>> = Transformations.map(_cattle) { Event(it) }
     fun setCattle(cattle: Cattle) = _cattle.postValue(cattle)
 
-    private val _saving by lazy { MutableLiveData<Boolean>() }
+    private val _saving by lazy { MutableLiveData<Boolean>(false) }
     val saving = _saving
 
     private val _editMode = MutableLiveData<Boolean>(false)
@@ -131,7 +132,12 @@ class CattleDetailsViewModel @Inject constructor(
 
     fun saveCattle() {
         validateFields()
-        val newCattle = getCattle()
+
+        val toggleSaving: suspend () -> Unit = {
+            withContext(Dispatchers.Main) {
+                _saving.value = _saving.value!!.not()
+            }
+        }
 
         if (
             showErrorOnTagNumber.value == CattleValidator.VALID_MESSAGE_ID &&
@@ -140,14 +146,16 @@ class CattleDetailsViewModel @Inject constructor(
         ) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    _saving.postValue(true)
-                    cattleDataRepository.updateCattle(newCattle)
-                    _cattle.postValue(newCattle)
-                    changeMode()
-                    _saving.postValue(false)
-                    _refreshCattleListScreen.postValue(Unit)
+                    toggleSaving()
+                    val newCattle = getCattle()
+                    cattleDataRepository.addCattle(newCattle)
+                    withContext(Dispatchers.Main) {
+                        _cattle.value = newCattle
+                        _refreshCattleListScreen.value = Unit
+                        toggleSaving()
+                    }
                 } catch (e: Exception) {
-                    _saving.postValue(false)
+                    toggleSaving()
                 }
             }
         }

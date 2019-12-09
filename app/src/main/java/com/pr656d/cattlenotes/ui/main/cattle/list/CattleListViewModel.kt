@@ -20,7 +20,7 @@ class CattleListViewModel @Inject constructor(
     private val _cattleList by lazy { MutableLiveData<List<Cattle>>() }
     val cattleList: LiveData<List<Cattle>> = _cattleList
 
-    private val _loading = MutableLiveData<Boolean>()
+    private val _loading = MutableLiveData<Boolean>(false)
     val isLoading = _loading
 
     init {
@@ -38,17 +38,22 @@ class CattleListViewModel @Inject constructor(
     fun refreshCattleList() = fetchCattleList()
 
     private fun fetchCattleList() {
-        _loading.postValue(true)
+        val toggleLoading: suspend () -> Unit = {
+            withContext(Dispatchers.Main) {
+                _loading.value = _loading.value!!.not()
+            }
+        }
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                toggleLoading()
                 val list = cattleDataRepository.getAllCattle()
                 withContext(Dispatchers.Main) {
-                    _cattleList.postValue(list)
+                    _cattleList.value = list
                     cacheData.setCattleList(list)
-                    _loading.postValue(false)
                 }
+                toggleLoading()
             } catch (e: Exception) {
-                _loading.postValue(false)
+                toggleLoading()
             }
         }
     }

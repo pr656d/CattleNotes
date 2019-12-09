@@ -12,13 +12,14 @@ import com.pr656d.cattlenotes.utils.common.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class AddCattleViewModel @Inject constructor(
     private val cattleDataRepository: CattleDataRepository
 ) : BaseViewModel() {
 
-    private val _saving by lazy { MutableLiveData<Boolean>() }
+    private val _saving by lazy { MutableLiveData<Boolean>(false) }
     val saving = _saving
 
     private val _launchCattleDetails by lazy { MutableLiveData<Cattle>() }
@@ -104,8 +105,7 @@ class AddCattleViewModel @Inject constructor(
         CattleValidator.isValidTagNumber(tagNumber, cattleDataRepository)
     }
 
-    private fun validateType(type: String?): Int =
-        CattleValidator.isValidType(type)
+    private fun validateType(type: String?): Int = CattleValidator.isValidType(type)
 
     private fun validateTotalCalving(totalCalving: String?): Int =
         CattleValidator.isValidTotalCalving(totalCalving)
@@ -125,24 +125,31 @@ class AddCattleViewModel @Inject constructor(
     fun saveCattle() {
         validateFields()
 
+        val toggleSaving: suspend () -> Unit = {
+            withContext(Dispatchers.Main) {
+                _saving.value = _saving.value!!.not()
+            }
+        }
+
         if (
             showErrorOnTagNumber.value == CattleValidator.VALID_MESSAGE_ID &&
             showErrorOnType.value == CattleValidator.VALID_MESSAGE_ID &&
             showErrorOnTotalCalving.value == CattleValidator.VALID_MESSAGE_ID
-        ) {
+        )
             viewModelScope.launch(Dispatchers.IO) {
                 try {
-                    _saving.postValue(true)
-                    val cattle = getCattle()
-                    cattleDataRepository.addCattle(cattle)
-                    _saving.postValue(false)
-                    _refreshCattleListScreen.postValue(Unit)
-                    _launchCattleDetails.postValue(cattle)
+                    toggleSaving()
+                    val newCattle = getCattle()
+                    cattleDataRepository.addCattle(newCattle)
+                    withContext(Dispatchers.Main) {
+                        toggleSaving()
+                        _refreshCattleListScreen.value = Unit
+                        _launchCattleDetails.value = newCattle
+                    }
                 } catch (e: Exception) {
-                    _saving.postValue(false)
+                    toggleSaving()
                 }
             }
-        }
     }
 
     private fun getCattle(): Cattle =
