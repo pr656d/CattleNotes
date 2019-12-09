@@ -20,7 +20,7 @@ class MainViewModel @Inject constructor(
 
     init {
         if (firebaseUser == null)
-            _redirectToLoginScreen.postValue(Unit)
+            _redirectToLoginScreen.value = Unit
     }
 
     private val _activeMenuItem = MutableLiveData<ActiveMenuItem>(

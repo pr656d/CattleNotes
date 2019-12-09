@@ -17,11 +17,11 @@ class LaunchViewModel @Inject constructor(
     val launchDestination: LiveData<Event<LaunchDestination>> = _launchDestination
 
     init {
-        _launchDestination.postValue(
-            Event(
-                if (userPreferences.isUserLoggedIn()) MAIN_ACTIVITY
-                else LOGIN_ACTIVITY
-            )
+        _launchDestination.value = Event(
+            if (userPreferences.isUserLoggedIn())
+                MAIN_ACTIVITY
+            else
+                LOGIN_ACTIVITY
         )
     }
 
