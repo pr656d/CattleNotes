@@ -65,7 +65,7 @@ data class CattleEntity(
     val dateOfBirth: String? = null,
 
     /**
-     * Artificial Insemination date in millis as String.
+     * Artificial Insemination date as String.
      */
     @SerializedName("ai_date")
     @ColumnInfo(name = "ai_date")
