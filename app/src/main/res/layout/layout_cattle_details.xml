@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:fillViewport="true"
-    android:paddingBottom="@dimen/appbar_height"
+    android:paddingBottom="@dimen/clip_padding_bottom"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout

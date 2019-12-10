@@ -16,5 +16,5 @@
     <dimen name="photo_height_normal">50dp</dimen>
 
     <dimen name="no_elevation">0dp</dimen>
-    <dimen name="appbar_height">120dp</dimen>
+    <dimen name="clip_padding_bottom">110dp</dimen>
 </resources>
