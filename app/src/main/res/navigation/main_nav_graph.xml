@@ -40,9 +40,7 @@
 
         <argument
             android:name="cattle"
-            app:argType="com.pr656d.cattlenotes.model.Cattle"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:argType="com.pr656d.cattlenotes.model.Cattle" />
     </fragment>
 
     <fragment
