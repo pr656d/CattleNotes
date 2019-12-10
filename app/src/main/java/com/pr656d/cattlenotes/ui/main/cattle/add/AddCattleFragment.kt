@@ -40,9 +40,8 @@ class AddCattleFragment : BaseFragment() {
             mainSharedViewModel.refreshCattleList()
         }
 
-        viewModel.launchCattleDetails.observe(viewLifecycleOwner, EventObserver {
-            val action = AddCattleFragmentDirections.navigateToCattleDetails(it)
-            findNavController().navigate(action)
+        viewModel.navigateUp.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigateUp()
         })
 
         val handleError: TextInputLayout.(messageId: Int) -> Unit = { messageId: Int ->
@@ -68,10 +67,8 @@ class AddCattleFragment : BaseFragment() {
             if (it) {
                 val action = AddCattleFragmentDirections.navigateToProgressDialog(R.string.please_wait_text)
                 findNavController().navigate(action)
-            } else {
-                if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
-                    findNavController().navigateUp()
-            }
+            } else if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
+                findNavController().navigateUp()
         }
     }
 

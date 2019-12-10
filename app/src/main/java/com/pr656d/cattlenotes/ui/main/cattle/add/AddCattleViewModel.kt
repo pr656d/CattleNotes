@@ -22,8 +22,8 @@ class AddCattleViewModel @Inject constructor(
     private val _saving by lazy { MutableLiveData<Boolean>(false) }
     val saving = _saving
 
-    private val _launchCattleDetails by lazy { MutableLiveData<Cattle>() }
-    val launchCattleDetails = Transformations.map(_launchCattleDetails) { Event(it) }
+    private val _navigateUp by lazy { MutableLiveData<Cattle>() }
+    val navigateUp = Transformations.map(_navigateUp) { Event(it) }
 
     private val _refreshCattleListScreen by lazy { MutableLiveData<Unit>() }
     val refreshCattleListScreen = _refreshCattleListScreen
@@ -144,7 +144,7 @@ class AddCattleViewModel @Inject constructor(
                     withContext(Dispatchers.Main) {
                         toggleSaving()
                         _refreshCattleListScreen.value = Unit
-                        _launchCattleDetails.value = newCattle
+                        _navigateUp.value = newCattle
                     }
                 } catch (e: Exception) {
                     toggleSaving()
