@@ -34,10 +34,6 @@
         android:label="@string/cattle_details"
         tools:layout="@layout/fragment_cattle_details">
 
-        <action
-            android:id="@+id/navigate_to_progress_dialog"
-            app:destination="@id/progressDialogScreen" />
-
         <argument
             android:name="cattle"
             app:argType="com.pr656d.cattlenotes.model.Cattle" />
@@ -48,11 +44,11 @@
         android:name="com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment"
         android:label="@string/add_cattle"
         tools:layout="@layout/fragment_add_cattle">
-
-        <action
-            android:id="@+id/navigate_to_progress_dialog"
-            app:destination="@id/progressDialogScreen" />
     </fragment>
+
+    <action
+        android:id="@+id/navigate_to_progress_dialog"
+        app:destination="@id/progressDialogScreen" />
 
     <dialog
         android:id="@+id/progressDialogScreen"

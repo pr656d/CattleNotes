@@ -6,6 +6,7 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="back">Back</string>
+    <string name="required">* Required</string>
 
     <!--  Transition name  -->
     <string name="sharedElementCattleItemLayout">transition_cattle_details</string>

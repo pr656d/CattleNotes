@@ -118,20 +118,6 @@
                             <option name="y" value="124" />
                           </Point>
                         </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="navigate_to_cattle_details">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                            <entry key="navigate_to_progress_dialog">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
-                        </option>
                       </LayoutPositions>
                     </value>
                   </entry>
@@ -155,15 +141,6 @@
                             <option name="x" value="390" />
                             <option name="y" value="-203" />
                           </Point>
-                        </option>
-                        <option name="myPositions">
-                          <map>
-                            <entry key="navigate_to_progress_dialog">
-                              <value>
-                                <LayoutPositions />
-                              </value>
-                            </entry>
-                          </map>
                         </option>
                       </LayoutPositions>
                     </value>
@@ -216,6 +193,11 @@
                           </Point>
                         </option>
                       </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="navigate_to_progress_dialog">
+                    <value>
+                      <LayoutPositions />
                     </value>
                   </entry>
                   <entry key="progressDialogScreen">
