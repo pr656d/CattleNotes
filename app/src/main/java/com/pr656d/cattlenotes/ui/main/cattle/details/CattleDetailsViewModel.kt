@@ -1,12 +1,16 @@
 package com.pr656d.cattlenotes.ui.main.cattle.details
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleViewModel
 import com.pr656d.cattlenotes.utils.common.Event
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CattleDetailsViewModel @Inject constructor(
@@ -16,6 +20,9 @@ class CattleDetailsViewModel @Inject constructor(
     private val _cattle =  MutableLiveData<Cattle>()
     val cattle: LiveData<Event<Cattle>> = Transformations.map(_cattle) { Event(it) }
     fun setCattle(cattle: Cattle) = _cattle.postValue(cattle)
+
+    private val _saveError by lazy { MutableLiveData<@StringRes Int>() }
+    val saveError = Transformations.map(_saveError) { Event(it) }
 
     private val _editMode = MutableLiveData<Boolean>(false)
     val editMode: LiveData<Boolean> = _editMode
@@ -28,14 +35,21 @@ class CattleDetailsViewModel @Inject constructor(
 
     override fun provideCurrentTagNumber(): Long? = _cattle.value!!.tagNumber
 
+    fun retrySave() = onFabClick()
+
     fun onFabClick() =
         if (isInEditMode())
             saveCattle(
                 doOnSuccess = {
-                    changeMode()
+                    withContext(Dispatchers.Main) {
+                        changeMode()
+                    }
                 },
                 doOnFailure = {
-                    changeMode()
+                    withContext(Dispatchers.Main) {
+                        _saveError.postValue(R.string.error_save)
+                        changeMode()
+                    }
                 }
             )
         else

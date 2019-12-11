@@ -7,6 +7,7 @@ import android.text.InputType
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import androidx.core.os.bundleOf
 import androidx.core.text.isDigitsOnly
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
@@ -63,7 +64,10 @@ abstract class BaseCattleFragment : BaseFragment() {
 
         getBaseCattleViewModel().saving.observe(viewLifecycleOwner) {
             if (it)
-                findNavController().navigate(R.id.navigate_to_progress_dialog)
+                findNavController().navigate(
+                    R.id.navigate_to_progress_dialog,
+                    bundleOf("message" to R.string.saving_dialog_message)
+                )
             else if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
                 findNavController().navigateUp()
         }

@@ -3,6 +3,7 @@ package com.pr656d.cattlenotes.ui.main.cattle.add
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.main.MainSharedViewModel
 import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleFragment
@@ -30,6 +31,13 @@ class AddCattleFragment : BaseCattleFragment() {
 
         viewModel.navigateUp.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigateUp()
+        })
+
+        viewModel.saveError.observe(viewLifecycleOwner, EventObserver {
+            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
+                .setAnchorView(R.id.fabButtonAddCattle)
+                .setAction(R.string.retry) { viewModel.retrySave() }
+                .show()
         })
     }
 

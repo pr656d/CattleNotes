@@ -120,8 +120,8 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     }
 
     protected fun saveCattle(
-        doOnSuccess: suspend () -> Unit,
-        doOnFailure: suspend () -> Unit
+        doOnSuccess: suspend () -> Unit = {},
+        doOnFailure: suspend () -> Unit = {}
     ) {
         validateFields()
 
@@ -145,9 +145,13 @@ abstract class BaseCattleViewModel : BaseViewModel() {
                         toggleSaving()
                         _refreshCattleListScreen.value = Unit
                     }
-                    doOnSuccess()
+                    runBlocking {
+                        doOnSuccess()
+                    }
                 } catch (e: Exception) {
-                    doOnFailure()
+                    runBlocking {
+                        doOnFailure()
+                    }
                     toggleSaving()
                 }
             }

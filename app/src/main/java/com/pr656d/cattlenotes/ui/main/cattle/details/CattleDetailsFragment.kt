@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
@@ -43,8 +44,15 @@ class CattleDetailsFragment : BaseCattleFragment() {
             setMode(it)
         }
 
-        viewModel.cattle.observe(this, EventObserver {
+        viewModel.cattle.observe(viewLifecycleOwner, EventObserver {
             it.bindView()
+        })
+
+        viewModel.saveError.observe(viewLifecycleOwner, EventObserver {
+            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
+                .setAnchorView(R.id.fabButtonCattleDetails)
+                .setAction(R.string.retry) { viewModel.retrySave() }
+                .show()
         })
     }
 
