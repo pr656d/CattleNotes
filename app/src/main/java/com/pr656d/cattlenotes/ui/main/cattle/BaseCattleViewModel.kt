@@ -22,9 +22,6 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     private val _saving by lazy { MutableLiveData<Boolean>(false) }
     val saving = _saving
 
-    private val _refreshCattleListScreen by lazy { MutableLiveData<Unit>() }
-    val refreshCattleListScreen = _refreshCattleListScreen
-
     // Start : Holding UI data
 
     private val _tagNumber by lazy { MutableLiveData<String>() }
@@ -141,17 +138,10 @@ abstract class BaseCattleViewModel : BaseViewModel() {
                     toggleSaving()
                     val newCattle = getCattle()
                     provideCattleDataRepository().addCattle(newCattle)
-                    withContext(Dispatchers.Main) {
-                        toggleSaving()
-                        _refreshCattleListScreen.value = Unit
-                    }
-                    runBlocking {
-                        doOnSuccess()
-                    }
+                    toggleSaving()
+                    doOnSuccess()
                 } catch (e: Exception) {
-                    runBlocking {
-                        doOnFailure()
-                    }
+                    doOnFailure()
                     toggleSaving()
                 }
             }

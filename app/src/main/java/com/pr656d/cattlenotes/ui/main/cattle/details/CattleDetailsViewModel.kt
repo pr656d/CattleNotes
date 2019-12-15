@@ -21,8 +21,8 @@ class CattleDetailsViewModel @Inject constructor(
     val cattle: LiveData<Event<Cattle>> = Transformations.map(_cattle) { Event(it) }
     fun setCattle(cattle: Cattle) = _cattle.postValue(cattle)
 
-    private val _saveError by lazy { MutableLiveData<@StringRes Int>() }
-    val saveError = Transformations.map(_saveError) { Event(it) }
+    private val _showError by lazy { MutableLiveData<@StringRes Int>() }
+    val showError = Transformations.map(_showError) { Event(it) }
 
     private val _editMode = MutableLiveData<Boolean>(false)
     val editMode: LiveData<Boolean> = _editMode
@@ -35,9 +35,9 @@ class CattleDetailsViewModel @Inject constructor(
 
     override fun provideCurrentTagNumber(): Long? = _cattle.value!!.tagNumber
 
-    fun retrySave() = onFabClick()
+    fun retrySave() = onEditSaveClick()
 
-    fun onFabClick() =
+    fun onEditSaveClick() =
         if (isInEditMode())
             saveCattle(
                 doOnSuccess = {
@@ -47,7 +47,7 @@ class CattleDetailsViewModel @Inject constructor(
                 },
                 doOnFailure = {
                     withContext(Dispatchers.Main) {
-                        _saveError.postValue(R.string.error_save)
+                        _showError.postValue(R.string.error_save)
                         changeMode()
                     }
                 }

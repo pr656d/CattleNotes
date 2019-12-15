@@ -4,7 +4,6 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.forEach
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
@@ -13,7 +12,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
-import com.pr656d.cattlenotes.ui.main.MainSharedViewModel
 import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleViewModel
 import com.pr656d.cattlenotes.utils.common.EventObserver
@@ -29,11 +27,8 @@ class CattleDetailsFragment : BaseCattleFragment() {
 
     private val args by navArgs<CattleDetailsFragmentArgs>()
     private val viewModel by viewModels<CattleDetailsViewModel> { viewModelFactory }
-    private val mainSharedVM by activityViewModels<MainSharedViewModel> { viewModelFactory }
 
     override fun getBaseCattleViewModel(): BaseCattleViewModel = viewModel
-
-    override fun getMainSharedViewModel(): MainSharedViewModel = mainSharedVM
 
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_details
 
@@ -48,7 +43,7 @@ class CattleDetailsFragment : BaseCattleFragment() {
             it.bindView()
         })
 
-        viewModel.saveError.observe(viewLifecycleOwner, EventObserver {
+        viewModel.showError.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
                 .setAnchorView(R.id.fabButtonCattleDetails)
                 .setAction(R.string.retry) { viewModel.retrySave() }
@@ -62,7 +57,7 @@ class CattleDetailsFragment : BaseCattleFragment() {
         viewModel.setCattle(args.cattle)
 
         fabButtonCattleDetails.setOnClickListener {
-            viewModel.onFabClick()
+            viewModel.onEditSaveClick()
         }
     }
 

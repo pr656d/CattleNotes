@@ -17,14 +17,11 @@ import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
-import com.pr656d.cattlenotes.ui.main.MainSharedViewModel
 import com.pr656d.cattlenotes.utils.common.parseToString
 import kotlinx.android.synthetic.main.layout_cattle_details.*
 import java.util.*
 
 abstract class BaseCattleFragment : BaseFragment() {
-
-    abstract fun getMainSharedViewModel(): MainSharedViewModel
 
     abstract fun getBaseCattleViewModel(): BaseCattleViewModel
 
@@ -39,10 +36,6 @@ abstract class BaseCattleFragment : BaseFragment() {
     }
 
     override fun setupObservers() {
-        getBaseCattleViewModel().refreshCattleListScreen.observe(viewLifecycleOwner) {
-            getMainSharedViewModel().refreshCattleList()
-        }
-
         val handleError: TextInputLayout.(messageId: Int) -> Unit = { messageId: Int ->
             isErrorEnabled = if (messageId != CattleValidator.VALID_MESSAGE_ID) {
                 error = getString(messageId)

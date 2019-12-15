@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.data.local.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 /**
@@ -14,8 +15,12 @@ interface CattleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(cattle: List<CattleEntity>)
 
+    /**
+     * Internally Room will handle it on background thread.
+     * If any change happens observer will be called by Room.
+     */
     @Query("SELECT * FROM cattle_list")
-    suspend fun getAll(): List<CattleEntity>
+    fun getAll(): LiveData<List<CattleEntity>>
 
     @Query("SELECT * FROM cattle_list WHERE tagNumber == :tagNumber")
     suspend fun getCattle(tagNumber: Long): CattleEntity?

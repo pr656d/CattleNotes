@@ -1,5 +1,7 @@
 package com.pr656d.cattlenotes.data.repository
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.pr656d.cattlenotes.data.local.db.AppDatabase
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.utils.common.toCattle
@@ -29,8 +31,10 @@ open class CattleDataRepository @Inject constructor(
         }
     }
 
-    suspend fun getAllCattle(): List<Cattle> =
-        appDatabase.cattleDao().getAll().toCattleList()
+    fun getAllCattle(): LiveData<List<Cattle>> =
+        appDatabase.cattleDao().getAll().run {
+            Transformations.map(this) { it.toCattleList() }
+        }
 
     suspend fun getCattle(tagNumber: Long): Cattle? =
         appDatabase.cattleDao().getCattle(tagNumber)?.toCattle()

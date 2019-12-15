@@ -17,22 +17,22 @@ class AddCattleViewModel @Inject constructor(
     private val _navigateUp by lazy { MutableLiveData<Cattle>() }
     val navigateUp = Transformations.map(_navigateUp) { Event(it) }
 
-    private val _saveError by lazy { MutableLiveData<@StringRes Int>() }
-    val saveError = Transformations.map(_saveError) { Event(it) }
+    private val _showError by lazy { MutableLiveData<@StringRes Int>() }
+    val showError = Transformations.map(_showError) { Event(it) }
 
     override fun provideCattleDataRepository(): CattleDataRepository =  cattleDataRepository
 
     override fun provideCurrentTagNumber(): Long? = null
 
-    fun retrySave() = onFabClick()
+    fun retrySave() = onSaveClick()
 
-    fun onFabClick() =
+    fun onSaveClick() =
         saveCattle(
             doOnSuccess = {
                 _navigateUp.postValue(getCattle())
             },
             doOnFailure = {
-                _saveError.postValue(R.string.error_save)
+                _showError.postValue(R.string.error_save)
             }
         )
 }
