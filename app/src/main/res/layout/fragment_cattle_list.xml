@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add_black"
         android:layout_marginBottom="@dimen/margin_normal"
+        android:transitionName="@string/tn_fabButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

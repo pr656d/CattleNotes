@@ -2,6 +2,7 @@ package com.pr656d.cattlenotes.ui.main.cattle.list
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.navigation.findNavController
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.model.Cattle
@@ -18,11 +19,20 @@ class CattleListViewHolder(
         // Save to use for click listener
         cattle = data
 
+        val setTextIfDataAvailableElseHideView: TextView.(s: String?) -> Unit = { s: String? ->
+            if (s.isNullOrBlank()) {
+                visibility = View.GONE
+            } else {
+                visibility = View.VISIBLE
+                text = s
+            }
+        }
+
         // Bind views
-        itemView.tvTagNumber.text = data.tagNumber.toString()
-        itemView.tvName.text = data.name
-        itemView.tvGroup.text = data.group
-        itemView.tvType.text = data.type
+        itemView.tvTagNumber.setTextIfDataAvailableElseHideView(data.tagNumber.toString())
+        itemView.tvName.setTextIfDataAvailableElseHideView(data.name)
+        itemView.tvGroup.setTextIfDataAvailableElseHideView(data.group)
+        itemView.tvType.setTextIfDataAvailableElseHideView(data.type)
     }
 
     override fun setupView(view: View) {

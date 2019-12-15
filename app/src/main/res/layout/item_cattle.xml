@@ -82,11 +82,9 @@
             style="@style/AppTheme.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
             android:textColor="@color/grey_light"
             app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
             app:layout_constraintStart_toEndOf="@+id/tvGroup"
-            app:layout_constraintTop_toTopOf="@+id/tvGroup"
             tools:text="Cow" />
 
         <TextView
@@ -94,10 +92,13 @@
             style="@style/AppTheme.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingStart="0dp"
+            android:paddingEnd="8dp"
             android:textColor="@color/grey_light"
             app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
             app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
-            tools:text="Milking" />
+            tools:text="Milking"
+            tools:visibility="visible" />
 
         <View
             android:id="@+id/divider"

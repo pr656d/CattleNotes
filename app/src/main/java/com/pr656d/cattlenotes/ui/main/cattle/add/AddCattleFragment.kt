@@ -1,8 +1,10 @@
 package com.pr656d.cattlenotes.ui.main.cattle.add
 
+import android.os.Bundle
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.transition.TransitionInflater
 import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.main.MainSharedViewModel
@@ -26,6 +28,13 @@ class AddCattleFragment : BaseCattleFragment() {
 
     override fun provideLayoutId(): Int = R.layout.fragment_add_cattle
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val transition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = transition
+        sharedElementReturnTransition = transition
+    }
+
     override fun setupObservers() {
         super.setupObservers()
 
@@ -35,7 +44,7 @@ class AddCattleFragment : BaseCattleFragment() {
 
         viewModel.saveError.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
-                .setAnchorView(R.id.fabButtonAddCattle)
+                .setAnchorView(R.id.fabButtonSaveCattle)
                 .setAction(R.string.retry) { viewModel.retrySave() }
                 .show()
         })
@@ -44,7 +53,7 @@ class AddCattleFragment : BaseCattleFragment() {
     override fun setupView() {
         super.setupView()
 
-        fabButtonAddCattle.setOnClickListener {
+        fabButtonSaveCattle.setOnClickListener {
             viewModel.onFabClick()
         }
     }

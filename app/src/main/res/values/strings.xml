@@ -11,6 +11,7 @@
     <string name="required">* Required</string>
 
     <!--  Transition name  -->
+    <string name="tn_fabButton">fab_button</string>
     <string name="sharedElementCattleItemLayout">transition_cattle_details</string>
     <string name="sharedElementImageView">ImageView</string>
 

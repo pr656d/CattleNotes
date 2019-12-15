@@ -24,7 +24,7 @@ class MainActivity : BaseActivity() {
     private val topLevelDestinations by lazy {
         hashSetOf(
             R.id.cattleListScreen, R.id.timelineScreen, R.id.milkingScreen,
-            R.id.cashflowScreen
+            R.id.cashflowScreen, R.id.mainBottomNavigationDrawer
         )
     }
 
@@ -63,6 +63,7 @@ class MainActivity : BaseActivity() {
             setNavigationOnClickListener {
                 navController.navigate(R.id.mainBottomNavigationDrawer)
             }
+
             setOnMenuItemClickListener { menuItem ->
                 viewModel.setActiveMenuItem(menuItem.itemId)
                 menuItem.onNavDestinationSelected(navController)
