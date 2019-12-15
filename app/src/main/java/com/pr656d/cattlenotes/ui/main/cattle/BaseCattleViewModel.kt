@@ -8,11 +8,17 @@ import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
+import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleViewModel
+import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
+/**
+ * Common abstract class for [AddCattleViewModel] and [CattleDetailsViewModel]
+ * to reduce code repetition.
+ */
 abstract class BaseCattleViewModel : BaseViewModel() {
 
     abstract fun provideCattleDataRepository(): CattleDataRepository
@@ -24,7 +30,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     // Start : Holding UI data
 
-    private val _tagNumber by lazy { MutableLiveData<String>() }
+    private val _tagNumber by lazy { MutableLiveData<String>("") }
     val tagNumber: LiveData<String> = _tagNumber
     fun setTagNumber(value: String) = _tagNumber.postValue(value)
     val showErrorOnTagNumber: LiveData<Int> = Transformations.map(_tagNumber) {
@@ -35,7 +41,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     val name: LiveData<String> = _name
     fun setName(value: String) = _name.postValue(value)
 
-    private val _totalCalving by lazy { MutableLiveData<String>() }
+    private val _totalCalving by lazy { MutableLiveData<String>("") }
     private val totalCalving: LiveData<String> = _totalCalving
     fun setTotalCalving(value: String) = _totalCalving.postValue(value)
     val showErrorOnTotalCalving: LiveData<Int> = Transformations.map(_totalCalving) {
@@ -46,7 +52,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     val breed: LiveData<String> = _breed
     fun setBreed(value: String) = _breed.postValue(value)
 
-    private val _type by lazy { MutableLiveData<String>() }
+    private val _type by lazy { MutableLiveData<String>("") }
     val type: LiveData<String> = _type
     fun setType(value: String) = _type.postValue(value)
     val showErrorOnType: LiveData<Int> = Transformations.map(_type) {
@@ -104,24 +110,27 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     private fun validateTotalCalving(totalCalving: String?): Int =
         CattleValidator.isValidTotalCalving(totalCalving)
 
-    private fun validateFields() {
-        if (tagNumber.value == null) {
-            _tagNumber.postValue(" ")
-        }
-        if (type.value == null) {
-            _type.postValue(" ")
-        }
-        if (totalCalving.value == null) {
-            _totalCalving.postValue(" ")
-        }
-    }
-
+    /**
+     * Function will be called by inherited class.
+     * By taking suspending lambda function as parameter for success and failure
+     * to do more operations after on success and on failure.
+     *
+     * Allows calls like:
+     * 1.   saveCattle(
+     *          doOnSuccess = {
+     *              // Do something on success.
+     *          },
+     *          doOnFailure = {
+     *              // Do something on failure.
+     *          }
+     *      )
+     *
+     *  2. saveCattle()
+     */
     protected fun saveCattle(
         doOnSuccess: suspend () -> Unit = {},
         doOnFailure: suspend () -> Unit = {}
     ) {
-        validateFields()
-
         val toggleSaving: suspend () -> Unit = {
             withContext(Dispatchers.Main) {
                 _saving.value = _saving.value!!.not()

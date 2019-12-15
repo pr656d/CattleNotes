@@ -17,10 +17,16 @@ import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
+import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment
+import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragment
 import com.pr656d.cattlenotes.utils.common.parseToString
 import kotlinx.android.synthetic.main.layout_cattle_details.*
 import java.util.*
 
+/**
+ * Common abstract class for [CattleDetailsFragment] and [AddCattleFragment]
+ * to reduce code repetition.
+ */
 abstract class BaseCattleFragment : BaseFragment() {
 
     abstract fun getBaseCattleViewModel(): BaseCattleViewModel
