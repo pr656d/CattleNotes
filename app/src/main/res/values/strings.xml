@@ -80,9 +80,11 @@
     <string name="dry_off">Dry off date</string>
     <string name="delete">Delete</string>
     <string name="error_save">Could not save cattle. Try again.</string>
+    <string name="error_fill_empty_fields">Fill required fields.</string>
     <!--  Add cattle  -->
     <string name="add_cattle">Add new cattle</string>
     <!--  Edit cattle details  -->
+    <string name="cattle_saved">Cattle saved</string>
     <string name="edit_cattle_details">Edit cattle details</string>
     <string name="error_already_exists">Already exists</string>
     <string name="error_empty_field">This field can\'t be empty</string>

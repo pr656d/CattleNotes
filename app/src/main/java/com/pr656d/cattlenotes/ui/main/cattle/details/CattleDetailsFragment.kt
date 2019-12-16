@@ -7,7 +7,6 @@ import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
@@ -32,6 +31,8 @@ class CattleDetailsFragment : BaseCattleFragment() {
 
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_details
 
+    override fun getFabButtonId(): Int = R.id.fabButtonCattleDetails
+
     override fun setupObservers() {
         super.setupObservers()
 
@@ -41,13 +42,6 @@ class CattleDetailsFragment : BaseCattleFragment() {
 
         viewModel.cattle.observe(viewLifecycleOwner, EventObserver {
             it.bindView()
-        })
-
-        viewModel.showError.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
-                .setAnchorView(R.id.fabButtonCattleDetails)
-                .setAction(R.string.retry) { viewModel.retrySave() }
-                .show()
         })
     }
 

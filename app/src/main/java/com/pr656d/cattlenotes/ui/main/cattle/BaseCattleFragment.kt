@@ -12,6 +12,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
@@ -19,6 +20,7 @@ import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
 import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragment
+import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
 import kotlinx.android.synthetic.main.layout_cattle_details.*
 import java.util.*
@@ -31,6 +33,11 @@ abstract class BaseCattleFragment : BaseFragment() {
 
     abstract fun getBaseCattleViewModel(): BaseCattleViewModel
 
+    /**
+     * Get fab button id to anchor [Snackbar] to it.
+     */
+    abstract fun getFabButtonId(): Int
+
     protected val setupDropDownAdapter: AutoCompleteTextView.(listId: Int) -> Unit = { listId ->
         setAdapter(
             ArrayAdapter<String>(
@@ -42,104 +49,121 @@ abstract class BaseCattleFragment : BaseFragment() {
     }
 
     override fun setupObservers() {
-        val handleError: TextInputLayout.(messageId: Int) -> Unit = { messageId: Int ->
-            isErrorEnabled = if (messageId != CattleValidator.VALID_MESSAGE_ID) {
-                error = getString(messageId)
-                true
-            } else { false }
-        }
+        getBaseCattleViewModel().run {
+            val handleError: TextInputLayout.(messageId: Int) -> Unit = { messageId: Int ->
+                isErrorEnabled = if (messageId != CattleValidator.VALID_MESSAGE_ID) {
+                    error = getString(messageId)
+                    true
+                } else { false }
+            }
 
-        getBaseCattleViewModel().showErrorOnTagNumber.observe(viewLifecycleOwner) {
-            layoutTagNumber.handleError(it)
-        }
+            showErrorOnTagNumber.observe(viewLifecycleOwner) {
+                layoutTagNumber.handleError(it)
+            }
 
-        getBaseCattleViewModel().showErrorOnType.observe(viewLifecycleOwner) {
-            layoutType.handleError(it)
-        }
+            showErrorOnType.observe(viewLifecycleOwner) {
+                layoutType.handleError(it)
+            }
 
-        getBaseCattleViewModel().showErrorOnTotalCalving.observe(viewLifecycleOwner) {
-            layoutCalving.handleError(it)
-        }
+            showErrorOnTotalCalving.observe(viewLifecycleOwner) {
+                layoutCalving.handleError(it)
+            }
 
-        getBaseCattleViewModel().saving.observe(viewLifecycleOwner) {
-            if (it)
-                findNavController().navigate(
-                    R.id.navigate_to_progress_dialog,
-                    bundleOf("message" to R.string.saving_dialog_message)
-                )
-            else if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
-                findNavController().navigateUp()
+            saving.observe(viewLifecycleOwner) {
+                if (it)
+                    findNavController().navigate(
+                        R.id.navigate_to_progress_dialog,
+                        bundleOf("message" to R.string.saving_dialog_message)
+                    )
+                else if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
+                    findNavController().navigateUp()
+            }
+
+            showRetrySnackBar.observe(viewLifecycleOwner) {
+                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
+                    .setAnchorView(getFabButtonId())
+                    .setAction(R.string.retry) { saveCattle() }
+                    .show()
+            }
+
+            showMessage.observe(viewLifecycleOwner, EventObserver {
+                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
+                    .setAnchorView(getFabButtonId())
+                    .show()
+            })
         }
     }
 
     override fun setupView() {
-        editTextTagNumber.addTextChangedListener {
-            getBaseCattleViewModel().setTagNumber(it.toString())
-        }
+        getBaseCattleViewModel().run {
+            editTextTagNumber.addTextChangedListener {
+                setTagNumber(it.toString())
+            }
 
-        editTextName.addTextChangedListener {
-            getBaseCattleViewModel().setName(it.toString())
-        }
+            editTextName.addTextChangedListener {
+                setName(it.toString())
+            }
 
-        editTextCalving.addTextChangedListener {
-            getBaseCattleViewModel().setTotalCalving(it.toString())
-        }
+            editTextCalving.addTextChangedListener {
+                setTotalCalving(it.toString())
+            }
 
-        exposedDropDownBreed.addTextChangedListener {
-            getBaseCattleViewModel().setBreed(it.toString())
-        }
+            exposedDropDownBreed.addTextChangedListener {
+                setBreed(it.toString())
+            }
 
-        exposedDropDownType.addTextChangedListener {
-            getBaseCattleViewModel().setType(it.toString())
-        }
+            exposedDropDownType.addTextChangedListener {
+                setType(it.toString())
+            }
 
-        exposedDropDownGroup.addTextChangedListener {
-            getBaseCattleViewModel().setGroup(it.toString())
-        }
+            exposedDropDownGroup.addTextChangedListener {
+                setGroup(it.toString())
+            }
 
-        editTextPurchaseAmount.addTextChangedListener {
-            val amount = it.toString()
-            getBaseCattleViewModel().setPurchaseAmount(
-                if (amount.isNotBlank() && amount.isDigitsOnly())
-                    amount.toLong()
-                else
-                    null
-            )
-        }
+            editTextPurchaseAmount.addTextChangedListener {
+                val amount = it.toString()
+                setPurchaseAmount(
+                    if (amount.isNotBlank() && amount.isDigitsOnly())
+                        amount.toLong()
+                    else
+                        null
+                )
+            }
 
-        editTextDateOfBirth.apply {
-            setupForDateInput()
-            addTextChangedListener { getBaseCattleViewModel().setDob(it.toString()) }
-        }
+            editTextDateOfBirth.apply {
+                setupForDateInput()
+                addTextChangedListener { this@run.setDob(it.toString()) }
+            }
 
-        editTextAiDate.apply {
-            setupForDateInput()
-            addTextChangedListener { getBaseCattleViewModel().setAiDate(it.toString()) }
-        }
+            editTextAiDate.apply {
+                setupForDateInput()
+                addTextChangedListener { this@run.setAiDate(it.toString()) }
+            }
 
-        editTextRepeatHeatDate.apply {
-            setupForDateInput()
-            addTextChangedListener { getBaseCattleViewModel().setRepeatHeatDate(it.toString()) }
-        }
+            editTextRepeatHeatDate.apply {
+                setupForDateInput()
+                addTextChangedListener { this@run.setRepeatHeatDate(it.toString()) }
+            }
 
-        editTextPregnancyCheckDate.apply {
-            setupForDateInput()
-            addTextChangedListener { getBaseCattleViewModel().setPregnancyCheckDate(it.toString()) }
-        }
+            editTextPregnancyCheckDate.apply {
+                setupForDateInput()
+                addTextChangedListener { this@run.setPregnancyCheckDate(it.toString()) }
+            }
 
-        editTextDryOffDate.apply {
-            setupForDateInput()
-            addTextChangedListener { getBaseCattleViewModel().setDryOffDate(it.toString()) }
-        }
+            editTextDryOffDate.apply {
+                setupForDateInput()
+                addTextChangedListener { this@run.setDryOffDate(it.toString()) }
+            }
 
-        editTextCalvingDate.apply {
-            setupForDateInput()
-            addTextChangedListener { getBaseCattleViewModel().setCalvingDate(it.toString()) }
-        }
+            editTextCalvingDate.apply {
+                setupForDateInput()
+                addTextChangedListener { this@run.setCalvingDate(it.toString()) }
+            }
 
-        editTextPurchaseDate.apply {
-            setupForDateInput()
-            addTextChangedListener { getBaseCattleViewModel().setPurchaseDate(it.toString()) }
+            editTextPurchaseDate.apply {
+                setupForDateInput()
+                addTextChangedListener { this@run.setPurchaseDate(it.toString()) }
+            }
         }
 
         exposedDropDownBreed.setupDropDownAdapter(R.array.list_breed)
