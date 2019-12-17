@@ -67,19 +67,19 @@ class MainActivity : BaseActivity() {
             setOnMenuItemClickListener { menuItem ->
                 menuItem.onNavDestinationSelected(navController)
             }
+        }
 
-            navController.addOnDestinationChangedListener { _, destination, _ ->
-                when (
-                    if (topLevelDestinations.contains(destination.id))
-                        destination.id
-                    else
-                        -1
-                    ) {
-                    R.id.cattleListScreen -> viewModel.setActiveMenuItem(R.id.cattleListScreen)
-                    R.id.timelineScreen -> viewModel.setActiveMenuItem(R.id.timelineScreen)
-                    R.id.milkingScreen -> viewModel.setActiveMenuItem(R.id.milkingScreen)
-                    R.id.cashflowScreen -> viewModel.setActiveMenuItem(R.id.cashflowScreen)
-                }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (
+                if (topLevelDestinations.contains(destination.id))
+                    destination.id
+                else
+                    -1
+                ) {
+                R.id.cattleListScreen -> viewModel.setActiveMenuItem(R.id.cattleListScreen)
+                R.id.timelineScreen -> viewModel.setActiveMenuItem(R.id.timelineScreen)
+                R.id.milkingScreen -> viewModel.setActiveMenuItem(R.id.milkingScreen)
+                R.id.cashflowScreen -> viewModel.setActiveMenuItem(R.id.cashflowScreen)
             }
         }
     }
