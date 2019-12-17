@@ -22,7 +22,7 @@ class MainActivity : BaseActivity() {
 
     private val navController by lazy { findNavController(R.id.nav_host_main) }
     private val topLevelDestinations by lazy {
-        hashSetOf(
+        setOf(
             R.id.cattleListScreen, R.id.timelineScreen, R.id.milkingScreen,
             R.id.cashflowScreen, R.id.mainBottomNavigationDrawer
         )
@@ -65,8 +65,21 @@ class MainActivity : BaseActivity() {
             }
 
             setOnMenuItemClickListener { menuItem ->
-                viewModel.setActiveMenuItem(menuItem.itemId)
                 menuItem.onNavDestinationSelected(navController)
+            }
+
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                when (
+                    if (topLevelDestinations.contains(destination.id))
+                        destination.id
+                    else
+                        -1
+                    ) {
+                    R.id.cattleListScreen -> viewModel.setActiveMenuItem(R.id.cattleListScreen)
+                    R.id.timelineScreen -> viewModel.setActiveMenuItem(R.id.timelineScreen)
+                    R.id.milkingScreen -> viewModel.setActiveMenuItem(R.id.milkingScreen)
+                    R.id.cashflowScreen -> viewModel.setActiveMenuItem(R.id.cashflowScreen)
+                }
             }
         }
     }
