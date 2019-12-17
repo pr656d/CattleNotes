@@ -13,7 +13,7 @@ object Toaster {
         toast.view.background.setColorFilter(
             ContextCompat.getColor(context, R.color.black), PorterDuff.Mode.SRC_IN
         )
-        val textView = toast.view.findViewById(R.id.message) as TextView
+        val textView = toast.view.findViewById(android.R.id.message) as TextView
         textView.setTextColor(ContextCompat.getColor(context, R.color.white))
         toast.show()
     }
