@@ -2,8 +2,8 @@ package com.pr656d.cattlenotes.ui.main.cattle.add
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
-import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleViewModel
 import com.pr656d.cattlenotes.utils.common.Event
 import javax.inject.Inject
@@ -17,11 +17,11 @@ class AddCattleViewModel @Inject constructor(
 
     override fun provideCattleDataRepository(): CattleDataRepository =  cattleDataRepository
 
-    override fun provideCurrentTagNumber(): Long? = null
+    override fun provideCurrentTagNumber(): String? = null
 
-    fun onSaveClick() = saveCattle(
-        doOnSuccess = {
-            _navigateUp.postValue(getCattle())
-        }
-    )
+//    fun onSaveClick() = saveCattle(
+//        doOnSuccess = {
+//            _navigateUp.postValue(getCattle())
+//        }
+//    )
 }

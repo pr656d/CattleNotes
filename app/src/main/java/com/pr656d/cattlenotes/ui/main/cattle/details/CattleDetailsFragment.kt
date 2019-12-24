@@ -1,16 +1,13 @@
 package com.pr656d.cattlenotes.ui.main.cattle.details
 
-import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleViewModel
 import com.pr656d.cattlenotes.utils.common.EventObserver
@@ -24,7 +21,7 @@ class CattleDetailsFragment : BaseCattleFragment() {
         const val TAG = "CattleActivity"
     }
 
-    private val args by navArgs<CattleDetailsFragmentArgs>()
+//    private val args by navArgs<CattleDetailsFragmentArgs>()
     private val viewModel by viewModels<CattleDetailsViewModel> { viewModelFactory }
 
     override fun getBaseCattleViewModel(): BaseCattleViewModel = viewModel
@@ -41,17 +38,17 @@ class CattleDetailsFragment : BaseCattleFragment() {
         }
 
         viewModel.cattle.observe(viewLifecycleOwner, EventObserver {
-            it.bindView()
+//            it.bindView()
         })
     }
 
     override fun setupView() {
         super.setupView()
 
-        viewModel.setCattle(args.cattle)
+//        viewModel.setCattle(args.cattle)
 
         fabButtonCattleDetails.setOnClickListener {
-            viewModel.onEditSaveClick()
+//            viewModel.onEditSaveClick()
         }
     }
 
@@ -134,38 +131,38 @@ class CattleDetailsFragment : BaseCattleFragment() {
         }
     }
 
-    private fun Cattle.bindView() {
-        val setTextIfNotSame: EditText.(newValue: String?) -> Unit = { newValue: String? ->
-            if (text.toString() != newValue) {
-                setText(newValue)
-            }
-        }
-        editTextTagNumber.setTextIfNotSame(tagNumber.toString())
-        editTextName.setTextIfNotSame(name)
-        exposedDropDownBreed.apply {
-            setTextIfNotSame(breed)
-            setupDropDownAdapter(R.array.list_breed)
-        }
-        exposedDropDownType.apply {
-            setTextIfNotSame(type)
-            setupDropDownAdapter(R.array.list_type)
-        }
-        editTextCalving.setTextIfNotSame(calving.toString())
-        exposedDropDownGroup.apply {
-            setTextIfNotSame(group)
-            setupDropDownAdapter(R.array.list_group)
-        }
-        editTextDateOfBirth.setTextIfNotSame(dateOfBirth)
-        editTextAiDate.setTextIfNotSame(aiDate)
-        editTextRepeatHeatDate.setTextIfNotSame(repeatHeatDate)
-        editTextPregnancyCheckDate.setTextIfNotSame(pregnancyCheckDate)
-        editTextDryOffDate.setTextIfNotSame(dryOffDate)
-        editTextCalvingDate.setTextIfNotSame(calvingDate)
-        /**
-         * [NumberFormatException] will be thrown if you pass null for [TextInputEditText.setText]
-         * which has input type as number.
-         */
-        purchaseAmount?.let { editTextPurchaseAmount.setTextIfNotSame(it.toString()) }
-        editTextPurchaseDate.setTextIfNotSame(purchaseDate)
-    }
+//    private fun Cattle.bindView() {
+//        val setTextIfNotSame: EditText.(newValue: String?) -> Unit = { newValue: String? ->
+//            if (text.toString() != newValue) {
+//                setText(newValue)
+//            }
+//        }
+//        editTextTagNumber.setTextIfNotSame(tagNumber.toString())
+//        editTextName.setTextIfNotSame(name)
+//        exposedDropDownBreed.apply {
+//            setTextIfNotSame(breed)
+//            setupDropDownAdapter(R.array.list_breed)
+//        }
+//        exposedDropDownType.apply {
+//            setTextIfNotSame(type)
+//            setupDropDownAdapter(R.array.list_type)
+//        }
+//        editTextCalving.setTextIfNotSame(calving.toString())
+//        exposedDropDownGroup.apply {
+//            setTextIfNotSame(group)
+//            setupDropDownAdapter(R.array.list_group)
+//        }
+//        editTextDateOfBirth.setTextIfNotSame(dateOfBirth)
+//        editTextAiDate.setTextIfNotSame(aiDate)
+//        editTextRepeatHeatDate.setTextIfNotSame(repeatHeatDate)
+//        editTextPregnancyCheckDate.setTextIfNotSame(pregnancyCheckDate)
+//        editTextDryOffDate.setTextIfNotSame(dryOffDate)
+//        editTextCalvingDate.setTextIfNotSame(calvingDate)
+//        /**
+//         * [NumberFormatException] will be thrown if you pass null for [TextInputEditText.setText]
+//         * which has input type as number.
+//         */
+//        purchaseAmount?.let { editTextPurchaseAmount.setTextIfNotSame(it.toString()) }
+//        editTextPurchaseDate.setTextIfNotSame(purchaseDate)
+//    }
 }

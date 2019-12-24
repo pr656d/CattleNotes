@@ -34,7 +34,7 @@ class AddCattleFragment : BaseCattleFragment() {
         super.setupView()
 
         fabButtonSaveCattle.setOnClickListener {
-            viewModel.onSaveClick()
+//            viewModel.onSaveClick()
         }
     }
 }

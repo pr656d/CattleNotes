@@ -3,9 +3,8 @@ package com.pr656d.cattlenotes.ui.main.cattle.list
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.navigation.findNavController
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.model.Cattle
+import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseItemViewHolder
 import kotlinx.android.synthetic.main.item_cattle.view.*
 
@@ -29,16 +28,16 @@ class CattleListViewHolder(
         }
 
         // Bind views
-        itemView.tvTagNumber.setTextIfDataAvailableElseHideView(data.tagNumber.toString())
-        itemView.tvName.setTextIfDataAvailableElseHideView(data.name)
-        itemView.tvGroup.setTextIfDataAvailableElseHideView(data.group)
-        itemView.tvType.setTextIfDataAvailableElseHideView(data.type)
+//        itemView.tvTagNumber.setTextIfDataAvailableElseHideView(data.tagNumber.toString())
+//        itemView.tvName.setTextIfDataAvailableElseHideView(data.name)
+//        itemView.tvGroup.setTextIfDataAvailableElseHideView(data.group)
+//        itemView.tvType.setTextIfDataAvailableElseHideView(data.type)
     }
 
     override fun setupView(view: View) {
         view.layout_cattle_item.setOnClickListener {
-            val action = CattleListFragmentDirections.navigateToCattleDetails(cattle)
-            it.findNavController().navigate(action)
+//            val action = CattleListFragmentDirections.navigateToCattleDetails(cattle)
+//            it.findNavController().navigate(action)
         }
     }
 }

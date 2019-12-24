@@ -34,9 +34,9 @@
         android:label="@string/cattle_details"
         tools:layout="@layout/fragment_cattle_details">
 
-        <argument
-            android:name="cattle"
-            app:argType="com.pr656d.cattlenotes.model.Cattle" />
+<!--        <argument-->
+<!--            android:name="cattle"-->
+<!--            app:argType="com.pr656d.cattlenotes.model.Cattle" />-->
     </fragment>
 
     <fragment

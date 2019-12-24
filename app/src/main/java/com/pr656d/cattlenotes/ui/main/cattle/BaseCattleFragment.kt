@@ -79,12 +79,12 @@ abstract class BaseCattleFragment : BaseFragment() {
                     findNavController().navigateUp()
             }
 
-            showRetrySnackBar.observe(viewLifecycleOwner) {
-                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
-                    .setAnchorView(getFabButtonId())
-                    .setAction(R.string.retry) { saveCattle() }
-                    .show()
-            }
+//            showRetrySnackBar.observe(viewLifecycleOwner) {
+//                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
+//                    .setAnchorView(getFabButtonId())
+//                    .setAction(R.string.retry) { saveCattle() }
+//                    .show()
+//            }
 
             showMessage.observe(viewLifecycleOwner, EventObserver {
                 Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)

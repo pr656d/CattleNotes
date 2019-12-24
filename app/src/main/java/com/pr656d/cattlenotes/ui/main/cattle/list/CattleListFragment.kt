@@ -1,8 +1,5 @@
 package com.pr656d.cattlenotes.ui.main.cattle.list
 
-import android.view.View
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
@@ -19,19 +16,19 @@ class CattleListFragment : BaseFragment() {
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_list
 
     override fun setupObservers() {
-        val viewModel by viewModels<CattleListViewModel> { viewModelFactory }
+//        val viewModel by viewModels<CattleListViewModel> { viewModelFactory }
 
-        viewModel.cattleList.observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                cattleAdapter.updateList(it)
-
-                tvEmptyListMessage.visibility = View.GONE
-                rvCattleList.visibility = View.VISIBLE
-            } else {
-                rvCattleList.visibility = View.GONE
-                tvEmptyListMessage.visibility = View.VISIBLE
-            }
-        }
+//        viewModel.cattleList.observe(viewLifecycleOwner) {
+//            if (it.isNotEmpty()) {
+//                cattleAdapter.updateList(it)
+//
+//                tvEmptyListMessage.visibility = View.GONE
+//                rvCattleList.visibility = View.VISIBLE
+//            } else {
+//                rvCattleList.visibility = View.GONE
+//                tvEmptyListMessage.visibility = View.VISIBLE
+//            }
+//        }
     }
 
     override fun setupView() {

@@ -8,6 +8,6 @@ class CattleListViewModel @Inject constructor(
     cattleDataRepository: CattleDataRepository
 ) : BaseViewModel() {
 
-    val cattleList by lazy { cattleDataRepository.getAllCattle() }
+//    val cattleList by lazy { cattleDataRepository.getAllCattle() }
 
 }

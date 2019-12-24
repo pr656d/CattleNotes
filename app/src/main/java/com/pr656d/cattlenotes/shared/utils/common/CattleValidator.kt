@@ -12,12 +12,11 @@ object CattleValidator {
     suspend fun isValidTagNumber(
         tagNumber: String?,
         repository: CattleDataRepository,
-        oldTagNumber: Long? = null
+        oldTagNumber: String? = null
     ): Int = when {
         tagNumber.isNullOrBlank() -> R.string.error_empty_field
-        !tagNumber.isDigitsOnly() -> R.string.error_contain_digits_only
-        tagNumber.toLong() == oldTagNumber -> VALID_MESSAGE_ID
-        repository.isCattleExists(tagNumber.toLong()) -> R.string.error_already_exists
+        tagNumber == oldTagNumber -> VALID_MESSAGE_ID
+//        repository.isCattleExists(tagNumber.toLong()) -> R.string.error_already_exists
         else -> VALID_MESSAGE_ID
     }
 

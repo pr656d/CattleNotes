@@ -4,19 +4,13 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
-import androidx.lifecycle.viewModelScope
-import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
-import com.pr656d.cattlenotes.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
 import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleViewModel
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsViewModel
 import com.pr656d.cattlenotes.utils.common.Event
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 
 /**
  * Common abstract class for [AddCattleViewModel] and [CattleDetailsViewModel]
@@ -26,7 +20,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     abstract fun provideCattleDataRepository(): CattleDataRepository
 
-    abstract fun provideCurrentTagNumber(): Long?
+    abstract fun provideCurrentTagNumber(): String?
 
     private val _saving by lazy { MutableLiveData<Boolean>(false) }
     val saving = _saving
@@ -136,43 +130,43 @@ abstract class BaseCattleViewModel : BaseViewModel() {
      *
      *  2. saveCattle()
      */
-    fun saveCattle(
-        doOnSuccess: suspend () -> Unit = {},
-        doOnFailure: suspend () -> Unit = {}
-    ) {
-        val toggleSaving: suspend () -> Unit = {
-            withContext(Dispatchers.Main) {
-                _saving.value = _saving.value!!.not()
-            }
-        }
+//    fun saveCattle(
+//        doOnSuccess: suspend () -> Unit = {},
+//        doOnFailure: suspend () -> Unit = {}
+//    ) {
+//        val toggleSaving: suspend () -> Unit = {
+//            withContext(Dispatchers.Main) {
+//                _saving.value = _saving.value!!.not()
+//            }
+//        }
+//
+//        if (
+//            showErrorOnTagNumber.value == CattleValidator.VALID_MESSAGE_ID &&
+//            showErrorOnType.value == CattleValidator.VALID_MESSAGE_ID &&
+//            showErrorOnTotalCalving.value == CattleValidator.VALID_MESSAGE_ID
+//        )
+//            viewModelScope.launch(Dispatchers.IO) {
+//                try {
+//                    toggleSaving()
+//                    val newCattle = getCattle()
+//                    provideCattleDataRepository().addCattle(newCattle)
+//                    toggleSaving()
+//                    doOnSuccess()
+//                } catch (e: Exception) {
+//                    doOnFailure()
+//                    toggleSaving()
+//                    _showRetrySnackBar.postValue(R.string.retry)
+//                }
+//            }
+//        else
+//            _showMessage.postValue(R.string.error_fill_empty_fields)
+//    }
 
-        if (
-            showErrorOnTagNumber.value == CattleValidator.VALID_MESSAGE_ID &&
-            showErrorOnType.value == CattleValidator.VALID_MESSAGE_ID &&
-            showErrorOnTotalCalving.value == CattleValidator.VALID_MESSAGE_ID
-        )
-            viewModelScope.launch(Dispatchers.IO) {
-                try {
-                    toggleSaving()
-                    val newCattle = getCattle()
-                    provideCattleDataRepository().addCattle(newCattle)
-                    toggleSaving()
-                    doOnSuccess()
-                } catch (e: Exception) {
-                    doOnFailure()
-                    toggleSaving()
-                    _showRetrySnackBar.postValue(R.string.retry)
-                }
-            }
-        else
-            _showMessage.postValue(R.string.error_fill_empty_fields)
-    }
-
-    protected fun getCattle(): Cattle =
-        Cattle(
-            tagNumber.value!!.toLong(), name.value, type.value!!, imageUrl.value, breed.value,
-            group.value, totalCalving.value?.toInt() ?: 0, dob.value, aiDate.value,
-            repeatHeatDate.value, pregnancyCheckDate.value, dryOffDate.value, calvingDate.value,
-            purchaseAmount.value?.toLong(), purchaseDate.value
-        )
+//    protected fun getCattle(): Cattle =
+//        Cattle(
+//            tagNumber.value!!.toLong(), name.value, type.value!!, imageUrl.value, breed.value,
+//            group.value, totalCalving.value?.toInt() ?: 0, dob.value, aiDate.value,
+//            repeatHeatDate.value, pregnancyCheckDate.value, dryOffDate.value, calvingDate.value,
+//            purchaseAmount.value?.toLong(), purchaseDate.value
+//        )
 }
