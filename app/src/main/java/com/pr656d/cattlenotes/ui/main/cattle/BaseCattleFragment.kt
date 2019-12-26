@@ -135,30 +135,30 @@ abstract class BaseCattleFragment : BaseFragment() {
                 addTextChangedListener { this@run.setDob(it.toString()) }
             }
 
-            editTextAiDate.apply {
-                setupForDateInput()
-                addTextChangedListener { this@run.setAiDate(it.toString()) }
-            }
-
-            editTextRepeatHeatDate.apply {
-                setupForDateInput()
-                addTextChangedListener { this@run.setRepeatHeatDate(it.toString()) }
-            }
-
-            editTextPregnancyCheckDate.apply {
-                setupForDateInput()
-                addTextChangedListener { this@run.setPregnancyCheckDate(it.toString()) }
-            }
-
-            editTextDryOffDate.apply {
-                setupForDateInput()
-                addTextChangedListener { this@run.setDryOffDate(it.toString()) }
-            }
-
-            editTextCalvingDate.apply {
-                setupForDateInput()
-                addTextChangedListener { this@run.setCalvingDate(it.toString()) }
-            }
+//            editTextAiDate.apply {
+//                setupForDateInput()
+//                addTextChangedListener { this@run.setAiDate(it.toString()) }
+//            }
+//
+//            editTextRepeatHeatDate.apply {
+//                setupForDateInput()
+//                addTextChangedListener { this@run.setRepeatHeatDate(it.toString()) }
+//            }
+//
+//            editTextPregnancyCheckDate.apply {
+//                setupForDateInput()
+//                addTextChangedListener { this@run.setPregnancyCheckDate(it.toString()) }
+//            }
+//
+//            editTextDryOffDate.apply {
+//                setupForDateInput()
+//                addTextChangedListener { this@run.setDryOffDate(it.toString()) }
+//            }
+//
+//            editTextCalvingDate.apply {
+//                setupForDateInput()
+//                addTextChangedListener { this@run.setCalvingDate(it.toString()) }
+//            }
 
             editTextPurchaseDate.apply {
                 setupForDateInput()

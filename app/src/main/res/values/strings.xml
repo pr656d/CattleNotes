@@ -9,6 +9,8 @@
     <string name="back">Back</string>
     <string name="retry">Retry</string>
     <string name="required">* Required</string>
+    <string name="zero">0</string>
+    <string name="cow">Cow</string>
 
     <!--  Transition name  -->
     <string name="tn_fabButton">fab_button</string>
@@ -70,7 +72,8 @@
     <string name="type">Type</string>
     <string name="group">Group</string>
     <string name="date_of_birth">Date of birth</string>
-    <string name="total_calving">Total calving</string>
+    <string name="lactation">Lactation</string>
+    <string name="active_breeding">Active breeding</string>
     <string name="calving_date">Calving date</string>
     <string name="purchase_amount">Purchase amount (\u20B9)</string>
     <string name="purchase_date">Purchase date</string>
@@ -79,6 +82,9 @@
     <string name="pregnancy_check">Pregnancy check date</string>
     <string name="dry_off">Dry off date</string>
     <string name="delete">Delete</string>
+    <string name="home_born">Home born</string>
+    <string name="expected">Expected</string>
+    <string name="actual">Actual</string>
     <string name="error_save">Could not save cattle. Try again.</string>
     <string name="error_fill_empty_fields">Fill required fields.</string>
     <!--  Add cattle  -->

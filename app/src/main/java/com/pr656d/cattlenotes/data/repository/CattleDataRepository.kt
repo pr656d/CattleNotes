@@ -11,11 +11,9 @@ open class CattleDataRepository @Inject constructor(
     private val appDatabase: AppDatabase
 ) {
 
-    suspend fun addCattle(cattle: Cattle) =
-        appDatabase.cattleDao().insert(cattle)
+    suspend fun addCattle(cattle: Cattle) = appDatabase.cattleDao().insert(cattle)
 
-    suspend fun addAllCattle(cattleList: List<Cattle>) =
-        appDatabase.cattleDao().insertAll(cattleList)
+    suspend fun addAllCattle(cattleList: List<Cattle>) = appDatabase.cattleDao().insertAll(cattleList)
 
     suspend fun isCattleExists(tagNumber: Long): Boolean =
         try {

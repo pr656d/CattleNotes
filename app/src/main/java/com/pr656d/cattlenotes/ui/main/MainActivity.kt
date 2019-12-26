@@ -70,12 +70,7 @@ class MainActivity : BaseActivity() {
         }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (
-                if (topLevelDestinations.contains(destination.id))
-                    destination.id
-                else
-                    -1
-                ) {
+            when (destination.id) {
                 R.id.cattleListScreen -> viewModel.setActiveMenuItem(R.id.cattleListScreen)
                 R.id.timelineScreen -> viewModel.setActiveMenuItem(R.id.timelineScreen)
                 R.id.milkingScreen -> viewModel.setActiveMenuItem(R.id.milkingScreen)

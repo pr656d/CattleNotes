@@ -23,6 +23,10 @@ class Cattle(
     @ColumnInfo(name = "group")
     val group: Group = Group.MILKING,
 
+    @SerializedName("lactation")
+    @ColumnInfo(name = "lactation")
+    val lactation: Int = 0,
+
     homeBirth: Boolean = false,
 
     purchaseAmount: Long? = null,

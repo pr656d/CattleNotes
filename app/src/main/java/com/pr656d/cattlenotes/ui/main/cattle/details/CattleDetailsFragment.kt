@@ -74,10 +74,10 @@ class CattleDetailsFragment : BaseCattleFragment() {
         val editTextForDateInput = intArrayOf(
             R.id.editTextDateOfBirth,
             R.id.editTextAiDate,
-            R.id.editTextRepeatHeatDate,
-            R.id.editTextPregnancyCheckDate,
-            R.id.editTextDryOffDate,
-            R.id.editTextCalvingDate,
+//            R.id.editTextRepeatHeatDate,
+//            R.id.editTextPregnancyCheckDate,
+//            R.id.editTextDryOffDate,
+//            R.id.editTextCalvingDate,
             R.id.editTextPurchaseDate
         )
 

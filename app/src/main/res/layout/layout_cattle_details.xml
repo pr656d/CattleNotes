@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout_cattle_details"
@@ -35,9 +34,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
-            app:helperTextEnabled="true"
+            android:hint="@string/tag_number"
             app:helperText="@string/required"
-            android:hint="@string/tag_number">
+            app:helperTextEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTagNumber"
@@ -78,15 +77,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:helperTextEnabled="true"
-                app:helperText="@string/required"
-                android:hint="@string/type">
+                android:hint="@string/type"
+                app:helperTextEnabled="true">
 
                 <AutoCompleteTextView
                     android:id="@+id/exposedDropDownType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:editable="false"
+                    android:text="@string/cow"
                     android:textColor="@drawable/selector_text_color"
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -123,9 +122,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                app:helperTextEnabled="true"
-                app:helperText="@string/required"
-                android:hint="@string/total_calving">
+                android:hint="@string/lactation"
+                app:helperTextEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextCalving"
@@ -133,6 +131,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:maxLines="1"
+                    android:text="@string/zero"
                     android:textColor="@drawable/selector_text_color" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -182,98 +181,32 @@
 
         </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutAiDate"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:hint="@string/artificial_insemination"
-            app:startIconDrawable="@drawable/ic_date_grey">
+            android:layout_marginTop="@dimen/margin_normal"
+            android:backgroundTint="@color/transparent"
+            android:clickable="false"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/grey"
+            app:strokeWidth="1dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextAiDate"
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                style="@style/Widget.MaterialComponents.CompoundButton.Switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:text="@string/home_born"
+                android:textColor="@color/grey"
+                android:textSize="18sp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutRepeatHeatDate"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:hint="@string/repeat_heat"
-            app:startIconDrawable="@drawable/ic_date_grey">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextRepeatHeatDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutPregnancyCheckDate"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:hint="@string/pregnancy_check"
-            app:startIconDrawable="@drawable/ic_date_grey">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextPregnancyCheckDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutDryOffDate"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:hint="@string/dry_off"
-            app:startIconDrawable="@drawable/ic_date_grey">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextDryOffDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutCalvingDate"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:hint="@string/calving_date"
-            app:startIconDrawable="@drawable/ic_date_grey">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextCalvingDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
-        </com.google.android.material.textfield.TextInputLayout>
-
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
+            android:id="@+id/containerPurchase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -317,4 +250,4 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>
