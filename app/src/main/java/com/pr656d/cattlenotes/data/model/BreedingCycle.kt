@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 @Entity(
-    tableName = "cow_breeding_cycle",
+    tableName = "breeding_cycle",
     foreignKeys = [
         ForeignKey(
             entity = Cattle::class,

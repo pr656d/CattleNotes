@@ -155,4 +155,17 @@
     <style name="AppTheme.Toolbar.TitleText">
         <item name="android:textSize">@dimen/title_size</item>
     </style>
+
+    <style name="AppTheme.TextInputEditTextForDateDisabled">
+        <item name="android:focusable">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:enabled">false</item>
+        <item name="android:textColor">@drawable/selector_text_color</item>
+    </style>
+
+    <style name="AppTheme.TextInputEditTextForDateEnabled">
+        <item name="android:focusable">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textColor">@drawable/selector_text_color</item>
+    </style>
 </resources>

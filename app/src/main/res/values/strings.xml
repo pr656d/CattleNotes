@@ -86,6 +86,8 @@
     <string name="expected">Expected</string>
     <string name="actual">Actual</string>
     <string name="breeding_history">Breeding History</string>
+    <string name="add_new_breeding">Add new breeding</string>
+    <string name="show_add_breeding">Show all breeding</string>
     <string name="error_save">Could not save cattle. Try again.</string>
     <string name="error_fill_empty_fields">Fill required fields.</string>
     <!--  Add cattle  -->

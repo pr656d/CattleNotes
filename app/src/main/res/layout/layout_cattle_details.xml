@@ -13,7 +13,7 @@
     <LinearLayout
         android:id="@+id/view_cattle_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="@dimen/margin_normal"
         android:layout_marginEnd="@dimen/margin_normal"
         android:gravity="center_horizontal"
@@ -42,7 +42,6 @@
                 android:id="@+id/editTextTagNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
                 android:maxLines="1"
                 android:textColor="@drawable/selector_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -77,8 +76,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/type"
-                app:helperTextEnabled="true">
+                android:hint="@string/type">
 
                 <AutoCompleteTextView
                     android:id="@+id/exposedDropDownType"
@@ -122,8 +120,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="@string/lactation"
-                app:helperTextEnabled="true">
+                android:hint="@string/lactation">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTextCalving"
@@ -171,12 +168,10 @@
                 app:startIconDrawable="@drawable/ic_date_grey">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    style="@style/AppTheme.TextInputEditTextForDateEnabled"
                     android:id="@+id/editTextDateOfBirth"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:maxLines="1"
-                    android:textColor="@drawable/selector_text_color" />
+                    android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
@@ -241,13 +236,36 @@
                 app:startIconDrawable="@drawable/ic_date_grey">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    style="@style/AppTheme.TextInputEditTextForDateEnabled"
                     android:id="@+id/editTextPurchaseDate"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:maxLines="1"
-                    android:textColor="@drawable/selector_text_color" />
+                    android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAddNewBreeding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:drawableEnd="@drawable/ic_arrow_right_white"
+            android:text="@string/add_new_breeding"
+            android:textAllCaps="false"
+            android:visibility="gone"/>
+
+        <include
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/active_breeding"
+            android:layout_marginTop="@dimen/margin_small"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnShowAllBreeding"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/ic_arrow_right_white"
+            android:text="@string/show_add_breeding"
+            android:textAllCaps="false" />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
