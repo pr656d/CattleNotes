@@ -85,6 +85,7 @@
     <string name="home_born">Home born</string>
     <string name="expected">Expected</string>
     <string name="actual">Actual</string>
+    <string name="breeding_history">Breeding History</string>
     <string name="error_save">Could not save cattle. Try again.</string>
     <string name="error_fill_empty_fields">Fill required fields.</string>
     <!--  Add cattle  -->

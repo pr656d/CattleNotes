@@ -17,7 +17,7 @@
             style="@style/AppTheme.Headline6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Breeding History"
+            android:text="@string/breeding_history"
             android:textAlignment="center" />
 
         <include
