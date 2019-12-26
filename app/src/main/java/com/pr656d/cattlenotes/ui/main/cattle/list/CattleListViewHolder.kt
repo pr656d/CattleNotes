@@ -28,10 +28,10 @@ class CattleListViewHolder(
         }
 
         // Bind views
-//        itemView.tvTagNumber.setTextIfDataAvailableElseHideView(data.tagNumber.toString())
-//        itemView.tvName.setTextIfDataAvailableElseHideView(data.name)
-//        itemView.tvGroup.setTextIfDataAvailableElseHideView(data.group)
-//        itemView.tvType.setTextIfDataAvailableElseHideView(data.type)
+        itemView.tvTagNumber.setTextIfDataAvailableElseHideView(data.tagNumber)
+        itemView.tvName.setTextIfDataAvailableElseHideView(data.name)
+        itemView.tvGroup.setTextIfDataAvailableElseHideView(data.group.displayName)
+        itemView.tvType.setTextIfDataAvailableElseHideView(data.type.displayName)
     }
 
     override fun setupView(view: View) {

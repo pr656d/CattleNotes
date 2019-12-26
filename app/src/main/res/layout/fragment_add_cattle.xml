@@ -6,7 +6,7 @@
 
     <include
         layout="@layout/layout_cattle_details"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabButtonSaveCattle"
@@ -15,6 +15,6 @@
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/margin_normal"
         android:src="@drawable/ic_check_black"
-        android:transitionName="@string/tn_fabButton"/>
+        android:transitionName="@string/tn_fabButton" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
