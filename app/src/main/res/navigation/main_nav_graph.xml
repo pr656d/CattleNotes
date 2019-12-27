@@ -13,11 +13,7 @@
 
         <action
             android:id="@+id/navigate_to_add_cattle"
-            app:destination="@id/addCattleScreen"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"/>
+            app:destination="@id/addCattleScreen"/>
 
         <action
             android:id="@+id/navigate_to_cattle_details"
@@ -36,7 +32,7 @@
 
 <!--        <argument-->
 <!--            android:name="cattle"-->
-<!--            app:argType="com.pr656d.cattlenotes.model.Cattle" />-->
+<!--            app:argType="com.pr656d.cattlenotes.data.model.Cattle" />-->
     </fragment>
 
     <fragment
@@ -77,10 +73,5 @@
         android:name="com.pr656d.cattlenotes.ui.main.cashflow.CashflowFragment"
         android:label="@string/cashflow"
         tools:layout="@layout/fragment_cashflow" />
-
-    <dialog
-        android:id="@+id/mainBottomNavigationDrawer"
-        android:name="com.pr656d.cattlenotes.ui.main.MainBottomNavigationSheet"
-        tools:layout="@layout/main_navigation_drawer"/>
 
 </navigation>

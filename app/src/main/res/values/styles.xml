@@ -112,31 +112,11 @@
         <item name="android:minHeight">?attr/actionBarSize</item>
     </style>
 
-
     <style name="AppTheme.ToolbarTitle" parent="AppTheme.Body1">
         <item name="android:paddingTop">@dimen/margin_small</item>
         <item name="android:paddingBottom">@dimen/margin_small</item>
         <item name="android:textSize">@dimen/title_size</item>
-        <item name="android:layout_gravity">center</item>
     </style>
-
-    <style name="AppTheme.MainBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" >
-        <item name="android:fitsSystemWindows">true</item>
-        <item name="android:layout_gravity">bottom</item>
-        <item name="fabAlignmentMode">end</item>
-        <item name="fabCradleVerticalOffset">@dimen/margin_normal</item>
-        <item name="navigationIcon">@drawable/ic_menu_black</item>
-        <item name="menu">@menu/menu_main_appbar</item>
-    </style>
-
-    <style name="AppTheme.CattleDetailsBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar" >
-        <item name="android:layout_gravity">bottom</item>
-        <item name="fabAlignmentMode">center</item>
-        <item name="hideOnScroll">false</item>
-        <item name="fabCradleVerticalOffset">@dimen/margin_normal</item>
-    </style>
-
-    <style name="AppTheme.NavigationDrawer" parent="Widget.MaterialComponents.BottomNavigationView" />
 
     <style name="AppTheme.AddFabButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="android:src">@drawable/ic_add_black</item>
@@ -154,18 +134,5 @@
 
     <style name="AppTheme.Toolbar.TitleText">
         <item name="android:textSize">@dimen/title_size</item>
-    </style>
-
-    <style name="AppTheme.TextInputEditTextForDateDisabled">
-        <item name="android:focusable">false</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:enabled">false</item>
-        <item name="android:textColor">@drawable/selector_text_color</item>
-    </style>
-
-    <style name="AppTheme.TextInputEditTextForDateEnabled">
-        <item name="android:focusable">false</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:textColor">@drawable/selector_text_color</item>
     </style>
 </resources>

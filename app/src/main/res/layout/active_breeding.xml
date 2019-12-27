@@ -7,11 +7,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="false"
+    android:visibility="visible"
     app:cardCornerRadius="4dp"
     app:cardElevation="0dp"
     app:strokeColor="@color/grey"
     app:strokeWidth="1dp"
-    android:visibility="gone">
+    tools:visibility="visible">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,8 +30,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textAlignment="center"
-                android:text="@string/active_breeding" />
+                android:text="@string/active_breeding"
+                android:textAlignment="center" />
 
             <ImageButton
                 android:id="@+id/btnEditActiveBreeding"
@@ -41,6 +42,29 @@
                 tools:ignore="ContentDescription" />
         </LinearLayout>
 
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.MaterialComponents.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:backgroundTint="@color/transparent"
+            android:clickable="false"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/grey"
+            app:strokeWidth="1dp">
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:enabled="false"
+                android:text="Mark as active"
+                android:textColor="@drawable/selector_text_color"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutAiDate"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -50,10 +74,12 @@
             android:hint="@string/artificial_insemination">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/AppTheme.TextInputEditTextForDateDisabled"
                 android:id="@+id/editTextAiDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -66,11 +92,38 @@
             app:helperText="@string/expected">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/AppTheme.TextInputEditTextForDateDisabled"
                 android:id="@+id/editTextRepeatHeatDateExpected"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.MaterialComponents.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:backgroundTint="@color/transparent"
+            android:clickable="false"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/grey"
+            app:strokeWidth="1dp">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="2dp"
+                android:enabled="false"
+                android:layoutDirection="rtl"
+                android:text="Repeat heat status"
+                android:textColor="@drawable/selector_text_color"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutRepeatHeatDateActual"
@@ -83,10 +136,12 @@
             app:helperText="@string/actual">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/AppTheme.TextInputEditTextForDateDisabled"
                 android:id="@+id/editTextRepeatHeatDateActual"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -99,11 +154,38 @@
             app:helperText="@string/expected">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/AppTheme.TextInputEditTextForDateDisabled"
                 android:id="@+id/editTextPregnancyCheckDateExpected"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.MaterialComponents.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:backgroundTint="@color/transparent"
+            android:clickable="false"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/grey"
+            app:strokeWidth="1dp">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="2dp"
+                android:enabled="false"
+                android:layoutDirection="rtl"
+                android:text="Pregnancy check status"
+                android:textColor="@drawable/selector_text_color"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutPregnancyCheckDateActual"
@@ -116,10 +198,12 @@
             app:helperText="@string/actual">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/AppTheme.TextInputEditTextForDateDisabled"
                 android:id="@+id/editTextPregnancyCheckDateActual"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -132,11 +216,38 @@
             app:helperText="@string/expected">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/AppTheme.TextInputEditTextForDateDisabled"
                 android:id="@+id/editTextDryOffDateExpected"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.MaterialComponents.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:backgroundTint="@color/transparent"
+            android:clickable="false"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/grey"
+            app:strokeWidth="1dp">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="2dp"
+                android:enabled="false"
+                android:layoutDirection="rtl"
+                android:text="Dry off status"
+                android:textColor="@drawable/selector_text_color"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDryOffDateActual"
@@ -149,10 +260,12 @@
             app:helperText="@string/actual">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/AppTheme.TextInputEditTextForDateDisabled"
                 android:id="@+id/editTextDryOffDateActual"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -165,11 +278,38 @@
             app:helperText="@string/expected">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/AppTheme.TextInputEditTextForDateDisabled"
                 android:id="@+id/editTextCalvingDateExpected"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Widget.MaterialComponents.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:backgroundTint="@color/transparent"
+            android:clickable="false"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/grey"
+            app:strokeWidth="1dp">
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="2dp"
+                android:enabled="false"
+                android:layoutDirection="rtl"
+                android:text="Calving status"
+                android:textColor="@drawable/selector_text_color"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutCalvingDateActual"
@@ -182,10 +322,12 @@
             app:helperText="@string/actual">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/AppTheme.TextInputEditTextForDateDisabled"
                 android:id="@+id/editTextCalvingDateActual"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:focusable="false"
+                android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton

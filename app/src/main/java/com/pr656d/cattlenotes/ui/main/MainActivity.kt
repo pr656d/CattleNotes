@@ -3,11 +3,9 @@ package com.pr656d.cattlenotes.ui.main
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
+import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.onNavDestinationSelected
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
@@ -21,12 +19,6 @@ class MainActivity : BaseActivity() {
     }
 
     private val navController by lazy { findNavController(R.id.nav_host_main) }
-    private val topLevelDestinations by lazy {
-        setOf(
-            R.id.cattleListScreen, R.id.timelineScreen, R.id.milkingScreen,
-            R.id.cashflowScreen, R.id.mainBottomNavigationDrawer
-        )
-    }
 
     private val viewModel by viewModels<MainViewModel> { viewModelFactory }
 
@@ -34,21 +26,8 @@ class MainActivity : BaseActivity() {
 
     override fun setupObservers() {
         viewModel.redirectToLoginScreen.observe(this, EventObserver {
-            startActivity(
-                Intent(this, LoginActivity::class.java)
-            )
+            startActivity(Intent(this, LoginActivity::class.java))
             finish()
-        })
-
-        viewModel.activeMenuItem.observe(this, Observer { menuItem ->
-            bottomAppBar.apply {
-                menuItem.previousItem?.let {
-                    menu.findItem(it.itemId)?.setIcon(it.unselectedIcon)
-                }
-                menuItem.currentItem.let {
-                    menu.findItem(it.itemId)?.setIcon(it.selectedIcon)
-                }
-            }
         })
     }
 
@@ -56,25 +35,18 @@ class MainActivity : BaseActivity() {
         NavigationUI.setupWithNavController(
             toolbar,
             navController,
-            AppBarConfiguration(topLevelDestinations)
+            drawer_layout
         )
+        NavigationUI.setupWithNavController(navigation_view, navController)
+    }
 
-        bottomAppBar.run {
-            setNavigationOnClickListener {
-                navController.navigate(R.id.mainBottomNavigationDrawer)
-            }
-
-            setOnMenuItemClickListener { menuItem ->
-                menuItem.onNavDestinationSelected(navController)
-            }
-        }
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.cattleListScreen -> viewModel.setActiveMenuItem(R.id.cattleListScreen)
-                R.id.timelineScreen -> viewModel.setActiveMenuItem(R.id.timelineScreen)
-                R.id.milkingScreen -> viewModel.setActiveMenuItem(R.id.milkingScreen)
-                R.id.cashflowScreen -> viewModel.setActiveMenuItem(R.id.cashflowScreen)
+    override fun onBackPressed() {
+        drawer_layout.run {
+            if (isDrawerOpen(GravityCompat.START)) {
+                closeDrawer(GravityCompat.START)
+                return
+            } else {
+                super.onBackPressed()
             }
         }
     }

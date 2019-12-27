@@ -66,7 +66,7 @@ abstract class BaseCattleFragment : BaseFragment() {
             }
 
             showErrorOnTotalCalving.observe(viewLifecycleOwner) {
-                layoutCalving.handleError(it)
+                layoutLactation.handleError(it)
             }
 
             saving.observe(viewLifecycleOwner) {
@@ -104,7 +104,7 @@ abstract class BaseCattleFragment : BaseFragment() {
                 setName(it.toString())
             }
 
-            editTextCalving.addTextChangedListener {
+            editTextLactation.addTextChangedListener {
                 setTotalCalving(it.toString())
             }
 
