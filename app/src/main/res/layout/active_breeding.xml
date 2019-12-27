@@ -60,7 +60,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:enabled="false"
-                android:text="Mark as active"
+                android:text="@string/mark_as_active"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="16sp" />
         </com.google.android.material.card.MaterialCardView>
@@ -120,7 +120,7 @@
                 android:layout_marginBottom="2dp"
                 android:enabled="false"
                 android:layoutDirection="rtl"
-                android:text="Repeat heat status"
+                android:text="@string/repeat_heat_status"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="16sp" />
         </com.google.android.material.card.MaterialCardView>
@@ -182,7 +182,7 @@
                 android:layout_marginBottom="2dp"
                 android:enabled="false"
                 android:layoutDirection="rtl"
-                android:text="Pregnancy check status"
+                android:text="@string/pregnancy_check_status"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="16sp" />
         </com.google.android.material.card.MaterialCardView>
@@ -244,7 +244,7 @@
                 android:layout_marginBottom="2dp"
                 android:enabled="false"
                 android:layoutDirection="rtl"
-                android:text="Dry off status"
+                android:text="@string/dry_off_status"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="16sp" />
         </com.google.android.material.card.MaterialCardView>
@@ -306,7 +306,7 @@
                 android:layout_marginBottom="2dp"
                 android:enabled="false"
                 android:layoutDirection="rtl"
-                android:text="Calving status"
+                android:text="@string/calving_status"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="16sp" />
         </com.google.android.material.card.MaterialCardView>

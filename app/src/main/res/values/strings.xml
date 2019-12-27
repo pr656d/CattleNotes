@@ -100,4 +100,10 @@
     <string name="error_already_exists">Already exists</string>
     <string name="error_empty_field">This field can\'t be empty</string>
     <string name="error_contain_digits_only">This field should contain digits only</string>
+    <!--  Active Breeding  -->
+    <string name="mark_as_active">Mark as active</string>
+    <string name="repeat_heat_status">Repeat heat status</string>
+    <string name="pregnancy_check_status">Pregnancy check status</string>
+    <string name="dry_off_status">Dry off status</string>
+    <string name="calving_status">Calving status</string>
 </resources>
