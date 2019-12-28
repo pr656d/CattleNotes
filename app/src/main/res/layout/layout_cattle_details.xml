@@ -249,10 +249,12 @@
             android:text="@string/add_new_breeding"
             android:textAllCaps="false"/>
 
-        <include
+        <ViewStub
+            android:id="@+id/viewStubActiveBreeding"
+            android:inflatedId="@+id/layoutActiveBreeding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/active_breeding"
+            android:layout="@layout/active_breeding"
             android:layout_marginTop="@dimen/margin_small"/>
 
         <com.google.android.material.button.MaterialButton
@@ -263,7 +265,8 @@
             android:drawableEnd="@drawable/ic_arrow_right_white"
             android:text="@string/show_add_breeding"
             android:textAllCaps="false"
-            android:visibility="visible"/>
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

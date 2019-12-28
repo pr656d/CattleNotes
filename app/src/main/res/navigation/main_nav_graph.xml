@@ -30,9 +30,9 @@
         android:label="@string/cattle_details"
         tools:layout="@layout/fragment_cattle_details">
 
-<!--        <argument-->
-<!--            android:name="cattle"-->
-<!--            app:argType="com.pr656d.cattlenotes.data.model.Cattle" />-->
+        <argument
+            android:name="cattle_tag_number"
+            app:argType="string" />
     </fragment>
 
     <fragment
