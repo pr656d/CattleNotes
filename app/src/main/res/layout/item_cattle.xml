@@ -48,7 +48,7 @@
             android:layout_width="@dimen/photo_width_normal"
             android:layout_height="@dimen/photo_height_normal"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_cattle_black"
+            android:src="@drawable/ic_cattle"
             app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
             app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
             app:layout_constraintTop_toTopOf="@+id/guidelineTop"

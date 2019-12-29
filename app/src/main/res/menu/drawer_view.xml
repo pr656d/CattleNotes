@@ -1,6 +1,4 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
         android:id="@+id/topLevelDestinations"
@@ -8,26 +6,26 @@
         <item
             android:id="@id/cattleListScreen"
             android:checkable="true"
-            android:icon="@drawable/ic_cattle_black"
+            android:icon="@drawable/ic_cattle"
             android:title="@string/cattle"
-            android:checked="true" />
+            android:checked="true"/>
 
         <item
             android:id="@id/timelineScreen"
             android:checkable="true"
-            android:icon="@drawable/ic_timeline_black"
+            android:icon="@drawable/ic_timeline"
             android:title="@string/timeline" />
 
         <item
             android:id="@id/milkingScreen"
             android:checkable="true"
-            android:icon="@drawable/ic_milking_black"
+            android:icon="@drawable/ic_milking"
             android:title="@string/milking" />
 
         <item
             android:id="@id/cashflowScreen"
             android:checkable="true"
-            android:icon="@drawable/ic_cashflow_black"
+            android:icon="@drawable/ic_cashflow"
             android:title="@string/cashflow"/>
 
         <group android:checkableBehavior="single">
