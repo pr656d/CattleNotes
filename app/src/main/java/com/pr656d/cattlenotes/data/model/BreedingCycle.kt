@@ -31,9 +31,9 @@ class BreedingCycle(
     /**
      * Artificial Insemination date as String.
      */
-    @SerializedName("artificial_insemination")
-    @ColumnInfo(name = "artificial_insemination")
-    val artificialInsemination: Date?,
+    @SerializedName("ai_")
+    @Embedded(prefix = "ai_")
+    val artificialInsemination: ArtificialInseminationInfo? = null,
 
     /**
      * Depends on AI date.
@@ -65,6 +65,24 @@ class BreedingCycle(
     @ColumnInfo(name = "breeding_cycle_id")
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
+
+    data class ArtificialInseminationInfo(
+        @SerializedName("date")
+        @ColumnInfo(name = "date")
+        val date: Date,
+
+        @SerializedName("did_by")
+        @ColumnInfo(name = "did_by")
+        val didBy: String?,
+
+        @SerializedName("bull_name")
+        @ColumnInfo(name = "bull_name")
+        val bullName: String?,
+
+        @SerializedName("straw_code")
+        @ColumnInfo(name = "straw_code")
+        val strawCode: String?
+    )
 
     data class BreedingEvent(
         @SerializedName("expected_on")

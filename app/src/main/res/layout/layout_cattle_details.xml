@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
+    android:fitsSystemWindows="true"
     android:fillViewport="true"
     android:paddingBottom="@dimen/clip_padding_bottom"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -103,6 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:editable="false"
+                    android:text="@string/hf"
                     android:textColor="@drawable/selector_text_color"
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -129,6 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:editable="false"
+                    android:text="@string/dry"
                     android:textColor="@drawable/selector_text_color"
                     tools:ignore="Deprecated,LabelFor" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -170,6 +173,24 @@
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutParent"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/parent"
+            android:layout_marginTop="@dimen/margin_small"
+            app:endIconDrawable="@drawable/ic_arrow_right_white"
+            app:endIconMode="custom">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextParent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.card.MaterialCardView
             style="@style/Widget.MaterialComponents.CardView"
             android:layout_width="match_parent"
@@ -183,6 +204,7 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 style="@style/Widget.MaterialComponents.CompoundButton.Switch"
+                android:id="@+id/switchHomeBorn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -200,7 +222,7 @@
             android:layout_marginTop="@dimen/margin_small"
             android:baselineAligned="false"
             android:orientation="horizontal"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputLayout

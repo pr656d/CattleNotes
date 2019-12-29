@@ -42,7 +42,7 @@ abstract class Animal(
 
     @SerializedName("parent")
     @ColumnInfo(name = "parent")
-    val parent: Long?
+    val parent: String?
 ) {
     enum class Type(val displayName: String) {
         COW("Cow"),
@@ -53,10 +53,10 @@ abstract class Animal(
     data class Image(
         @SerializedName("local_path")
         @ColumnInfo(name = "local_path")
-        val localPath: String?,
+        val localPath: String? = null,
 
         @SerializedName("remote_path")
         @ColumnInfo(name = "remote_path")
-        val remotePath: String?
+        val remotePath: String? = null
     )
 }

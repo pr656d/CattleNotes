@@ -16,7 +16,7 @@ object CattleValidator {
     ): Int = when {
         tagNumber.isNullOrBlank() -> R.string.error_empty_field
         tagNumber == oldTagNumber -> VALID_MESSAGE_ID
-//        repository.isCattleExists(tagNumber.toLong()) -> R.string.error_already_exists
+        repository.isCattleExists(tagNumber) -> R.string.error_already_exists
         else -> VALID_MESSAGE_ID
     }
 
@@ -25,7 +25,7 @@ object CattleValidator {
         else -> VALID_MESSAGE_ID
     }
 
-    fun isValidTotalCalving(totalCalving: String?): Int = when {
+    fun isValidLactation(totalCalving: String?): Int = when {
         totalCalving.isNullOrBlank() -> R.string.error_empty_field
         !totalCalving.isDigitsOnly() -> R.string.error_contain_digits_only
         else -> VALID_MESSAGE_ID

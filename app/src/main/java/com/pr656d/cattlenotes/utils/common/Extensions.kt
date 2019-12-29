@@ -1,8 +1,13 @@
 package com.pr656d.cattlenotes.utils.common
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import com.pr656d.cattlenotes.data.local.db.Converters
+import com.pr656d.cattlenotes.data.model.Animal
+import com.pr656d.cattlenotes.data.model.Cattle
 import java.text.SimpleDateFormat
+import java.util.*
 
 
 // region date to string
@@ -20,5 +25,18 @@ fun Context.parseToString(dayOfMonth: Int, month: Int, year: Int): String =
         // In Android SDK API index of month start from 0. +1 to get correct month.
         format(parse("$dayOfMonth/${month+1}/$year")!!)
     }
+
+@SuppressLint("SimpleDateFormat")
+fun String.toDate(): Date = Date(SimpleDateFormat("dd/MM/yyyy").parse(this)!!.time)
+
+// end region
+
+// region converters
+
+fun String.toType(): Animal.Type = Converters().fromStringToType(this)
+
+fun String.toBreed(): Cattle.Breed = Converters().fromStringToBreed(this)
+
+fun String.toGroup(): Cattle.Group = Converters().fromStringToGroup(this)
 
 // end region

@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.text.InputType
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -65,26 +66,36 @@ abstract class BaseCattleFragment : BaseFragment() {
                 layoutType.handleError(it)
             }
 
-            showErrorOnTotalCalving.observe(viewLifecycleOwner) {
+            showErrorOnLactation.observe(viewLifecycleOwner) {
                 layoutLactation.handleError(it)
+            }
+
+            homeBorn.observe(viewLifecycleOwner) {
+                containerPurchase.visibility = if (it) {
+                    editTextPurchaseAmount.text = null
+                    editTextPurchaseDate.text = null
+                    View.GONE
+                } else {
+                    View.VISIBLE
+                }
             }
 
             saving.observe(viewLifecycleOwner) {
                 if (it)
                     findNavController().navigate(
                         R.id.navigate_to_progress_dialog,
-                        bundleOf("message" to R.string.saving_dialog_message)
+                        bundleOf("message" to R.string.saving_dialog_message.toString())
                     )
                 else if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
                     findNavController().navigateUp()
             }
 
-//            showRetrySnackBar.observe(viewLifecycleOwner) {
-//                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
-//                    .setAnchorView(getFabButtonId())
-//                    .setAction(R.string.retry) { saveCattle() }
-//                    .show()
-//            }
+            showRetrySnackBar.observe(viewLifecycleOwner) {
+                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
+                    .setAnchorView(getFabButtonId())
+                    .setAction(R.string.retry) { saveCattle() }
+                    .show()
+            }
 
             showMessage.observe(viewLifecycleOwner, EventObserver {
                 Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
@@ -104,20 +115,29 @@ abstract class BaseCattleFragment : BaseFragment() {
                 setName(it.toString())
             }
 
-            editTextLactation.addTextChangedListener {
-                setTotalCalving(it.toString())
+            exposedDropDownType.addTextChangedListener {
+                setType(it.toString())
             }
 
             exposedDropDownBreed.addTextChangedListener {
                 setBreed(it.toString())
             }
 
-            exposedDropDownType.addTextChangedListener {
-                setType(it.toString())
-            }
-
             exposedDropDownGroup.addTextChangedListener {
                 setGroup(it.toString())
+            }
+
+            editTextLactation.addTextChangedListener {
+                setLactation(it.toString())
+            }
+
+            editTextDateOfBirth.apply {
+                setupForDateInput()
+                addTextChangedListener { setDob(it.toString()) }
+            }
+
+            switchHomeBorn.setOnCheckedChangeListener { _, isChecked ->
+                setHomeBorn(isChecked)
             }
 
             editTextPurchaseAmount.addTextChangedListener {
@@ -130,39 +150,9 @@ abstract class BaseCattleFragment : BaseFragment() {
                 )
             }
 
-            editTextDateOfBirth.apply {
-                setupForDateInput()
-                addTextChangedListener { this@run.setDob(it.toString()) }
-            }
-
-//            editTextAiDate.apply {
-//                setupForDateInput()
-//                addTextChangedListener { this@run.setAiDate(it.toString()) }
-//            }
-//
-//            editTextRepeatHeatDate.apply {
-//                setupForDateInput()
-//                addTextChangedListener { this@run.setRepeatHeatDate(it.toString()) }
-//            }
-//
-//            editTextPregnancyCheckDate.apply {
-//                setupForDateInput()
-//                addTextChangedListener { this@run.setPregnancyCheckDate(it.toString()) }
-//            }
-//
-//            editTextDryOffDate.apply {
-//                setupForDateInput()
-//                addTextChangedListener { this@run.setDryOffDate(it.toString()) }
-//            }
-//
-//            editTextCalvingDate.apply {
-//                setupForDateInput()
-//                addTextChangedListener { this@run.setCalvingDate(it.toString()) }
-//            }
-
             editTextPurchaseDate.apply {
                 setupForDateInput()
-                addTextChangedListener { this@run.setPurchaseDate(it.toString()) }
+                addTextChangedListener { setPurchaseDate(it.toString()) }
             }
         }
 

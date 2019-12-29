@@ -35,7 +35,7 @@ class Cattle(
 
     dateOfBirth: Date? = null,
 
-    parent: Long? = null
+    parent: String? = null
 ) : Animal(
     tagNumber, name, image, type, homeBirth, purchaseAmount, purchasedOn, dateOfBirth, parent
 ) {

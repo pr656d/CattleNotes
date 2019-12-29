@@ -53,7 +53,9 @@
 
         <argument
             android:name="message"
-            app:argType="integer"/>
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </dialog>
 
     <fragment

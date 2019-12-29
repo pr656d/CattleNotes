@@ -11,6 +11,8 @@
     <string name="required">* Required</string>
     <string name="zero">0</string>
     <string name="cow">Cow</string>
+    <string name="hf">HF</string>
+    <string name="dry">Dry</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -74,6 +76,7 @@
     <string name="type">Type</string>
     <string name="group">Group</string>
     <string name="date_of_birth">Date of birth</string>
+    <string name="parent">Parent</string>
     <string name="lactation">Lactation</string>
     <string name="active_breeding">Active breeding</string>
     <string name="calving_date">Calving date</string>
