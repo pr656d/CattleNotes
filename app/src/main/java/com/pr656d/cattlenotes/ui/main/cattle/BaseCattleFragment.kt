@@ -8,6 +8,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
 import androidx.core.os.bundleOf
 import androidx.core.text.isDigitsOnly
 import androidx.core.widget.addTextChangedListener
@@ -19,6 +20,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
+import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragment
 import com.pr656d.cattlenotes.utils.common.EventObserver
@@ -58,16 +60,61 @@ abstract class BaseCattleFragment : BaseFragment() {
                 } else { false }
             }
 
+            val setTextIfNotSame: EditText.(s: String?) -> Unit = { s: String? ->
+                if (text?.toString() != s)
+                    setText(s)
+            }
+
+            tagNumber.observe(viewLifecycleOwner) {
+                editTextTagNumber.setTextIfNotSame(it)
+            }
+
             showErrorOnTagNumber.observe(viewLifecycleOwner) {
                 layoutTagNumber.handleError(it)
+            }
+
+            name.observe(viewLifecycleOwner) {
+                editTextName.setTextIfNotSame(it)
+            }
+
+            type.observe(viewLifecycleOwner) {
+                exposedDropDownType.setTextIfNotSame(it)
             }
 
             showErrorOnType.observe(viewLifecycleOwner) {
                 layoutType.handleError(it)
             }
 
+            breed.observe(viewLifecycleOwner) {
+                exposedDropDownBreed.setTextIfNotSame(it)
+            }
+
+            showErrorOnBreed.observe(viewLifecycleOwner) {
+                layoutBreed.handleError(it)
+            }
+
+            group.observe(viewLifecycleOwner) {
+                exposedDropDownGroup.setTextIfNotSame(it)
+            }
+
+            showErrorOnGroup.observe(viewLifecycleOwner) {
+                layoutGroup.handleError(it)
+            }
+
+            lactation.observe(viewLifecycleOwner) {
+                editTextLactation.setTextIfNotSame(it)
+            }
+
             showErrorOnLactation.observe(viewLifecycleOwner) {
                 layoutLactation.handleError(it)
+            }
+
+            dob.observe(viewLifecycleOwner) {
+                editTextDateOfBirth.setTextIfNotSame(it)
+            }
+
+            parent.observe(viewLifecycleOwner) {
+                editTextParent.setTextIfNotSame(it)
             }
 
             homeBorn.observe(viewLifecycleOwner) {
@@ -80,6 +127,14 @@ abstract class BaseCattleFragment : BaseFragment() {
                 }
             }
 
+            purchaseAmount.observe(viewLifecycleOwner) {
+                editTextPurchaseAmount.setTextIfNotSame(it?.toString())
+            }
+
+            purchaseDate.observe(viewLifecycleOwner) {
+                editTextPurchaseDate.setTextIfNotSame(it)
+            }
+
             saving.observe(viewLifecycleOwner) {
                 if (it)
                     findNavController().navigate(
@@ -88,13 +143,6 @@ abstract class BaseCattleFragment : BaseFragment() {
                     )
                 else if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
                     findNavController().navigateUp()
-            }
-
-            showRetrySnackBar.observe(viewLifecycleOwner) {
-                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_INDEFINITE)
-                    .setAnchorView(getFabButtonId())
-                    .setAction(R.string.retry) { saveCattle() }
-                    .show()
             }
 
             showMessage.observe(viewLifecycleOwner, EventObserver {
@@ -152,7 +200,37 @@ abstract class BaseCattleFragment : BaseFragment() {
 
             editTextPurchaseDate.apply {
                 setupForDateInput()
-                addTextChangedListener { setPurchaseDate(it.toString()) }
+                addTextChangedListener {
+                    val date = it.toString()
+                    setPurchaseDate(
+                        if (date.isNotBlank())
+                            it.toString()
+                        else
+                            null
+                    )
+                }
+            }
+
+            editTextParent.apply {
+                // Set input type as null to stop keyboard from opening.
+                inputType = InputType.TYPE_NULL
+                isFocusableInTouchMode = false
+                setOnClickListener {
+                    hideKeyboard()
+                    isFocusableInTouchMode = true
+                    requestFocus()
+                    Toaster.show(requireContext(), "select parent")
+                }
+                setOnLongClickListener {
+                    hideKeyboard()
+                    isFocusableInTouchMode = true
+                    Toaster.show(requireContext(), "remove parent")
+                    requestFocus()
+                }
+            }
+
+            layoutParent.setEndIconOnClickListener {
+                Toaster.show(requireContext(), "parent details")
             }
         }
 
@@ -175,9 +253,7 @@ abstract class BaseCattleFragment : BaseFragment() {
         isFocusableInTouchMode = false  // Initially set to false
 
         setOnClickListener {
-            // Hide the soft keyboard if open.
-            (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                .hideSoftInputFromWindow(view?.windowToken, 0)
+            hideKeyboard()
 
             // Set focusable to true.
             isFocusableInTouchMode = true
@@ -207,5 +283,11 @@ abstract class BaseCattleFragment : BaseFragment() {
             }
             dialog.show()   // Show the dialog.
         }
+    }
+
+    private fun hideKeyboard() {
+        // Hide the soft keyboard if open.
+        (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+            .hideSoftInputFromWindow(view?.windowToken, 0)
     }
 }

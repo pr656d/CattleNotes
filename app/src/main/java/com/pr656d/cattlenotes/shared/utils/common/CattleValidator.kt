@@ -30,4 +30,14 @@ object CattleValidator {
         !totalCalving.isDigitsOnly() -> R.string.error_contain_digits_only
         else -> VALID_MESSAGE_ID
     }
+
+    fun isValidBreed(breed: String?): Int = when {
+        breed.isNullOrBlank() -> R.string.error_empty_field
+        else -> VALID_MESSAGE_ID
+    }
+
+    fun isValidGroup(group: String?): Int = when {
+        group.isNullOrBlank() -> R.string.error_empty_field
+        else -> VALID_MESSAGE_ID
+    }
 }

@@ -8,7 +8,8 @@
     <string name="ok">OK</string>
     <string name="back">Back</string>
     <string name="retry">Retry</string>
-    <string name="required">* Required</string>
+    <string name="more">More</string>
+    <string name="required">Required</string>
     <string name="zero">0</string>
     <string name="cow">Cow</string>
     <string name="hf">HF</string>
@@ -92,7 +93,8 @@
     <string name="actual">Actual</string>
     <string name="breeding_history">Breeding History</string>
     <string name="add_new_breeding">Add new breeding</string>
-    <string name="show_add_breeding">Show all breeding</string>
+    <string name="show_all_breeding">Show all breeding</string>
+    <string name="show_active_breeding">Show active breeding</string>
     <string name="error_save">Could not save cattle. Try again.</string>
     <string name="error_fill_empty_fields">Fill required fields.</string>
     <!--  Add cattle  -->

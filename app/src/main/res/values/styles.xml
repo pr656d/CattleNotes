@@ -135,4 +135,16 @@
     <style name="AppTheme.Toolbar.TitleText">
         <item name="android:textSize">@dimen/title_size</item>
     </style>
+    
+    <style name="AppTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textSize">@dimen/text_size_text_input_layout</item>
+        <item name="boxStrokeColor">@color/grey</item>
+        <item name="boxStrokeWidth">@dimen/box_stroke_width</item>
+    </style>
+
+    <style name="AppTextInputEditTextStyle" parent="ThemeOverlay.Design.TextInputEditText">
+        <item name="android:textColorHint">@color/colorPrimaryDark</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
 </resources>

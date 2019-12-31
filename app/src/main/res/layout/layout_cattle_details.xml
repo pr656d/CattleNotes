@@ -2,30 +2,26 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_cattle_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="false"
-    android:fitsSystemWindows="true"
-    android:fillViewport="true"
     android:paddingBottom="@dimen/clip_padding_bottom"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/view_cattle_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_normal"
-        android:layout_marginEnd="@dimen/margin_normal"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_margin="@dimen/margin_normal">
 
         <ImageView
             android:id="@+id/ivCattle"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="@dimen/margin_normal"
             android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_cattle"
             tools:ignore="ContentDescription" />
 
@@ -36,16 +32,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
             android:hint="@string/tag_number"
+            app:endIconMode="clear_text"
             app:helperText="@string/required"
             app:helperTextEnabled="true"
-            app:endIconMode="clear_text">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivCattle">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTagNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:textColor="@drawable/selector_text_color"
+                android:theme="@style/AppTextInputEditTextStyle" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -55,7 +55,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/name"
-            app:endIconMode="clear_text">
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutTagNumber">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextName"
@@ -65,105 +68,107 @@
                 android:textColor="@drawable/selector_text_color" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutType"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
+            android:layout_marginEnd="@dimen/margin_micro"
+            android:hint="@string/type"
+            app:helperText="@string/required"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutName">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutType"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
+            <AutoCompleteTextView
+                android:id="@+id/exposedDropDownType"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:layout_weight="1"
-                android:hint="@string/type">
+                android:editable="false"
+                android:textColor="@drawable/selector_text_color"
+                tools:ignore="Deprecated,LabelFor" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <AutoCompleteTextView
-                    android:id="@+id/exposedDropDownType"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:text="@string/cow"
-                    android:textColor="@drawable/selector_text_color"
-                    tools:ignore="Deprecated,LabelFor" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutBreed"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_micro"
+            android:hint="@string/breed"
+            app:helperText="@string/required"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutType"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/layoutType">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutBreed"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
+            <AutoCompleteTextView
+                android:id="@+id/exposedDropDownBreed"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/breed">
+                android:editable="false"
+                android:textColor="@drawable/selector_text_color"
+                tools:ignore="Deprecated,LabelFor" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <AutoCompleteTextView
-                    android:id="@+id/exposedDropDownBreed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:text="@string/hf"
-                    android:textColor="@drawable/selector_text_color"
-                    tools:ignore="Deprecated,LabelFor" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutGroup"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
-            android:baselineAligned="false"
-            android:orientation="horizontal">
+            android:layout_marginEnd="@dimen/margin_micro"
+            android:hint="@string/group"
+            app:helperText="@string/required"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutType">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutGroup"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
+            <AutoCompleteTextView
+                android:id="@+id/exposedDropDownGroup"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:layout_weight="1"
-                android:hint="@string/group">
+                android:editable="false"
+                android:textColor="@drawable/selector_text_color"
+                tools:ignore="Deprecated,LabelFor" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <AutoCompleteTextView
-                    android:id="@+id/exposedDropDownGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:text="@string/dry"
-                    android:textColor="@drawable/selector_text_color"
-                    tools:ignore="Deprecated,LabelFor" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutLactation"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_micro"
+            android:hint="@string/lactation"
+            app:helperText="@string/required"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutGroup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/layoutGroup">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutLactation"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextLactation"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/lactation">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextLactation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:text="@string/zero"
-                    android:textColor="@drawable/selector_text_color" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+                android:inputType="number"
+                android:maxLines="1"
+                android:text="@string/zero"
+                android:textColor="@drawable/selector_text_color" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDateOfBirth"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/date_of_birth"
             android:layout_marginTop="@dimen/margin_small"
-            app:startIconDrawable="@drawable/ic_date_grey"
-            app:endIconMode="clear_text">
+            android:hint="@string/date_of_birth"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutGroup"
+            app:startIconDrawable="@drawable/ic_date_grey">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDateOfBirth"
@@ -178,10 +183,13 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/parent"
             android:layout_marginTop="@dimen/margin_small"
+            android:hint="@string/parent"
             app:endIconDrawable="@drawable/ic_arrow_right_white"
-            app:endIconMode="custom">
+            app:endIconMode="custom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutDateOfBirth">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextParent"
@@ -191,76 +199,78 @@
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            style="@style/Widget.MaterialComponents.CardView"
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchHomeBorn"
+            style="@style/Widget.MaterialComponents.CompoundButton.Switch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:backgroundTint="@color/transparent"
-            android:clickable="false"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/grey"
-            app:strokeWidth="1dp">
+            android:layout_marginTop="@dimen/margin_normal"
+            android:background="@drawable/outline"
+            android:paddingStart="@dimen/box_padding_StartEnd"
+            android:paddingTop="@dimen/box_padding_TopBottom"
+            android:paddingEnd="@dimen/box_padding_StartEnd"
+            android:paddingBottom="@dimen/box_padding_TopBottom"
+            android:text="@string/home_born"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutParent" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                style="@style/Widget.MaterialComponents.CompoundButton.Switch"
-                android:id="@+id/switchHomeBorn"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutPurchaseAmount"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginEnd="@dimen/margin_micro"
+            android:hint="@string/purchase_amount"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switchHomeBorn">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPurchaseAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:text="@string/home_born"
-                android:textSize="18sp" />
+                android:inputType="number"
+                android:maxLines="1"
+                android:textColor="@drawable/selector_text_color" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutPurchaseDate"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_micro"
+            android:hint="@string/purchase_date"
+            app:endIconMode="clear_text"
+            app:layout_constraintBottom_toBottomOf="@+id/layoutPurchaseAmount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/layoutPurchaseAmount"
+            app:startIconDrawable="@drawable/ic_date_grey">
 
-        <LinearLayout
-            android:id="@+id/containerPurchase"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPurchaseDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnShowActiveBreeding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
+            android:drawableEnd="@drawable/ic_arrow_right_white"
+            android:text="@string/show_active_breeding"
+            android:textAllCaps="false"
             android:visibility="visible"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutPurchaseAmount"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:layout_weight="1"
-                android:hint="@string/purchase_amount">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextPurchaseAmount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:maxLines="1"
-                    android:textColor="@drawable/selector_text_color" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutPurchaseDate"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.3"
-                android:hint="@string/purchase_date"
-                app:startIconDrawable="@drawable/ic_date_grey"
-                app:endIconMode="clear_text">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editTextPurchaseDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutPurchaseAmount"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddNewBreeding"
@@ -269,15 +279,10 @@
             android:layout_marginTop="@dimen/margin_small"
             android:drawableEnd="@drawable/ic_arrow_right_white"
             android:text="@string/add_new_breeding"
-            android:textAllCaps="false"/>
-
-        <ViewStub
-            android:id="@+id/viewStubActiveBreeding"
-            android:inflatedId="@+id/layoutActiveBreeding"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout="@layout/active_breeding"
-            android:layout_marginTop="@dimen/margin_small"/>
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnShowActiveBreeding" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnShowAllBreeding"
@@ -285,11 +290,27 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:drawableEnd="@drawable/ic_arrow_right_white"
-            android:text="@string/show_add_breeding"
+            android:text="@string/show_all_breeding"
             android:textAllCaps="false"
-            android:visibility="gone"
-            tools:visibility="visible"/>
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAddNewBreeding"
+            tools:visibility="visible" />
 
-    </LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/containerPurchase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="layoutPurchaseAmount,layoutPurchaseDate"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

@@ -19,9 +19,9 @@ class AddCattleViewModel @Inject constructor(
 
     override fun provideCurrentTagNumber(): String? = null
 
-//    fun onSaveClick() = saveCattle(
-//        doOnSuccess = {
-//            _navigateUp.postValue(getCattle())
-//        }
-//    )
+    fun onSaveClick() = saveCattle(
+        doOnSuccess = {
+            _navigateUp.postValue(getCattle())
+        }
+    )
 }

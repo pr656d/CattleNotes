@@ -5,6 +5,7 @@ import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
@@ -21,7 +22,7 @@ class CattleDetailsFragment : BaseCattleFragment() {
         const val TAG = "CattleActivity"
     }
 
-//    private val args by navArgs<CattleDetailsFragmentArgs>()
+    private val args by navArgs<CattleDetailsFragmentArgs>()
     private val viewModel by viewModels<CattleDetailsViewModel> { viewModelFactory }
 
     override fun getBaseCattleViewModel(): BaseCattleViewModel = viewModel
@@ -72,13 +73,7 @@ class CattleDetailsFragment : BaseCattleFragment() {
          * When in edit mode show the icons.
          */
         val editTextForDateInput = intArrayOf(
-            R.id.editTextDateOfBirth,
-            R.id.editTextAiDate,
-//            R.id.editTextRepeatHeatDate,
-//            R.id.editTextPregnancyCheckDate,
-//            R.id.editTextDryOffDate,
-//            R.id.editTextCalvingDate,
-            R.id.editTextPurchaseDate
+            R.id.editTextDateOfBirth, R.id.editTextPurchaseDate
         )
 
         val textInputLayoutForExposedDropDownMenu = intArrayOf(
@@ -112,11 +107,6 @@ class CattleDetailsFragment : BaseCattleFragment() {
         view_cattle_details.forEach { view ->
             if (view is TextInputLayout)
                 view.applyProperties()
-            else if (view is LinearLayout)
-                view.forEach {
-                    if (it is TextInputLayout)
-                        it.applyProperties()
-                }
         }
 
         fabButtonCattleDetails.apply {
@@ -130,39 +120,4 @@ class CattleDetailsFragment : BaseCattleFragment() {
             show()
         }
     }
-
-//    private fun Cattle.bindView() {
-//        val setTextIfNotSame: EditText.(newValue: String?) -> Unit = { newValue: String? ->
-//            if (text.toString() != newValue) {
-//                setText(newValue)
-//            }
-//        }
-//        editTextTagNumber.setTextIfNotSame(tagNumber.toString())
-//        editTextName.setTextIfNotSame(name)
-//        exposedDropDownBreed.apply {
-//            setTextIfNotSame(breed)
-//            setupDropDownAdapter(R.array.list_breed)
-//        }
-//        exposedDropDownType.apply {
-//            setTextIfNotSame(type)
-//            setupDropDownAdapter(R.array.list_type)
-//        }
-//        editTextCalving.setTextIfNotSame(calving.toString())
-//        exposedDropDownGroup.apply {
-//            setTextIfNotSame(group)
-//            setupDropDownAdapter(R.array.list_group)
-//        }
-//        editTextDateOfBirth.setTextIfNotSame(dateOfBirth)
-//        editTextAiDate.setTextIfNotSame(aiDate)
-//        editTextRepeatHeatDate.setTextIfNotSame(repeatHeatDate)
-//        editTextPregnancyCheckDate.setTextIfNotSame(pregnancyCheckDate)
-//        editTextDryOffDate.setTextIfNotSame(dryOffDate)
-//        editTextCalvingDate.setTextIfNotSame(calvingDate)
-//        /**
-//         * [NumberFormatException] will be thrown if you pass null for [TextInputEditText.setText]
-//         * which has input type as number.
-//         */
-//        purchaseAmount?.let { editTextPurchaseAmount.setTextIfNotSame(it.toString()) }
-//        editTextPurchaseDate.setTextIfNotSame(purchaseDate)
-//    }
 }

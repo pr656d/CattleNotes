@@ -10,7 +10,9 @@ import com.pr656d.cattlenotes.data.model.Animal
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
+import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
+import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleViewModel
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsViewModel
 import com.pr656d.cattlenotes.utils.common.*
@@ -34,9 +36,6 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     protected val _showMessage by lazy { MutableLiveData<@StringRes Int>() }
     val showMessage = Transformations.map(_showMessage) { Event(it) }
-
-    private val _showRetrySnackBar by lazy { MutableLiveData<@StringRes Int>() }
-    val showRetrySnackBar: LiveData<Int> = _showRetrySnackBar
 
     // Start : Holding UI data
 
@@ -65,37 +64,43 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     private val _breed by lazy { MutableLiveData<String>() }
     val breed: LiveData<String> = _breed
     fun setBreed(value: String) = _breed.postValue(value)
+    val showErrorOnBreed: LiveData<Int> = Transformations.map(_breed) {
+        validateBreed(it)
+    }
 
     private val _group by lazy { MutableLiveData<String>() }
     val group: LiveData<String> = _group
     fun setGroup(value: String) = _group.postValue(value)
+    val showErrorOnGroup: LiveData<Int> = Transformations.map(_group) {
+        validateGroup(it)
+    }
 
-    private val _lactation by lazy { MutableLiveData<String>() }
-    private val lactation: LiveData<String> = _lactation
+    private val _lactation by lazy { MutableLiveData<String>("0") }
+    val lactation: LiveData<String> = _lactation
     fun setLactation(value: String) = _lactation.postValue(value)
     val showErrorOnLactation: LiveData<Int> = Transformations.map(_lactation) {
         validateLactation(it)
     }
 
     private val _dob by lazy { MutableLiveData<String>() }
-    private val dob: LiveData<String> = _dob
+    val dob: LiveData<String> = _dob
     fun setDob(value: String) = _dob.postValue(value)
 
     private val _parent by lazy { MutableLiveData<String>() }
     val parent: LiveData<String> = _parent
     fun setParent(value: String) = _parent.postValue(value)
 
-    private val _homeBorn by lazy { MutableLiveData<Boolean>() }
+    private val _homeBorn by lazy { MutableLiveData<Boolean>(false) }
     val homeBorn: LiveData<Boolean> = _homeBorn
     fun setHomeBorn(value: Boolean) = _homeBorn.postValue(value)
 
     private val _purchaseAmount by lazy { MutableLiveData<Long?>(null) }
-    private val purchaseAmount: LiveData<Long?> = _purchaseAmount
+    val purchaseAmount: LiveData<Long?> = _purchaseAmount
     fun setPurchaseAmount(value: Long?) = _purchaseAmount.postValue(value)
 
-    private val _purchaseDate by lazy { MutableLiveData<String>() }
-    private val purchaseDate: LiveData<String> = _purchaseDate
-    fun setPurchaseDate(value: String) = _purchaseDate.postValue(value)
+    private val _purchaseDate by lazy { MutableLiveData<String?>() }
+    val purchaseDate: LiveData<String?> = _purchaseDate
+    fun setPurchaseDate(value: String?) = _purchaseDate.postValue(value)
 
     // End : Holding UI data
 
@@ -106,6 +111,10 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     private fun validateType(type: String?): Int = CattleValidator.isValidType(type)
 
     private fun validateLactation(totalCalving: String?): Int = CattleValidator.isValidLactation(totalCalving)
+
+    private fun validateBreed(breed: String?): Int = CattleValidator.isValidBreed(breed)
+
+    private fun validateGroup(group: String?): Int = CattleValidator.isValidGroup(group)
 
     /**
      * Function will be called by inherited class.
@@ -137,7 +146,8 @@ abstract class BaseCattleViewModel : BaseViewModel() {
         if (
             showErrorOnTagNumber.value == CattleValidator.VALID_MESSAGE_ID &&
             showErrorOnType.value == CattleValidator.VALID_MESSAGE_ID &&
-            showErrorOnLactation.value == CattleValidator.VALID_MESSAGE_ID
+            showErrorOnLactation.value == CattleValidator.VALID_MESSAGE_ID &&
+            showErrorOnBreed.value == CattleValidator.VALID_MESSAGE_ID
         )
             viewModelScope.launch(Dispatchers.IO) {
                 try {
@@ -148,7 +158,9 @@ abstract class BaseCattleViewModel : BaseViewModel() {
                 } catch (e: Exception) {
                     doOnFailure()
                     toggleSaving()
-                    _showRetrySnackBar.postValue(R.string.retry)
+                    Logger.e(AddCattleFragment.TAG, "$e")
+                    Logger.e(AddCattleFragment.TAG, "${e.printStackTrace()}")
+                    _showMessage.postValue(R.string.retry)
                 }
             }
         else
@@ -158,7 +170,8 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     protected fun getCattle(): Cattle =
         Cattle(
             tagNumber.value!!, name.value?.let { it }, Animal.Image(), type.value!!.toType(),
-            breed.value!!.toBreed(), group.value!!.toGroup(), lactation.value!!.toInt(), homeBorn.value!!,
-            purchaseAmount.value!!, purchaseDate.value?.toDate(), dob.value?.toDate(), parent.value?.let { it }
+            breed.value!!.toBreed(), group.value!!.toGroup(), lactation.value?.toInt() ?: 0,
+            homeBorn.value!!, purchaseAmount.value?.let { it }, purchaseDate.value?.toDate(),
+            dob.value?.toDate(), parent.value?.let { it }
         )
 }

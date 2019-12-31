@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="false"
-    android:visibility="gone"
+    android:visibility="visible"
     app:cardCornerRadius="4dp"
     app:cardElevation="@dimen/no_elevation"
     app:strokeColor="@color/grey"
@@ -52,7 +52,8 @@
             app:cardElevation="0dp"
             app:strokeColor="@color/grey"
             app:strokeWidth="1dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:layout_width="match_parent"
@@ -124,7 +125,8 @@
                 android:text="@string/repeat_heat_status"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                tools:visibility="visible"/>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -135,7 +137,8 @@
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/repeat_heat"
             android:visibility="gone"
-            app:helperText="@string/actual">
+            app:helperText="@string/actual"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRepeatHeatDateActual"
@@ -187,7 +190,8 @@
                 android:text="@string/pregnancy_check_status"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                tools:visibility="visible"/>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -198,7 +202,8 @@
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/pregnancy_check"
             android:visibility="gone"
-            app:helperText="@string/actual">
+            app:helperText="@string/actual"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPregnancyCheckDateActual"
@@ -250,7 +255,8 @@
                 android:text="@string/dry_off_status"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                tools:visibility="visible"/>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -261,7 +267,8 @@
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/dry_off"
             android:visibility="gone"
-            app:helperText="@string/actual">
+            app:helperText="@string/actual"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDryOffDateActual"
@@ -313,7 +320,8 @@
                 android:text="@string/calving_status"
                 android:textColor="@drawable/selector_text_color"
                 android:textSize="16sp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                tools:visibility="visible"/>
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -324,7 +332,8 @@
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/calving_date"
             android:visibility="gone"
-            app:helperText="@string/actual">
+            app:helperText="@string/actual"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextCalvingDateActual"
