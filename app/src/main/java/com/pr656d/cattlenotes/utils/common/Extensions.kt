@@ -29,6 +29,9 @@ fun Context.parseToString(dayOfMonth: Int, month: Int, year: Int): String =
 @SuppressLint("SimpleDateFormat")
 fun String.toDate(): Date = Date(SimpleDateFormat("dd/MM/yyyy").parse(this)!!.time)
 
+@SuppressLint("SimpleDateFormat")
+fun Date.toFormattedString(): String = SimpleDateFormat("dd/MM/yyyy").format(this)
+
 // end region
 
 // region converters

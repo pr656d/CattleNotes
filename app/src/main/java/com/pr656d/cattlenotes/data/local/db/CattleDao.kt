@@ -20,7 +20,7 @@ interface CattleDao {
      * Internally Room will handle it on background thread.
      * If any change happens observer will be called by Room.
      */
-    @Query("SELECT * FROM cattle_list")
+    @Query("SELECT * FROM cattle_list ORDER BY tag_number")
     fun getAll(): LiveData<List<Cattle>>
 
     @Query("SELECT * FROM cattle_list WHERE tag_number == :tagNumber")

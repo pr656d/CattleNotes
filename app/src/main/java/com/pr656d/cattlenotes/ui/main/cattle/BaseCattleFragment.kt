@@ -118,6 +118,10 @@ abstract class BaseCattleFragment : BaseFragment() {
             }
 
             homeBorn.observe(viewLifecycleOwner) {
+                switchHomeBorn.apply {
+                    if (isChecked != it)
+                        isChecked = it
+                }
                 containerPurchase.visibility = if (it) {
                     editTextPurchaseAmount.text = null
                     editTextPurchaseDate.text = null
@@ -139,7 +143,7 @@ abstract class BaseCattleFragment : BaseFragment() {
                 if (it)
                     findNavController().navigate(
                         R.id.navigate_to_progress_dialog,
-                        bundleOf("message" to R.string.saving_dialog_message.toString())
+                        bundleOf("message" to getString(R.string.saving_dialog_message))
                     )
                 else if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
                     findNavController().navigateUp()
@@ -181,7 +185,15 @@ abstract class BaseCattleFragment : BaseFragment() {
 
             editTextDateOfBirth.apply {
                 setupForDateInput()
-                addTextChangedListener { setDob(it.toString()) }
+                addTextChangedListener {
+                    val dob = it.toString()
+                    setDob(
+                        if (dob.isNotBlank())
+                            dob
+                        else
+                            null
+                    )
+                }
             }
 
             switchHomeBorn.setOnCheckedChangeListener { _, isChecked ->
@@ -204,7 +216,7 @@ abstract class BaseCattleFragment : BaseFragment() {
                     val date = it.toString()
                     setPurchaseDate(
                         if (date.isNotBlank())
-                            it.toString()
+                            date
                         else
                             null
                     )

@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseActivity
@@ -19,6 +20,14 @@ class MainActivity : BaseActivity() {
     }
 
     private val navController by lazy { findNavController(R.id.nav_host_main) }
+    private val topLevelDestinations by lazy {
+        setOf(
+            R.id.cattleListScreen,
+            R.id.timelineScreen,
+            R.id.milkingScreen,
+            R.id.cashflowScreen
+        )
+    }
 
     private val viewModel by viewModels<MainViewModel> { viewModelFactory }
 
@@ -35,19 +44,17 @@ class MainActivity : BaseActivity() {
         NavigationUI.setupWithNavController(
             toolbar,
             navController,
-            drawer_layout
+            AppBarConfiguration(topLevelDestinations, drawer_layout)
         )
         NavigationUI.setupWithNavController(navigation_view, navController)
     }
 
     override fun onBackPressed() {
         drawer_layout.run {
-            if (isDrawerOpen(GravityCompat.START)) {
+            if (isDrawerOpen(GravityCompat.START))
                 closeDrawer(GravityCompat.START)
-                return
-            } else {
+            else
                 super.onBackPressed()
-            }
         }
     }
 }

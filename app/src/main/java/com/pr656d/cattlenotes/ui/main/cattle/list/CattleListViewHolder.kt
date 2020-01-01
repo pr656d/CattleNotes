@@ -3,6 +3,7 @@ package com.pr656d.cattlenotes.ui.main.cattle.list
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.shared.base.BaseItemViewHolder
@@ -12,11 +13,11 @@ class CattleListViewHolder(
     parent: ViewGroup
 ) : BaseItemViewHolder<Cattle>(R.layout.item_cattle, parent) {
 
-    private lateinit var cattle: Cattle
+    private lateinit var tagNumber: String
 
     override fun bind(data: Cattle) {
         // Save to use for click listener
-        cattle = data
+        tagNumber = data.tagNumber
 
         val setTextIfDataAvailableElseHideView: TextView.(s: String?) -> Unit = { s: String? ->
             if (s.isNullOrBlank()) {
@@ -36,8 +37,8 @@ class CattleListViewHolder(
 
     override fun setupView(view: View) {
         view.layout_cattle_item.setOnClickListener {
-//            val action = CattleListFragmentDirections.navigateToCattleDetails(cattle)
-//            it.findNavController().navigate(action)
+            val action = CattleListFragmentDirections.navigateToCattleDetails(tagNumber)
+            it.findNavController().navigate(action)
         }
     }
 }

@@ -6,12 +6,12 @@ import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleViewModel
-import com.pr656d.cattlenotes.utils.common.EventObserver
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_cattle_details.*
 import kotlinx.android.synthetic.main.layout_cattle_details.*
@@ -37,19 +37,15 @@ class CattleDetailsFragment : BaseCattleFragment() {
         viewModel.editMode.observe(viewLifecycleOwner) {
             setMode(it)
         }
-
-        viewModel.cattle.observe(viewLifecycleOwner, EventObserver {
-//            it.bindView()
-        })
     }
 
     override fun setupView() {
         super.setupView()
 
-//        viewModel.setCattle(args.cattle)
+        viewModel.fetchCattle(args.cattleTagNumber)
 
         fabButtonCattleDetails.setOnClickListener {
-//            viewModel.onEditSaveClick()
+            viewModel.onEditSaveClick()
         }
     }
 
@@ -105,8 +101,10 @@ class CattleDetailsFragment : BaseCattleFragment() {
          * Iterate through those too.
          */
         view_cattle_details.forEach { view ->
-            if (view is TextInputLayout)
-                view.applyProperties()
+            when(view) {
+                is TextInputLayout -> view.applyProperties()
+                is SwitchMaterial -> view.setEnabled(editMode)
+            }
         }
 
         fabButtonCattleDetails.apply {

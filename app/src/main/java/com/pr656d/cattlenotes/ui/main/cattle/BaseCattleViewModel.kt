@@ -12,7 +12,6 @@ import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
 import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
-import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleViewModel
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsViewModel
 import com.pr656d.cattlenotes.utils.common.*
@@ -40,7 +39,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     // Start : Holding UI data
 
     private val _imageUrl by lazy { MutableLiveData<String>() }
-    private val imageUrl: LiveData<String> = _imageUrl
+    val imageUrl: LiveData<String> = _imageUrl
     fun setImageUrl(value: String) = _imageUrl.postValue(value)
 
     private val _tagNumber by lazy { MutableLiveData<String>() }
@@ -50,9 +49,9 @@ abstract class BaseCattleViewModel : BaseViewModel() {
         validateTagNumber(it)
     }
 
-    private val _name by lazy { MutableLiveData<String>() }
-    val name: LiveData<String> = _name
-    fun setName(value: String) = _name.postValue(value)
+    private val _name by lazy { MutableLiveData<String?>(null) }
+    val name: LiveData<String?> = _name
+    fun setName(value: String?) = _name.postValue(value)
 
     private val _type by lazy { MutableLiveData<String>() }
     val type: LiveData<String> = _type
@@ -82,13 +81,13 @@ abstract class BaseCattleViewModel : BaseViewModel() {
         validateLactation(it)
     }
 
-    private val _dob by lazy { MutableLiveData<String>() }
-    val dob: LiveData<String> = _dob
-    fun setDob(value: String) = _dob.postValue(value)
+    private val _dob by lazy { MutableLiveData<String?>(null) }
+    val dob: LiveData<String?> = _dob
+    fun setDob(value: String?) = _dob.postValue(value)
 
-    private val _parent by lazy { MutableLiveData<String>() }
-    val parent: LiveData<String> = _parent
-    fun setParent(value: String) = _parent.postValue(value)
+    private val _parent by lazy { MutableLiveData<String?>(null) }
+    val parent: LiveData<String?> = _parent
+    fun setParent(value: String?) = _parent.postValue(value)
 
     private val _homeBorn by lazy { MutableLiveData<Boolean>(false) }
     val homeBorn: LiveData<Boolean> = _homeBorn
@@ -98,7 +97,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     val purchaseAmount: LiveData<Long?> = _purchaseAmount
     fun setPurchaseAmount(value: Long?) = _purchaseAmount.postValue(value)
 
-    private val _purchaseDate by lazy { MutableLiveData<String?>() }
+    private val _purchaseDate by lazy { MutableLiveData<String?>(null) }
     val purchaseDate: LiveData<String?> = _purchaseDate
     fun setPurchaseDate(value: String?) = _purchaseDate.postValue(value)
 
@@ -152,15 +151,20 @@ abstract class BaseCattleViewModel : BaseViewModel() {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
                     toggleSaving()
-                    provideCattleDataRepository().addCattle(getCattle())
-                    toggleSaving()
+                    provideCattleDataRepository().run {
+                        val cattle = getCattle()
+                        if (getCattle(_tagNumber.value!!) != null)
+                            updateCattle(cattle)
+                        else
+                            provideCattleDataRepository().addCattle(cattle)
+                    }
                     doOnSuccess()
+                    toggleSaving()
                 } catch (e: Exception) {
                     doOnFailure()
-                    toggleSaving()
-                    Logger.e(AddCattleFragment.TAG, "$e")
-                    Logger.e(AddCattleFragment.TAG, "${e.printStackTrace()}")
                     _showMessage.postValue(R.string.retry)
+                    Logger.d("save", "${e.printStackTrace()}")
+                    toggleSaving()
                 }
             }
         else

@@ -32,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
             android:hint="@string/tag_number"
-            app:endIconMode="clear_text"
             app:helperText="@string/required"
             app:helperTextEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +54,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/name"
-            app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutTagNumber">
@@ -164,7 +162,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/date_of_birth"
-            app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutGroup"
@@ -175,7 +172,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="@drawable/selector_text_color"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -211,6 +209,7 @@
             android:paddingEnd="@dimen/box_padding_StartEnd"
             android:paddingBottom="@dimen/box_padding_TopBottom"
             android:text="@string/home_born"
+            android:textColor="@drawable/selector_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutParent" />
@@ -243,7 +242,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_micro"
             android:hint="@string/purchase_date"
-            app:endIconMode="clear_text"
             app:layout_constraintBottom_toBottomOf="@+id/layoutPurchaseAmount"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -255,7 +253,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:textColor="@drawable/selector_text_color"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

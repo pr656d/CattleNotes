@@ -25,9 +25,11 @@ class CattleListFragment : BaseFragment() {
             if (it.isNotEmpty()) {
                 cattleAdapter.updateList(it)
 
+                progressBar.visibility = View.GONE
                 tvEmptyListMessage.visibility = View.GONE
                 rvCattleList.visibility = View.VISIBLE
             } else {
+                progressBar.visibility = View.VISIBLE
                 rvCattleList.visibility = View.GONE
                 tvEmptyListMessage.visibility = View.VISIBLE
             }
