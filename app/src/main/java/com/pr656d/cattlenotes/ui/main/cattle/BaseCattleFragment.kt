@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.ui.main.cattle
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -10,29 +11,36 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.core.os.bundleOf
-import androidx.core.text.isDigitsOnly
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
-import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragment
+import com.pr656d.cattlenotes.ui.main.cattle.parent.ParentListDialogFragment
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
 import kotlinx.android.synthetic.main.layout_cattle_details.*
 import java.util.*
+import javax.inject.Inject
 
 /**
  * Common abstract class for [CattleDetailsFragment] and [AddCattleFragment]
  * to reduce code repetition.
  */
-abstract class BaseCattleFragment : BaseFragment() {
+abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.ParentSelector {
+
+    companion object {
+        const val TAG = "BaseCattleFragment"
+    }
+
+    @Inject lateinit var selectParentDialog: ParentListDialogFragment
 
     abstract fun getBaseCattleViewModel(): BaseCattleViewModel
 
@@ -78,7 +86,10 @@ abstract class BaseCattleFragment : BaseFragment() {
             }
 
             type.observe(viewLifecycleOwner) {
-                exposedDropDownType.setTextIfNotSame(it)
+                exposedDropDownType.apply {
+                    setTextIfNotSame(it)
+                    setupDropDownAdapter(R.array.list_type)
+                }
             }
 
             showErrorOnType.observe(viewLifecycleOwner) {
@@ -86,7 +97,10 @@ abstract class BaseCattleFragment : BaseFragment() {
             }
 
             breed.observe(viewLifecycleOwner) {
-                exposedDropDownBreed.setTextIfNotSame(it)
+                exposedDropDownBreed.apply {
+                    setTextIfNotSame(it)
+                    setupDropDownAdapter(R.array.list_breed)
+                }
             }
 
             showErrorOnBreed.observe(viewLifecycleOwner) {
@@ -94,7 +108,10 @@ abstract class BaseCattleFragment : BaseFragment() {
             }
 
             group.observe(viewLifecycleOwner) {
-                exposedDropDownGroup.setTextIfNotSame(it)
+                exposedDropDownGroup.apply {
+                    setTextIfNotSame(it)
+                    setupDropDownAdapter(R.array.list_group)
+                }
             }
 
             showErrorOnGroup.observe(viewLifecycleOwner) {
@@ -132,7 +149,11 @@ abstract class BaseCattleFragment : BaseFragment() {
             }
 
             purchaseAmount.observe(viewLifecycleOwner) {
-                editTextPurchaseAmount.setTextIfNotSame(it?.toString())
+                editTextPurchaseAmount.setTextIfNotSame(it)
+            }
+
+            showErrorOnPurchaseAmount.observe(viewLifecycleOwner) {
+                layoutPurchaseAmount.handleError(it)
             }
 
             purchaseDate.observe(viewLifecycleOwner) {
@@ -186,13 +207,8 @@ abstract class BaseCattleFragment : BaseFragment() {
             editTextDateOfBirth.apply {
                 setupForDateInput()
                 addTextChangedListener {
-                    val dob = it.toString()
-                    setDob(
-                        if (dob.isNotBlank())
-                            dob
-                        else
-                            null
-                    )
+                    val date = it.toString()
+                    setDob(if (date.isBlank()) null else date)
                 }
             }
 
@@ -201,48 +217,65 @@ abstract class BaseCattleFragment : BaseFragment() {
             }
 
             editTextPurchaseAmount.addTextChangedListener {
-                val amount = it.toString()
-                setPurchaseAmount(
-                    if (amount.isNotBlank() && amount.isDigitsOnly())
-                        amount.toLong()
-                    else
-                        null
-                )
+                setPurchaseAmount(it?.toString())
             }
 
             editTextPurchaseDate.apply {
                 setupForDateInput()
                 addTextChangedListener {
                     val date = it.toString()
-                    setPurchaseDate(
-                        if (date.isNotBlank())
-                            date
-                        else
-                            null
-                    )
+                    setPurchaseDate(if (date.isBlank()) null else date)
                 }
             }
 
             editTextParent.apply {
                 // Set input type as null to stop keyboard from opening.
                 inputType = InputType.TYPE_NULL
+
                 isFocusableInTouchMode = false
+
                 setOnClickListener {
                     hideKeyboard()
+
                     isFocusableInTouchMode = true
+
                     requestFocus()
-                    Toaster.show(requireContext(), "select parent")
+
+                    selectParentDialog.setTargetFragment(this@BaseCattleFragment, 0)
+                    selectParentDialog.show(requireFragmentManager(), TAG)
                 }
+
                 setOnLongClickListener {
                     hideKeyboard()
+
                     isFocusableInTouchMode = true
-                    Toaster.show(requireContext(), "remove parent")
+
                     requestFocus()
+
+                    if (!text.isNullOrBlank())
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle(R.string.remove_parent)
+                            .setMessage(R.string.remove_parent_message)
+                            .setPositiveButton(R.string.yes) { _, which ->
+                                if (which == AlertDialog.BUTTON_POSITIVE) {
+                                    getBaseCattleViewModel().setParent(null)
+                                }
+                            }
+                            .setNegativeButton(R.string.no, null)
+                            .create()
+                            .show()
+
+                    true
                 }
             }
 
             layoutParent.setEndIconOnClickListener {
-                Toaster.show(requireContext(), "parent details")
+                getBaseCattleViewModel().parent.value?.let {
+                    findNavController().navigate(
+                        R.id.cattleDetailsScreen,
+                        bundleOf("cattle_tag_number" to it)
+                    )
+                }
             }
         }
 
@@ -251,6 +284,17 @@ abstract class BaseCattleFragment : BaseFragment() {
         exposedDropDownType.setupDropDownAdapter(R.array.list_type)
 
         exposedDropDownGroup.setupDropDownAdapter(R.array.list_group)
+    }
+
+    override fun onParentSelected(parentTagNumber: String) {
+        getBaseCattleViewModel().setParent(parentTagNumber)
+        editTextParent.isFocusableInTouchMode = false
+        selectParentDialog.dismiss()
+    }
+
+    override fun parentDialogCancelled() {
+        editTextParent.isFocusableInTouchMode = false
+        selectParentDialog.dismiss()
     }
 
     /**
@@ -284,6 +328,7 @@ abstract class BaseCattleFragment : BaseFragment() {
                 Calendar.getInstance().get(Calendar.MONTH),
                 Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             )
+
             // Cancel button click handler.
             dialog.setButton(
                 DialogInterface.BUTTON_NEGATIVE,
@@ -293,6 +338,10 @@ abstract class BaseCattleFragment : BaseFragment() {
                 if (which == DialogInterface.BUTTON_NEGATIVE)
                     isFocusableInTouchMode = false
             }
+
+            // Disable future date selection
+            dialog.datePicker.maxDate = System.currentTimeMillis()
+
             dialog.show()   // Show the dialog.
         }
     }

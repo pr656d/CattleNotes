@@ -12,6 +12,7 @@ import com.pr656d.cattlenotes.ui.main.cashflow.CashflowBindingModule
 import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleBindingModule
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsBindingModule
 import com.pr656d.cattlenotes.ui.main.cattle.list.CattleListBindingModule
+import com.pr656d.cattlenotes.ui.main.cattle.parent.ParentListBindingModule
 import com.pr656d.cattlenotes.ui.main.milking.MilkingBindingModule
 import com.pr656d.cattlenotes.ui.main.timeline.TimelineBindingModule
 import dagger.Module
@@ -52,6 +53,7 @@ abstract class ActivityBindingModule {
             CattleListBindingModule::class,
             CattleDetailsBindingModule::class,
             AddCattleBindingModule::class,
+            ParentListBindingModule::class,
             TimelineBindingModule::class,
             MilkingBindingModule::class,
             CashflowBindingModule::class

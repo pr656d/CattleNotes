@@ -93,9 +93,12 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     val homeBorn: LiveData<Boolean> = _homeBorn
     fun setHomeBorn(value: Boolean) = _homeBorn.postValue(value)
 
-    private val _purchaseAmount by lazy { MutableLiveData<Long?>(null) }
-    val purchaseAmount: LiveData<Long?> = _purchaseAmount
-    fun setPurchaseAmount(value: Long?) = _purchaseAmount.postValue(value)
+    private val _purchaseAmount by lazy { MutableLiveData<String?>(null) }
+    val purchaseAmount: LiveData<String?> = _purchaseAmount
+    fun setPurchaseAmount(value: String?) = _purchaseAmount.postValue(value)
+    val showErrorOnPurchaseAmount: LiveData<Int> = Transformations.map(_purchaseAmount) {
+        validatePurchaseAmount(it)
+    }
 
     private val _purchaseDate by lazy { MutableLiveData<String?>(null) }
     val purchaseDate: LiveData<String?> = _purchaseDate
@@ -114,6 +117,8 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     private fun validateBreed(breed: String?): Int = CattleValidator.isValidBreed(breed)
 
     private fun validateGroup(group: String?): Int = CattleValidator.isValidGroup(group)
+
+    private fun validatePurchaseAmount(amount: String?): Int = CattleValidator.isValidAmount(amount)
 
     /**
      * Function will be called by inherited class.
@@ -153,10 +158,10 @@ abstract class BaseCattleViewModel : BaseViewModel() {
                     toggleSaving()
                     provideCattleDataRepository().run {
                         val cattle = getCattle()
-                        if (getCattle(_tagNumber.value!!) != null)
+                        if (isCattleExists(cattle.tagNumber))
                             updateCattle(cattle)
                         else
-                            provideCattleDataRepository().addCattle(cattle)
+                            addCattle(cattle)
                     }
                     doOnSuccess()
                     toggleSaving()
@@ -175,7 +180,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
         Cattle(
             tagNumber.value!!, name.value?.let { it }, Animal.Image(), type.value!!.toType(),
             breed.value!!.toBreed(), group.value!!.toGroup(), lactation.value?.toInt() ?: 0,
-            homeBorn.value!!, purchaseAmount.value?.let { it }, purchaseDate.value?.toDate(),
+            homeBorn.value!!, purchaseAmount.value?.toLong(), purchaseDate.value?.toDate(),
             dob.value?.toDate(), parent.value?.let { it }
         )
 }

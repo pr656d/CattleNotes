@@ -40,4 +40,10 @@ object CattleValidator {
         group.isNullOrBlank() -> R.string.error_empty_field
         else -> VALID_MESSAGE_ID
     }
+
+    fun isValidAmount(amount: String?): Int = when {
+        amount == null -> VALID_MESSAGE_ID
+        !amount.isDigitsOnly() -> R.string.error_contain_digits_only
+        else -> VALID_MESSAGE_ID
+    }
 }

@@ -69,6 +69,14 @@
     <!--  Cattle list  -->
     <string name="cattle_list_empty">Click &#43; icon to add new cattle.</string>
 
+    <!--  Parent list  -->
+    <string name="parent_list_empty">Your parent list if empty</string>
+    <string name="select_parent">Select parent</string>
+    <string name="remove_parent">Remove parent</string>
+    <string name="remove_parent_message">Are you sure you want to remove parent?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
     <!--  Cattle details  -->
     <string name="cattle_details">Cattle details</string>
     <string name="tag_number">Tag Number</string>
@@ -94,6 +102,7 @@
     <string name="breeding_history">Breeding History</string>
     <string name="add_new_breeding">Add new breeding</string>
     <string name="show_all_breeding">Show all breeding</string>
+    <string name="parent_helper_text">Press and hold to remove</string>
     <string name="show_active_breeding">Show active breeding</string>
     <string name="error_save">Could not save cattle. Try again.</string>
     <string name="error_fill_empty_fields">Fill required fields.</string>

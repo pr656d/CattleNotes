@@ -60,7 +60,7 @@ class CattleDetailsViewModel @Inject constructor(
         setDob(dateOfBirth?.toFormattedString())
         setParent(parent)
         setHomeBorn(homeBirth)
-        setPurchaseAmount(purchaseAmount)
+        setPurchaseAmount(purchaseAmount?.toString())
         setPurchaseDate(purchasedOn?.toFormattedString())
     }
 }
