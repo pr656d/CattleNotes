@@ -43,3 +43,12 @@ fun String.toBreed(): Cattle.Breed = Converters().fromStringToBreed(this)
 fun String.toGroup(): Cattle.Group = Converters().fromStringToGroup(this)
 
 // end region
+
+// region String util
+
+/**
+ * TextWatcher for input gives empty string ("") which causes parse error for conversion to different object.
+ */
+fun String?.getNullOrValue(): String? = if (isNullOrBlank()) null else this
+
+// end region

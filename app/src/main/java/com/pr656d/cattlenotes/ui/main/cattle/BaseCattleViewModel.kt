@@ -83,7 +83,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     private val _dob by lazy { MutableLiveData<String?>(null) }
     val dob: LiveData<String?> = _dob
-    fun setDob(value: String?) = _dob.postValue(value)
+    fun setDob(value: String?) = _dob.postValue(value.getNullOrValue())
 
     private val _parent by lazy { MutableLiveData<String?>(null) }
     val parent: LiveData<String?> = _parent
@@ -95,14 +95,14 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     private val _purchaseAmount by lazy { MutableLiveData<String?>(null) }
     val purchaseAmount: LiveData<String?> = _purchaseAmount
-    fun setPurchaseAmount(value: String?) = _purchaseAmount.postValue(value)
+    fun setPurchaseAmount(value: String?) = _purchaseAmount.postValue(value.getNullOrValue())
     val showErrorOnPurchaseAmount: LiveData<Int> = Transformations.map(_purchaseAmount) {
         validatePurchaseAmount(it)
     }
 
     private val _purchaseDate by lazy { MutableLiveData<String?>(null) }
     val purchaseDate: LiveData<String?> = _purchaseDate
-    fun setPurchaseDate(value: String?) = _purchaseDate.postValue(value)
+    fun setPurchaseDate(value: String?) = _purchaseDate.postValue(value.getNullOrValue())
 
     // End : Holding UI data
 
@@ -151,8 +151,9 @@ abstract class BaseCattleViewModel : BaseViewModel() {
             showErrorOnTagNumber.value == CattleValidator.VALID_MESSAGE_ID &&
             showErrorOnType.value == CattleValidator.VALID_MESSAGE_ID &&
             showErrorOnLactation.value == CattleValidator.VALID_MESSAGE_ID &&
-            showErrorOnBreed.value == CattleValidator.VALID_MESSAGE_ID
-        )
+            showErrorOnBreed.value == CattleValidator.VALID_MESSAGE_ID &&
+            showErrorOnPurchaseAmount.value == CattleValidator.VALID_MESSAGE_ID
+        ) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
                     toggleSaving()
@@ -163,17 +164,18 @@ abstract class BaseCattleViewModel : BaseViewModel() {
                         else
                             addCattle(cattle)
                     }
-                    doOnSuccess()
                     toggleSaving()
+                    doOnSuccess()
                 } catch (e: Exception) {
+                    toggleSaving()
                     doOnFailure()
                     _showMessage.postValue(R.string.retry)
                     Logger.d("save", "${e.printStackTrace()}")
-                    toggleSaving()
                 }
             }
-        else
+        } else {
             _showMessage.postValue(R.string.error_fill_empty_fields)
+        }
     }
 
     protected fun getCattle(): Cattle =

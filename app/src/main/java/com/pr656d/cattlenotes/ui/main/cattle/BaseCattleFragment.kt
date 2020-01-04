@@ -166,8 +166,9 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
                         R.id.navigate_to_progress_dialog,
                         bundleOf("message" to getString(R.string.saving_dialog_message))
                     )
-                else if (findNavController().currentDestination?.id == R.id.progressDialogScreen)
+                else if (findNavController().currentDestination?.id == R.id.progressDialogScreen) {
                     findNavController().navigateUp()
+                }
             }
 
             showMessage.observe(viewLifecycleOwner, EventObserver {
@@ -207,8 +208,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
             editTextDateOfBirth.apply {
                 setupForDateInput()
                 addTextChangedListener {
-                    val date = it.toString()
-                    setDob(if (date.isBlank()) null else date)
+                    setDob(it?.toString())
                 }
             }
 
@@ -223,8 +223,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
             editTextPurchaseDate.apply {
                 setupForDateInput()
                 addTextChangedListener {
-                    val date = it.toString()
-                    setPurchaseDate(if (date.isBlank()) null else date)
+                    setPurchaseDate(it?.toString())
                 }
             }
 
