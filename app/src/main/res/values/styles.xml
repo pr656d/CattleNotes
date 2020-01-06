@@ -143,11 +143,6 @@
         <item name="boxStrokeWidth">@dimen/box_stroke_width</item>
     </style>
 
-    <style name="AppTextInputEditTextStyle" parent="ThemeOverlay.Design.TextInputEditText">
-        <item name="android:textColorHint">@color/colorPrimaryDark</item>
-        <item name="android:fontFamily">@font/roboto_regular</item>
-    </style>
-
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

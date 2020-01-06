@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.shared.log.Logger
 import kotlinx.android.synthetic.main.fragment_parent_list.*
 import javax.inject.Inject
 
@@ -30,6 +29,7 @@ class ParentListDialogFragment @Inject constructor() : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+
         requireDialog().window?.apply {
             setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -47,6 +47,7 @@ class ParentListDialogFragment @Inject constructor() : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setStyle(STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
     }
 
@@ -59,9 +60,9 @@ class ParentListDialogFragment @Inject constructor() : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Logger.d(TAG, "onViewCreated()")
-
         val viewModel by viewModels<ParentListViewModel> { viewModelFactory }
+
+        viewModel.setCurrentTagNumber(listenerFragment.provideCurrentTagNumber())
 
         val parentAdapter = ParentCattleListAdapter(
             object: ParentCattleListAdapter.ClickListener {
@@ -77,7 +78,14 @@ class ParentListDialogFragment @Inject constructor() : DialogFragment() {
 
         viewModel.parentList.observe(viewLifecycleOwner) {
             parentAdapter.updateList(it)
-            rvParentList.visibility = if (it.isNotEmpty()) View.VISIBLE else View.GONE
+
+            if (it.isEmpty()) {
+                rvParentList.visibility = View.GONE
+                tvEmptyListMessage.visibility = View.VISIBLE
+            } else {
+                tvEmptyListMessage.visibility = View.GONE
+                rvParentList.visibility = View.VISIBLE
+            }
             progressBar.visibility = View.GONE
         }
 
@@ -96,5 +104,11 @@ class ParentListDialogFragment @Inject constructor() : DialogFragment() {
          * Target fragment will get callback for cancellation.
          */
         fun parentDialogCancelled()
+
+        /**
+         * Get current tag number to eliminate from the list.
+         * It's doesn't make any sense if a animal chooses it self as it's parent.
+         */
+        fun provideCurrentTagNumber(): Long?
     }
 }

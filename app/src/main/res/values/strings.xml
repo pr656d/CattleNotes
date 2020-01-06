@@ -70,7 +70,7 @@
     <string name="cattle_list_empty">Click &#43; icon to add new cattle.</string>
 
     <!--  Parent list  -->
-    <string name="parent_list_empty">Your parent list if empty</string>
+    <string name="parent_list_empty">Your parent list is empty</string>
     <string name="select_parent">Select parent</string>
     <string name="remove_parent">Remove parent</string>
     <string name="remove_parent_message">Are you sure you want to remove parent?</string>

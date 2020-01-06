@@ -31,6 +31,8 @@ class CattleDetailsFragment : BaseCattleFragment() {
 
     override fun getFabButtonId(): Int = R.id.fabButtonCattleDetails
 
+    override fun provideCurrentTagNumber(): Long? = viewModel.tagNumber.value!!
+
     override fun setupObservers() {
         super.setupObservers()
 

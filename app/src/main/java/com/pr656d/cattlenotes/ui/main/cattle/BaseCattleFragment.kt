@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import androidx.annotation.StringRes
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
@@ -61,16 +62,21 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
 
     override fun setupObservers() {
         getBaseCattleViewModel().run {
-            val handleError: TextInputLayout.(messageId: Int) -> Unit = { messageId: Int ->
+            fun TextInputLayout.handleError(@StringRes messageId: Int) {
                 isErrorEnabled = if (messageId != CattleValidator.VALID_MESSAGE_ID) {
                     error = getString(messageId)
                     true
-                } else { false }
+                } else {
+                    false
+                }
             }
 
-            val setTextIfNotSame: EditText.(s: String?) -> Unit = { s: String? ->
-                if (text?.toString() != s)
-                    setText(s)
+            fun EditText.setTextIfNotSame(s: String?) {
+                if (!(text?.toString().isNullOrEmpty() && s.isNullOrEmpty())) {
+                    if (text.toString() != s) {
+                        setText(s)
+                    }
+                }
             }
 
             tagNumber.observe(viewLifecycleOwner) {
@@ -272,7 +278,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
                 getBaseCattleViewModel().parent.value?.let {
                     findNavController().navigate(
                         R.id.cattleDetailsScreen,
-                        bundleOf("cattle_tag_number" to it)
+                        bundleOf("cattle_tag_number" to it.toString())
                     )
                 }
             }

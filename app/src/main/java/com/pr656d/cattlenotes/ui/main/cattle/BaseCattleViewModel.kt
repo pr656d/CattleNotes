@@ -73,7 +73,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
         validateGroup(it)
     }
 
-    private val _lactation by lazy { MutableLiveData<String>("0") }
+    private val _lactation by lazy { MutableLiveData<String>() }
     val lactation: LiveData<String> = _lactation
     fun setLactation(value: String) = _lactation.postValue(value)
     val showErrorOnLactation: LiveData<Int> = Transformations.map(_lactation) {
