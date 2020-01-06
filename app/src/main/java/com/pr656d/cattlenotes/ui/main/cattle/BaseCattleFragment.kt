@@ -74,7 +74,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
             }
 
             tagNumber.observe(viewLifecycleOwner) {
-                editTextTagNumber.setTextIfNotSame(it)
+                editTextTagNumber.setTextIfNotSame(it?.toString())
             }
 
             showErrorOnTagNumber.observe(viewLifecycleOwner) {
@@ -131,7 +131,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
             }
 
             parent.observe(viewLifecycleOwner) {
-                editTextParent.setTextIfNotSame(it)
+                editTextParent.setTextIfNotSame(it?.toString())
             }
 
             homeBorn.observe(viewLifecycleOwner) {
@@ -149,7 +149,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
             }
 
             purchaseAmount.observe(viewLifecycleOwner) {
-                editTextPurchaseAmount.setTextIfNotSame(it)
+                editTextPurchaseAmount.setTextIfNotSame(it?.toString())
             }
 
             showErrorOnPurchaseAmount.observe(viewLifecycleOwner) {
@@ -208,7 +208,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
             editTextDateOfBirth.apply {
                 setupForDateInput()
                 addTextChangedListener {
-                    setDob(it?.toString())
+                    setDob(it.toString())
                 }
             }
 
@@ -217,13 +217,13 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
             }
 
             editTextPurchaseAmount.addTextChangedListener {
-                setPurchaseAmount(it?.toString())
+                setPurchaseAmount(it.toString())
             }
 
             editTextPurchaseDate.apply {
                 setupForDateInput()
                 addTextChangedListener {
-                    setPurchaseDate(it?.toString())
+                    setPurchaseDate(it.toString())
                 }
             }
 
@@ -257,7 +257,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
                             .setMessage(R.string.remove_parent_message)
                             .setPositiveButton(R.string.yes) { _, which ->
                                 if (which == AlertDialog.BUTTON_POSITIVE) {
-                                    getBaseCattleViewModel().setParent(null)
+                                    getBaseCattleViewModel().setParent("")
                                 }
                             }
                             .setNegativeButton(R.string.no, null)

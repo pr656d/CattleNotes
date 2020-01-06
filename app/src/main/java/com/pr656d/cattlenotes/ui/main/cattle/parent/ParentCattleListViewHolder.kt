@@ -17,7 +17,7 @@ class ParentCattleListViewHolder(
 
     override fun bind(data: Cattle) {
         // Save to use for click listener
-        tagNumber = data.tagNumber
+        tagNumber = data.tagNumber.toString()
 
         val setTextIfDataAvailableElseHideView: TextView.(s: String?) -> Unit = { s: String? ->
             if (s.isNullOrBlank()) {
@@ -29,7 +29,7 @@ class ParentCattleListViewHolder(
         }
 
         // Bind views
-        itemView.tvTagNumber.setTextIfDataAvailableElseHideView(data.tagNumber)
+        itemView.tvTagNumber.setTextIfDataAvailableElseHideView(data.tagNumber.toString())
         itemView.tvName.setTextIfDataAvailableElseHideView(data.name)
         itemView.tvGroup.setTextIfDataAvailableElseHideView(data.group.displayName)
         itemView.tvType.setTextIfDataAvailableElseHideView(data.type.displayName)

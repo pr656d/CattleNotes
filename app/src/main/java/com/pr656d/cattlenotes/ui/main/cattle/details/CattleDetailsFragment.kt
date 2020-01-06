@@ -42,7 +42,7 @@ class CattleDetailsFragment : BaseCattleFragment() {
     override fun setupView() {
         super.setupView()
 
-        viewModel.fetchCattle(args.cattleTagNumber)
+        viewModel.fetchCattle(args.cattleTagNumber.toLong())
 
         fabButtonCattleDetails.setOnClickListener {
             viewModel.onEditSaveClick()

@@ -27,7 +27,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     abstract fun provideCattleDataRepository(): CattleDataRepository
 
-    abstract fun provideCurrentTagNumber(): String?
+    abstract fun provideCurrentTagNumber(): Long?
 
     private val _saving by lazy { MutableLiveData<Boolean>(false) }
     val saving = _saving
@@ -41,9 +41,9 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     val imageUrl: LiveData<String> = _imageUrl
     fun setImageUrl(value: String) = _imageUrl.postValue(value)
 
-    private val _tagNumber by lazy { MutableLiveData<String>() }
-    val tagNumber: LiveData<String> = _tagNumber
-    fun setTagNumber(value: String) = _tagNumber.postValue(value)
+    private val _tagNumber by lazy { MutableLiveData<Long?>() }
+    val tagNumber: LiveData<Long?> = _tagNumber
+    fun setTagNumber(value: String) = _tagNumber.postValue(value.toLongOrNull())
     val showErrorOnTagNumber: LiveData<Int> = Transformations.map(_tagNumber) {
         validateTagNumber(it)
     }
@@ -82,30 +82,30 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     private val _dob by lazy { MutableLiveData<String?>(null) }
     val dob: LiveData<String?> = _dob
-    fun setDob(value: String?) = _dob.postValue(value.getNullOrValue())
+    fun setDob(value: String?) = _dob.postValue(value.toDateOrNull())
 
-    private val _parent by lazy { MutableLiveData<String?>(null) }
-    val parent: LiveData<String?> = _parent
-    fun setParent(value: String?) = _parent.postValue(value)
+    private val _parent by lazy { MutableLiveData<Long?>(null) }
+    val parent: LiveData<Long?> = _parent
+    fun setParent(value: String?) = _parent.postValue(value?.toLongOrNull())
 
     private val _homeBorn by lazy { MutableLiveData<Boolean>(false) }
     val homeBorn: LiveData<Boolean> = _homeBorn
     fun setHomeBorn(value: Boolean) = _homeBorn.postValue(value)
 
-    private val _purchaseAmount by lazy { MutableLiveData<String?>(null) }
-    val purchaseAmount: LiveData<String?> = _purchaseAmount
-    fun setPurchaseAmount(value: String?) = _purchaseAmount.postValue(value.getNullOrValue())
+    private val _purchaseAmount by lazy { MutableLiveData<Long?>(null) }
+    val purchaseAmount: LiveData<Long?> = _purchaseAmount
+    fun setPurchaseAmount(value: String?) = _purchaseAmount.postValue(value?.toLongOrNull())
     val showErrorOnPurchaseAmount: LiveData<Int> = Transformations.map(_purchaseAmount) {
         validatePurchaseAmount(it)
     }
 
     private val _purchaseDate by lazy { MutableLiveData<String?>(null) }
     val purchaseDate: LiveData<String?> = _purchaseDate
-    fun setPurchaseDate(value: String?) = _purchaseDate.postValue(value.getNullOrValue())
+    fun setPurchaseDate(value: String?) = _purchaseDate.postValue(value?.toDateOrNull())
 
     // End : Holding UI data
 
-    private fun validateTagNumber(tagNumber: String?): Int = runBlocking {
+    private fun validateTagNumber(tagNumber: Long?): Int = runBlocking {
         CattleValidator.isValidTagNumber(tagNumber, provideCattleDataRepository(), provideCurrentTagNumber())
     }
 
@@ -117,7 +117,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     private fun validateGroup(group: String?): Int = CattleValidator.isValidGroup(group)
 
-    private fun validatePurchaseAmount(amount: String?): Int = CattleValidator.isValidAmount(amount)
+    private fun validatePurchaseAmount(amount: Long?): Int = CattleValidator.isValidAmount(amount)
 
     /**
      * Function will be called by inherited class.

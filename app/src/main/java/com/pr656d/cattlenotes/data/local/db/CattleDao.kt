@@ -24,7 +24,7 @@ interface CattleDao {
     fun getAll(): LiveData<List<Cattle>>
 
     @Query("SELECT * FROM cattle_list WHERE tag_number == :tagNumber")
-    suspend fun getCattle(tagNumber: String): Cattle?
+    suspend fun getCattle(tagNumber: Long): Cattle?
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(cattle: Cattle)

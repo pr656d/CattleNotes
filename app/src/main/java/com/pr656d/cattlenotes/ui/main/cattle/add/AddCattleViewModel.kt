@@ -16,7 +16,7 @@ class AddCattleViewModel @Inject constructor(
 
     override fun provideCattleDataRepository(): CattleDataRepository =  cattleDataRepository
 
-    override fun provideCurrentTagNumber(): String? = null
+    override fun provideCurrentTagNumber(): Long? = null
 
     fun onSaveClick() = saveCattle(
         doOnSuccess = {

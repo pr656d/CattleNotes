@@ -28,7 +28,7 @@ class CattleDetailsViewModel @Inject constructor(
 
     override fun provideCattleDataRepository(): CattleDataRepository = cattleDataRepository
 
-    override fun provideCurrentTagNumber(): String? = tagNumber.value
+    override fun provideCurrentTagNumber(): Long? = tagNumber.value
 
     fun onEditSaveClick() {
         if (isInEditMode())
@@ -44,21 +44,21 @@ class CattleDetailsViewModel @Inject constructor(
             changeMode()
     }
 
-    fun fetchCattle(tagNumber: String) {
+    fun fetchCattle(tagNumber: Long) {
         viewModelScope.launch {
             cattleDataRepository.getCattle(tagNumber)?.bindData()
         }
     }
 
     private fun Cattle.bindData() {
-        setTagNumber(tagNumber)
+        setTagNumber(tagNumber.toString())
         setName(name)
         setType(type.displayName)
         setBreed(breed.displayName)
         setGroup(group.displayName)
         setLactation(lactation.toString())
         setDob(dateOfBirth?.toFormattedString())
-        setParent(parent)
+        setParent(parent?.toString())
         setHomeBorn(homeBirth)
         setPurchaseAmount(purchaseAmount?.toString())
         setPurchaseDate(purchasedOn?.toFormattedString())

@@ -49,6 +49,6 @@ fun String.toGroup(): Cattle.Group = Converters().fromStringToGroup(this)
 /**
  * TextWatcher for input gives empty string ("") which causes parse error for conversion to different object.
  */
-fun String?.getNullOrValue(): String? = if (isNullOrBlank()) null else this
+fun String?.toDateOrNull(): String? = if (isNullOrBlank()) null else this
 
 // end region

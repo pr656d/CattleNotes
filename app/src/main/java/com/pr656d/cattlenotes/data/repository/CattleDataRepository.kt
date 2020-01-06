@@ -15,7 +15,7 @@ open class CattleDataRepository @Inject constructor(
 
     suspend fun addAllCattle(cattleList: List<Cattle>) = appDatabase.cattleDao().insertAll(cattleList)
 
-    suspend fun isCattleExists(tagNumber: String): Boolean =
+    suspend fun isCattleExists(tagNumber: Long): Boolean =
         try {
             getCattle(tagNumber) != null
         } catch (e: Exception) {
@@ -24,7 +24,7 @@ open class CattleDataRepository @Inject constructor(
 
     fun getAllCattle(): LiveData<List<Cattle>> = appDatabase.cattleDao().getAll()
 
-    suspend fun getCattle(tagNumber: String): Cattle? = appDatabase.cattleDao().getCattle(tagNumber)
+    suspend fun getCattle(tagNumber: Long): Cattle? = appDatabase.cattleDao().getCattle(tagNumber)
 
     suspend fun deleteCattle(cattle: Cattle) = appDatabase.cattleDao().delete(cattle)
 

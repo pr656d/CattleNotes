@@ -10,11 +10,11 @@ object CattleValidator {
     const val VALID_MESSAGE_ID = -100
 
     suspend fun isValidTagNumber(
-        tagNumber: String?,
+        tagNumber: Long?,
         repository: CattleDataRepository,
-        oldTagNumber: String? = null
+        oldTagNumber: Long? = null
     ): Int = when {
-        tagNumber.isNullOrBlank() -> R.string.error_empty_field
+        tagNumber == null -> R.string.error_empty_field
         tagNumber == oldTagNumber -> VALID_MESSAGE_ID
         repository.isCattleExists(tagNumber) -> R.string.error_already_exists
         else -> VALID_MESSAGE_ID
@@ -41,9 +41,8 @@ object CattleValidator {
         else -> VALID_MESSAGE_ID
     }
 
-    fun isValidAmount(amount: String?): Int = when {
-        amount == null -> VALID_MESSAGE_ID
-        !amount.isDigitsOnly() -> R.string.error_contain_digits_only
+    fun isValidAmount(amount: Long?): Int = when (amount) {
+        null -> VALID_MESSAGE_ID
         else -> VALID_MESSAGE_ID
     }
 }

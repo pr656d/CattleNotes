@@ -12,7 +12,7 @@ data class Cattle(
     @PrimaryKey
     @SerializedName("tag_number")
     @ColumnInfo(name = "tag_number", index = true)
-    val tagNumber: String,
+    val tagNumber: Long,
 
     @SerializedName("name")
     @ColumnInfo(name = "name")
@@ -56,7 +56,7 @@ data class Cattle(
 
     @SerializedName("parent")
     @ColumnInfo(name = "parent")
-    val parent: String? = null
+    val parent: Long? = null
 ) {
     enum class Group(val displayName: String) {
         HEIFER("Heifer"),
