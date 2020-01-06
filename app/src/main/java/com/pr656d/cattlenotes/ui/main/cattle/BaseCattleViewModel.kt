@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.data.model.Animal
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
@@ -180,7 +179,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     protected fun getCattle(): Cattle =
         Cattle(
-            tagNumber.value!!, name.value?.let { it }, Animal.Image(), type.value!!.toType(),
+            tagNumber.value!!, name.value?.let { it }, null, type.value!!.toType(),
             breed.value!!.toBreed(), group.value!!.toGroup(), lactation.value?.toInt() ?: 0,
             homeBorn.value!!, purchaseAmount.value?.toLong(), purchaseDate.value?.toDate(),
             dob.value?.toDate(), parent.value?.let { it }

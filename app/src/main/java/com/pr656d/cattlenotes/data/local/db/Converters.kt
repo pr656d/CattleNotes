@@ -48,13 +48,13 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromImageToString(value: Animal.Image?): String? = value?.let{
+    fun fromImageToString(value: Cattle.Image?): String? = value?.let{
         "${it.localPath}/#SEPERATOR#/${it.remotePath}"
     }
 
     @TypeConverter
-    fun fromStringToImage(value: String): Animal.Image =
-        Animal.Image(
+    fun fromStringToImage(value: String): Cattle.Image =
+        Cattle.Image(
             localPath = value.split("/#SEPERATOR#/")[0],
             remotePath = value.split("/#SEPERATOR#/")[1]
         )

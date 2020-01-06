@@ -1,19 +1,30 @@
 package com.pr656d.cattlenotes.data.model
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.util.*
 
-@Entity(tableName = "cattle_list", inheritSuperIndices = true)
-class Cattle(
-    tagNumber: String,
+@Entity(tableName = "cattle_list")
+data class Cattle(
+    @PrimaryKey
+    @SerializedName("tag_number")
+    @ColumnInfo(name = "tag_number", index = true)
+    val tagNumber: String,
 
-    name: String? = null,
+    @SerializedName("name")
+    @ColumnInfo(name = "name")
+    val name: String? = null,
 
-    image: Image? = null,
+    @SerializedName("image")
+    @Embedded(prefix = "image_")
+    val image: Image? = null,
 
-    type: Type = Type.COW,
+    @SerializedName("type")
+    @ColumnInfo(name = "type")
+    val type: Animal.Type,
 
     @SerializedName("breed")
     @ColumnInfo(name = "breed")
@@ -27,17 +38,25 @@ class Cattle(
     @ColumnInfo(name = "lactation")
     val lactation: Int = 0,
 
-    homeBirth: Boolean = false,
+    @SerializedName("home_birth")
+    @ColumnInfo(name = "home_birth")
+    val homeBirth: Boolean = false,
 
-    purchaseAmount: Long? = null,
+    @SerializedName("purchase_amount")
+    @ColumnInfo(name = "purchase_amount")
+    val purchaseAmount: Long? = null,
 
-    purchasedOn: Date? = null,
+    @SerializedName("purchased_on")
+    @ColumnInfo(name = "purchased_on")
+    val purchasedOn: Date? = null,
 
-    dateOfBirth: Date? = null,
+    @SerializedName("date_of_birth")
+    @ColumnInfo(name = "date_of_birth")
+    val dateOfBirth: Date? = null,
 
-    parent: String? = null
-) : Animal(
-    tagNumber, name, image, type, homeBirth, purchaseAmount, purchasedOn, dateOfBirth, parent
+    @SerializedName("parent")
+    @ColumnInfo(name = "parent")
+    val parent: String? = null
 ) {
     enum class Group(val displayName: String) {
         HEIFER("Heifer"),
@@ -52,4 +71,14 @@ class Cattle(
         KANKREJ("Kankrej"),
         SHAHIVAL("Shahival")
     }
+
+    data class Image(
+        @SerializedName("local_path")
+        @ColumnInfo(name = "local_path")
+        val localPath: String? = null,
+
+        @SerializedName("remote_path")
+        @ColumnInfo(name = "remote_path")
+        val remotePath: String? = null
+    )
 }
