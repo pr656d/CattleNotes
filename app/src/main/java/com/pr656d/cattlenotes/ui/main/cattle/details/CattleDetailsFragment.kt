@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.layout_cattle_details.*
 class CattleDetailsFragment : BaseCattleFragment() {
 
     companion object {
-        const val TAG = "CattleActivity"
+        const val TAG = "CattleDetailsFragment"
     }
 
     private val args by navArgs<CattleDetailsFragmentArgs>()
@@ -30,8 +30,6 @@ class CattleDetailsFragment : BaseCattleFragment() {
     override fun provideLayoutId(): Int = R.layout.fragment_cattle_details
 
     override fun getFabButtonId(): Int = R.id.fabButtonCattleDetails
-
-    override fun provideCurrentTagNumber(): Long? = viewModel.tagNumber.value!!
 
     override fun setupObservers() {
         super.setupObservers()

@@ -302,6 +302,8 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
         selectParentDialog.dismiss()
     }
 
+    override fun provideCurrentTagNumber(): Long? = getBaseCattleViewModel().tagNumber.value
+
     /**
      * To match view theme dates shows as [TextInputEditText].
      *

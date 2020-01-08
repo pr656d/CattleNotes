@@ -22,8 +22,6 @@ class AddCattleFragment : BaseCattleFragment() {
 
     override fun getFabButtonId(): Int = R.id.fabButtonSaveCattle
 
-    override fun provideCurrentTagNumber(): Long? = null
-
     override fun setupObservers() {
         super.setupObservers()
 
