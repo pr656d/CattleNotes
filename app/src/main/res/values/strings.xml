@@ -14,8 +14,7 @@
     <string name="cow">Cow</string>
     <string name="hf">HF</string>
     <string name="dry">Dry</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="back_pressed_message">Are you sure you want to go back?</string>
 
     <!--  Transition name  -->
     <string name="tn_fabButton">fab_button</string>
