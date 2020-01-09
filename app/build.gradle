@@ -65,7 +65,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$rootProject.corektxVersion"
     implementation "androidx.activity:activity-ktx:$rootProject.activityVersion"
     implementation "androidx.fragment:fragment-ktx:$rootProject.fragmentVersion"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecyclerRuntimeVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$rootProject.lifecycleRuntimeVersion"
     implementation "androidx.navigation:navigation-ui-ktx:$rootProject.navigationControllerVersion"
     implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.navigationControllerVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$rootProject.viewModelKtxVersion"
