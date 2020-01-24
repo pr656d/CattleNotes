@@ -27,7 +27,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutTagNumber"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
@@ -40,16 +40,15 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextTagNumber"
+                style="@style/AppTheme.AppTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberSigned"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:inputType="numberSigned" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutName"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -60,10 +59,9 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextName"
+                style="@style/AppTheme.AppTextInputEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -81,10 +79,9 @@
 
             <AutoCompleteTextView
                 android:id="@+id/exposedDropDownType"
+                style="@style/AppTheme.AutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:editable="false"
-                android:textColor="@drawable/selector_text_color"
                 tools:ignore="Deprecated,LabelFor" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -103,10 +100,9 @@
 
             <AutoCompleteTextView
                 android:id="@+id/exposedDropDownBreed"
+                style="@style/AppTheme.AutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:editable="false"
-                android:textColor="@drawable/selector_text_color"
                 tools:ignore="Deprecated,LabelFor" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,16 +121,15 @@
 
             <AutoCompleteTextView
                 android:id="@+id/exposedDropDownGroup"
+                style="@style/AppTheme.AutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:editable="false"
-                android:textColor="@drawable/selector_text_color"
                 tools:ignore="Deprecated,LabelFor" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutLactation"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_micro"
@@ -147,16 +142,15 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextLactation"
+                style="@style/AppTheme.AppTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDateOfBirth"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -168,57 +162,47 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDateOfBirth"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color"/>
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutParent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/parent"
             app:endIconDrawable="@drawable/ic_arrow_right_white"
             app:endIconMode="custom"
-            app:helperTextEnabled="true"
             app:helperText="@string/parent_helper_text"
+            app:helperTextEnabled="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutDateOfBirth">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextParent"
+                style="@style/AppTheme.AppTextInputEditText"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color"/>
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switchHomeBorn"
-            style="@style/Widget.MaterialComponents.CompoundButton.Switch"
+            style="@style/AppTheme.MaterialSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_normal"
-            android:background="@drawable/outline"
-            android:paddingStart="@dimen/box_padding_StartEnd"
-            android:paddingTop="@dimen/box_padding_TopBottom"
-            android:paddingEnd="@dimen/box_padding_StartEnd"
-            android:paddingBottom="@dimen/box_padding_TopBottom"
             android:text="@string/home_born"
-            android:textColor="@drawable/selector_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutParent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutPurchaseAmount"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -230,16 +214,15 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPurchaseAmount"
+                style="@style/AppTheme.AppTextInputEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutPurchaseDate"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_micro"
@@ -252,11 +235,9 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPurchaseDate"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color"/>
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -310,7 +291,7 @@
             android:id="@+id/containerPurchase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="layoutPurchaseAmount,layoutPurchaseDate"/>
+            app:constraint_referenced_ids="layoutPurchaseAmount,layoutPurchaseDate" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

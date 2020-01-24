@@ -20,7 +20,7 @@ class ProgressDialog @Inject constructor() : AppCompatDialogFragment() {
     @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = requireActivity().layoutInflater.inflate(R.layout.progress_dialog, null)
-        args.message?.let {
+        args.StringArgProgressDialogMessage?.let {
             view.tvMessage.text = it
         }
         return AlertDialog.Builder(activity).setView(view).create()

@@ -4,6 +4,7 @@
     <!--  General  -->
     <string name="please_wait_text">Please wait&#8230;</string>
     <string name="saving_dialog_message">Saving&#8230;</string>
+    <string name="stay">Stay</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="back">Back</string>
@@ -15,6 +16,10 @@
     <string name="hf">HF</string>
     <string name="dry">Dry</string>
     <string name="back_pressed_message">Are you sure you want to go back?</string>
+
+    <!--  Navigation args  -->
+    <string name="arg_tagNumber">cattle_tag_number</string>
+    <string name="arg_progressDialogMessage">message</string>
 
     <!--  Transition name  -->
     <string name="tn_fabButton">fab_button</string>

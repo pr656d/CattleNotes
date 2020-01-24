@@ -1,6 +1,5 @@
-package com.pr656d.cattlenotes.ui.main.cattle
+package com.pr656d.cattlenotes.ui.main.cattle.base
 
-import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -11,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
@@ -24,6 +24,7 @@ import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
 import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragment
+import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragmentDirections
 import com.pr656d.cattlenotes.ui.main.cattle.parent.ParentListDialogFragment
 import com.pr656d.cattlenotes.utils.common.EventObserver
 import com.pr656d.cattlenotes.utils.common.parseToString
@@ -140,6 +141,29 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
                 editTextParent.setTextIfNotSame(it?.toString())
             }
 
+            showSelectParentScreen.observe(viewLifecycleOwner, EventObserver {
+                selectParentDialog.setTargetFragment(this@BaseCattleFragment, 0)
+                selectParentDialog.show(requireFragmentManager(), TAG)
+            })
+
+            showRemoveParentScreen.observe(viewLifecycleOwner, EventObserver {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.remove_parent)
+                    .setMessage(R.string.remove_parent_message)
+                    .setPositiveButton(R.string.yes) { _, which ->
+                        if (which == AlertDialog.BUTTON_POSITIVE) {
+                            setParent("")
+                        }
+                    }
+                    .setNegativeButton(R.string.no, null)
+                    .create()
+                    .show()
+            })
+
+            launchParentDetailsScreen.observe(viewLifecycleOwner, EventObserver {
+
+            })
+
             homeBorn.observe(viewLifecycleOwner) {
                 switchHomeBorn.apply {
                     if (isChecked != it)
@@ -166,11 +190,39 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
                 editTextPurchaseDate.setTextIfNotSame(it)
             }
 
+            launchActiveBreedingScreen.observe(viewLifecycleOwner, EventObserver {
+                val action = CattleDetailsFragmentDirections.navigateToActiveBreeding(it.toString())
+                findNavController().navigate(action)
+            })
+
+            launchAddBreedingScreen.observe(viewLifecycleOwner, EventObserver {
+                val action = CattleDetailsFragmentDirections.navigateToAddBreeding()
+                findNavController().navigate(action)
+            })
+
+            launchBreedingHistoryScreen.observe(viewLifecycleOwner, EventObserver {
+                val action = CattleDetailsFragmentDirections.navigateToBreedingHistory()
+                findNavController().navigate(action)
+            })
+
+            showBackPressedScreen.observe(viewLifecycleOwner, EventObserver {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.back_pressed_message)
+                    .setPositiveButton(R.string.back) { _, which ->
+                        if (which == AlertDialog.BUTTON_POSITIVE) {
+                            findNavController().navigateUp()
+                        }
+                    }
+                    .setNegativeButton(R.string.stay, null)
+                    .create()
+                    .show()
+            })
+
             saving.observe(viewLifecycleOwner) {
                 if (it)
                     findNavController().navigate(
                         R.id.navigate_to_progress_dialog,
-                        bundleOf("message" to getString(R.string.saving_dialog_message))
+                        bundleOf(getString(R.string.arg_progressDialogMessage) to getString(R.string.saving_dialog_message))
                     )
                 else if (findNavController().currentDestination?.id == R.id.progressDialogScreen) {
                     findNavController().navigateUp()
@@ -181,6 +233,10 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
                 Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
                     .setAnchorView(getFabButtonId())
                     .show()
+            })
+
+            navigateUp.observe(viewLifecycleOwner, EventObserver {
+                findNavController().navigateUp()
             })
         }
     }
@@ -237,50 +293,47 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
                 // Set input type as null to stop keyboard from opening.
                 inputType = InputType.TYPE_NULL
 
-                isFocusableInTouchMode = false
+                isFocusableInTouchMode = false  // Initially set to false
 
                 setOnClickListener {
                     hideKeyboard()
 
+                    // Set focusable to true.
                     isFocusableInTouchMode = true
-
+                    // Take view in focus.
                     requestFocus()
 
-                    selectParentDialog.setTargetFragment(this@BaseCattleFragment, 0)
-                    selectParentDialog.show(requireFragmentManager(), TAG)
+                    showSelectParentScreen()
                 }
 
                 setOnLongClickListener {
                     hideKeyboard()
 
+                    // Set focusable to true.
                     isFocusableInTouchMode = true
-
+                    // Take view in focus.
                     requestFocus()
 
-                    if (!text.isNullOrBlank())
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setTitle(R.string.remove_parent)
-                            .setMessage(R.string.remove_parent_message)
-                            .setPositiveButton(R.string.yes) { _, which ->
-                                if (which == AlertDialog.BUTTON_POSITIVE) {
-                                    getBaseCattleViewModel().setParent("")
-                                }
-                            }
-                            .setNegativeButton(R.string.no, null)
-                            .create()
-                            .show()
+                    showRemoveParentScreen()
 
                     true
                 }
             }
 
             layoutParent.setEndIconOnClickListener {
-                getBaseCattleViewModel().parent.value?.let {
-                    findNavController().navigate(
-                        R.id.cattleDetailsScreen,
-                        bundleOf("cattle_tag_number" to it.toString())
-                    )
-                }
+                showParentDetailsScreen()
+            }
+
+            btnShowActiveBreeding.setOnClickListener {
+                launchActiveBreeding()
+            }
+
+            btnAddNewBreeding.setOnClickListener {
+                launchAddBreedingScreen()
+            }
+
+            btnShowAllBreeding.setOnClickListener {
+                launchBreedingHistoryScreen()
             }
         }
 
@@ -353,9 +406,13 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
         }
     }
 
-    private fun hideKeyboard() {
-        // Hide the soft keyboard if open.
+    // Hide the soft keyboard if open.
+    private fun hideKeyboard() =
         (requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-            .hideSoftInputFromWindow(view?.windowToken, 0)
+            .hideSoftInputFromWindow(requireView().windowToken, 0)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        hideKeyboard()
     }
 }

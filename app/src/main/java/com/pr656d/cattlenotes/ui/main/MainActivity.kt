@@ -6,7 +6,8 @@ import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupWithNavController
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
@@ -22,10 +23,10 @@ class MainActivity : BaseActivity() {
     private val navController by lazy { findNavController(R.id.nav_host_main) }
     private val topLevelDestinations by lazy {
         setOf(
-            R.id.cattleListScreen,
-            R.id.timelineScreen,
-            R.id.milkingScreen,
-            R.id.cashflowScreen
+            R.id.navigation_cattle_list,
+            R.id.navigation_timeline,
+            R.id.navigation_milking,
+            R.id.navigation_cashflow
         )
     }
 
@@ -35,22 +36,35 @@ class MainActivity : BaseActivity() {
 
     override fun setupObservers() {
         viewModel.redirectToLoginScreen.observe(this, EventObserver {
-            startActivity(Intent(this, LoginActivity::class.java))
+            startActivity(
+                Intent(this, LoginActivity::class.java)
+            )
             finish()
         })
     }
 
     override fun setupView(savedInstanceState: Bundle?) {
-        NavigationUI.setupWithNavController(
-            toolbar,
-            navController,
-            AppBarConfiguration(topLevelDestinations, drawer_layout)
-        )
-        NavigationUI.setupWithNavController(navigation_view, navController)
+        navigation_view.apply {
+            setupWithNavController(navController)
+            addHeaderView(layoutInflater.inflate(R.layout.nav_header, null))
+        }
+
+        toolbar.apply {
+            AppBarConfiguration(topLevelDestinations, drawer_layout).let { appBarConfig ->
+                setupWithNavController(navController, appBarConfig)
+
+                setNavigationOnClickListener {
+                    if (topLevelDestinations.contains(navController.currentDestination?.id))
+                        navController.navigateUp(appBarConfig)
+                    else
+                        onBackPressed()
+                }
+            }
+        }
     }
 
     override fun onBackPressed() {
-        drawer_layout.run {
+        drawer_layout.apply {
             if (isDrawerOpen(GravityCompat.START))
                 closeDrawer(GravityCompat.START)
             else

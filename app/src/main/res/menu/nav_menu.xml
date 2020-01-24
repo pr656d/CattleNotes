@@ -1,43 +1,46 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/topLevelDestinations"
+        android:id="@+id/nav_first_group"
         android:checkableBehavior="single">
+
         <item
-            android:id="@id/cattleListScreen"
+            android:id="@+id/navigation_cattle_list"
             android:checkable="true"
             android:icon="@drawable/ic_cattle"
             android:title="@string/cattle"
             android:checked="true"/>
 
         <item
-            android:id="@id/timelineScreen"
+            android:id="@+id/navigation_timeline"
             android:checkable="true"
             android:icon="@drawable/ic_timeline"
             android:title="@string/timeline" />
 
         <item
-            android:id="@id/milkingScreen"
+            android:id="@+id/navigation_milking"
             android:checkable="true"
             android:icon="@drawable/ic_milking"
             android:title="@string/milking" />
 
         <item
-            android:id="@id/cashflowScreen"
+            android:id="@+id/navigation_cashflow"
             android:checkable="true"
             android:icon="@drawable/ic_cashflow"
             android:title="@string/cashflow"/>
+    </group>
 
-        <group android:checkableBehavior="single">
-            <item
-                android:id="@+id/itemSettings"
-                android:icon="@drawable/ic_settings_black"
-                android:title="@string/settings" />
+    <group android:id="@+id/nav_second_group"
+        android:checkableBehavior="single">
 
-            <item
-                android:id="@+id/itemAboutApp"
-                android:icon="@drawable/ic_info_black"
-                android:title="@string/about_this_app" />
-        </group>
+        <item
+            android:id="@+id/itemSettings"
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/settings" />
+
+        <item
+            android:id="@+id/itemAboutApp"
+            android:icon="@drawable/ic_info_black"
+            android:title="@string/about_this_app" />
     </group>
 </menu>

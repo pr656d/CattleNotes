@@ -1,60 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_normal"
-    android:backgroundTint="@color/transparent"
-    android:clickable="true"
-    android:focusable="true"
-    app:rippleColor="@color/rippleColor"
-    app:cardCornerRadius="4dp"
-    app:strokeColor="@color/grey"
-    app:strokeWidth="1dp">
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingBottom="@dimen/clip_padding_bottom">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/margin_normal"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/padding_normal">
 
-        <LinearLayout
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switchActiveBreedingStatus"
+            style="@style/AppTheme.MaterialSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/AppTheme.Subtitle1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:textAlignment="textEnd"
-                tools:text="21 Jan 2018" />
-
-            <TextView
-                style="@style/AppTheme.Subtitle1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="-"
-                android:textAlignment="center" />
-
-            <TextView
-                style="@style/AppTheme.Subtitle1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/active_breeding"
-                android:textAlignment="textStart"
-                tools:text="05 Sep 2018" />
-
-        </LinearLayout>
+            android:text="@string/mark_as_active" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutAiDate"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
@@ -62,170 +30,186 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextAiDate"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutRepeatHeatDateExpected"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/repeat_heat"
-            android:visibility="gone"
             app:helperText="@string/expected">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRepeatHeatDateExpected"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxRepeatHeatStatus"
+            style="@style/AppTheme.MaterialCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@string/repeat_heat_status"
+            android:visibility="visible"
+            tools:visibility="visible" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutRepeatHeatDateActual"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/repeat_heat"
-            app:helperText="@string/actual">
+            android:visibility="visible"
+            app:helperText="@string/actual"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextRepeatHeatDateActual"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutPregnancyCheckDateExpected"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/pregnancy_check"
-            android:visibility="gone"
             app:helperText="@string/expected">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPregnancyCheckDateExpected"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxPregnancyCheckStatus"
+            style="@style/AppTheme.MaterialCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@string/pregnancy_check_status"
+            android:visibility="visible"
+            tools:visibility="visible" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutPregnancyCheckDateActual"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/pregnancy_check"
-            app:helperText="@string/actual">
+            android:visibility="visible"
+            app:helperText="@string/actual"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextPregnancyCheckDateActual"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDryOffDateExpected"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/dry_off"
-            android:visibility="gone"
             app:helperText="@string/expected">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDryOffDateExpected"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxDryOffStatus"
+            style="@style/AppTheme.MaterialCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@string/dry_off_status"
+            android:visibility="visible"
+            tools:visibility="visible" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutDryOffDateActual"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/dry_off"
-            app:helperText="@string/actual">
+            android:visibility="visible"
+            app:helperText="@string/actual"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextDryOffDateActual"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutCalvingDateExpected"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/calving_date"
-            android:visibility="gone"
             app:helperText="@string/expected">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextCalvingDateExpected"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxCalvingStatus"
+            style="@style/AppTheme.MaterialCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:text="@string/calving_status"
+            android:visibility="visible"
+            tools:visibility="visible" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutCalvingDateActual"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/AppTheme.AppTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
             android:hint="@string/calving_date"
-            app:helperText="@string/actual">
+            android:visibility="visible"
+            app:helperText="@string/actual"
+            tools:visibility="visible">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/editTextCalvingDateActual"
+                style="@style/AppTheme.AppTextInputDate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="false"
-                android:maxLines="1"
-                android:textColor="@drawable/selector_text_color" />
+                android:layout_height="wrap_content" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <ImageButton
-            android:id="@+id/btnExpandCollapse"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_normal"
-            android:background="@color/transparent"
-            android:padding="@dimen/spacing_micro"
-            android:src="@drawable/ic_expand_more_black"
-            tools:ignore="ContentDescription" />
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView>
+</ScrollView>

@@ -1,11 +1,10 @@
 package com.pr656d.cattlenotes.ui.main.cattle.add
 
+import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleFragment
-import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleViewModel
-import com.pr656d.cattlenotes.utils.common.EventObserver
+import com.pr656d.cattlenotes.ui.main.cattle.base.BaseCattleFragment
+import com.pr656d.cattlenotes.ui.main.cattle.base.BaseCattleViewModel
 import kotlinx.android.synthetic.main.fragment_add_cattle.*
 
 class AddCattleFragment : BaseCattleFragment() {
@@ -24,14 +23,17 @@ class AddCattleFragment : BaseCattleFragment() {
 
     override fun setupObservers() {
         super.setupObservers()
-
-        viewModel.navigateUp.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigateUp()
-        })
     }
 
     override fun setupView() {
         super.setupView()
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (viewModel.tagNumber.value != null)
+                viewModel.showBackPressedScreen()
+            else
+                viewModel.navigateUp()
+        }
 
         fabButtonSaveCattle.setOnClickListener {
             viewModel.onSaveClick()

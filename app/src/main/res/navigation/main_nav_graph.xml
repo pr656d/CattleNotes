@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@+id/cattleListScreen">
+    app:startDestination="@+id/navigation_cattle_list">
 
     <fragment
-        android:id="@+id/cattleListScreen"
+        android:id="@+id/navigation_cattle_list"
         android:name="com.pr656d.cattlenotes.ui.main.cattle.list.CattleListFragment"
         android:label="@string/cattle"
         tools:layout="@layout/fragment_cattle_list">
@@ -35,8 +35,32 @@
         tools:layout="@layout/fragment_cattle_details">
 
         <argument
-            android:name="cattle_tag_number"
+            android:name="@string/arg_tagNumber"
             app:argType="string" />
+
+        <action
+            android:id="@+id/navigate_to_active_breeding"
+            app:destination="@id/activeBreedingScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/navigate_to_add_breeding"
+            app:destination="@id/addBreedingScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/navigate_to_breeding_history"
+            app:destination="@id/breedingHistoryScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -44,6 +68,57 @@
         android:name="com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment"
         android:label="@string/add_cattle"
         tools:layout="@layout/fragment_add_cattle">
+
+        <action
+            android:id="@+id/navigate_to_active_breeding"
+            app:destination="@id/activeBreedingScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/navigate_to_add_breeding"
+            app:destination="@id/addBreedingScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/navigate_to_breeding_history"
+            app:destination="@id/breedingHistoryScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/activeBreedingScreen"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.breeding.active.ActiveBreedingFragment"
+        android:label="@string/active_breeding"
+        tools:layout="@layout/fragment_active_breeding">
+
+        <argument
+            android:name="@string/arg_tagNumber"
+            app:argType="string"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/addBreedingScreen"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.breeding.add.AddBreedingFragment"
+        android:label="@string/add_new_breeding"
+        tools:layout="@layout/fragment_add_breeding">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/breedingHistoryScreen"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.breeding.history.BreedingHistoryFragment"
+        android:label="@string/breeding_history"
+        tools:layout="@layout/fragment_breeding_history">
+
     </fragment>
 
     <action
@@ -56,26 +131,26 @@
         tools:layout="@layout/progress_dialog">
 
         <argument
-            android:name="message"
+            android:name="@string/arg_progressDialogMessage"
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
     </dialog>
 
     <fragment
-        android:id="@+id/timelineScreen"
+        android:id="@+id/navigation_timeline"
         android:name="com.pr656d.cattlenotes.ui.main.timeline.TimelineFragment"
         android:label="@string/timeline"
         tools:layout="@layout/fragment_timeline" />
 
     <fragment
-        android:id="@+id/milkingScreen"
+        android:id="@+id/navigation_milking"
         android:name="com.pr656d.cattlenotes.ui.main.milking.MilkingFragment"
         android:label="@string/milking"
         tools:layout="@layout/fragment_milking" />
 
     <fragment
-        android:id="@+id/cashflowScreen"
+        android:id="@+id/navigation_cashflow"
         android:name="com.pr656d.cattlenotes.ui.main.cashflow.CashflowFragment"
         android:label="@string/cashflow"
         tools:layout="@layout/fragment_cashflow" />

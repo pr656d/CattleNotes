@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.main.cattle
+package com.pr656d.cattlenotes.ui.main.cattle.base
 
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
@@ -88,6 +88,21 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     val parent: LiveData<Long?> = _parent
     fun setParent(value: String?) = _parent.postValue(value?.toLongOrNull())
 
+    private val _showSelectParentScreen by lazy { MutableLiveData<Event<Unit>>() }
+    val showSelectParentScreen: LiveData<Event<Unit>> = _showSelectParentScreen
+    fun showSelectParentScreen() = _showSelectParentScreen.postValue(Event(Unit))
+
+    private val _showRemoveParentScreen by lazy { MutableLiveData<Event<Unit>>() }
+    val showRemoveParentScreen: LiveData<Event<Unit>> = _showRemoveParentScreen
+    fun showRemoveParentScreen() =
+        _showRemoveParentScreen.postValue(_parent.value?.let{ Event(Unit) })
+
+    private val _launchParentDetailsScreen by lazy { MutableLiveData<Event<Long>>() }
+    val launchParentDetailsScreen: LiveData<Event<Long>> = _launchParentDetailsScreen
+    fun showParentDetailsScreen() = _launchParentDetailsScreen.postValue(
+        _parent.value?.let { Event(it) }
+    )
+
     private val _homeBorn by lazy { MutableLiveData<Boolean>(false) }
     val homeBorn: LiveData<Boolean> = _homeBorn
     fun setHomeBorn(value: Boolean) = _homeBorn.postValue(value)
@@ -102,6 +117,28 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     private val _purchaseDate by lazy { MutableLiveData<String?>(null) }
     val purchaseDate: LiveData<String?> = _purchaseDate
     fun setPurchaseDate(value: String?) = _purchaseDate.postValue(value?.toDateOrNull())
+
+    private val _launchActiveBreedingScreen by lazy { MutableLiveData<Event<Long>>() }
+    val launchActiveBreedingScreen: LiveData<Event<Long>> = _launchActiveBreedingScreen
+    fun launchActiveBreeding() = _launchActiveBreedingScreen.postValue(
+        tagNumber.value?.let { Event(it) }
+    )
+
+    private val _launchAddBreedingScreen by lazy { MutableLiveData<Event<Unit>>() }
+    val launchAddBreedingScreen: LiveData<Event<Unit>> = _launchAddBreedingScreen
+    fun launchAddBreedingScreen() = _launchAddBreedingScreen.postValue(Event(Unit))
+
+    private val _launchBreedingHistoryScreen by lazy { MutableLiveData<Event<Unit>>() }
+    val launchBreedingHistoryScreen: LiveData<Event<Unit>> = _launchBreedingHistoryScreen
+    fun launchBreedingHistoryScreen() = _launchBreedingHistoryScreen.postValue(Event(Unit))
+
+    private val _showBackPressedScreen by lazy { MutableLiveData<Event<Unit>>() }
+    val showBackPressedScreen: LiveData<Event<Unit>> = _showBackPressedScreen
+    fun showBackPressedScreen() = _showBackPressedScreen.postValue(Event(Unit))
+
+    private val _navigateUp by lazy { MutableLiveData<Event<Unit>>() }
+    val navigateUp = Transformations.map(_navigateUp) { Event(it) }
+    fun navigateUp() = _navigateUp.postValue(Event(Unit))
 
     // End : Holding UI data
 

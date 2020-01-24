@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
-import com.pr656d.cattlenotes.ui.main.cattle.BaseCattleViewModel
+import com.pr656d.cattlenotes.ui.main.cattle.base.BaseCattleViewModel
 import com.pr656d.cattlenotes.utils.common.toFormattedString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

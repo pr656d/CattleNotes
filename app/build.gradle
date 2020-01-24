@@ -19,7 +19,6 @@ android {
     }
 
     buildTypes {
-        // Add this debug config to provide debug settings
         debug {
 //            minifyEnabled true  // To enable proguard
 //            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

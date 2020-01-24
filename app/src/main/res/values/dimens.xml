@@ -13,13 +13,15 @@
     <dimen name="padding_large">32dp</dimen>
     <dimen name="padding_zero">0dp</dimen>
 
-    <dimen name="title_size">32sp</dimen>
+    <dimen name="title_size">28sp</dimen>
 
     <dimen name="spacing_normal">8dp</dimen>
     <dimen name="spacing_micro">4dp</dimen>
 
     <dimen name="photo_width_normal">50dp</dimen>
     <dimen name="photo_height_normal">50dp</dimen>
+
+    <dimen name="nav_header_logo_size">100dp</dimen>
 
     <dimen name="no_elevation">0dp</dimen>
     <dimen name="clip_padding_bottom">100dp</dimen>
@@ -29,6 +31,5 @@
     <dimen name="box_stroke_width">1dp</dimen>
     <dimen name="box_corner_radius">4dp</dimen>
 
-    <dimen name="box_padding_StartEnd">10dp</dimen>
-    <dimen name="box_padding_TopBottom">8dp</dimen>
+    <dimen name="box_padding">16dp</dimen>
 </resources>

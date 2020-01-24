@@ -89,7 +89,7 @@ class ParentListDialogFragment @Inject constructor() : DialogFragment() {
             progressBar.visibility = View.GONE
         }
 
-        btnCloseDialog.setOnClickListener {
+        selectParentToolbar.setNavigationOnClickListener {
             listenerFragment.parentDialogCancelled()
         }
     }
