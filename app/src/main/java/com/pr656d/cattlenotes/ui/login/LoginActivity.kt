@@ -55,7 +55,9 @@ class LoginActivity : DaggerAppCompatActivity() {
         })
 
         viewModel.launchMain.observe(this, EventObserver {
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            startActivity(
+                Intent(this@LoginActivity, MainActivity::class.java)
+            )
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         })
