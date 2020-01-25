@@ -5,7 +5,6 @@ import com.pr656d.cattlenotes.ui.launch.LaunchBindingModule
 import com.pr656d.cattlenotes.ui.launch.LauncherActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.login.LoginBindingModule
-import com.pr656d.cattlenotes.ui.login.LoginModule
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.ui.main.MainBindingModule
 import com.pr656d.cattlenotes.ui.main.cashflow.CashflowBindingModule
@@ -39,12 +38,7 @@ abstract class ActivityBindingModule {
     internal abstract fun launcherActivity(): LauncherActivity
 
     @ActivityScoped
-    @ContributesAndroidInjector(
-        modules = [
-            LoginBindingModule::class,
-            LoginModule::class
-        ]
-    )
+    @ContributesAndroidInjector(modules = [LoginBindingModule::class])
     internal abstract fun loginActivity(): LoginActivity
 
     @ActivityScoped

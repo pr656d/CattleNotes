@@ -27,8 +27,6 @@ class LoginActivity : DaggerAppCompatActivity() {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<LoginViewModel> { viewModelFactory }
 
-    @Inject lateinit var authUI: AuthUI
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,7 +39,7 @@ class LoginActivity : DaggerAppCompatActivity() {
 
         viewModel.launchFirebaseAuthUI.observe(this, EventObserver {
             startActivityForResult(
-                authUI.createSignInIntentBuilder()
+                AuthUI.getInstance().createSignInIntentBuilder()
                     .setAvailableProviders(arrayListOf(
                         AuthUI.IdpConfig.EmailBuilder().build(),
                         AuthUI.IdpConfig.PhoneBuilder().build(),
