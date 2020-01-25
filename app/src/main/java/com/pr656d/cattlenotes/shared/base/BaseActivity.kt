@@ -3,9 +3,7 @@ package com.pr656d.cattlenotes.shared.base
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.annotation.LayoutRes
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
-import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -20,10 +18,6 @@ abstract class BaseActivity : DaggerAppCompatActivity() {
         setupObservers()
         setupView(savedInstanceState)
     }
-
-    fun showMessage(message: String) = Toaster.show(applicationContext, message)
-
-    fun showMessage(@StringRes resId: Int) = showMessage(getString(resId))
 
     private fun setActivityScreenOrientation(allowLandscape: Boolean = false) {
         /**

@@ -4,18 +4,19 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.shared.base.BaseActivity
+import com.pr656d.cattlenotes.databinding.ActivityLoginBinding
 import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.utils.common.EventObserver
-import kotlinx.android.synthetic.main.activity_login.*
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class LoginActivity : BaseActivity() {
+class LoginActivity : DaggerAppCompatActivity() {
 
     companion object {
         const val TAG = "LoginActivity"
@@ -23,13 +24,21 @@ class LoginActivity : BaseActivity() {
         const val CODE_SIGN_IN = 111
     }
 
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<LoginViewModel> { viewModelFactory }
 
     @Inject lateinit var authUI: AuthUI
 
-    override fun provideLayoutId(): Int = R.layout.activity_login
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun setupObservers() {
+        val binding: ActivityLoginBinding = DataBindingUtil.setContentView(
+            this, R.layout.activity_login
+        )
+
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+
         viewModel.launchFirebaseAuthUI.observe(this, EventObserver {
             startActivityForResult(
                 authUI.createSignInIntentBuilder()
@@ -52,19 +61,6 @@ class LoginActivity : BaseActivity() {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         })
-
-        viewModel.loginStatus.observe(this, Observer {
-            it.data?.run { tvMessage.setText(this) }
-        })
-    }
-
-    override fun setupView(savedInstanceState: Bundle?) {
-        btnLogin.apply {
-            setOnClickListener {
-                isEnabled = false
-                viewModel.onLoginClick()
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -80,7 +76,6 @@ class LoginActivity : BaseActivity() {
                         Toaster.show(this, getString(it))
                     }
                     viewModel.onLoginFail()
-                    btnLogin.isEnabled = true
                 }
             }
         }
