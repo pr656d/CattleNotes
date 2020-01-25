@@ -148,11 +148,10 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
 
             showRemoveParentScreen.observe(viewLifecycleOwner, EventObserver {
                 MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.remove_parent)
-                    .setMessage(R.string.remove_parent_message)
+                    .setTitle(R.string.remove_parent_message)
                     .setPositiveButton(R.string.yes) { _, which ->
                         if (which == AlertDialog.BUTTON_POSITIVE) {
-                            setParent("")
+                            setParent(null)
                         }
                     }
                     .setNegativeButton(R.string.no, null)
@@ -208,6 +207,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
             showBackPressedScreen.observe(viewLifecycleOwner, EventObserver {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle(R.string.back_pressed_message)
+                    .setMessage(R.string.changes_not_saved_message)
                     .setPositiveButton(R.string.back) { _, which ->
                         if (which == AlertDialog.BUTTON_POSITIVE) {
                             findNavController().navigateUp()

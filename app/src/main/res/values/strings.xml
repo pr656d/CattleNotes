@@ -7,7 +7,7 @@
     <string name="stay">Stay</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="back">Back</string>
+    <string name="back">Go Back</string>
     <string name="retry">Retry</string>
     <string name="more">More</string>
     <string name="required">Required</string>
@@ -16,6 +16,7 @@
     <string name="hf">HF</string>
     <string name="dry">Dry</string>
     <string name="back_pressed_message">Are you sure you want to go back?</string>
+    <string name="changes_not_saved_message">If you go back changes will not be saved.</string>
 
     <!--  Navigation args  -->
     <string name="arg_tagNumber">cattle_tag_number</string>

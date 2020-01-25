@@ -38,7 +38,7 @@ buildscript {
         lifecycleVersion = '2.1.0'
         lifecycleRuntimeVersion = '2.2.0-rc03'
         liveDataKtxVersion = '2.1.0'
-        materialVersion = '1.2.0-alpha03'
+        materialVersion = '1.2.0-alpha04'
         multidexVersion = '2.0.1'
         mockitoVersion = '2.7.1'
         navigationControllerVersion = '2.1.0'

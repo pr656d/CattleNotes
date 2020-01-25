@@ -32,14 +32,13 @@
 
     <!--  LaunchTheme  -->
     <style name="LaunchTheme" parent="AppThemeFullscreen">
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
         <item name="android:background">@color/transparent</item>
     </style>
 
     <!--  LoginTheme  -->
-    <style name="ThemeOverlay.LoginTheme" parent="LaunchTheme">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    </style>
+    <style name="ThemeOverlay.LoginTheme" parent="LaunchTheme" />
 
     <!--  Firebase Theme  -->
     <style name="FirebaseTheme" parent="FirebaseUI">
