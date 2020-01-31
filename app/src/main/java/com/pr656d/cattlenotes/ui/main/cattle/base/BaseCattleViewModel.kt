@@ -11,16 +11,16 @@ import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.shared.base.BaseViewModel
 import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
-import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleViewModel
+import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsViewModel
-import com.pr656d.cattlenotes.utils.common.*
+import com.pr656d.cattlenotes.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 /**
- * Common abstract class for [AddCattleViewModel] and [CattleDetailsViewModel]
+ * Common abstract class for [AddEditCattleViewModel] and [CattleDetailsViewModel]
  * to reduce code repetition.
  */
 abstract class BaseCattleViewModel : BaseViewModel() {
@@ -33,7 +33,11 @@ abstract class BaseCattleViewModel : BaseViewModel() {
     val saving = _saving
 
     protected val _showMessage by lazy { MutableLiveData<@StringRes Int>() }
-    val showMessage = Transformations.map(_showMessage) { Event(it) }
+    val showMessage = Transformations.map(_showMessage) {
+        Event(
+            it
+        )
+    }
 
     // Start : Holding UI data
 
@@ -90,12 +94,20 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     private val _showSelectParentScreen by lazy { MutableLiveData<Event<Unit>>() }
     val showSelectParentScreen: LiveData<Event<Unit>> = _showSelectParentScreen
-    fun showSelectParentScreen() = _showSelectParentScreen.postValue(Event(Unit))
+    fun showSelectParentScreen() = _showSelectParentScreen.postValue(
+        Event(
+            Unit
+        )
+    )
 
     private val _showRemoveParentScreen by lazy { MutableLiveData<Event<Unit>>() }
     val showRemoveParentScreen: LiveData<Event<Unit>> = _showRemoveParentScreen
     fun showRemoveParentScreen() =
-        _showRemoveParentScreen.postValue(_parent.value?.let{ Event(Unit) })
+        _showRemoveParentScreen.postValue(_parent.value?.let{
+            Event(
+                Unit
+            )
+        })
 
     private val _launchParentDetailsScreen by lazy { MutableLiveData<Event<Long>>() }
     val launchParentDetailsScreen: LiveData<Event<Long>> = _launchParentDetailsScreen
@@ -126,19 +138,39 @@ abstract class BaseCattleViewModel : BaseViewModel() {
 
     private val _launchAddBreedingScreen by lazy { MutableLiveData<Event<Unit>>() }
     val launchAddBreedingScreen: LiveData<Event<Unit>> = _launchAddBreedingScreen
-    fun launchAddBreedingScreen() = _launchAddBreedingScreen.postValue(Event(Unit))
+    fun launchAddBreedingScreen() = _launchAddBreedingScreen.postValue(
+        Event(
+            Unit
+        )
+    )
 
     private val _launchBreedingHistoryScreen by lazy { MutableLiveData<Event<Unit>>() }
     val launchBreedingHistoryScreen: LiveData<Event<Unit>> = _launchBreedingHistoryScreen
-    fun launchBreedingHistoryScreen() = _launchBreedingHistoryScreen.postValue(Event(Unit))
+    fun launchBreedingHistoryScreen() = _launchBreedingHistoryScreen.postValue(
+        Event(
+            Unit
+        )
+    )
 
     private val _showBackPressedScreen by lazy { MutableLiveData<Event<Unit>>() }
     val showBackPressedScreen: LiveData<Event<Unit>> = _showBackPressedScreen
-    fun showBackPressedScreen() = _showBackPressedScreen.postValue(Event(Unit))
+    fun showBackPressedScreen() = _showBackPressedScreen.postValue(
+        Event(
+            Unit
+        )
+    )
 
     private val _navigateUp by lazy { MutableLiveData<Event<Unit>>() }
-    val navigateUp = Transformations.map(_navigateUp) { Event(it) }
-    fun navigateUp() = _navigateUp.postValue(Event(Unit))
+    val navigateUp = Transformations.map(_navigateUp) {
+        Event(
+            it
+        )
+    }
+    fun navigateUp() = _navigateUp.postValue(
+        Event(
+            Unit
+        )
+    )
 
     // End : Holding UI data
 
@@ -184,11 +216,11 @@ abstract class BaseCattleViewModel : BaseViewModel() {
         }
 
         if (
-            showErrorOnTagNumber.value == CattleValidator.VALID_MESSAGE_ID &&
-            showErrorOnType.value == CattleValidator.VALID_MESSAGE_ID &&
-            showErrorOnLactation.value == CattleValidator.VALID_MESSAGE_ID &&
-            showErrorOnBreed.value == CattleValidator.VALID_MESSAGE_ID &&
-            showErrorOnPurchaseAmount.value == CattleValidator.VALID_MESSAGE_ID
+            showErrorOnTagNumber.value == CattleValidator.VALID_FIELD &&
+            showErrorOnType.value == CattleValidator.VALID_FIELD &&
+            showErrorOnLactation.value == CattleValidator.VALID_FIELD &&
+            showErrorOnBreed.value == CattleValidator.VALID_FIELD &&
+            showErrorOnPurchaseAmount.value == CattleValidator.VALID_FIELD
         ) {
             viewModelScope.launch(Dispatchers.IO) {
                 try {
@@ -218,7 +250,7 @@ abstract class BaseCattleViewModel : BaseViewModel() {
         Cattle(
             tagNumber.value!!, name.value?.let { it }, null, type.value!!.toType(),
             breed.value!!.toBreed(), group.value!!.toGroup(), lactation.value?.toInt() ?: 0,
-            homeBorn.value!!, purchaseAmount.value?.toLong(), purchaseDate.value?.toDate(),
-            dob.value?.toDate(), parent.value?.let { it }
+            homeBorn.value!!, purchaseAmount.value?.toLong(), null,
+            null, parent.value?.let { it }
         )
 }

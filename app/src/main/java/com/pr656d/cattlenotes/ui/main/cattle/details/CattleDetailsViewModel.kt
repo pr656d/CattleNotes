@@ -7,7 +7,7 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.ui.main.cattle.base.BaseCattleViewModel
-import com.pr656d.cattlenotes.utils.common.toFormattedString
+import com.pr656d.cattlenotes.utils.toFormattedString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

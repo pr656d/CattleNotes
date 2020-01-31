@@ -108,6 +108,7 @@
 
     <style name="AppTheme.AppTextInputDate" parent="AppTheme.AppTextInputEditText">
         <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
     </style>
 
     <style name="AppTheme.AppTextInputEditText" parent="Theme.MaterialComponents.Light">
@@ -116,6 +117,8 @@
         <item name="android:textColor">@drawable/selector_text_color</item>
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
     </style>
+
+    <style name="AppTheme.TextInputParent" parent="AppTheme.AppTextInputDate"/>
 
     <style name="AppTheme.MaterialCheckBox">
         <item name="android:background">@drawable/outline</item>

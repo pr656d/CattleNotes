@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.utils.common
+package com.pr656d.cattlenotes.utils
 
 enum class Status {
     SUCCESS,

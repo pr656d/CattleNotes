@@ -4,11 +4,12 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
 import com.pr656d.cattlenotes.R
 
 object Toaster {
-    fun show(context: Context, text: CharSequence) {
+    fun showToast(context: Context, text: CharSequence) {
         val toast = Toast.makeText(context, text, Toast.LENGTH_SHORT)
         toast.view.background.setColorFilter(
             ContextCompat.getColor(context, R.color.black), PorterDuff.Mode.SRC_IN
@@ -17,4 +18,7 @@ object Toaster {
         textView.setTextColor(ContextCompat.getColor(context, R.color.white))
         toast.show()
     }
+
+    fun showToast(context: Context, @StringRes textId: Int) =
+        showToast(context, context.getString(textId))
 }

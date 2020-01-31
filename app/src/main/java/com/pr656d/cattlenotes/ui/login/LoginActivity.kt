@@ -12,7 +12,7 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityLoginBinding
 import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import com.pr656d.cattlenotes.ui.main.MainActivity
-import com.pr656d.cattlenotes.utils.common.EventObserver
+import com.pr656d.cattlenotes.utils.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -25,7 +25,7 @@ class LoginActivity : DaggerAppCompatActivity() {
     }
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel by viewModels<LoginViewModel> { viewModelFactory }
+    private val model by viewModels<LoginViewModel> { viewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,32 +35,36 @@ class LoginActivity : DaggerAppCompatActivity() {
         )
 
         binding.lifecycleOwner = this
-        binding.viewModel = viewModel
+        binding.viewModel = model
 
-        viewModel.launchFirebaseAuthUI.observe(this, EventObserver {
-            startActivityForResult(
-                AuthUI.getInstance().createSignInIntentBuilder()
-                    .setAvailableProviders(arrayListOf(
-                        AuthUI.IdpConfig.EmailBuilder().build(),
-                        AuthUI.IdpConfig.PhoneBuilder().build(),
-                        AuthUI.IdpConfig.GoogleBuilder().build(),
-                        AuthUI.IdpConfig.FacebookBuilder().build(),
-                        AuthUI.IdpConfig.AnonymousBuilder().build()
-                    ))
-                    .setLogo(R.drawable.logo)
-                    .setTheme(R.style.FirebaseTheme)
-                    .build(),
-                CODE_SIGN_IN
-            )
-        })
+        model.launchFirebaseAuthUI.observe(this,
+            EventObserver {
+                startActivityForResult(
+                    AuthUI.getInstance().createSignInIntentBuilder()
+                        .setAvailableProviders(
+                            arrayListOf(
+                                AuthUI.IdpConfig.EmailBuilder().build(),
+                                AuthUI.IdpConfig.PhoneBuilder().build(),
+                                AuthUI.IdpConfig.GoogleBuilder().build(),
+                                AuthUI.IdpConfig.FacebookBuilder().build(),
+                                AuthUI.IdpConfig.AnonymousBuilder().build()
+                            )
+                        )
+                        .setLogo(R.drawable.logo)
+                        .setTheme(R.style.FirebaseTheme)
+                        .build(),
+                    CODE_SIGN_IN
+                )
+            })
 
-        viewModel.launchMain.observe(this, EventObserver {
-            startActivity(
-                Intent(this@LoginActivity, MainActivity::class.java)
-            )
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            finish()
-        })
+        model.launchMain.observe(this,
+            EventObserver {
+                startActivity(
+                    Intent(this@LoginActivity, MainActivity::class.java)
+                )
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                finish()
+            })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -70,12 +74,12 @@ class LoginActivity : DaggerAppCompatActivity() {
             CODE_SIGN_IN -> {
                 val response = IdpResponse.fromResultIntent(data)
                 if (resultCode == Activity.RESULT_OK) {
-                    viewModel.onLoginSuccess()
+                    model.onLoginSuccess()
                 } else {
                     response?.error?.errorCode?.let {
-                        Toaster.show(this, getString(it))
+                        Toaster.showToast(this, it)
                     }
-                    viewModel.onLoginFail()
+                    model.onLoginFail()
                 }
             }
         }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.data.local.prefs.UserPreferences
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
-import com.pr656d.cattlenotes.utils.common.Event
+import com.pr656d.cattlenotes.utils.Event
 import javax.inject.Inject
 
 class LaunchViewModel @Inject constructor(userPreferences: UserPreferences) : ViewModel() {

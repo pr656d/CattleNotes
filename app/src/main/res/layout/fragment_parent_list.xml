@@ -1,69 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/selectParentAppbarLayout"
-        style="@style/AppTheme.AppBarLight"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/selectParentToolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/selectParentAppbarLayout"
+            style="@style/AppTheme.AppBarLight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/select_parent"
-            app:navigationIcon="@drawable/ic_close_black"
-            app:titleTextAppearance="@style/AppTheme.Toolbar.TitleText" />
-    </com.google.android.material.appbar.AppBarLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="@style/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="false"
-        android:visibility="visible"
-        android:layout_marginTop="@dimen/margin_normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectParentAppbarLayout" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/selectParentToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:navigationIcon="@drawable/ic_close_black"
+                app:title="@string/select_parent"
+                app:titleTextAppearance="@style/AppTheme.Toolbar.TitleText" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvParentList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/clip_padding_bottom"
-        android:visibility="gone"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectParentAppbarLayout"
-        tools:itemCount="20"
-        tools:listitem="@layout/item_cattle" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="false"
+            app:goneUnless="@{ viewModel.parentIsLoading }"
+            android:layout_marginTop="@dimen/margin_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectParentAppbarLayout" />
 
-    <TextView
-        android:id="@+id/tvEmptyListMessage"
-        style="@style/AppTheme.Headline6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/parent_list_empty"
-        android:textAlignment="center"
-        android:textColor="@color/grey"
-        android:visibility="gone"
-        app:layout_anchorGravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvParentList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:goneUnless="@{ !viewModel.parentIsLoading }"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectParentAppbarLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_cattle" />
+
+        <TextView
+            android:id="@+id/tvEmptyListMessage"
+            style="@style/AppTheme.Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/parent_list_empty"
+            android:textAlignment="center"
+            android:textColor="@color/grey"
+            app:goneUnless="@{ viewModel.isParentListEmpty }"
+            app:layout_anchorGravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/selectParentAppbarLayout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

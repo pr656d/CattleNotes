@@ -19,7 +19,6 @@
     <string name="changes_not_saved_message">If you go back changes will not be saved.</string>
 
     <!--  Navigation args  -->
-    <string name="arg_tagNumber">cattle_tag_number</string>
     <string name="arg_progressDialogMessage">message</string>
 
     <!--  Transition name  -->
@@ -77,8 +76,9 @@
     <!--  Parent list  -->
     <string name="parent_list_empty">Your parent list is empty</string>
     <string name="select_parent">Select parent</string>
-    <string name="remove_parent">Remove parent</string>
     <string name="remove_parent_message">Are you sure you want to remove parent?</string>
+    <string name="remove_dob_message">Are you sure you want to remove date of birth?</string>
+    <string name="remove_purchase_date_message">Are you sure you want to remove purchase date?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
@@ -111,6 +111,7 @@
     <string name="show_active_breeding">Show active breeding</string>
     <string name="error_save">Could not save cattle. Try again.</string>
     <string name="error_fill_empty_fields">Fill required fields.</string>
+    <string name="provide_tag_number">Provide tag number to view parent list</string>
     <!--  Add cattle  -->
     <string name="add_cattle">Add new cattle</string>
     <!--  Edit cattle details  -->

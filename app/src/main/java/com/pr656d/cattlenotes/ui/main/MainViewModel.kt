@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
-import com.pr656d.cattlenotes.utils.common.Event
+import com.pr656d.cattlenotes.utils.Event
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(firebaseUser: FirebaseUser?) : ViewModel() {
@@ -14,6 +14,10 @@ class MainViewModel @Inject constructor(firebaseUser: FirebaseUser?) : ViewModel
 
     init {
         if (firebaseUser == null)
-            _redirectToLoginScreen.postValue(Event(Unit))
+            _redirectToLoginScreen.postValue(
+                Event(
+                    Unit
+                )
+            )
     }
 }

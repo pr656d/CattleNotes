@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.utils.common
+package com.pr656d.cattlenotes.utils
 
 import java.util.*
 

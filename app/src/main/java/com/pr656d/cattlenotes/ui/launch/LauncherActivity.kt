@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.ui.launch
 
+import android.R
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -8,7 +9,7 @@ import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.main.MainActivity
-import com.pr656d.cattlenotes.utils.common.EventObserver
+import com.pr656d.cattlenotes.utils.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -23,13 +24,14 @@ class LauncherActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val viewModel by viewModels<LaunchViewModel> { viewModelFactory }
-        viewModel.launchDestination.observe(this, EventObserver { destination ->
-            when (destination) {
-                MAIN_ACTIVITY -> startActivity(Intent(this, MainActivity::class.java))
-                LOGIN_ACTIVITY -> startActivity(Intent(this, LoginActivity::class.java))
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        })
+        viewModel.launchDestination.observe(this,
+            EventObserver { destination ->
+                when (destination) {
+                    MAIN_ACTIVITY -> startActivity(Intent(this, MainActivity::class.java))
+                    LOGIN_ACTIVITY -> startActivity(Intent(this, LoginActivity::class.java))
+                }
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            })
     }
 
     override fun onBackPressed() {

@@ -1,7 +1,7 @@
 package com.pr656d.cattlenotes.shared.utils.common
 
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.utils.common.Resource
+import com.pr656d.cattlenotes.utils.Resource
 import java.util.regex.Pattern
 
 object Validator {

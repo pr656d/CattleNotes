@@ -11,7 +11,6 @@ import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
@@ -22,27 +21,24 @@ import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
 import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
-import com.pr656d.cattlenotes.ui.main.cattle.add.AddCattleFragment
+import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragment
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragment
 import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragmentDirections
-import com.pr656d.cattlenotes.ui.main.cattle.parent.ParentListDialogFragment
-import com.pr656d.cattlenotes.utils.common.EventObserver
-import com.pr656d.cattlenotes.utils.common.parseToString
+import com.pr656d.cattlenotes.utils.EventObserver
 import kotlinx.android.synthetic.main.layout_cattle_details.*
 import java.util.*
-import javax.inject.Inject
 
 /**
- * Common abstract class for [CattleDetailsFragment] and [AddCattleFragment]
+ * Common abstract class for [CattleDetailsFragment] and [AddEditCattleFragment]
  * to reduce code repetition.
  */
-abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.ParentSelector {
+abstract class BaseCattleFragment : BaseFragment() {
 
     companion object {
         const val TAG = "BaseCattleFragment"
     }
 
-    @Inject lateinit var selectParentDialog: ParentListDialogFragment
+//    @Inject lateinit var selectParentDialog: ParentListDialogFragment
 
     abstract fun getBaseCattleViewModel(): BaseCattleViewModel
 
@@ -64,7 +60,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
     override fun setupObservers() {
         getBaseCattleViewModel().run {
             fun TextInputLayout.handleError(@StringRes messageId: Int) {
-                isErrorEnabled = if (messageId != CattleValidator.VALID_MESSAGE_ID) {
+                isErrorEnabled = if (messageId != CattleValidator.VALID_FIELD) {
                     error = getString(messageId)
                     true
                 } else {
@@ -141,27 +137,30 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
                 editTextParent.setTextIfNotSame(it?.toString())
             }
 
-            showSelectParentScreen.observe(viewLifecycleOwner, EventObserver {
-                selectParentDialog.setTargetFragment(this@BaseCattleFragment, 0)
-                selectParentDialog.show(requireFragmentManager(), TAG)
-            })
+            showSelectParentScreen.observe(viewLifecycleOwner,
+                EventObserver {
+//                    selectParentDialog.setTargetFragment(this@BaseCattleFragment, 0)
+//                    selectParentDialog.show(requireFragmentManager(), TAG)
+                })
 
-            showRemoveParentScreen.observe(viewLifecycleOwner, EventObserver {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.remove_parent_message)
-                    .setPositiveButton(R.string.yes) { _, which ->
-                        if (which == AlertDialog.BUTTON_POSITIVE) {
-                            setParent(null)
+            showRemoveParentScreen.observe(viewLifecycleOwner,
+                EventObserver {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.remove_parent_message)
+                        .setPositiveButton(R.string.yes) { _, which ->
+                            if (which == AlertDialog.BUTTON_POSITIVE) {
+                                setParent(null)
+                            }
                         }
-                    }
-                    .setNegativeButton(R.string.no, null)
-                    .create()
-                    .show()
-            })
+                        .setNegativeButton(R.string.no, null)
+                        .create()
+                        .show()
+                })
 
-            launchParentDetailsScreen.observe(viewLifecycleOwner, EventObserver {
+            launchParentDetailsScreen.observe(viewLifecycleOwner,
+                EventObserver {
 
-            })
+                })
 
             homeBorn.observe(viewLifecycleOwner) {
                 switchHomeBorn.apply {
@@ -189,55 +188,62 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
                 editTextPurchaseDate.setTextIfNotSame(it)
             }
 
-            launchActiveBreedingScreen.observe(viewLifecycleOwner, EventObserver {
-                val action = CattleDetailsFragmentDirections.navigateToActiveBreeding(it.toString())
-                findNavController().navigate(action)
-            })
+            launchActiveBreedingScreen.observe(viewLifecycleOwner,
+                EventObserver {
+                    val action =
+                        CattleDetailsFragmentDirections.navigateToActiveBreeding(it.toString())
+                    findNavController().navigate(action)
+                })
 
-            launchAddBreedingScreen.observe(viewLifecycleOwner, EventObserver {
-                val action = CattleDetailsFragmentDirections.navigateToAddBreeding()
-                findNavController().navigate(action)
-            })
+            launchAddBreedingScreen.observe(viewLifecycleOwner,
+                EventObserver {
+                    val action = CattleDetailsFragmentDirections.navigateToAddBreeding()
+                    findNavController().navigate(action)
+                })
 
-            launchBreedingHistoryScreen.observe(viewLifecycleOwner, EventObserver {
-                val action = CattleDetailsFragmentDirections.navigateToBreedingHistory()
-                findNavController().navigate(action)
-            })
+            launchBreedingHistoryScreen.observe(viewLifecycleOwner,
+                EventObserver {
+                    val action = CattleDetailsFragmentDirections.navigateToBreedingHistory()
+                    findNavController().navigate(action)
+                })
 
-            showBackPressedScreen.observe(viewLifecycleOwner, EventObserver {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(R.string.back_pressed_message)
-                    .setMessage(R.string.changes_not_saved_message)
-                    .setPositiveButton(R.string.back) { _, which ->
-                        if (which == AlertDialog.BUTTON_POSITIVE) {
-                            findNavController().navigateUp()
+            showBackPressedScreen.observe(viewLifecycleOwner,
+                EventObserver {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle(R.string.back_pressed_message)
+                        .setMessage(R.string.changes_not_saved_message)
+                        .setPositiveButton(R.string.back) { _, which ->
+                            if (which == AlertDialog.BUTTON_POSITIVE) {
+                                findNavController().navigateUp()
+                            }
                         }
-                    }
-                    .setNegativeButton(R.string.stay, null)
-                    .create()
-                    .show()
-            })
+                        .setNegativeButton(R.string.stay, null)
+                        .create()
+                        .show()
+                })
 
             saving.observe(viewLifecycleOwner) {
-                if (it)
-                    findNavController().navigate(
-                        R.id.navigate_to_progress_dialog,
-                        bundleOf(getString(R.string.arg_progressDialogMessage) to getString(R.string.saving_dialog_message))
-                    )
-                else if (findNavController().currentDestination?.id == R.id.progressDialogScreen) {
-                    findNavController().navigateUp()
-                }
+//                if (it)
+//                    findNavController().navigate(
+//                        R.id.navigate_to_progress_dialog,
+//                        bundleOf(getString(R.string.arg_progressDialogMessage) to getString(R.string.saving_dialog_message))
+//                    )
+//                else if (findNavController().currentDestination?.id == R.id.progressDialogScreen) {
+//                    findNavController().navigateUp()
+//                }
             }
 
-            showMessage.observe(viewLifecycleOwner, EventObserver {
-                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
-                    .setAnchorView(getFabButtonId())
-                    .show()
-            })
+            showMessage.observe(viewLifecycleOwner,
+                EventObserver {
+                    Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
+                        .setAnchorView(getFabButtonId())
+                        .show()
+                })
 
-            navigateUp.observe(viewLifecycleOwner, EventObserver {
-                findNavController().navigateUp()
-            })
+            navigateUp.observe(viewLifecycleOwner,
+                EventObserver {
+                    findNavController().navigateUp()
+                })
         }
     }
 
@@ -344,18 +350,18 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
         exposedDropDownGroup.setupDropDownAdapter(R.array.list_group)
     }
 
-    override fun onParentSelected(parentTagNumber: String) {
-        getBaseCattleViewModel().setParent(parentTagNumber)
-        editTextParent.isFocusableInTouchMode = false
-        selectParentDialog.dismiss()
-    }
-
-    override fun parentDialogCancelled() {
-        editTextParent.isFocusableInTouchMode = false
-        selectParentDialog.dismiss()
-    }
-
-    override fun provideCurrentTagNumber(): Long? = getBaseCattleViewModel().tagNumber.value
+//    override fun onParentSelected(parentTagNumber: String) {
+//        getBaseCattleViewModel().setParent(parentTagNumber)
+//        editTextParent.isFocusableInTouchMode = false
+//        selectParentDialog.dismiss()
+//    }
+//
+//    override fun parentDialogCancelled() {
+//        editTextParent.isFocusableInTouchMode = false
+//        selectParentDialog.dismiss()
+//    }
+//
+//    override fun provideCurrentTagNumber(): Long? = getBaseCattleViewModel().tagNumber.value
 
     /**
      * To match view theme dates shows as [TextInputEditText].
@@ -380,7 +386,7 @@ abstract class BaseCattleFragment : BaseFragment(), ParentListDialogFragment.Par
             val dialog = DatePickerDialog(
                 context, R.style.DatePicker,
                 DatePickerDialog.OnDateSetListener { _, yyyy, mm, dd ->
-                    setText(requireContext().parseToString(dd, mm, yyyy))
+//                    setText(requireContext().parseToString(dd, mm, yyyy))
                     // After picking date reset focusable to false.
                     isFocusableInTouchMode = false
                 },

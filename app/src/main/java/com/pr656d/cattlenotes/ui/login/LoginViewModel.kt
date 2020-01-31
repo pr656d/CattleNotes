@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.local.prefs.UserPreferences
 import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
-import com.pr656d.cattlenotes.utils.common.Event
+import com.pr656d.cattlenotes.utils.Event
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
@@ -30,7 +30,11 @@ class LoginViewModel @Inject constructor(
     fun onLoginClick() {
         if (networkHelper.isNetworkConnected()) {
             _logginIn.postValue(true)
-            _launchFirebaseLoginUI.postValue(Event(Unit))
+            _launchFirebaseLoginUI.postValue(
+                Event(
+                    Unit
+                )
+            )
         } else {
             _loginStatus.postValue(R.string.network_not_available)
         }

@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.main.cattle.parent
+package com.pr656d.cattlenotes.ui.main.cattle.addedit.parent
 
 import android.view.View
 import android.view.ViewGroup

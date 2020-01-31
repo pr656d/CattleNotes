@@ -16,7 +16,7 @@ import com.google.android.material.navigation.NavigationView
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityMainBinding
 import com.pr656d.cattlenotes.ui.login.LoginActivity
-import com.pr656d.cattlenotes.utils.common.EventObserver
+import com.pr656d.cattlenotes.utils.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -33,7 +33,7 @@ class MainActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel by viewModels<MainViewModel> { viewModelFactory }
+        val model by viewModels<MainViewModel> { viewModelFactory }
 
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(
             this, R.layout.activity_main
@@ -77,12 +77,13 @@ class MainActivity : DaggerAppCompatActivity() {
             }
         }
 
-        viewModel.redirectToLoginScreen.observe(this, EventObserver {
-            startActivity(
-                Intent(this, LoginActivity::class.java)
-            )
-            finish()
-        })
+        model.redirectToLoginScreen.observe(this,
+            EventObserver {
+                startActivity(
+                    Intent(this, LoginActivity::class.java)
+                )
+                finish()
+            })
     }
 
     override fun onBackPressed() {

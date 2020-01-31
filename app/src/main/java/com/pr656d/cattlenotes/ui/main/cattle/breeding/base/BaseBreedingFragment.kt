@@ -9,7 +9,6 @@ import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.base.BaseFragment
-import com.pr656d.cattlenotes.utils.common.parseToString
 import kotlinx.android.synthetic.main.layout_breeding.*
 import java.util.*
 
@@ -133,7 +132,7 @@ abstract class BaseBreedingFragment : BaseFragment() {
             val dialog = DatePickerDialog(
                 context, R.style.DatePicker,
                 DatePickerDialog.OnDateSetListener { _, yyyy, mm, dd ->
-                    setText(requireContext().parseToString(dd, mm, yyyy))
+//                    setText(requireContext().parseToString(dd, mm, yyyy))
                     // After picking date reset focusable to false.
                     isFocusableInTouchMode = false
                 },

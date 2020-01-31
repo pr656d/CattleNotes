@@ -25,7 +25,7 @@ abstract class BaseFragment : DaggerFragment() {
         setupObservers()
     }
 
-    fun showMessage(message: String) = context?.let { Toaster.show(it, message) }
+    fun showMessage(message: String) = context?.let { Toaster.showToast(it, message) }
 
     fun showMessage(@StringRes resId: Int) = showMessage(getString(resId))
 
