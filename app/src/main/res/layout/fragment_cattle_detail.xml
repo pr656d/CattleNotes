@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel" />
+            type="com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailViewModel" />
 
     </data>
 
@@ -48,20 +48,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:hint="@string/tag_number"
-                    app:errorText="@{ viewModel.tagNumberErrorMessage }"
-                    app:helperText="@{ viewModel.tagNumber }"
-                    app:helperTextEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ivCattle">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextTagNumber"
-                        style="@style/AppTheme.AppTextInputEditText"
+                        style="@style/AppTheme.AppTextInputEditText.Disabled"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned"
-                        android:text="@={ viewModel.tagNumber }"/>
+                        android:text="@{ String.valueOf(viewModel.cattle.tagNumber) }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -77,10 +74,10 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextName"
-                        style="@style/AppTheme.AppTextInputEditText"
+                        style="@style/AppTheme.AppTextInputEditText.Disabled"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={ viewModel.name }"/>
+                        android:text="@{ viewModel.cattle.name }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -96,43 +93,36 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutType"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        style="@style/AppTheme.AppTextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_micro"
                         android:hint="@string/type"
-                        android:layout_weight="1"
-                        app:errorText="@{ viewModel.typeErrorMessage }"
-                        app:helperText="@{ viewModel.type }"
-                        app:helperTextEnabled="true">
+                        android:layout_weight="1">
 
-                        <AutoCompleteTextView
-                            android:id="@+id/exposedDropDownType"
-                            style="@style/AppTheme.AutoCompleteTextView"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextType"
+                            style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownText="@{ viewModel.type }"
-                            tools:ignore="LabelFor" />
+                            android:text="@{ viewModel.cattle.type.displayName }"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutBreed"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        style="@style/AppTheme.AppTextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_micro"
                         android:hint="@string/breed"
-                        android:layout_weight="1"
-                        app:helperText="@{ viewModel.breed }"
-                        app:errorText="@{ viewModel.breedErrorMessage }">
+                        android:layout_weight="1">
 
-                        <AutoCompleteTextView
-                            android:id="@+id/exposedDropDownBreed"
-                            style="@style/AppTheme.AutoCompleteTextView"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextBreed"
+                            style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownText="@{ viewModel.breed }"
-                            tools:ignore="Deprecated,LabelFor" />
+                            android:text="@{ viewModel.cattle.breed.displayName }"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -150,22 +140,19 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutGroup"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        style="@style/AppTheme.AppTextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_micro"
                         android:layout_weight="1"
-                        android:hint="@string/group"
-                        app:errorText="@{ viewModel.groupErrorMessage }"
-                        app:helperText="@{ viewModel.group }">
+                        android:hint="@string/group">
 
-                        <AutoCompleteTextView
-                            android:id="@+id/exposedDropDownGroup"
-                            style="@style/AppTheme.AutoCompleteTextView"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextGroup"
+                            style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownText="@{ viewModel.group }"
-                            tools:ignore="Deprecated,LabelFor" />
+                            android:text="@{ viewModel.cattle.group.displayName }"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -175,17 +162,15 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_micro"
                         android:layout_weight="1"
-                        android:hint="@string/lactation"
-                        app:errorText="@{ viewModel.lactationErrorMessage }"
-                        app:helperText="@{ viewModel.lactation }">
+                        android:hint="@string/lactation">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextLactation"
-                            style="@style/AppTheme.AppTextInputEditText"
+                            style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="@={ viewModel.lactation }" />
+                            android:text="@{ String.valueOf(viewModel.cattle.lactation) }" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
@@ -203,13 +188,10 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextDateOfBirth"
-                        style="@style/AppTheme.AppTextInputDate"
+                        style="@style/AppTheme.AppTextInputEditText.Disabled"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="@{ InputType.TYPE_NULL }"
-                        android:onClick="@{ () -> viewModel.pickBirthDate() }"
-                        android:onLongClick="@{ (view) -> viewModel.removeDob(view) }"
-                        app:dateText="@{ viewModel.dob }"/>
+                        app:dateText="@{ viewModel.cattle.dateOfBirth }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -221,31 +203,26 @@
                     android:hint="@string/parent"
                     app:endIconDrawable="@drawable/ic_arrow_right_white"
                     app:endIconMode="custom"
-                    app:helperText="@string/parent_helper_text"
-                    app:helperTextEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layoutDateOfBirth">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextParent"
-                        style="@style/AppTheme.TextInputParent"
+                        style="@style/AppTheme.AppTextInputEditText.Disabled"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="@{ InputType.TYPE_NULL }"
-                        android:text="@={ viewModel.parent }"
-                        android:onClick="@{ () -> viewModel.pickParent() }"
-                        android:onLongClick="@{ (view) -> viewModel.removeParent(view) }"/>
+                        android:text="@{ String.valueOf(viewModel.cattle.parent) }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchHomeBorn"
-                    style="@style/AppTheme.MaterialSwitch"
+                    style="@style/AppTheme.MaterialSwitch.Disabled"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:text="@string/home_born"
-                    android:checked="@={ viewModel.homeBorn }"
+                    android:checked="@{ viewModel.cattle.homeBorn }"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layoutParent" />
@@ -257,7 +234,7 @@
                     android:orientation="horizontal"
                     android:baselineAligned="true"
                     android:layout_marginTop="@dimen/margin_small"
-                    app:goneUnless="@{ !viewModel.homeBorn }"
+                    app:goneUnless="@{ !viewModel.cattle.homeBorn }"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/switchHomeBorn"
                     app:layout_constraintEnd_toEndOf="parent">
@@ -273,12 +250,11 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPurchaseAmount"
-                            style="@style/AppTheme.AppTextInputEditText"
+                            style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="@={ viewModel.purchaseAmount }"
-                            app:resetText="@{ viewModel.homeBorn }"/>
+                            android:text="@{ String.valueOf(viewModel.cattle.purchaseAmount) }"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -293,14 +269,10 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPurchaseDate"
-                            style="@style/AppTheme.AppTextInputDate"
+                            style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="@{ InputType.TYPE_NULL }"
-                            android:onClick="@{ () -> viewModel.pickPurchaseDate() }"
-                            android:onLongClick="@{ (view) -> viewModel.removePurchaseDate(view) }"
-                            app:dateText="@{ viewModel.purchaseDate }"
-                            app:resetText="@{ viewModel.homeBorn }"/>
+                            app:dateText="@{ viewModel.cattle.purchaseDate }"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
@@ -343,13 +315,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnAddNewBreeding" />
 
-                <androidx.constraintlayout.widget.Guideline
-                    android:id="@+id/guideline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.5" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
@@ -360,9 +325,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/margin_normal"
-            android:src="@drawable/ic_check_black"
-            android:onClick="@{() -> viewModel.save() }"
-            android:transitionName="@string/tn_fabButton" />
+            android:src="@drawable/ic_edit_black"
+            android:onClick="@{ () -> viewModel.editCattle() }" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

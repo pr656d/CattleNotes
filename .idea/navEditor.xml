@@ -207,19 +207,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="navigation_cashflow">
-                    <value>
-                      <LayoutPositions>
-                        <option name="myPosition">
-                          <Point>
-                            <option name="x" value="256" />
-                            <option name="y" value="368" />
-                          </Point>
-                        </option>
-                      </LayoutPositions>
-                    </value>
-                  </entry>
-                  <entry key="navigation_cattle_list">
+                  <entry key="cattleListScreen">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -230,17 +218,29 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="navigate_to_add_cattle">
+                            <entry key="to_add_edit_cattle">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="navigate_to_cattle_details">
+                            <entry key="to_cattle_detail">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
                           </map>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="navigation_cashflow">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="256" />
+                            <option name="y" value="368" />
+                          </Point>
                         </option>
                       </LayoutPositions>
                     </value>

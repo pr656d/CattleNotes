@@ -27,6 +27,9 @@ fun goneUnless(view: View, visible: Boolean) {
     view.visibility = if (visible) VISIBLE else GONE
 }
 
+/**
+ * Set [errorText] on [TextInputLayout] from string resource.
+ */
 @BindingAdapter("errorText")
 fun errorText(view: TextInputLayout, @StringRes message: Int) {
     if (message == 0) {
@@ -47,6 +50,7 @@ fun helperText(view: TextInputLayout, value: String?) {
     }
 }
 
+/** Set text on [TextInputEditText] from [Date] type.  */
 @BindingAdapter("dateText")
 fun dateText(view: TextInputEditText, value: Date?) {
     with(view) {
@@ -58,6 +62,12 @@ fun dateText(view: TextInputEditText, value: Date?) {
     }
 }
 
+/**
+ * Set text on [AutoCompleteTextView] which is used in [TextInputLayout] for dropdown menu.
+ * Default [AutoCompleteTextView.setText] method filters so dropdown doesn't show all options
+ * when pre set option is needed.
+ * pass false for filter while setting text which will not filter and shows all options of dropdown.
+ */
 @BindingAdapter("dropDownText")
 fun dropDownText(view: AutoCompleteTextView, text: String?) {
     with(view) {

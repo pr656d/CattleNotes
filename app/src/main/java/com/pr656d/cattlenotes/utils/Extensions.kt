@@ -1,6 +1,5 @@
 package com.pr656d.cattlenotes.utils
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -131,9 +130,6 @@ fun Context.toDate(dayOfMonth: Int, month: Int, year: Int): Date? {
 }
 
 fun Context.getString(date: Date): String = DateFormat.getMediumDateFormat(this).format(date)
-
-@SuppressLint("SimpleDateFormat")
-fun Date.toFormattedString(): String = SimpleDateFormat("dd/MM/yyyy").format(this)
 
 // end region
 

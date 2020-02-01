@@ -37,7 +37,7 @@ class CattleListViewHolder(
 
     override fun setupView(view: View) {
         view.layout_cattle_item.setOnClickListener {
-            val action = CattleListFragmentDirections.navigateToCattleDetails(tagNumber)
+            val action = CattleListFragmentDirections.toCattleDetail(tagNumber)
             it.findNavController().navigate(action)
         }
     }

@@ -5,7 +5,7 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/navigation_cattle_list"
+            android:id="@+id/cattleListScreen"
             android:checkable="true"
             android:icon="@drawable/ic_cattle"
             android:title="@string/cattle"

@@ -28,19 +28,19 @@ data class Cattle(
 
     @SerializedName("breed")
     @ColumnInfo(name = "breed")
-    val breed: Breed = Breed.HF,
+    val breed: Breed,
 
     @SerializedName("group")
     @ColumnInfo(name = "group")
-    val group: Group = Group.MILKING,
+    val group: Group,
 
     @SerializedName("lactation")
     @ColumnInfo(name = "lactation")
-    val lactation: Int = 0,
+    val lactation: Int,
 
     @SerializedName("home_birth")
     @ColumnInfo(name = "home_birth")
-    val homeBirth: Boolean = false,
+    val homeBorn: Boolean = false,
 
     @SerializedName("purchase_amount")
     @ColumnInfo(name = "purchase_amount")
@@ -48,7 +48,7 @@ data class Cattle(
 
     @SerializedName("purchased_on")
     @ColumnInfo(name = "purchased_on")
-    val purchasedOn: Date? = null,
+    val purchaseDate: Date? = null,
 
     @SerializedName("date_of_birth")
     @ColumnInfo(name = "date_of_birth")

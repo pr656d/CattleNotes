@@ -50,7 +50,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
         findViewById<Toolbar>(R.id.toolbar).apply {
             val topLevelDestinations = setOf(
-                R.id.navigation_cattle_list,
+                R.id.cattleListScreen,
                 R.id.navigation_timeline,
                 R.id.navigation_milking,
                 R.id.navigation_cashflow

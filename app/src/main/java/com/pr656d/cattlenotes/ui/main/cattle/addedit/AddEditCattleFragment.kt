@@ -84,9 +84,7 @@ class AddEditCattleFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.action.observe(viewLifecycleOwner, EventObserver {
-            performAction(it)
-        })
+        model.action.observe(viewLifecycleOwner, EventObserver { performAction(it) })
 
         model.saving.observe(viewLifecycleOwner) {
             if (it)

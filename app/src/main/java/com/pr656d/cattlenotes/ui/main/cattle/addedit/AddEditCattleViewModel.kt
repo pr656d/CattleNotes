@@ -142,9 +142,9 @@ class AddEditCattleViewModel @Inject constructor(
         lactation.value = cattle.lactation.toString()
         _dob.value = cattle.dateOfBirth
         parent.value = cattle.parent?.toString()
-        homeBorn.value = cattle.homeBirth
+        homeBorn.value = cattle.homeBorn
         purchaseAmount.value = cattle.purchaseAmount?.toString()
-        _purchaseDate.value = cattle.purchasedOn
+        _purchaseDate.value = cattle.purchaseDate
     }
 
     private fun getCattle(): Cattle =

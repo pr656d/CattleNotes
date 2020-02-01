@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@+id/navigation_cattle_list">
+    app:startDestination="@+id/cattleListScreen">
 
     <fragment
-        android:id="@+id/navigation_cattle_list"
+        android:id="@+id/cattleListScreen"
         android:name="com.pr656d.cattlenotes.ui.main.cattle.list.CattleListFragment"
         android:label="@string/cattle"
         tools:layout="@layout/fragment_cattle_list">
 
         <action
-            android:id="@+id/navigate_to_add_cattle"
+            android:id="@+id/to_add_edit_cattle"
             app:destination="@id/addEditCattleScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -20,8 +20,8 @@
             app:popExitAnim="@anim/slide_out_right"/>
 
         <action
-            android:id="@+id/navigate_to_cattle_details"
-            app:destination="@id/cattleDetailsScreen"
+            android:id="@+id/to_cattle_detail"
+            app:destination="@id/cattleDetailScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -29,17 +29,25 @@
     </fragment>
 
     <fragment
-        android:id="@+id/cattleDetailsScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsFragment"
+        android:id="@+id/cattleDetailScreen"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragment"
         android:label="@string/cattle_details"
-        tools:layout="@layout/fragment_cattle_details">
+        tools:layout="@layout/fragment_cattle_detail">
 
         <argument
             android:name="cattle_tag_number"
             app:argType="string" />
 
         <action
-            android:id="@+id/navigate_to_active_breeding"
+            android:id="@+id/to_add_edit_cattle"
+            app:destination="@id/addEditCattleScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/to_active_breeding"
             app:destination="@id/activeBreedingScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -47,7 +55,7 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/navigate_to_add_breeding"
+            android:id="@+id/to_add_breeding"
             app:destination="@id/addBreedingScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -55,7 +63,7 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/navigate_to_breeding_history"
+            android:id="@+id/to_breeding_history"
             app:destination="@id/breedingHistoryScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -76,7 +84,7 @@
             android:defaultValue="@null"/>
 
         <action
-            android:id="@+id/navigate_to_active_breeding"
+            android:id="@+id/to_active_breeding"
             app:destination="@id/activeBreedingScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -84,7 +92,7 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/navigate_to_add_breeding"
+            android:id="@+id/to_add_breeding"
             app:destination="@id/addBreedingScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -92,7 +100,7 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/navigate_to_breeding_history"
+            android:id="@+id/to_breeding_history"
             app:destination="@id/breedingHistoryScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"

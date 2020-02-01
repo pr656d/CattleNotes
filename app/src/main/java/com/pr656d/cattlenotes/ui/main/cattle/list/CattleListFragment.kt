@@ -41,7 +41,7 @@ class CattleListFragment : BaseFragment() {
         }
 
         fabButtonAddCattle.setOnClickListener {
-            val action = CattleListFragmentDirections.navigateToAddCattle()
+            val action = CattleListFragmentDirections.toAddEditCattle()
             findNavController().navigate(action)
         }
     }

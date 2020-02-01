@@ -8,12 +8,12 @@ import com.pr656d.cattlenotes.ui.login.LoginBindingModule
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.ui.main.MainBindingModule
 import com.pr656d.cattlenotes.ui.main.cashflow.CashflowBindingModule
-import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleBindingModule
+import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleModule
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogBindingModule
 import com.pr656d.cattlenotes.ui.main.cattle.breeding.active.ActiveBreedingBindingModule
 import com.pr656d.cattlenotes.ui.main.cattle.breeding.add.AddBreedingBindingModule
 import com.pr656d.cattlenotes.ui.main.cattle.breeding.history.BreedingHistoryBindingModule
-import com.pr656d.cattlenotes.ui.main.cattle.details.CattleDetailsBindingModule
+import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailModule
 import com.pr656d.cattlenotes.ui.main.cattle.list.CattleListBindingModule
 import com.pr656d.cattlenotes.ui.main.milking.MilkingBindingModule
 import com.pr656d.cattlenotes.ui.main.timeline.TimelineBindingModule
@@ -48,8 +48,8 @@ abstract class ActivityBindingModule {
             MainBindingModule::class,
             // fragments
             CattleListBindingModule::class,
-            CattleDetailsBindingModule::class,
-            AddEditCattleBindingModule::class,
+            CattleDetailModule::class,
+            AddEditCattleModule::class,
             ActiveBreedingBindingModule::class,
             AddBreedingBindingModule::class,
             BreedingHistoryBindingModule::class,

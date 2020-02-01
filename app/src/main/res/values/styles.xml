@@ -118,6 +118,11 @@
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
     </style>
 
+    <style name="AppTheme.AppTextInputEditText.Disabled" parent="AppTheme.AppTextInputEditText">
+        <item name="android:editable">false</item>
+        <item name="android:enabled">false</item>
+    </style>
+
     <style name="AppTheme.TextInputParent" parent="AppTheme.AppTextInputDate"/>
 
     <style name="AppTheme.MaterialCheckBox">
@@ -136,6 +141,10 @@
         <item name="android:paddingBottom">@dimen/box_padding</item>
         <item name="android:textColor">@drawable/selector_text_color</item>
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
+    </style>
+
+    <style name="AppTheme.MaterialSwitch.Disabled" parent="AppTheme.MaterialSwitch">
+        <item name="android:enabled">false</item>
     </style>
 
     <!--  For exposed drop down menu  -->
