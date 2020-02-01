@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.pr656d.cattlenotes.databinding.FragmentCattleListBinding
 import com.pr656d.cattlenotes.ui.main.cattle.list.CattleListFragmentDirections.Companion.toAddEditCattle
+import com.pr656d.cattlenotes.ui.main.cattle.list.CattleListFragmentDirections.Companion.toCattleDetail
 import com.pr656d.cattlenotes.utils.EventObserver
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -23,7 +23,7 @@ class CattleListFragment : DaggerFragment() {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val model by viewModels<CattleListViewModel> { viewModelFactory }
     private lateinit var binding: FragmentCattleListBinding
-    private val cattleAdapter = CattleListAdapter()
+    private val cattleAdapter by lazy { CattleListAdapter(model) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,15 +36,18 @@ class CattleListFragment : DaggerFragment() {
             viewModel = model
             rvCattleList.adapter = cattleAdapter
         }
+        return binding.root
+    }
 
-        model.cattleList.observe(viewLifecycleOwner) {
-            cattleAdapter.updateList(it)
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         model.launchAddCattleScreen.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(toAddEditCattle())
         })
 
-        return binding.root
+        model.launchCattleDetail.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(toCattleDetail(it.tagNumber.toString()))
+        })
     }
 }

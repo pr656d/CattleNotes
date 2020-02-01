@@ -1,114 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_cattle_item"
-    style="@style/Widget.MaterialComponents.CardView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    app:cardCornerRadius="0dp"
-    app:rippleColor="@color/rippleColor">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable
+            name="eventListener"
+            type="com.pr656d.cattlenotes.ui.main.cattle.list.CattleActionListener" />
+
+        <variable
+            name="cattle"
+            type="com.pr656d.cattlenotes.data.model.Cattle" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/layout_cattle_item"
+        style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{ () -> eventListener.openCattle(cattle) }"
+        app:cardCornerRadius="0dp"
+        app:rippleColor="@color/rippleColor">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineLeft"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_begin="@dimen/spacing_normal" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_end="@dimen/spacing_normal" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineBottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="@dimen/spacing_normal" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guidelineTop"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="@dimen/spacing_normal" />
-
-        <ImageView
-            android:id="@+id/ivProfileImage"
-            android:layout_width="@dimen/photo_width_normal"
-            android:layout_height="@dimen/photo_height_normal"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_cattle"
-            android:padding="@dimen/padding_micro"
-            app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-            app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-            app:layout_constraintTop_toTopOf="@+id/guidelineTop"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/tvTagNumber"
-            style="@style/AppTheme.Body1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
-            android:textAlignment="textStart"
-            app:layout_constraintBottom_toTopOf="@+id/tvType"
-            app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-            app:layout_constraintTop_toTopOf="@+id/guidelineTop"
-            tools:text="123456789012" />
-
-        <TextView
-            android:id="@+id/tvName"
-            style="@style/AppTheme.Subtitle1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grey"
-            app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-            app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
-            app:layout_constraintTop_toTopOf="@+id/guidelineTop"
-            tools:text="Name" />
-
-        <TextView
-            android:id="@+id/tvType"
-            style="@style/AppTheme.Body2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grey_light"
-            app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-            app:layout_constraintStart_toEndOf="@+id/tvGroup"
-            tools:text="Cow" />
-
-        <TextView
-            android:id="@+id/tvGroup"
-            style="@style/AppTheme.Body2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="0dp"
-            android:paddingEnd="8dp"
-            android:textColor="@color/grey_light"
-            app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-            app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
-            tools:text="Milking"
-            tools:visibility="visible" />
-
-        <View
-            android:id="@+id/divider"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="0.2dp"
-            android:background="@drawable/divider"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="wrap_content">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</com.google.android.material.card.MaterialCardView>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/spacing_normal" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/spacing_normal" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_end="@dimen/spacing_normal" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guidelineTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="@dimen/spacing_normal" />
+
+            <ImageView
+                android:id="@+id/ivProfileImage"
+                android:layout_width="@dimen/photo_width_normal"
+                android:layout_height="@dimen/photo_height_normal"
+                android:scaleType="centerCrop"
+                android:padding="@dimen/padding_micro"
+                app:srcCompat="@drawable/ic_cattle"
+                app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+                app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
+                app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tvTagNumber"
+                style="@style/AppTheme.Body1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small"
+                android:textAlignment="textStart"
+                android:text="@{ String.valueOf(cattle.tagNumber) }"
+                app:layout_constraintBottom_toTopOf="@+id/tvType"
+                app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+                app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+                tools:text="123456789012" />
+
+            <TextView
+                android:id="@+id/tvName"
+                style="@style/AppTheme.Subtitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                android:text="@{ cattle.name }"
+                app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+                app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
+                app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+                tools:text="Name" />
+
+            <TextView
+                android:id="@+id/tvType"
+                style="@style/AppTheme.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey_light"
+                android:text="@{ cattle.type.displayName }"
+                app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+                app:layout_constraintStart_toEndOf="@+id/tvGroup"
+                tools:text="Cow" />
+
+            <TextView
+                android:id="@+id/tvGroup"
+                style="@style/AppTheme.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="0dp"
+                android:paddingEnd="8dp"
+                android:textColor="@color/grey_light"
+                android:text="@{ cattle.group.displayName }"
+                app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+                app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
+                tools:text="Milking"
+                tools:visibility="visible" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="0.2dp"
+                android:background="@drawable/divider"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
