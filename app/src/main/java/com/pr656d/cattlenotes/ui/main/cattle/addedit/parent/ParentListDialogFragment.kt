@@ -10,10 +10,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentParentListBinding
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragment
+import com.pr656d.cattlenotes.utils.EventObserver
 import com.pr656d.cattlenotes.utils.executeAfter
 import dagger.android.support.DaggerDialogFragment
 import javax.inject.Inject
@@ -35,7 +35,6 @@ class ParentListDialogFragment : DaggerDialogFragment() {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val model by viewModels<ParentListDialogViewModel> { viewModelFactory }
     private lateinit var binding: FragmentParentListBinding
-    private lateinit var parentAdapter: ParentCattleListAdapter
 
     override fun onStart() {
         super.onStart()
@@ -53,9 +52,6 @@ class ParentListDialogFragment : DaggerDialogFragment() {
         super.onCreate(savedInstanceState)
 
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
-
-        val tagNumber = arguments?.getString(ARG_TAG_NUMBER)
-        model.setTagNumber(tagNumber)
     }
 
     override fun onCreateView(
@@ -67,34 +63,28 @@ class ParentListDialogFragment : DaggerDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = model
 
+        val tagNumber = arguments?.getString(ARG_TAG_NUMBER)
+        model.setTagNumber(tagNumber)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        parentAdapter = ParentCattleListAdapter(
-            object : ParentCattleListAdapter.ClickListener {
-                override fun onClick(parentTagNumber: String) {
-                    setParentTagNumber(parentTagNumber)
-                    dismiss()
-                }
-            }
-        )
-
         binding.executeAfter {
-            rvParentList.adapter = parentAdapter
             selectParentToolbar.setNavigationOnClickListener {
                 dismiss()
             }
         }
 
-        model.parentList.observe(viewLifecycleOwner) {
-            parentAdapter.updateList(it)
-        }
+        model.parentSelected.observe(viewLifecycleOwner, EventObserver {
+            setParentTagNumber(it.tagNumber.toString())
+            dismiss()
+        })
     }
 
-    fun setParentTagNumber(parentTagNumber: String) {
+    private fun setParentTagNumber(parentTagNumber: String) {
         targetFragment?.run {
             val intent = AddEditCattleFragment.newIntent(parentTagNumber)
             onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
