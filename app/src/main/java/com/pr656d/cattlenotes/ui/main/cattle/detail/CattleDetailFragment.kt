@@ -29,11 +29,6 @@ class CattleDetailFragment : DaggerFragment() {
     private val model by viewModels<CattleDetailViewModel> { viewModelFactory }
     private lateinit var binding: FragmentCattleDetailBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        model.fetchCattle(args.cattleTagNumber)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,12 +39,14 @@ class CattleDetailFragment : DaggerFragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = model
         }
+
+        model.fetchCattle(args.cattleTagNumber)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         model.action.observe(viewLifecycleOwner, EventObserver { performAction(it) })
     }
 
@@ -58,12 +55,15 @@ class CattleDetailFragment : DaggerFragment() {
             ACTIVE_BREEDING -> {
 
             }
+
             ALL_BREEDING_SCREEN -> {
 
             }
+
             ADD_BREEDING_SCREEN -> {
 
             }
+
             EDIT_CATTLE_SCREEN -> {
                 findNavController().navigate(toAddEditCattle(action.data as String))
             }

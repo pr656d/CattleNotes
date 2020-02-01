@@ -20,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination.DESTINATIONS.*
@@ -247,5 +248,37 @@ class AddEditCattleFragment : DaggerFragment() {
 fun resetText(view: TextInputEditText, value: Boolean) {
     if (value) {
         view.text = null
+    }
+}
+
+
+/** Set helper text as [R.string.required] on [TextInputLayout] based on text provided. */
+@BindingAdapter("setRequired")
+fun setRequired(view: TextInputLayout, text: String?) {
+    view.apply {
+        if (text.isNullOrBlank()) {
+            isHelperTextEnabled = true
+            helperText = context.getString(R.string.required)
+        } else {
+            isHelperTextEnabled = false
+            helperText = null
+        }
+    }
+}
+
+/**
+ * Set text on [AutoCompleteTextView] which is used in [TextInputLayout] for dropdown menu.
+ * Default [AutoCompleteTextView.setText] method filters so dropdown doesn't show all options
+ * when pre set option is needed.
+ * pass false for filter while setting text which will not filter and shows all options of dropdown.
+ */
+@BindingAdapter("dropDownText")
+fun dropDownText(view: AutoCompleteTextView, text: String?) {
+    view.apply {
+        if (text.isNullOrEmpty()) {
+            setText(null, false)
+        } else {
+            setText(text, false)
+        }
     }
 }

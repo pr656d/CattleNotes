@@ -144,17 +144,17 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="navigate_to_active_breeding">
+                            <entry key="to_active_breeding">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="navigate_to_add_breeding">
+                            <entry key="to_add_breeding">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="navigate_to_breeding_history">
+                            <entry key="to_breeding_history">
                               <value>
                                 <LayoutPositions />
                               </value>
@@ -176,7 +176,7 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="cattleDetailsScreen">
+                  <entry key="cattleDetailScreen">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">
@@ -187,17 +187,17 @@
                         </option>
                         <option name="myPositions">
                           <map>
-                            <entry key="navigate_to_active_breeding">
+                            <entry key="to_add_breeding">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="navigate_to_add_breeding">
+                            <entry key="to_add_edit_cattle">
                               <value>
                                 <LayoutPositions />
                               </value>
                             </entry>
-                            <entry key="navigate_to_breeding_history">
+                            <entry key="to_breeding_history">
                               <value>
                                 <LayoutPositions />
                               </value>

@@ -212,7 +212,7 @@
                         style="@style/AppTheme.AppTextInputEditText.Disabled"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{ String.valueOf(viewModel.cattle.parent) }" />
+                        android:text="@{ viewModel.cattle.parent != null ? String.valueOf(viewModel.cattle.parent) : null }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
