@@ -23,6 +23,10 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
+import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toActiveBreeding
+import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toAddBreeding
+import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toBreedingHistory
+import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogFragment
 import com.pr656d.cattlenotes.utils.*
@@ -105,8 +109,8 @@ class AddEditCattleFragment : DaggerFragment() {
         }
     }
 
-    private fun performAction(action: AddEditCattleViewModel.Destination) {
-        when(action.destination) {
+    private fun performAction(action: Destination) = with(action) {
+        when (destination) {
             PICK_DATE_OF_BIRTH -> selectDateOfBirth()
             REMOVE_DATE_OF_BIRTH -> {
                 requireContext().showDialog(
@@ -117,7 +121,7 @@ class AddEditCattleFragment : DaggerFragment() {
                 )
             }
 
-            PICK_PARENT -> binding.editTextParent.pickParent(action.data as String)
+            PICK_PARENT -> data?.let { binding.editTextParent.pickParent(it) }
             REMOVE_PARENT -> {
                 requireContext().showDialog(
                     title = R.string.remove_parent_message,
@@ -137,17 +141,11 @@ class AddEditCattleFragment : DaggerFragment() {
                 )
             }
 
-            ACTIVE_BREEDING -> {
+            ACTIVE_BREEDING -> data?.let { findNavController().navigate(toActiveBreeding(it)) }
 
-            }
+            ALL_BREEDING_SCREEN -> data?.let { findNavController().navigate(toBreedingHistory(it)) }
 
-            ALL_BREEDING_SCREEN -> {
-
-            }
-
-            ADD_BREEDING_SCREEN -> {
-
-            }
+            ADD_BREEDING_SCREEN -> data?.let { findNavController().navigate(toAddBreeding(it)) }
 
             BACK_CONFIRMATION_DIALOG -> {
                 requireContext().showDialog(

@@ -32,22 +32,30 @@ class CattleDetailViewModel @Inject constructor(
     }
 
     fun showAllBreeding() {
-        _action.value = Event(Destination(ALL_BREEDING_SCREEN))
+        cattle.value!!.tagNumber.toString().let {
+            _action.value = Event(Destination(ALL_BREEDING_SCREEN, it))
+        }
     }
 
     fun addNewBreeding() {
-        _action.value = Event(Destination(ADD_BREEDING_SCREEN))
+        cattle.value!!.tagNumber.toString().let {
+            _action.value = Event(Destination(ADD_BREEDING_SCREEN, it))
+        }
     }
 
     fun showActiveBreeding() {
-        _action.value = Event(Destination(ACTIVE_BREEDING))
+        cattle.value!!.tagNumber.toString().let {
+            _action.value = Event(Destination(ACTIVE_BREEDING, it))
+        }
     }
 
     fun editCattle() {
-        _action.value = Event(Destination(EDIT_CATTLE_SCREEN, cattle.value!!.tagNumber.toString()))
+        cattle.value!!.tagNumber.toString().let {
+            _action.value = Event(Destination(EDIT_CATTLE_SCREEN, it))
+        }
     }
 
-    data class Destination(val destination: DESTINATIONS, val data: Any = Unit) {
+    data class Destination(val destination: DESTINATIONS, val data: String? = null) {
         enum class DESTINATIONS {
             ACTIVE_BREEDING, ALL_BREEDING_SCREEN, ADD_BREEDING_SCREEN, EDIT_CATTLE_SCREEN
         }

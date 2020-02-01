@@ -187,6 +187,11 @@
                         </option>
                         <option name="myPositions">
                           <map>
+                            <entry key="to_active_breeding">
+                              <value>
+                                <LayoutPositions />
+                              </value>
+                            </entry>
                             <entry key="to_add_breeding">
                               <value>
                                 <LayoutPositions />

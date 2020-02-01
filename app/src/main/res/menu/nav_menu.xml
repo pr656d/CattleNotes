@@ -12,19 +12,19 @@
             android:checked="true"/>
 
         <item
-            android:id="@+id/navigation_timeline"
+            android:id="@+id/timelineScreen"
             android:checkable="true"
             android:icon="@drawable/ic_timeline"
             android:title="@string/timeline" />
 
         <item
-            android:id="@+id/navigation_milking"
+            android:id="@+id/milkingScreen"
             android:checkable="true"
             android:icon="@drawable/ic_milking"
             android:title="@string/milking" />
 
         <item
-            android:id="@+id/navigation_cashflow"
+            android:id="@+id/cashflowScreen"
             android:checkable="true"
             android:icon="@drawable/ic_cashflow"
             android:title="@string/cashflow"/>

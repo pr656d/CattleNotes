@@ -1,16 +1,30 @@
 package com.pr656d.cattlenotes.ui.main.cattle.breeding.history
 
-import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.shared.base.BaseFragment
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.pr656d.cattlenotes.databinding.FragmentBreedingHistoryBinding
+import dagger.android.support.DaggerFragment
 
-class BreedingHistoryFragment : BaseFragment() {
+class BreedingHistoryFragment : DaggerFragment() {
 
-    override fun provideLayoutId(): Int = R.layout.fragment_breeding_history
-
-    override fun setupView() {
-
+    companion object {
+        const val TAG = "BreedingHistoryFragment"
     }
 
-    override fun setupObservers() {
+    private lateinit var binding: FragmentBreedingHistoryBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentBreedingHistoryBinding.inflate(inflater, container, false)
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        return binding.root
     }
 }

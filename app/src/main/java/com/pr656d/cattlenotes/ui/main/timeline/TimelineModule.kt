@@ -10,11 +10,11 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**
- * Module where classes needed to create the [TimelineBindingModule] are defined.
+ * Module where classes needed to create the [TimelineModule] are defined.
  */
 @Module
 @Suppress("UNUSED")
-internal abstract class TimelineBindingModule {
+internal abstract class TimelineModule {
 
     /**
      * Generates an [AndroidInjector] for the [TimelineFragment].

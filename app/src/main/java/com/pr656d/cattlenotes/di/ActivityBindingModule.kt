@@ -7,16 +7,16 @@ import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.login.LoginBindingModule
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.ui.main.MainBindingModule
-import com.pr656d.cattlenotes.ui.main.cashflow.CashflowBindingModule
+import com.pr656d.cattlenotes.ui.main.cashflow.CashflowModule
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleModule
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogModule
-import com.pr656d.cattlenotes.ui.main.cattle.breeding.active.ActiveBreedingBindingModule
-import com.pr656d.cattlenotes.ui.main.cattle.breeding.add.AddBreedingBindingModule
-import com.pr656d.cattlenotes.ui.main.cattle.breeding.history.BreedingHistoryBindingModule
+import com.pr656d.cattlenotes.ui.main.cattle.breeding.active.ActiveBreedingModule
+import com.pr656d.cattlenotes.ui.main.cattle.breeding.add.AddBreedingModule
+import com.pr656d.cattlenotes.ui.main.cattle.breeding.history.BreedingHistoryModule
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailModule
 import com.pr656d.cattlenotes.ui.main.cattle.list.CattleListBindingModule
-import com.pr656d.cattlenotes.ui.main.milking.MilkingBindingModule
-import com.pr656d.cattlenotes.ui.main.timeline.TimelineBindingModule
+import com.pr656d.cattlenotes.ui.main.milking.MilkingModule
+import com.pr656d.cattlenotes.ui.main.timeline.TimelineModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -50,12 +50,12 @@ abstract class ActivityBindingModule {
             CattleListBindingModule::class,
             CattleDetailModule::class,
             AddEditCattleModule::class,
-            ActiveBreedingBindingModule::class,
-            AddBreedingBindingModule::class,
-            BreedingHistoryBindingModule::class,
-            TimelineBindingModule::class,
-            MilkingBindingModule::class,
-            CashflowBindingModule::class,
+            ActiveBreedingModule::class,
+            AddBreedingModule::class,
+            BreedingHistoryModule::class,
+            TimelineModule::class,
+            MilkingModule::class,
+            CashflowModule::class,
             // Others
             ParentListDialogModule::class
         ]

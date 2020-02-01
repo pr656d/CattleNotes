@@ -1,6 +1,10 @@
 package com.pr656d.cattlenotes.ui.main.cashflow
 
-import com.pr656d.cattlenotes.shared.base.BaseViewModel
+import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
-class CashflowViewModel @Inject constructor() : BaseViewModel()
+class CashflowViewModel @Inject constructor(
+
+) : ViewModel() {
+
+}

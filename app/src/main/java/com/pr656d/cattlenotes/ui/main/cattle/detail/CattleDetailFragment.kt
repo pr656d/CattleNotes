@@ -9,7 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pr656d.cattlenotes.databinding.FragmentCattleDetailBinding
+import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirections.Companion.toActiveBreeding
+import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirections.Companion.toAddBreeding
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirections.Companion.toAddEditCattle
+import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirections.Companion.toBreedingHistory
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailViewModel.Destination
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.utils.EventObserver
@@ -49,23 +52,15 @@ class CattleDetailFragment : DaggerFragment() {
         model.action.observe(viewLifecycleOwner, EventObserver { performAction(it) })
     }
 
-    private fun performAction(action: Destination) {
-        when (action.destination) {
-            ACTIVE_BREEDING -> {
+    private fun performAction(action: Destination) = with(action) {
+        when (destination) {
+            ACTIVE_BREEDING -> data?.let { findNavController().navigate(toActiveBreeding(it)) }
 
-            }
+            ALL_BREEDING_SCREEN -> data?.let { findNavController().navigate(toBreedingHistory(it)) }
 
-            ALL_BREEDING_SCREEN -> {
+            ADD_BREEDING_SCREEN -> data?.let { findNavController().navigate(toAddBreeding(it)) }
 
-            }
-
-            ADD_BREEDING_SCREEN -> {
-
-            }
-
-            EDIT_CATTLE_SCREEN -> {
-                findNavController().navigate(toAddEditCattle(action.data as String))
-            }
+            EDIT_CATTLE_SCREEN -> data?.let { findNavController().navigate(toAddEditCattle(it)) }
         }
     }
 }

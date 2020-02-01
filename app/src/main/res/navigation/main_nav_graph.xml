@@ -125,6 +125,10 @@
         android:label="@string/add_new_breeding"
         tools:layout="@layout/fragment_add_breeding">
 
+        <argument
+            android:name="cattle_tag_number"
+            app:argType="string"/>
+
     </fragment>
 
     <fragment
@@ -133,22 +137,26 @@
         android:label="@string/breeding_history"
         tools:layout="@layout/fragment_breeding_history">
 
+        <argument
+            android:name="cattle_tag_number"
+            app:argType="string"/>
+
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_timeline"
+        android:id="@+id/timelineScreen"
         android:name="com.pr656d.cattlenotes.ui.main.timeline.TimelineFragment"
         android:label="@string/timeline"
         tools:layout="@layout/fragment_timeline" />
 
     <fragment
-        android:id="@+id/navigation_milking"
+        android:id="@+id/milkingScreen"
         android:name="com.pr656d.cattlenotes.ui.main.milking.MilkingFragment"
         android:label="@string/milking"
         tools:layout="@layout/fragment_milking" />
 
     <fragment
-        android:id="@+id/navigation_cashflow"
+        android:id="@+id/cashflowScreen"
         android:name="com.pr656d.cattlenotes.ui.main.cashflow.CashflowFragment"
         android:label="@string/cashflow"
         tools:layout="@layout/fragment_cashflow" />

@@ -217,15 +217,27 @@ class AddEditCattleViewModel @Inject constructor(
     }
 
     fun showAllBreeding() {
-        _action.value = Event(Destination(ALL_BREEDING_SCREEN))
+        tagNumber.value?.let {
+            _action.value = Event(Destination(ALL_BREEDING_SCREEN, it))
+            return
+        }
+        _showMessage.value = R.string.provide_tag_number
     }
 
     fun addNewBreeding() {
-        _action.value = Event(Destination(ADD_BREEDING_SCREEN))
+        tagNumber.value?.let {
+            _action.value = Event(Destination(ADD_BREEDING_SCREEN, it))
+            return
+        }
+        _showMessage.value = R.string.provide_tag_number
     }
 
     fun showActiveBreeding() {
-        _action.value = Event(Destination(ACTIVE_BREEDING))
+        tagNumber.value?.let {
+            _action.value = Event(Destination(ACTIVE_BREEDING, it))
+            return
+        }
+        _showMessage.value = R.string.provide_tag_number
     }
 
     fun onBackPressed() {
@@ -239,7 +251,7 @@ class AddEditCattleViewModel @Inject constructor(
         _action.value = Event(Destination(NAVIGATE_UP))
     }
 
-    data class Destination(val destination: DESTINATIONS, val data: Any = Unit) {
+    data class Destination(val destination: DESTINATIONS, val data: String? = null) {
         enum class DESTINATIONS {
             PICK_DATE_OF_BIRTH, PICK_PARENT, PICK_PURCHASE_DATE,
             REMOVE_DATE_OF_BIRTH, REMOVE_PARENT, REMOVE_PURCHASE_DATE,

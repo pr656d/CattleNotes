@@ -10,11 +10,11 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**
- * Module where classes needed to create the [CashflowBindingModule] are defined.
+ * Module where classes needed to create the [CashflowModule] are defined.
  */
 @Module
 @Suppress("UNUSED")
-internal abstract class CashflowBindingModule {
+internal abstract class CashflowModule {
 
     /**
      * Generates an [AndroidInjector] for the [CashflowFragment].

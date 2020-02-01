@@ -111,7 +111,7 @@
     <string name="show_active_breeding">Show active breeding</string>
     <string name="error_save">Could not save cattle. Try again.</string>
     <string name="error_fill_empty_fields">Fill required fields.</string>
-    <string name="provide_tag_number">Provide tag number to view parent list</string>
+    <string name="provide_tag_number">Provide tag number</string>
     <!--  Add cattle  -->
     <string name="add_cattle">Add new cattle</string>
     <!--  Edit cattle details  -->

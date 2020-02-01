@@ -51,9 +51,9 @@ class MainActivity : DaggerAppCompatActivity() {
         findViewById<Toolbar>(R.id.toolbar).apply {
             val topLevelDestinations = setOf(
                 R.id.cattleListScreen,
-                R.id.navigation_timeline,
-                R.id.navigation_milking,
-                R.id.navigation_cashflow
+                R.id.timelineScreen,
+                R.id.milkingScreen,
+                R.id.cashflowScreen
             )
 
             val appBarConfig = AppBarConfiguration(topLevelDestinations, drawer)

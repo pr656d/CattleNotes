@@ -1,29 +1,30 @@
 package com.pr656d.cattlenotes.ui.main.cattle.breeding.active
 
-import androidx.fragment.app.viewModels
-import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.ui.main.cattle.breeding.base.BaseBreedingFragment
-import com.pr656d.cattlenotes.ui.main.cattle.breeding.base.BaseBreedingViewModel
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.pr656d.cattlenotes.databinding.FragmentActiveBreedingBinding
+import dagger.android.support.DaggerFragment
 
-class ActiveBreedingFragment : BaseBreedingFragment() {
+class ActiveBreedingFragment : DaggerFragment() {
 
     companion object {
         const val TAG = "ActiveBreedingFragment"
     }
 
-    private val viewModel by viewModels<ActiveBreedingViewModel> { viewModelFactory }
+    private lateinit var binding: FragmentActiveBreedingBinding
 
-    override fun provideLayoutId(): Int = R.layout.fragment_active_breeding
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentActiveBreedingBinding.inflate(inflater, container, false)
+        binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
 
-    override fun getBaseBreedingViewModel(): BaseBreedingViewModel = viewModel
-
-    override fun setupObservers() {
-        super.setupObservers()
-
-    }
-
-    override fun setupView() {
-        super.setupView()
-
+        return binding.root
     }
 }

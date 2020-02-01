@@ -10,11 +10,11 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**
- * Module where classes needed to create the [MilkingBindingModule] are defined.
+ * Module where classes needed to create the [MilkingModule] are defined.
  */
 @Module
 @Suppress("UNUSED")
-internal abstract class MilkingBindingModule {
+internal abstract class MilkingModule {
 
     /**
      * Generates an [AndroidInjector] for the [MilkingFragment].

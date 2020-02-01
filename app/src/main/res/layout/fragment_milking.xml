@@ -1,14 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        style="@style/AppTheme.Headline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Comming soon"
-        android:layout_gravity="center"
-        android:textAlignment="center"/>
+    <data>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </data>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            style="@style/AppTheme.Headline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Milking\nComing soon"
+            android:textAlignment="center" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

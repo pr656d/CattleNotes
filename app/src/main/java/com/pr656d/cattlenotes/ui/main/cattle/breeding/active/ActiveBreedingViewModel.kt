@@ -1,8 +1,10 @@
 package com.pr656d.cattlenotes.ui.main.cattle.breeding.active
 
-import com.pr656d.cattlenotes.ui.main.cattle.breeding.base.BaseBreedingViewModel
+import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
-class ActiveBreedingViewModel @Inject constructor() : BaseBreedingViewModel() {
+class ActiveBreedingViewModel @Inject constructor(
+
+) : ViewModel() {
 
 }

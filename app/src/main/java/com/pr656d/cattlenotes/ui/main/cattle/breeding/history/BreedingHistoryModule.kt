@@ -10,11 +10,11 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**
- * Module where classes needed to create the [BreedingHistoryBindingModule] are defined.
+ * Module where classes needed to create the [BreedingHistoryModule] are defined.
  */
 @Module
 @Suppress("UNUSED")
-internal abstract class BreedingHistoryBindingModule {
+internal abstract class BreedingHistoryModule {
 
 
     /**

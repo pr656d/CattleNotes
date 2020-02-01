@@ -1,6 +1,10 @@
 package com.pr656d.cattlenotes.ui.main.timeline
 
-import com.pr656d.cattlenotes.shared.base.BaseViewModel
+import androidx.lifecycle.ViewModel
 import javax.inject.Inject
 
-class TimelineViewModel @Inject constructor() : BaseViewModel()
+class TimelineViewModel @Inject constructor(
+
+) : ViewModel() {
+
+}
