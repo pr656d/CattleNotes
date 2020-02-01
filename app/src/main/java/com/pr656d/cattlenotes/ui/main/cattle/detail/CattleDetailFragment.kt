@@ -22,8 +22,7 @@ class CattleDetailFragment : DaggerFragment() {
         const val TAG = "CattleDetailsFragment"
     }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val args by navArgs<CattleDetailFragmentArgs>()
     private val model by viewModels<CattleDetailViewModel> { viewModelFactory }

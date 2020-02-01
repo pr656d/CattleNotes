@@ -254,7 +254,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="@{ String.valueOf(viewModel.cattle.purchaseAmount) }"/>
+                            android:text="@{ viewModel.cattle.purchaseAmount != null ? String.valueOf(viewModel.cattle.purchaseAmount) : null }"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout

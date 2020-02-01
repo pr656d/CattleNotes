@@ -10,11 +10,11 @@ import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
 /**
- * Module where classes needed to create the [ParentListDialogBindingModule] are defined.
+ * Module where classes needed to create the [ParentListDialogModule] are defined.
  */
 @Module
 @Suppress("UNUSED")
-internal abstract class ParentListDialogBindingModule {
+internal abstract class ParentListDialogModule {
 
     /**
      * Generates an [AndroidInjector] for the [ParentListDialogFragment].

@@ -9,7 +9,7 @@ import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.ui.main.MainBindingModule
 import com.pr656d.cattlenotes.ui.main.cashflow.CashflowBindingModule
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleModule
-import com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogBindingModule
+import com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogModule
 import com.pr656d.cattlenotes.ui.main.cattle.breeding.active.ActiveBreedingBindingModule
 import com.pr656d.cattlenotes.ui.main.cattle.breeding.add.AddBreedingBindingModule
 import com.pr656d.cattlenotes.ui.main.cattle.breeding.history.BreedingHistoryBindingModule
@@ -57,7 +57,7 @@ abstract class ActivityBindingModule {
             MilkingBindingModule::class,
             CashflowBindingModule::class,
             // Others
-            ParentListDialogBindingModule::class
+            ParentListDialogModule::class
         ]
     )
     internal abstract fun mainActivity(): MainActivity
