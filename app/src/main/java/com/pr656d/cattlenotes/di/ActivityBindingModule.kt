@@ -7,6 +7,7 @@ import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.login.LoginBindingModule
 import com.pr656d.cattlenotes.ui.main.MainActivity
 import com.pr656d.cattlenotes.ui.main.MainBindingModule
+import com.pr656d.cattlenotes.ui.main.aboutapp.AboutAppModule
 import com.pr656d.cattlenotes.ui.main.cashflow.CashflowModule
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleModule
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogModule
@@ -16,6 +17,7 @@ import com.pr656d.cattlenotes.ui.main.cattle.breeding.history.BreedingHistoryMod
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailModule
 import com.pr656d.cattlenotes.ui.main.cattle.list.CattleListBindingModule
 import com.pr656d.cattlenotes.ui.main.milking.MilkingModule
+import com.pr656d.cattlenotes.ui.main.settings.SettingsModule
 import com.pr656d.cattlenotes.ui.main.timeline.TimelineModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -56,6 +58,8 @@ abstract class ActivityBindingModule {
             TimelineModule::class,
             MilkingModule::class,
             CashflowModule::class,
+            SettingsModule::class,
+            AboutAppModule::class,
             // Others
             ParentListDialogModule::class
         ]
