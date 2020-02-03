@@ -13,7 +13,7 @@
 
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,29 +21,39 @@
             android:id="@+id/appBarLayout"
             style="@style/AppTheme.AppBarLight"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
+                app:menu="@menu/cattle_detail_menu"
                 app:navigationIcon="@drawable/ic_menu_black"
-                app:title="@string/cattle_detail"/>
+                app:title="@string/cattle_detail" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:id="@+id/scrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/clip_padding_bottom"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:paddingBottom="@dimen/padding_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/view_cattle_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_normal">
+                android:layout_marginTop="@dimen/margin_normal"
+                android:layout_marginStart="@dimen/margin_normal"
+                android:layout_marginEnd="@dimen/margin_normal">
 
                 <ImageView
                     android:id="@+id/ivCattle"
@@ -73,7 +83,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned"
-                        android:text="@{ String.valueOf(viewModel.cattle.tagNumber) }"/>
+                        android:text="@{ String.valueOf(viewModel.cattle.tagNumber) }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -92,19 +102,19 @@
                         style="@style/AppTheme.AppTextInputEditText.Disabled"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{ viewModel.cattle.name }"/>
+                        android:text="@{ viewModel.cattle.name }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:id="@+id/containerTypeBreed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="@dimen/margin_small"
-                    app:layout_constraintTop_toBottomOf="@+id/layoutName"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:baselineAligned="true">
+                    app:layout_constraintTop_toBottomOf="@+id/layoutName">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutType"
@@ -112,15 +122,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_micro"
-                        android:hint="@string/type"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:hint="@string/type">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextType"
                             style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@{ viewModel.cattle.type.displayName }"/>
+                            android:text="@{ viewModel.cattle.type.displayName }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -129,15 +139,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_micro"
-                        android:hint="@string/breed"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:hint="@string/breed">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextBreed"
                             style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@{ viewModel.cattle.breed.displayName }"/>
+                            android:text="@{ viewModel.cattle.breed.displayName }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
@@ -146,12 +156,12 @@
                     android:id="@+id/containerGroupLactation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="@dimen/margin_small"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/containerTypeBreed"
-                    android:baselineAligned="true">
+                    app:layout_constraintTop_toBottomOf="@+id/containerTypeBreed">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutGroup"
@@ -167,7 +177,7 @@
                             style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@{ viewModel.cattle.group.displayName }"/>
+                            android:text="@{ viewModel.cattle.group.displayName }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -206,7 +216,7 @@
                         style="@style/AppTheme.AppTextInputEditText.Disabled"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:dateText="@{ viewModel.cattle.dateOfBirth }"/>
+                        app:dateText="@{ viewModel.cattle.dateOfBirth }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -236,8 +246,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
-                    android:text="@string/home_born"
                     android:checked="@{ viewModel.cattle.homeBorn }"
+                    android:text="@string/home_born"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layoutParent" />
@@ -246,13 +256,13 @@
                     android:id="@+id/containerPurchase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:baselineAligned="true"
                     android:layout_marginTop="@dimen/margin_small"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal"
                     app:goneUnless="@{ !viewModel.cattle.homeBorn }"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/switchHomeBorn"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toBottomOf="@+id/switchHomeBorn">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutPurchaseAmount"
@@ -260,8 +270,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_micro"
-                        android:hint="@string/purchase_amount"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:hint="@string/purchase_amount">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPurchaseAmount"
@@ -269,7 +279,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
-                            android:text="@{ viewModel.cattle.purchaseAmount != null ? String.valueOf(viewModel.cattle.purchaseAmount) : null }"/>
+                            android:text="@{ viewModel.cattle.purchaseAmount != null ? String.valueOf(viewModel.cattle.purchaseAmount) : null }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -278,8 +288,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_micro"
-                        android:hint="@string/purchase_date"
                         android:layout_weight="1"
+                        android:hint="@string/purchase_date"
                         app:startIconDrawable="@drawable/ic_date_grey">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -287,7 +297,7 @@
                             style="@style/AppTheme.AppTextInputEditText.Disabled"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dateText="@{ viewModel.cattle.purchaseDate }"/>
+                            app:dateText="@{ viewModel.cattle.purchaseDate }" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
@@ -297,9 +307,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:drawableEnd="@drawable/ic_arrow_right_white"
+                    android:onClick="@{ () -> viewModel.showActiveBreeding() }"
                     android:text="@string/show_active_breeding"
                     android:textAllCaps="false"
-                    android:onClick="@{ () -> viewModel.showActiveBreeding() }"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/containerPurchase" />
@@ -310,9 +320,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:drawableEnd="@drawable/ic_arrow_right_white"
+                    android:onClick="@{ () -> viewModel.addNewBreeding() }"
                     android:text="@string/add_new_breeding"
                     android:textAllCaps="false"
-                    android:onClick="@{ () -> viewModel.addNewBreeding() }"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnShowActiveBreeding" />
@@ -323,9 +333,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:drawableEnd="@drawable/ic_arrow_right_white"
+                    android:onClick="@{ () -> viewModel.showAllBreeding() }"
                     android:text="@string/show_all_breeding"
                     android:textAllCaps="false"
-                    android:onClick="@{ () -> viewModel.showAllBreeding() }"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnAddNewBreeding" />
@@ -334,14 +344,5 @@
 
         </ScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabButtonSaveCattle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_margin="@dimen/margin_normal"
-            android:src="@drawable/ic_edit_black"
-            android:onClick="@{ () -> viewModel.editCattle() }" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

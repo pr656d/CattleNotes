@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentCattleDetailBinding
 import com.pr656d.cattlenotes.ui.main.NavigationFragment
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirections.Companion.toActiveBreeding
@@ -43,6 +44,13 @@ class CattleDetailFragment : NavigationFragment() {
         }
 
         model.fetchCattle(args.cattleTagNumber)
+
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.menu_item_edit -> model.editCattle()
+            }
+            true
+        }
 
         return binding.root
     }
