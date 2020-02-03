@@ -14,7 +14,6 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentParentListBinding
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragment
 import com.pr656d.cattlenotes.utils.EventObserver
-import com.pr656d.cattlenotes.utils.executeAfter
 import dagger.android.support.DaggerDialogFragment
 import javax.inject.Inject
 
@@ -64,7 +63,7 @@ class ParentListDialogFragment : DaggerDialogFragment() {
         binding.viewModel = model
 
         val tagNumber = arguments?.getString(ARG_TAG_NUMBER)
-        model.setTagNumber(tagNumber)
+        tagNumber?.let { model.setTagNumber(tagNumber) }
 
         return binding.root
     }
@@ -72,11 +71,7 @@ class ParentListDialogFragment : DaggerDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.executeAfter {
-            selectParentToolbar.setNavigationOnClickListener {
-                dismiss()
-            }
-        }
+        binding.selectParentToolbar.setNavigationOnClickListener { dismiss() }
 
         model.parentSelected.observe(viewLifecycleOwner, EventObserver {
             setParentTagNumber(it.tagNumber.toString())
