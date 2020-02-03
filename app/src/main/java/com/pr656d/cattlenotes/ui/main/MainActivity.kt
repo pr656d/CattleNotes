@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -15,83 +16,106 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityMainBinding
+import com.pr656d.cattlenotes.databinding.NavHeaderBinding
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.utils.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class MainActivity : DaggerAppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity(), NavigationHost {
 
     companion object {
         const val TAG = "MainActivity"
+
+        private const val NAV_ID_NONE = -1
+
+        private val TOP_LEVEL_DESTINATIONS = setOf(
+            R.id.cattleListScreen,
+            R.id.timelineScreen,
+            R.id.milkingScreen,
+            R.id.cashflowScreen,
+            R.id.settingsScreen,
+            R.id.aboutAppScreen
+        )
     }
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val drawer by lazy { findViewById<DrawerLayout>(R.id.drawer_layout) }
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var drawer: DrawerLayout
+    private lateinit var navigation: NavigationView
+    private lateinit var navController: NavController
+    private lateinit var navHeaderBinding: NavHeaderBinding
+
+    private var currentNavId = NAV_ID_NONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val model by viewModels<MainViewModel> { viewModelFactory }
 
-        val binding: ActivityMainBinding = DataBindingUtil.setContentView(
-            this, R.layout.activity_main
-        )
-
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
+        drawer = binding.drawerLayout
+        navigation = binding.navigationView
 
-        val navController = findNavController(R.id.nav_host_main)
-
-        findViewById<NavigationView>(R.id.navigation_view).apply {
-            setupWithNavController(navController)
-            addHeaderView(layoutInflater.inflate(R.layout.nav_header, null))
+        navHeaderBinding = NavHeaderBinding.inflate(layoutInflater).apply {
+            lifecycleOwner = this@MainActivity
         }
 
-        findViewById<Toolbar>(R.id.toolbar).apply {
-            val topLevelDestinations = setOf(
-                R.id.cattleListScreen,
-                R.id.timelineScreen,
-                R.id.milkingScreen,
-                R.id.cashflowScreen
-            )
+        navController = findNavController(R.id.nav_host_main)
 
-            val appBarConfig = AppBarConfiguration(topLevelDestinations, drawer)
+        navigation.addHeaderView(navHeaderBinding.root)
 
-            setupWithNavController(navController, appBarConfig)
+        navigation.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            currentNavId = destination.id
+            val isTopLevelDestination = TOP_LEVEL_DESTINATIONS.contains(destination.id)
+            val lockMode = if (isTopLevelDestination) {
+                DrawerLayout.LOCK_MODE_UNLOCKED
+            } else {
+                DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            }
+            drawer.setDrawerLockMode(lockMode)
+        }
+
+        model.redirectToLoginScreen.observe(this, EventObserver {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        })
+    }
+
+    override fun onBackPressed() {
+        if (drawer.isDrawerOpen(navigation)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun registerToolbarWithNavigation(toolbar: Toolbar) {
+        toolbar.apply {
+            val appBarConfiguration = AppBarConfiguration(TOP_LEVEL_DESTINATIONS, drawer)
+
+            setupWithNavController(navController, appBarConfiguration)
 
             /**
              * Some fragments may need to do something when back pressed. By adding call back using
              * [activity.onBackPressedDispatcher.addCallBack()] in fragment you can handle
              * physical back pressed but not appBar navigation button. It also shows hamburger icon
              * to open [DrawerLayout].
-             * So we have to route it to onBackPressed() of activity if it's not [topLevelDestinations].
+             * So we have to route it to onBackPressed() of activity if it's not [TOP_LEVEL_DESTINATIONS].
              */
             setNavigationOnClickListener {
                 with(navController.currentDestination?.id) {
-                    if (topLevelDestinations.contains(this))
-                        navController.navigateUp(appBarConfig)
+                    val isTopLevelDestination = TOP_LEVEL_DESTINATIONS.contains(this)
+                    if (isTopLevelDestination)
+                        navController.navigateUp(appBarConfiguration)
                     else
                         onBackPressed()
                 }
             }
-        }
-
-        model.redirectToLoginScreen.observe(this,
-            EventObserver {
-                startActivity(
-                    Intent(this, LoginActivity::class.java)
-                )
-                finish()
-            })
-    }
-
-    override fun onBackPressed() {
-        drawer.apply {
-            if (isDrawerOpen(GravityCompat.START))
-                closeDrawer(GravityCompat.START)
-            else
-                super.onBackPressed()
         }
     }
 }

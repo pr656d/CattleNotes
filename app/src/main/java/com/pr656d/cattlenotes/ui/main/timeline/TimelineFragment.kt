@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.pr656d.cattlenotes.databinding.FragmentTimelineBinding
-import dagger.android.support.DaggerFragment
+import com.pr656d.cattlenotes.ui.main.NavigationFragment
 
-class TimelineFragment : DaggerFragment() {
+class TimelineFragment : NavigationFragment() {
 
     companion object {
         const val TAG = "TimelineFragment"

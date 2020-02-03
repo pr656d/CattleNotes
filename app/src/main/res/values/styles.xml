@@ -178,10 +178,6 @@
         <item name="android:indeterminateTint">@color/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.Toolbar.TitleText">
-        <item name="android:textSize">@dimen/title_size</item>
-    </style>
-
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.Light.Dialog">
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

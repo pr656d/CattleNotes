@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pr656d.cattlenotes.databinding.FragmentCattleDetailBinding
+import com.pr656d.cattlenotes.ui.main.NavigationFragment
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirections.Companion.toActiveBreeding
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirections.Companion.toAddBreeding
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirections.Companion.toAddEditCattle
@@ -16,10 +17,9 @@ import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirectio
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailViewModel.Destination
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.utils.EventObserver
-import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class CattleDetailFragment : DaggerFragment() {
+class CattleDetailFragment : NavigationFragment() {
 
     companion object {
         const val TAG = "CattleDetailsFragment"

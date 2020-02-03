@@ -8,13 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.pr656d.cattlenotes.databinding.FragmentCattleListBinding
+import com.pr656d.cattlenotes.ui.main.NavigationFragment
 import com.pr656d.cattlenotes.ui.main.cattle.list.CattleListFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.main.cattle.list.CattleListFragmentDirections.Companion.toCattleDetail
 import com.pr656d.cattlenotes.utils.EventObserver
-import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class CattleListFragment : DaggerFragment() {
+class CattleListFragment : NavigationFragment() {
 
     companion object {
         const val TAG = "CattleFragment"

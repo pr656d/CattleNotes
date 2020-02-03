@@ -31,7 +31,7 @@
     <fragment
         android:id="@+id/cattleDetailScreen"
         android:name="com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragment"
-        android:label="@string/cattle_details"
+        android:label="@string/cattle_detail"
         tools:layout="@layout/fragment_cattle_detail">
 
         <argument
@@ -170,7 +170,7 @@
     <fragment
         android:id="@id/aboutAppScreen"
         android:name="com.pr656d.cattlenotes.ui.main.aboutapp.AboutAppFragment"
-        android:label="@string/about_this_app"
+        android:label="@string/about_app"
         tools:layout="@layout/fragment_about_app" />
 
 </navigation>

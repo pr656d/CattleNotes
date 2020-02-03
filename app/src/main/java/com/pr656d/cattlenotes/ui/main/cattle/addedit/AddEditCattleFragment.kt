@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.activity.addCallback
 import androidx.annotation.ArrayRes
-import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
+import com.pr656d.cattlenotes.ui.main.NavigationFragment
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toActiveBreeding
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toAddBreeding
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toBreedingHistory
@@ -30,10 +30,9 @@ import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Dest
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogFragment
 import com.pr656d.cattlenotes.utils.*
-import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class AddEditCattleFragment : DaggerFragment() {
+class AddEditCattleFragment : NavigationFragment() {
 
     companion object {
         const val TAG = "AddCattleFragment"
@@ -65,7 +64,6 @@ class AddEditCattleFragment : DaggerFragment() {
         super.onCreate(savedInstanceState)
         args.cattleTagNumber?.let {
             model.fetchCattle(it)
-            requireActivity().findViewById<Toolbar>(R.id.toolbar).setTitle(R.string.edit_cattle_details)
         }
     }
 
@@ -88,6 +86,8 @@ class AddEditCattleFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        args.cattleTagNumber?.let { binding.toolbar.setTitle(R.string.edit_cattle_details) }
 
         model.action.observe(viewLifecycleOwner, EventObserver { performAction(it) })
 

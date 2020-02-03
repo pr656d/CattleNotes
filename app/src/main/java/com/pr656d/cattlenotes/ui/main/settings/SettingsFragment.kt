@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.pr656d.cattlenotes.databinding.FragmentSettingsBinding
-import dagger.android.support.DaggerFragment
+import com.pr656d.cattlenotes.ui.main.NavigationFragment
 
-class SettingsFragment : DaggerFragment() {
+class SettingsFragment : NavigationFragment() {
 
     companion object {
         const val TAG = "SettingsFragment"

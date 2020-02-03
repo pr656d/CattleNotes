@@ -62,21 +62,17 @@ class ParentListDialogFragment : DaggerDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = model
 
-        val tagNumber = arguments?.getString(ARG_TAG_NUMBER)
-        tagNumber?.let { model.setTagNumber(tagNumber) }
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         binding.selectParentToolbar.setNavigationOnClickListener { dismiss() }
+
+        val tagNumber = requireNotNull(arguments).getString(ARG_TAG_NUMBER)
+        tagNumber?.let { model.setTagNumber(tagNumber) }
 
         model.parentSelected.observe(viewLifecycleOwner, EventObserver {
             setParentTagNumber(it.tagNumber.toString())
             dismiss()
         })
+
+        return binding.root
     }
 
     private fun setParentTagNumber(parentTagNumber: String) {
