@@ -23,7 +23,6 @@ class CattleListFragment : DaggerFragment() {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private val model by viewModels<CattleListViewModel> { viewModelFactory }
     private lateinit var binding: FragmentCattleListBinding
-    private val cattleAdapter by lazy { CattleListAdapter(model) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,11 +30,9 @@ class CattleListFragment : DaggerFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCattleListBinding.inflate(inflater, container, false)
-        binding.apply {
-            lifecycleOwner = viewLifecycleOwner
-            viewModel = model
-            rvCattleList.adapter = cattleAdapter
-        }
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = model
+
         return binding.root
     }
 
