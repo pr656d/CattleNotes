@@ -9,7 +9,6 @@ import java.util.*
 
 @Entity(tableName = "cattle_list")
 data class Cattle(
-    @PrimaryKey
     @SerializedName("tag_number")
     @ColumnInfo(name = "tag_number", index = true)
     val tagNumber: Long,
@@ -58,6 +57,11 @@ data class Cattle(
     @ColumnInfo(name = "parent")
     val parent: Long? = null
 ) {
+
+    @PrimaryKey(autoGenerate = true)
+    @SerializedName("id")
+    var id: Long = 0
+
     enum class Group(val displayName: String) {
         HEIFER("Heifer"),
         MILKING("Milking"),

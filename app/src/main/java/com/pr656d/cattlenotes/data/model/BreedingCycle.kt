@@ -9,15 +9,19 @@ import java.util.*
     foreignKeys = [
         ForeignKey(
             entity = Cattle::class,
-            parentColumns = ["tag_number"],
-            childColumns = ["tag_number"],
+            parentColumns = ["id"],
+            childColumns = ["cattle_id"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
 class BreedingCycle(
+    @SerializedName("cattle_id")
+    @ColumnInfo(name = "cattle_id", index = true)
+    val cattleId: Long,
+
     @SerializedName("tag_number")
-    @ColumnInfo(name = "tag_number", index = true)
+    @ColumnInfo(name = "tag_number")
     val tagNumber: Long,
 
     @SerializedName("type")
@@ -61,8 +65,8 @@ class BreedingCycle(
     val calvingDate: BreedingEvent? = null
 ) {
 
-    @SerializedName("breeding_cycle_id")
-    @ColumnInfo(name = "breeding_cycle_id")
+    @SerializedName("id")
+    @ColumnInfo(name = "id")
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0
 

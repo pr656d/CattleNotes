@@ -26,8 +26,8 @@ interface CattleDao {
     @Query("SELECT * FROM cattle_list WHERE tag_number == :tagNumber")
     suspend fun getCattle(tagNumber: Long): Cattle?
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun update(cattle: Cattle)
+    @Update
+    suspend fun update(cattle: Cattle): Int
 
     @Delete
     suspend fun delete(vararg cattle: Cattle)

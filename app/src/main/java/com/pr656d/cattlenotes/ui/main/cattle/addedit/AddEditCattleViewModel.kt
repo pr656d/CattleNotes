@@ -101,14 +101,20 @@ class AddEditCattleViewModel @Inject constructor(
                     try {
                         toggleSaving()
 
-                        if (oldCattle != null)
-                            cattleDataRepository.updateCattle(newCattle)
-                        else
+                        if (oldCattle != null) {
+                            val rows = cattleDataRepository.updateCattle(newCattle)
+                            Logger.d(AddEditCattleFragment.TAG, "Update Cattle : $rows")
+                            Logger.d(AddEditCattleFragment.TAG, "$newCattle")
+                        } else {
                             cattleDataRepository.addCattle(newCattle)
+                            Logger.d(AddEditCattleFragment.TAG, "Add Cattle")
+                            Logger.d(AddEditCattleFragment.TAG, "$newCattle")
+                        }
 
                         toggleSaving()
 
                         _action.postValue(Event(Destination(NAVIGATE_UP)))
+                        Logger.d(AddEditCattleFragment.TAG, "Navigate up")
                     } catch (e: Exception) {
                         toggleSaving()
                         _showMessage.postValue(R.string.retry)
@@ -161,7 +167,9 @@ class AddEditCattleViewModel @Inject constructor(
             purchaseDate.value,
             dob.value,
             parent.value?.toLongOrNull()
-        )
+        ).apply {
+            oldCattle?.id?.let { id = it }
+        }
 
     private fun isAllFieldsValid(): Boolean {
         return tagNumberErrorMessage.value == CattleValidator.VALID_FIELD &&

@@ -28,5 +28,5 @@ open class CattleDataRepository @Inject constructor(
 
     suspend fun deleteCattle(cattle: Cattle) = appDatabase.cattleDao().delete(cattle)
 
-    suspend fun updateCattle(cattle: Cattle) = appDatabase.cattleDao().update(cattle)
+    suspend fun updateCattle(cattle: Cattle): Int = appDatabase.cattleDao().update(cattle)
 }
