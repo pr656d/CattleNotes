@@ -20,6 +20,7 @@ import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirectio
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailViewModel.Destination
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.utils.EventObserver
+import com.pr656d.cattlenotes.utils.showDialog
 import javax.inject.Inject
 
 class CattleDetailFragment : NavigationFragment() {
@@ -50,6 +51,7 @@ class CattleDetailFragment : NavigationFragment() {
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_item_edit -> model.editCattle()
+                R.id.menu_item_delete -> model.deleteCattleConfirmation()
             }
             true
         }
@@ -71,6 +73,15 @@ class CattleDetailFragment : NavigationFragment() {
             ADD_BREEDING_SCREEN -> data?.let { findNavController().navigate(toAddBreeding(it)) }
 
             EDIT_CATTLE_SCREEN -> data?.let { findNavController().navigate(toAddEditCattle(it)) }
+
+            DELETE_CATTLE_CONFIRMATION -> requireContext().showDialog(
+                title = R.string.delete_cattle_message,
+                positiveTextId = R.string.yes,
+                onPositiveSelected = { model.deleteCattle() },
+                negativeTextId = R.string.no
+            )
+
+            NAVIGATE_UP -> findNavController().navigateUp()
         }
     }
 }

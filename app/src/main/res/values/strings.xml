@@ -117,7 +117,9 @@
     <!--  Edit cattle details  -->
     <string name="cattle_saved">Cattle saved</string>
     <string name="edit_cattle_details">Edit cattle details</string>
-    <string name="menu_item_edit_cattle">Edit cattle</string>
+    <string name="menu_item_edit">Edit</string>
+    <string name="menu_item_delete">Delete</string>
+    <string name="delete_cattle_message">Delete cattle?</string>
     <string name="error_already_exists">Already exists</string>
     <string name="error_empty_field">This field can\'t be empty</string>
     <string name="error_contain_digits_only">This field should contain digits only</string>

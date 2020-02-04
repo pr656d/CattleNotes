@@ -61,9 +61,25 @@ class CattleDetailViewModel @Inject constructor(
         }
     }
 
+    fun deleteCattle() {
+        viewModelScope.launch {
+            cattleDataRepository.deleteCattle(cattle.value!!)
+            navigateUp()
+        }
+    }
+
+    fun deleteCattleConfirmation() {
+        _action.value = Event(Destination(DELETE_CATTLE_CONFIRMATION))
+    }
+
+    fun navigateUp() {
+        _action.value = Event(Destination(NAVIGATE_UP))
+    }
+
     data class Destination(val destination: DESTINATIONS, val data: String? = null) {
         enum class DESTINATIONS {
-            ACTIVE_BREEDING, ALL_BREEDING_SCREEN, ADD_BREEDING_SCREEN, EDIT_CATTLE_SCREEN
+            ACTIVE_BREEDING, ALL_BREEDING_SCREEN, ADD_BREEDING_SCREEN, EDIT_CATTLE_SCREEN,
+            DELETE_CATTLE_CONFIRMATION, NAVIGATE_UP
         }
     }
 }
