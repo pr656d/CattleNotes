@@ -30,11 +30,7 @@ class LoginViewModel @Inject constructor(
     fun onLoginClick() {
         if (networkHelper.isNetworkConnected()) {
             _logginIn.postValue(true)
-            _launchFirebaseLoginUI.postValue(
-                Event(
-                    Unit
-                )
-            )
+            _launchFirebaseLoginUI.postValue(Event(Unit))
         } else {
             _loginStatus.postValue(R.string.network_not_available)
         }

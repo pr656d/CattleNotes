@@ -71,7 +71,7 @@
     <string name="calving">%1$d calving</string>
 
     <!--  Cattle list  -->
-    <string name="cattle_list_empty">Click &#43; icon to add new cattle.</string>
+    <string name="cattle_list_empty">Click &#43; icon to add new cattle</string>
 
     <!--  Parent list  -->
     <string name="parent_list_empty">Your parent list is empty</string>
