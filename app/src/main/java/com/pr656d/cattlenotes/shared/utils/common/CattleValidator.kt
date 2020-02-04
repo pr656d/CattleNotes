@@ -2,21 +2,19 @@ package com.pr656d.cattlenotes.shared.utils.common
 
 import androidx.core.text.isDigitsOnly
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.data.repository.CattleDataRepository
+import com.pr656d.cattlenotes.data.model.Cattle
 
 object CattleValidator {
 
     const val TAG = "CattleValidator"
     const val VALID_FIELD = 0
 
-    suspend fun isValidTagNumber(
+    fun isValidTagNumber(
         tagNumber: Long?,
-        repository: CattleDataRepository,
-        oldTagNumber: Long? = null
-    ): Int = when {
-        tagNumber == null -> R.string.error_empty_field
-        tagNumber == oldTagNumber -> VALID_FIELD
-        repository.isCattleExists(tagNumber) -> R.string.error_already_exists
+        oldCattle: Cattle? = null
+    ): Int = when (tagNumber) {
+        null -> R.string.error_empty_field
+        oldCattle?.tagNumber -> VALID_FIELD
         else -> VALID_FIELD
     }
 

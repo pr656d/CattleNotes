@@ -34,8 +34,9 @@
         android:label="@string/cattle_detail"
         tools:layout="@layout/fragment_cattle_detail">
 
+        <!--  Pass as JSON using Gson library  -->
         <argument
-            android:name="cattle_tag_number"
+            android:name="cattle"
             app:argType="string" />
 
         <action
@@ -77,8 +78,9 @@
         android:label="@string/add_cattle"
         tools:layout="@layout/fragment_add_edit_cattle">
 
+        <!--  Pass as JSON using Gson library  -->
         <argument
-            android:name="cattle_tag_number"
+            android:name="cattle"
             app:argType="string"
             app:nullable="true"
             android:defaultValue="@null"/>
@@ -114,9 +116,10 @@
         android:label="@string/active_breeding"
         tools:layout="@layout/fragment_active_breeding">
 
+        <!--  Pass as JSON using Gson library  -->
         <argument
-            android:name="cattle_tag_number"
-            app:argType="string"/>
+            android:name="cattle"
+            app:argType="string" />
     </fragment>
 
     <fragment
@@ -125,9 +128,10 @@
         android:label="@string/add_new_breeding"
         tools:layout="@layout/fragment_add_breeding">
 
+        <!--  Pass as JSON using Gson library  -->
         <argument
-            android:name="cattle_tag_number"
-            app:argType="string"/>
+            android:name="cattle"
+            app:argType="string" />
 
     </fragment>
 
@@ -137,9 +141,10 @@
         android:label="@string/breeding_history"
         tools:layout="@layout/fragment_breeding_history">
 
+        <!--  Pass as JSON using Gson library  -->
         <argument
-            android:name="cattle_tag_number"
-            app:argType="string"/>
+            android:name="cattle"
+            app:argType="string" />
 
     </fragment>
 

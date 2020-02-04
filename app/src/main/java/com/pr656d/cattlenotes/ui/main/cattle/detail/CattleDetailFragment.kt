@@ -8,7 +8,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.FragmentCattleDetailBinding
 import com.pr656d.cattlenotes.ui.main.NavigationFragment
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragmentDirections.Companion.toActiveBreeding
@@ -43,7 +45,7 @@ class CattleDetailFragment : NavigationFragment() {
             viewModel = model
         }
 
-        model.fetchCattle(args.cattleTagNumber)
+        model.fetchCattle(Gson().fromJson(args.cattle, Cattle::class.java))
 
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {

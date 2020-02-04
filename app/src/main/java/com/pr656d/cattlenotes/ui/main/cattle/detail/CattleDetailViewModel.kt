@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
 import com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailViewModel.Destination.DESTINATIONS.*
@@ -22,11 +23,16 @@ class CattleDetailViewModel @Inject constructor(
     private val _action = MutableLiveData<Event<Destination>>()
     val action: LiveData<Event<Destination>> = _action
 
-    fun fetchCattle(tagNumber: String) {
+    fun fetchCattle(c: Cattle) {
+        cattle.value = c
+
         viewModelScope.launch(Dispatchers.IO) {
-            val c = cattleDataRepository.getCattle(tagNumber.toLong())
+            val newCattle = cattleDataRepository.getCattle(c.id)
             withContext(Dispatchers.Main) {
-                c?.let { cattle.value = c }
+                newCattle?.let {
+                    if (newCattle != cattle.value)
+                        cattle.value = it
+                }
             }
         }
     }
@@ -50,8 +56,8 @@ class CattleDetailViewModel @Inject constructor(
     }
 
     fun editCattle() {
-        cattle.value!!.tagNumber.toString().let {
-            _action.value = Event(Destination(EDIT_CATTLE_SCREEN, it))
+        cattle.value?.let {
+            _action.value = Event(Destination(EDIT_CATTLE_SCREEN, Gson().toJson(it)))
         }
     }
 

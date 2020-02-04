@@ -15,7 +15,6 @@ import com.pr656d.cattlenotes.utils.toGroup
 import com.pr656d.cattlenotes.utils.toType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
@@ -28,13 +27,7 @@ class AddEditCattleViewModel @Inject constructor(
 
     val tagNumber = MutableLiveData<String>()
     val tagNumberErrorMessage: LiveData<Int> = tagNumber.map {
-        runBlocking {
-            CattleValidator.isValidTagNumber(
-                it.toLongOrNull(),
-                cattleDataRepository,
-                oldCattle?.tagNumber
-            )
-        }
+        CattleValidator.isValidTagNumber(it.toLongOrNull(), oldCattle)
     }
 
     val name = MutableLiveData<String?>()
@@ -129,14 +122,9 @@ class AddEditCattleViewModel @Inject constructor(
         }
     }
 
-    fun fetchCattle(tagNumber: String) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val cattle = cattleDataRepository.getCattle(tagNumber.toLong())
-            withContext(Dispatchers.Main) {
-                oldCattle = cattle
-                cattle?.let { bindData(it) }
-            }
-        }
+    fun setCattle(cattle: Cattle) {
+        oldCattle = cattle
+        bindData(cattle)
     }
 
     private fun bindData(cattle: Cattle) {

@@ -23,8 +23,8 @@ interface CattleDao {
     @Query("SELECT * FROM cattle_list ORDER BY tag_number")
     fun getAll(): LiveData<List<Cattle>>
 
-    @Query("SELECT * FROM cattle_list WHERE tag_number == :tagNumber")
-    suspend fun getCattle(tagNumber: Long): Cattle?
+    @Query("SELECT * FROM cattle_list WHERE id == :id")
+    suspend fun getCattle(id: Long): Cattle?
 
     @Update
     suspend fun update(cattle: Cattle): Int

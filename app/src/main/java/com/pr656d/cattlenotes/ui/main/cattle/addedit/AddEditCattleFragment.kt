@@ -20,7 +20,9 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
 import com.pr656d.cattlenotes.ui.main.NavigationFragment
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toActiveBreeding
@@ -62,8 +64,8 @@ class AddEditCattleFragment : NavigationFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        args.cattleTagNumber?.let {
-            model.fetchCattle(it)
+        args.cattle?.let {
+            model.setCattle(Gson().fromJson(it, Cattle::class.java))
         }
     }
 
@@ -76,6 +78,7 @@ class AddEditCattleFragment : NavigationFragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = model
+            /** Setup dropdown adapters for drop down option */
             exposedDropDownBreed.setupDropDownAdapters(R.array.list_breed)
             exposedDropDownType.setupDropDownAdapters(R.array.list_type)
             exposedDropDownGroup.setupDropDownAdapters(R.array.list_group)
@@ -87,7 +90,8 @@ class AddEditCattleFragment : NavigationFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        args.cattleTagNumber?.let { binding.toolbar.setTitle(R.string.edit_cattle_details) }
+        if (args.cattle != null)
+            binding.toolbar.setTitle(R.string.edit_cattle_details)
 
         model.action.observe(viewLifecycleOwner, EventObserver { performAction(it) })
 
