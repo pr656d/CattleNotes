@@ -65,7 +65,7 @@ class ParentListDialogFragment : DaggerDialogFragment() {
         binding.selectParentToolbar.setNavigationOnClickListener { dismiss() }
 
         val tagNumber = requireNotNull(arguments).getString(ARG_TAG_NUMBER)
-        tagNumber?.let { model.setTagNumber(tagNumber) }
+        tagNumber?.let { model.setTagNumber(tagNumber.toLong()) }
 
         model.parentSelected.observe(viewLifecycleOwner, EventObserver {
             setParentTagNumber(it.tagNumber.toString())
