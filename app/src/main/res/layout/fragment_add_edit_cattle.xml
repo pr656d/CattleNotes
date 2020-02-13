@@ -219,7 +219,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="@{ InputType.TYPE_NULL }"
                         app:onClickPickDate="@{ viewModel.dob }"
-                        app:onLongPressRemoveText="@{ viewModel.dob }"/>
+                        app:onLongClickRemoveText="@{ viewModel.dob }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -243,7 +243,7 @@
                         android:inputType="@{ InputType.TYPE_NULL }"
                         android:text="@={ viewModel.parent }"
                         android:onClick="@{ () -> viewModel.pickParent() }"
-                        app:onLongPressRemoveText="@{ viewModel.parent }"/>
+                        app:onLongClickRemoveText="@{ viewModel.parent }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -306,7 +306,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="@{ InputType.TYPE_NULL }"
                             app:onClickPickDate="@{ viewModel.dob }"
-                            app:onLongPressRemoveText="@{ viewModel.dob }"
+                            app:onLongClickRemoveText="@{ viewModel.dob }"
                             app:resetText="@{ viewModel.homeBorn }"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>

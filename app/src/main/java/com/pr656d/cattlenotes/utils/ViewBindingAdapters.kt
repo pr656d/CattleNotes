@@ -59,8 +59,8 @@ fun dateText(view: TextInputEditText, value: Date?) {
 }
 
 /** onLongClick listener on [MutableLiveData] to remove text by showing confirmation dialog */
-@BindingAdapter("onLongPressRemoveText")
-fun onLongPressRemoveText(view: TextInputEditText, data: MutableLiveData<*>?) {
+@BindingAdapter("onLongClickRemoveText")
+fun onLongClickRemoveText(view: TextInputEditText, data: MutableLiveData<*>?) {
     view.setOnLongClickListener {
         // Hide keyboard if visible.
         it.context.hideKeyboard(it)

@@ -129,7 +129,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:onClickPickDate="@{ viewModel.aiDate }"
-                        app:onLongPressRemoveText="@{ viewModel.aiDate }"/>
+                        app:onLongClickRemoveText="@{ viewModel.aiDate }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -227,7 +227,7 @@
                         android:layout_height="wrap_content"
                         app:resetText="@{ !viewModel.repeatHeatStatus }"
                         app:onClickPickDate="@{ viewModel.repeatHeatDoneOn }"
-                        app:onLongPressRemoveText="@{ viewModel.repeatHeatDoneOn }"/>
+                        app:onLongClickRemoveText="@{ viewModel.repeatHeatDoneOn }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -277,7 +277,7 @@
                         android:layout_height="wrap_content"
                         app:resetText="@{ !viewModel.pregnancyCheckStatus }"
                         app:onClickPickDate="@{ viewModel.pregnancyCheckDoneOn }"
-                        app:onLongPressRemoveText="@{ viewModel.pregnancyCheckDoneOn }"/>
+                        app:onLongClickRemoveText="@{ viewModel.pregnancyCheckDoneOn }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -327,7 +327,7 @@
                         android:layout_height="wrap_content"
                         app:resetText="@{ !viewModel.dryOffStatus }"
                         app:onClickPickDate="@{ viewModel.dryOffDoneOn }"
-                        app:onLongPressRemoveText="@{ viewModel.dryOffDoneOn }"/>
+                        app:onLongClickRemoveText="@{ viewModel.dryOffDoneOn }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -377,7 +377,7 @@
                         android:layout_height="wrap_content"
                         app:resetText="@{ !viewModel.calvingStatus }"
                         app:onClickPickDate="@{ viewModel.calvingDoneOn }"
-                        app:onLongPressRemoveText="@{ viewModel.calvingDoneOn }"/>
+                        app:onLongClickRemoveText="@{ viewModel.calvingDoneOn }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Space
