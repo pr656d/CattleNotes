@@ -109,6 +109,7 @@
     <style name="AppTheme.AppTextInputDate" parent="AppTheme.AppTextInputEditText">
         <item name="android:focusable">false</item>
         <item name="android:focusableInTouchMode">false</item>
+        <item name="android:cursorVisible">false</item>
     </style>
 
     <style name="AppTheme.AppTextInputEditText" parent="Theme.MaterialComponents.Light">

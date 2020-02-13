@@ -31,7 +31,10 @@ import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirect
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogFragment
-import com.pr656d.cattlenotes.utils.*
+import com.pr656d.cattlenotes.utils.EventObserver
+import com.pr656d.cattlenotes.utils.focus
+import com.pr656d.cattlenotes.utils.hideKeyboard
+import com.pr656d.cattlenotes.utils.showDialog
 import javax.inject.Inject
 
 class AddEditCattleFragment : NavigationFragment() {
@@ -115,32 +118,12 @@ class AddEditCattleFragment : NavigationFragment() {
 
     private fun performAction(action: Destination) = with(action) {
         when (destination) {
-            PICK_DATE_OF_BIRTH -> selectDateOfBirth()
-            REMOVE_DATE_OF_BIRTH -> {
-                requireContext().showDialog(
-                    title = R.string.remove_dob_message,
-                    positiveTextId = R.string.yes,
-                    onPositiveSelected = { model.setDob(null) },
-                    negativeTextId = R.string.no
-                )
-            }
-
             PICK_PARENT -> data?.let { binding.editTextParent.pickParent(it) }
             REMOVE_PARENT -> {
                 requireContext().showDialog(
                     title = R.string.remove_parent_message,
                     positiveTextId = R.string.yes,
                     onPositiveSelected = { model.setParent(null) },
-                    negativeTextId = R.string.no
-                )
-            }
-
-            PICK_PURCHASE_DATE -> selectPurchaseDate()
-            REMOVE_PURCHASE_DATE -> {
-                requireContext().showDialog(
-                    title = R.string.remove_purchase_date_message,
-                    positiveTextId = R.string.yes,
-                    onPositiveSelected = { model.setPurchaseDate(null) },
                     negativeTextId = R.string.no
                 )
             }
@@ -162,34 +145,6 @@ class AddEditCattleFragment : NavigationFragment() {
             }
 
             NAVIGATE_UP -> findNavController().navigateUp()
-        }
-    }
-
-    private fun selectDateOfBirth() {
-        binding.editTextDateOfBirth.apply {
-            requireActivity().hideKeyboard(requireView())
-            focus()
-            pickADate { _, dd, mm, yyyy ->
-                requireContext().toDate(dd, mm, yyyy)?.let {
-                    model.setDob(it)
-                }
-                // After picking date reset focusable to false.
-                isFocusableInTouchMode = false
-            }
-        }
-    }
-
-    private fun selectPurchaseDate() {
-        binding.editTextPurchaseDate.apply {
-            requireActivity().hideKeyboard(requireView())
-            focus()
-            pickADate { _, dd, mm, yyyy ->
-                requireContext().toDate(dd, mm, yyyy)?.let {
-                    model.setPurchaseDate(it)
-                }
-                // After picking date reset focusable to false.
-                isFocusableInTouchMode = false
-            }
         }
     }
 
@@ -242,17 +197,6 @@ class AddEditCattleFragment : NavigationFragment() {
         requireActivity().hideKeyboard(requireView())
     }
 }
-
-/**
- * Removes text if boolean is true.
- */
-@BindingAdapter("resetText")
-fun resetText(view: TextInputEditText, value: Boolean) {
-    if (value) {
-        view.text = null
-    }
-}
-
 
 /** Set helper text as [R.string.required] on [TextInputLayout] based on text provided. */
 @BindingAdapter("setRequired")

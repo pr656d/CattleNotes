@@ -57,7 +57,7 @@
 
         <action
             android:id="@+id/to_add_breeding"
-            app:destination="@id/addBreedingScreen"
+            app:destination="@id/addEditBreedingScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -95,7 +95,7 @@
 
         <action
             android:id="@+id/to_add_breeding"
-            app:destination="@id/addBreedingScreen"
+            app:destination="@id/addEditBreedingScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
@@ -123,10 +123,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/addBreedingScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.breeding.add.AddBreedingFragment"
+        android:id="@+id/addEditBreedingScreen"
+        android:name="com.pr656d.cattlenotes.ui.main.cattle.breeding.addedit.AddEditBreedingFragment"
         android:label="@string/add_new_breeding"
-        tools:layout="@layout/fragment_add_breeding">
+        tools:layout="@layout/fragment_add_edit_breeding">
 
         <!--  Pass as JSON using Gson library  -->
         <argument

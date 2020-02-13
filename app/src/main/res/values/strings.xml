@@ -10,6 +10,7 @@
     <string name="back">Go Back</string>
     <string name="retry">Retry</string>
     <string name="more">More</string>
+    <string name="remove">You want to remove data from this field</string>
     <string name="required">Required</string>
     <string name="zero">0</string>
     <string name="cow">Cow</string>
@@ -97,13 +98,16 @@
     <string name="purchase_amount">Purchase amount (\u20B9)</string>
     <string name="purchase_date">Purchase date</string>
     <string name="artificial_insemination">Artificial insemination date</string>
+    <string name="did_by">Did by</string>
+    <string name="bull_name">Bull name</string>
+    <string name="straw_code">Straw code</string>
     <string name="repeat_heat">Repeat heat date</string>
     <string name="pregnancy_check">Pregnancy check date</string>
     <string name="dry_off">Dry off date</string>
     <string name="delete">Delete</string>
     <string name="home_born">Home born</string>
     <string name="expected">Expected</string>
-    <string name="actual">Actual</string>
+    <string name="done_on">Done on</string>
     <string name="breeding_history">Breeding History</string>
     <string name="add_new_breeding">Add new breeding</string>
     <string name="show_all_breeding">Show all breeding</string>

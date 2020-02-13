@@ -44,8 +44,8 @@ class CattleDetailViewModel @Inject constructor(
     }
 
     fun addNewBreeding() {
-        cattle.value!!.tagNumber.toString().let {
-            _action.value = Event(Destination(ADD_BREEDING_SCREEN, it))
+        cattle.value!!.let {
+            _action.value = Event(Destination(ADD_BREEDING_SCREEN, Gson().toJson(it)))
         }
     }
 

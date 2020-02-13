@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.shared.utils.common
+package com.pr656d.cattlenotes.utils.validator
 
 import androidx.core.text.isDigitsOnly
 import com.pr656d.cattlenotes.R

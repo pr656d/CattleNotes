@@ -20,6 +20,36 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# Dagger2
+-dontwarn com.google.errorprone.annotations.**
+
+# OkHttp3
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
+
+# Firebase
+-dontwarn retrofit2.Call
+
+# Databinding CardViewBindingAdapter
+-dontwarn androidx.cardview.widget.CardView
 
 # Gson throws Assertion Error on Enum types.
 -keepclassmembers class com.pr656d.cattlenotes.data.model.** { <fields>; }
+
+# Glide
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
+
+# https://github.com/firebase/FirebaseUI-Android/issues/1429
+-keep class com.firebase.ui.auth.** { * ; }

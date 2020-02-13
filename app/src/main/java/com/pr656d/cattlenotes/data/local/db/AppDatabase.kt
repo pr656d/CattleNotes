@@ -22,6 +22,7 @@ import com.pr656d.cattlenotes.data.model.Cattle
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun cattleDao(): CattleDao
+    abstract fun breedingDao(): BreedingDao
 
     companion object {
         private const val databaseName = "cattlenotes-db"

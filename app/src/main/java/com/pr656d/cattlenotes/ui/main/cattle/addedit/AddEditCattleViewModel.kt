@@ -3,16 +3,16 @@ package com.pr656d.cattlenotes.ui.main.cattle.addedit
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
+import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
-import com.pr656d.cattlenotes.shared.log.Logger
-import com.pr656d.cattlenotes.shared.utils.common.CattleValidator
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.utils.Event
 import com.pr656d.cattlenotes.utils.toBreed
 import com.pr656d.cattlenotes.utils.toGroup
 import com.pr656d.cattlenotes.utils.toType
+import com.pr656d.cattlenotes.utils.validator.CattleValidator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -53,10 +53,7 @@ class AddEditCattleViewModel @Inject constructor(
     val lactation = MutableLiveData<String>()
     val lactationErrorMessage: LiveData<Int> = lactation.map { CattleValidator.isValidLactation(it) }
 
-    private val _dob = MutableLiveData<Date>()
-    fun setDob(date: Date?) { _dob.value = date }
-    val dob: LiveData<Date>
-        get() = _dob
+    val dob = MutableLiveData<Date>()
 
     val parent = MutableLiveData<String>()
     fun setParent(value: String?) { parent.value = value }
@@ -65,10 +62,7 @@ class AddEditCattleViewModel @Inject constructor(
 
     val purchaseAmount = MutableLiveData<String>()
 
-    private val _purchaseDate = MutableLiveData<Date>()
-    fun setPurchaseDate(date: Date?) { _purchaseDate.value = date }
-    val purchaseDate: LiveData<Date>
-        get() = _purchaseDate
+    val purchaseDate = MutableLiveData<Date>()
 
     private val _action = MutableLiveData<Event<Destination>>()
     val action: LiveData<Event<Destination>> = _action
@@ -95,23 +89,18 @@ class AddEditCattleViewModel @Inject constructor(
                         toggleSaving()
 
                         if (oldCattle != null) {
-                            val rows = cattleDataRepository.updateCattle(newCattle)
-                            Logger.d(AddEditCattleFragment.TAG, "Update Cattle : $rows")
-                            Logger.d(AddEditCattleFragment.TAG, "$newCattle")
+                            cattleDataRepository.updateCattle(newCattle)
                         } else {
                             cattleDataRepository.addCattle(newCattle)
-                            Logger.d(AddEditCattleFragment.TAG, "Add Cattle")
-                            Logger.d(AddEditCattleFragment.TAG, "$newCattle")
+
                         }
 
                         toggleSaving()
 
                         _action.postValue(Event(Destination(NAVIGATE_UP)))
-                        Logger.d(AddEditCattleFragment.TAG, "Navigate up")
                     } catch (e: Exception) {
                         toggleSaving()
                         _showMessage.postValue(R.string.retry)
-                        Logger.e(AddEditCattleFragment.TAG, "${e.printStackTrace()}")
                     }
                 }
             } else {
@@ -134,11 +123,11 @@ class AddEditCattleViewModel @Inject constructor(
         _breed.value = cattle.breed.displayName
         _group.value = cattle.group.displayName
         lactation.value = cattle.lactation.toString()
-        _dob.value = cattle.dateOfBirth
+        dob.value = cattle.dateOfBirth
         parent.value = cattle.parent?.toString()
         homeBorn.value = cattle.homeBorn
         purchaseAmount.value = cattle.purchaseAmount?.toString()
-        _purchaseDate.value = cattle.purchaseDate
+        purchaseDate.value = cattle.purchaseDate
     }
 
     private fun getCattle(): Cattle =
@@ -181,24 +170,6 @@ class AddEditCattleViewModel @Inject constructor(
                 purchaseDate.value == null
     }
 
-    fun pickBirthDate() {
-        _action.value = Event(Destination(PICK_DATE_OF_BIRTH))
-    }
-
-    fun removeDob(view: View): Boolean {
-        _action.value = Event(Destination(REMOVE_DATE_OF_BIRTH))
-        return true
-    }
-
-    fun pickPurchaseDate() {
-        _action.value = Event(Destination(PICK_PURCHASE_DATE))
-    }
-
-    fun removePurchaseDate(view: View): Boolean {
-        _action.value = Event(Destination(REMOVE_PURCHASE_DATE))
-        return true
-    }
-
     fun pickParent() {
         tagNumber.value?.let {
             _action.value = Event(Destination(PICK_PARENT, it))
@@ -221,11 +192,11 @@ class AddEditCattleViewModel @Inject constructor(
     }
 
     fun addNewBreeding() {
-        tagNumber.value?.let {
-            _action.value = Event(Destination(ADD_BREEDING_SCREEN, it))
-            return
+        if (isAllFieldsValid()) {
+            _action.value = Event(Destination(ADD_BREEDING_SCREEN, Gson().toJson(getCattle())))
+        } else {
+            _showMessage.value = R.string.error_fill_empty_fields
         }
-        _showMessage.value = R.string.provide_tag_number
     }
 
     fun showActiveBreeding() {
@@ -249,8 +220,7 @@ class AddEditCattleViewModel @Inject constructor(
 
     data class Destination(val destination: DESTINATIONS, val data: String? = null) {
         enum class DESTINATIONS {
-            PICK_DATE_OF_BIRTH, PICK_PARENT, PICK_PURCHASE_DATE,
-            REMOVE_DATE_OF_BIRTH, REMOVE_PARENT, REMOVE_PURCHASE_DATE,
+            PICK_PARENT, REMOVE_PARENT,
             ACTIVE_BREEDING, ALL_BREEDING_SCREEN, ADD_BREEDING_SCREEN,
             BACK_CONFIRMATION_DIALOG, NAVIGATE_UP
         }

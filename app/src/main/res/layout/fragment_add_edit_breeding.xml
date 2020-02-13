@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.pr656d.cattlenotes.ui.main.cattle.breeding.addedit.AddEditBreedingViewModel" />
+
+        <variable
+            name="cattle"
+            type="com.pr656d.cattlenotes.data.model.Cattle" />
+    </data>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_layout_add_edit_breeding"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:ignore="MergeRootFrame">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:fitsSystemWindows="true">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsing_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                app:titleEnabled="false"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:contentScrim="@color/white"
+                app:statusBarScrim="?colorSurface">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.6"
+                        app:srcCompat="@drawable/ic_cattle"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/textViewTagNumber"
+                        style="@style/AppTheme.Headline6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_normal"
+                        android:text="@{ String.valueOf(cattle.tagNumber) }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        tools:text="234293847207"/>
+
+                    <TextView
+                        android:id="@+id/textViewType"
+                        style="@style/AppTheme.Headline6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_normal"
+                        android:text="@{ cattle.type.displayName }"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/textViewTagNumber"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        tools:text="COW"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- Toolbar needs to be on top for the back button to be tappable -->
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    style="@style/AppTheme.Toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/ic_arrow_back_black" />
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/clip_padding_bottom"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/padding_normal">
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchActiveBreedingStatus"
+                    style="@style/AppTheme.MaterialSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mark_as_active"
+                    android:checked="@={ viewModel.active }"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutAiDate"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/artificial_insemination">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextAiDate"
+                        style="@style/AppTheme.AppTextInputDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:onClickPickDate="@{ viewModel.aiDate }"
+                        app:onLongPressRemoveText="@{ viewModel.aiDate }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutAiDidBy"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/did_by">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextAiDidBy"
+                        style="@style/AppTheme.AppTextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={ viewModel.didBy }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutAiBullName"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/bull_name">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextAiBullName"
+                        style="@style/AppTheme.AppTextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={ viewModel.bullName }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutStrawCode"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/straw_code">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextStrawCode"
+                        style="@style/AppTheme.AppTextInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={ viewModel.strawCode }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutRepeatHeatDateExpected"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/repeat_heat"
+                    app:helperText="@string/expected">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextRepeatHeatDateExpected"
+                        style="@style/AppTheme.AppTextInputDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        dateText="@{ viewModel.repeatHeatExpectedOn }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxRepeatHeatStatus"
+                    style="@style/AppTheme.MaterialCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/repeat_heat_status"
+                    android:visibility="visible"
+                    android:checked="@={ viewModel.repeatHeatStatus }"
+                    tools:visibility="visible" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutRepeatHeatDateActual"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/repeat_heat"
+                    android:visibility="visible"
+                    app:helperText="@string/done_on"
+                    app:goneUnless="@{ viewModel.repeatHeatStatus }"
+                    tools:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextRepeatHeatDateActual"
+                        style="@style/AppTheme.AppTextInputDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:resetText="@{ !viewModel.repeatHeatStatus }"
+                        app:onClickPickDate="@{ viewModel.repeatHeatDoneOn }"
+                        app:onLongPressRemoveText="@{ viewModel.repeatHeatDoneOn }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutPregnancyCheckDateExpected"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/pregnancy_check"
+                    app:helperText="@string/expected">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextPregnancyCheckDateExpected"
+                        style="@style/AppTheme.AppTextInputDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        dateText="@{ viewModel.pregnancyCheckExpectedOn }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxPregnancyCheckStatus"
+                    style="@style/AppTheme.MaterialCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/pregnancy_check_status"
+                    android:visibility="visible"
+                    android:checked="@={ viewModel.pregnancyCheckStatus }"
+                    tools:visibility="visible" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutPregnancyCheckDateActual"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/pregnancy_check"
+                    android:visibility="visible"
+                    app:helperText="@string/done_on"
+                    app:goneUnless="@{ viewModel.pregnancyCheckStatus }"
+                    tools:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextPregnancyCheckDateActual"
+                        style="@style/AppTheme.AppTextInputDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:resetText="@{ !viewModel.pregnancyCheckStatus }"
+                        app:onClickPickDate="@{ viewModel.pregnancyCheckDoneOn }"
+                        app:onLongPressRemoveText="@{ viewModel.pregnancyCheckDoneOn }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutDryOffDateExpected"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/dry_off"
+                    app:helperText="@string/expected">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextDryOffDateExpected"
+                        style="@style/AppTheme.AppTextInputDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        dateText="@{ viewModel.dryOffExpectedOn }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxDryOffStatus"
+                    style="@style/AppTheme.MaterialCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/dry_off_status"
+                    android:visibility="visible"
+                    android:checked="@{ viewModel.dryOffStatus }"
+                    tools:visibility="visible" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutDryOffDateActual"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/dry_off"
+                    android:visibility="visible"
+                    app:helperText="@string/done_on"
+                    app:goneUnless="@{ viewModel.dryOffStatus }"
+                    tools:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextDryOffDateActual"
+                        style="@style/AppTheme.AppTextInputDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:resetText="@{ !viewModel.dryOffStatus }"
+                        app:onClickPickDate="@{ viewModel.dryOffDoneOn }"
+                        app:onLongPressRemoveText="@{ viewModel.dryOffDoneOn }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutCalvingDateExpected"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/calving_date"
+                    app:helperText="@string/expected">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextCalvingDateExpected"
+                        style="@style/AppTheme.AppTextInputDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        dateText="@{ viewModel.calvingExpectedOn }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBoxCalvingStatus"
+                    style="@style/AppTheme.MaterialCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/calving_status"
+                    android:visibility="visible"
+                    android:checked="@={ viewModel.calvingStatus }"
+                    tools:visibility="visible" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutCalvingDateActual"
+                    style="@style/AppTheme.AppTextInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:hint="@string/calving_date"
+                    android:visibility="visible"
+                    app:goneUnless="@{ viewModel.calvingStatus }"
+                    app:helperText="@string/done_on"
+                    tools:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextCalvingDateActual"
+                        style="@style/AppTheme.AppTextInputDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:resetText="@{ !viewModel.calvingStatus }"
+                        app:onClickPickDate="@{ viewModel.calvingDoneOn }"
+                        app:onLongPressRemoveText="@{ viewModel.calvingDoneOn }"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabButtonSaveBreeding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="@dimen/margin_normal"
+            android:src="@drawable/ic_check_black"
+            android:onClick="@{() -> viewModel.save(cattle) }" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

@@ -220,9 +220,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="@{ InputType.TYPE_NULL }"
-                        android:onClick="@{ () -> viewModel.pickBirthDate() }"
-                        android:onLongClick="@{ (view) -> viewModel.removeDob(view) }"
-                        app:dateText="@{ viewModel.dob }"/>
+                        app:onClickPickDate="@{ viewModel.dob }"
+                        app:onLongPressRemoveText="@{ viewModel.dob }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -308,9 +307,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="@{ InputType.TYPE_NULL }"
-                            android:onClick="@{ () -> viewModel.pickPurchaseDate() }"
-                            android:onLongClick="@{ (view) -> viewModel.removePurchaseDate(view) }"
-                            app:dateText="@{ viewModel.purchaseDate }"
+                            app:onClickPickDate="@{ viewModel.dob }"
+                            app:onLongPressRemoveText="@{ viewModel.dob }"
                             app:resetText="@{ viewModel.homeBorn }"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>

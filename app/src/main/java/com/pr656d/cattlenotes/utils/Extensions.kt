@@ -11,7 +11,6 @@ import android.widget.DatePicker
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
@@ -34,6 +33,7 @@ fun TextInputEditText.focus() {
 
 // region Date
 fun View.pickADate(
+    onDateCancelled: () -> Unit = {},
     onDateSet: (view: DatePicker, dd: Int, mm: Int, yyyy: Int) -> Unit
 ) {
     // Create date picker dialog.
@@ -54,7 +54,7 @@ fun View.pickADate(
     ) { _, which ->
         // Reset focus to false.
         if (which == DialogInterface.BUTTON_NEGATIVE)
-            isFocusableInTouchMode = false
+            onDateCancelled()
     }
 
     // Disable future date selection
@@ -105,7 +105,7 @@ fun Context.showDialog(
 
 // region Soft input
 
-fun FragmentActivity.hideKeyboard(view: View) {
+fun Context.hideKeyboard(view: View) {
     (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
         .hideSoftInputFromWindow(view.windowToken, 0)
 }
@@ -140,14 +140,5 @@ fun String.toType(): Animal.Type = Converters().fromStringToType(this)
 fun String.toBreed(): Cattle.Breed = Converters().fromStringToBreed(this)
 
 fun String.toGroup(): Cattle.Group = Converters().fromStringToGroup(this)
-
-// end region
-
-// region String util
-
-/**
- * TextWatcher for input gives empty string ("") which causes parse error for conversion to different object.
- */
-fun String?.toDateOrNull(): String? = if (isNullOrBlank()) null else this
 
 // end region

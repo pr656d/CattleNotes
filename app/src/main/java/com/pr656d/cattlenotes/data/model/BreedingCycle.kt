@@ -20,12 +20,12 @@ class BreedingCycle(
     @ColumnInfo(name = "cattle_id", index = true)
     val cattleId: Long,
 
-    @SerializedName("tag_number")
-    @ColumnInfo(name = "tag_number")
+    @SerializedName("cattle_tag_number")
+    @ColumnInfo(name = "cattle_tag_number")
     val tagNumber: Long,
 
-    @SerializedName("type")
-    @ColumnInfo(name = "type")
+    @SerializedName("cattle_type")
+    @ColumnInfo(name = "cattle_type")
     val type: Animal.Type,
 
     @SerializedName("is_active")
