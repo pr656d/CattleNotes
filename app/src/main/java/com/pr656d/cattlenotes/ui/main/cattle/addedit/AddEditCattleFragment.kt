@@ -18,18 +18,12 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
 import com.pr656d.cattlenotes.ui.main.NavigationFragment
-import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toActiveBreeding
-import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toAddBreeding
-import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragmentDirections.Companion.toBreedingHistory
-import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination
-import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.ui.main.cattle.addedit.parent.ParentListDialogFragment
 import com.pr656d.cattlenotes.utils.EventObserver
 import com.pr656d.cattlenotes.utils.focus
@@ -96,7 +90,32 @@ class AddEditCattleFragment : NavigationFragment() {
         if (args.cattle != null)
             binding.toolbar.setTitle(R.string.edit_cattle_details)
 
-        model.action.observe(viewLifecycleOwner, EventObserver { performAction(it) })
+        model.selectParent.observe(viewLifecycleOwner, EventObserver { tagNumber ->
+            with (binding.editTextParent) {
+                requireActivity().hideKeyboard(requireView())
+                focus()
+
+                ParentListDialogFragment.newInstance(tagNumber)
+                    .apply {
+                        setTargetFragment(this@AddEditCattleFragment, SELECT_PARENT_REQUEST_CODE)
+                    }
+                    .show(parentFragmentManager, TAG)
+            }
+        })
+
+        model.showBackConfirmationDialog.observe(viewLifecycleOwner, EventObserver {
+            requireContext().showDialog(
+                title = R.string.back_pressed_message,
+                message = R.string.changes_not_saved_message,
+                positiveTextId = R.string.yes,
+                onPositiveSelected = { model.navigateUp() },
+                negativeTextId = R.string.no
+            )
+        })
+
+        model.navigateUp.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigateUp()
+        })
 
         model.saving.observe(viewLifecycleOwner) {
             if (it)
@@ -116,38 +135,6 @@ class AddEditCattleFragment : NavigationFragment() {
         }
     }
 
-    private fun performAction(action: Destination) = with(action) {
-        when (destination) {
-            PICK_PARENT -> data?.let { binding.editTextParent.pickParent(it) }
-            REMOVE_PARENT -> {
-                requireContext().showDialog(
-                    title = R.string.remove_parent_message,
-                    positiveTextId = R.string.yes,
-                    onPositiveSelected = { model.setParent(null) },
-                    negativeTextId = R.string.no
-                )
-            }
-
-            ACTIVE_BREEDING -> data?.let { findNavController().navigate(toActiveBreeding(it)) }
-
-            ALL_BREEDING_SCREEN -> data?.let { findNavController().navigate(toBreedingHistory(it)) }
-
-            ADD_BREEDING_SCREEN -> data?.let { findNavController().navigate(toAddBreeding(it)) }
-
-            BACK_CONFIRMATION_DIALOG -> {
-                requireContext().showDialog(
-                    title = R.string.back_pressed_message,
-                    message = R.string.changes_not_saved_message,
-                    positiveTextId = R.string.yes,
-                    onPositiveSelected = { model.navigateUp() },
-                    negativeTextId = R.string.no
-                )
-            }
-
-            NAVIGATE_UP -> findNavController().navigateUp()
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == SELECT_PARENT_REQUEST_CODE) {
             when(resultCode) {
@@ -159,17 +146,6 @@ class AddEditCattleFragment : NavigationFragment() {
             }
             binding.editTextParent.isFocusableInTouchMode = false
         }
-    }
-
-    private fun TextInputEditText.pickParent(tagNumber: String) {
-        requireActivity().hideKeyboard(requireView())
-        focus()
-
-        ParentListDialogFragment.newInstance(tagNumber)
-            .apply {
-                setTargetFragment(this@AddEditCattleFragment, SELECT_PARENT_REQUEST_CODE)
-            }
-            .show(parentFragmentManager, TAG)
     }
 
     private fun AutoCompleteTextView.setupDropDownAdapters(@ArrayRes listId: Int) {

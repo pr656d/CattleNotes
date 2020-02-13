@@ -34,8 +34,6 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:paddingBottom="@dimen/clip_padding_bottom"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -245,7 +243,7 @@
                         android:inputType="@{ InputType.TYPE_NULL }"
                         android:text="@={ viewModel.parent }"
                         android:onClick="@{ () -> viewModel.pickParent() }"
-                        android:onLongClick="@{ (view) -> viewModel.removeParent(view) }"/>
+                        app:onLongPressRemoveText="@{ viewModel.parent }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -313,44 +311,13 @@
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnShowActiveBreeding"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:drawableEnd="@drawable/ic_arrow_right_white"
-                    android:text="@string/show_active_breeding"
-                    android:textAllCaps="false"
-                    android:onClick="@{ () -> viewModel.showActiveBreeding() }"
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/containerPurchase" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnAddNewBreeding"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:drawableEnd="@drawable/ic_arrow_right_white"
-                    android:text="@string/add_new_breeding"
-                    android:textAllCaps="false"
-                    android:onClick="@{ () -> viewModel.addNewBreeding() }"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnShowActiveBreeding" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnShowAllBreeding"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:drawableEnd="@drawable/ic_arrow_right_white"
-                    android:text="@string/show_all_breeding"
-                    android:textAllCaps="false"
-                    android:onClick="@{ () -> viewModel.showAllBreeding() }"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btnAddNewBreeding" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

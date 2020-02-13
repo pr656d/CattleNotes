@@ -1,13 +1,10 @@
 package com.pr656d.cattlenotes.ui.main.cattle.addedit
 
-import android.view.View
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
-import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
-import com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.utils.Event
 import com.pr656d.cattlenotes.utils.toBreed
 import com.pr656d.cattlenotes.utils.toGroup
@@ -64,11 +61,21 @@ class AddEditCattleViewModel @Inject constructor(
 
     val purchaseDate = MutableLiveData<Date>()
 
-    private val _action = MutableLiveData<Event<Destination>>()
-    val action: LiveData<Event<Destination>> = _action
+    private val _selectParent = MutableLiveData<Event<String>>()
+    val selectParent: LiveData<Event<String>>
+        get() = _selectParent
+
+    private val _showBackConfirmationDialog = MutableLiveData<Event<Unit>>()
+    val showBackConfirmationDialog: LiveData<Event<Unit>>
+        get() = _showBackConfirmationDialog
+
+    private val _navigateUp = MutableLiveData<Event<Unit>>()
+    val navigateUp: LiveData<Event<Unit>>
+        get() = _navigateUp
 
     private val _saving = MutableLiveData<Boolean>(false)
-    val saving: LiveData<Boolean> = _saving
+    val saving: LiveData<Boolean>
+        get() = _saving
 
     private val _showMessage = MutableLiveData<@StringRes Int>()
     val showMessage: LiveData<Event<Int>> = _showMessage.map { Event(it) }
@@ -97,14 +104,17 @@ class AddEditCattleViewModel @Inject constructor(
 
                         toggleSaving()
 
-                        _action.postValue(Event(Destination(NAVIGATE_UP)))
+                        withContext(Dispatchers.Main) {
+                            navigateUp()
+                        }
                     } catch (e: Exception) {
-                        toggleSaving()
+                        if (_saving.value!!)
+                            toggleSaving()
                         _showMessage.postValue(R.string.retry)
                     }
                 }
             } else {
-                _action.value = Event(Destination(NAVIGATE_UP))
+                navigateUp()
             }
         } else {
             _showMessage.value = R.string.error_fill_empty_fields
@@ -170,59 +180,21 @@ class AddEditCattleViewModel @Inject constructor(
                 purchaseDate.value == null
     }
 
-    fun pickParent() {
-        tagNumber.value?.let {
-            _action.value = Event(Destination(PICK_PARENT, it))
-            return
-        }
-        _showMessage.value = R.string.provide_tag_number
-    }
-
-    fun removeParent(view: View): Boolean {
-        _action.value = Event(Destination(REMOVE_PARENT))
-        return true
-    }
-
-    fun showAllBreeding() {
-        tagNumber.value?.let {
-            _action.value = Event(Destination(ALL_BREEDING_SCREEN, it))
-            return
-        }
-        _showMessage.value = R.string.provide_tag_number
-    }
-
-    fun addNewBreeding() {
-        if (isAllFieldsValid()) {
-            _action.value = Event(Destination(ADD_BREEDING_SCREEN, Gson().toJson(getCattle())))
-        } else {
-            _showMessage.value = R.string.error_fill_empty_fields
-        }
-    }
-
-    fun showActiveBreeding() {
-        tagNumber.value?.let {
-            _action.value = Event(Destination(ACTIVE_BREEDING, it))
-            return
-        }
-        _showMessage.value = R.string.provide_tag_number
+    fun pickParent() = tagNumber.value.let {
+        if (it != null)
+            _selectParent.value = Event(it)
+        else
+            _showMessage.value = R.string.provide_tag_number
     }
 
     fun onBackPressed() {
         if (isAllFieldsEmpty())
             navigateUp()
         else
-            _action.value = Event(Destination(BACK_CONFIRMATION_DIALOG))
+            _showBackConfirmationDialog.value = Event(Unit)
     }
 
     fun navigateUp() {
-        _action.value = Event(Destination(NAVIGATE_UP))
-    }
-
-    data class Destination(val destination: DESTINATIONS, val data: String? = null) {
-        enum class DESTINATIONS {
-            PICK_PARENT, REMOVE_PARENT,
-            ACTIVE_BREEDING, ALL_BREEDING_SCREEN, ADD_BREEDING_SCREEN,
-            BACK_CONFIRMATION_DIALOG, NAVIGATE_UP
-        }
+        _navigateUp.value = Event(Unit)
     }
 }

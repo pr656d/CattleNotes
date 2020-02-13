@@ -10,17 +10,14 @@
     <string name="back">Go Back</string>
     <string name="retry">Retry</string>
     <string name="more">More</string>
-    <string name="remove">You want to remove data from this field</string>
+    <string name="remove_text">Reset data on this field?</string>
     <string name="required">Required</string>
     <string name="zero">0</string>
     <string name="cow">Cow</string>
     <string name="hf">HF</string>
     <string name="dry">Dry</string>
-    <string name="back_pressed_message">Are you sure you want to go back?</string>
+    <string name="back_pressed_message">You want to go back?</string>
     <string name="changes_not_saved_message">If you go back changes will not be saved.</string>
-
-    <!--  Navigation args  -->
-    <string name="arg_progressDialogMessage">message</string>
 
     <!--  Transition name  -->
     <string name="tn_fabButton">fab_button</string>
@@ -77,9 +74,6 @@
     <!--  Parent list  -->
     <string name="parent_list_empty">Your parent list is empty</string>
     <string name="select_parent">Select parent</string>
-    <string name="remove_parent_message">Are you sure you want to remove parent?</string>
-    <string name="remove_dob_message">Are you sure you want to remove date of birth?</string>
-    <string name="remove_purchase_date_message">Are you sure you want to remove purchase date?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 

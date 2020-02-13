@@ -24,7 +24,6 @@
     <dimen name="nav_header_logo_size">100dp</dimen>
 
     <dimen name="no_elevation">0dp</dimen>
-    <dimen name="clip_padding_bottom">100dp</dimen>
 
     <!--  Dimensions for TextInputLayout  -->
     <dimen name="text_size_text_input_layout">16sp</dimen>

@@ -39,7 +39,7 @@
             android:layout_height="0dp"
             android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/clip_padding_bottom"
+            android:paddingBottom="100dp"
             app:cattleListItems="@{ viewModel.cattleList }"
             app:cattleListViewModel="@{viewModel}"
             app:layoutManager="LinearLayoutManager"

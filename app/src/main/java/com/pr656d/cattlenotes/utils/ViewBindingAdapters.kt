@@ -69,7 +69,7 @@ fun onLongPressRemoveText(view: TextInputEditText, data: MutableLiveData<*>?) {
 
         // Show dialog.
         view.context.showDialog(
-            title = R.string.remove,
+            title = R.string.remove_text,
             positiveTextId = R.string.yes,
             onPositiveSelected = {
                 data?.value = null
