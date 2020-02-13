@@ -122,7 +122,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/artificial_insemination">
+                    android:hint="@string/artificial_insemination"
+                    app:helperText="@string/required">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextAiDate"

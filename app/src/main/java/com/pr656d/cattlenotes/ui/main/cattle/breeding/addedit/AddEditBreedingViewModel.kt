@@ -8,6 +8,7 @@ import com.pr656d.cattlenotes.data.model.BreedingCycle.ArtificialInseminationInf
 import com.pr656d.cattlenotes.data.model.BreedingCycle.BreedingEvent
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.BreedingDataRepository
+import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.utils.BreedingUtil
 import com.pr656d.cattlenotes.utils.Event
 import kotlinx.coroutines.Dispatchers
@@ -75,17 +76,25 @@ class AddEditBreedingViewModel @Inject constructor(
             }
         }
 
-        val breedingCycle = getBreedingCycle(cattle)
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                toggleSaving()
-                breedingDataRepository.addBreeding(breedingCycle)
-                toggleSaving()
-                navigateUp()
-            } catch (e: Exception) {
-                toggleSaving()
-                _showMessage.postValue(R.string.retry)
+        if (aiDate.value != null) {
+            val breedingCycle = getBreedingCycle(cattle)
+            viewModelScope.launch(Dispatchers.IO) {
+                try {
+                    toggleSaving()
+                    breedingDataRepository.addBreeding(breedingCycle)
+                    toggleSaving()
+                    withContext(Dispatchers.Main) {
+                        navigateUp()
+                    }
+                } catch (e: Exception) {
+                    Logger.d(AddEditBreedingFragment.TAG, "${e.printStackTrace()}")
+                    if (_saving.value!!)
+                        toggleSaving()
+                    _showMessage.postValue(R.string.retry)
+                }
             }
+        } else {
+            _showMessage.value = R.string.provide_ai_date
         }
     }
 
