@@ -5,7 +5,7 @@
 
     <stroke
         android:width="@dimen/box_stroke_width"
-        android:color="?android:textColorHint">
+        android:color="?colorControlNormal">
     </stroke>
 
     <solid android:color="@color/transparent"/>
