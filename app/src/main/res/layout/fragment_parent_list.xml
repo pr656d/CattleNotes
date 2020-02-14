@@ -25,10 +25,10 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/selectParentToolbar"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:navigationIcon="@drawable/ic_close_black"
+                app:navigationIcon="@drawable/ic_close"
                 app:title="@string/select_parent" />
         </com.google.android.material.appbar.AppBarLayout>
 

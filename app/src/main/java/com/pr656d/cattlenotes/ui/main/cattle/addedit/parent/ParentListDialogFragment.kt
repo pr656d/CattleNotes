@@ -62,7 +62,7 @@ class ParentListDialogFragment : DaggerDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = model
 
-        binding.selectParentToolbar.setNavigationOnClickListener { dismiss() }
+        binding.toolbar.setNavigationOnClickListener { dismiss() }
 
         val tagNumber = requireNotNull(arguments).getString(ARG_TAG_NUMBER)
         tagNumber?.let { model.setTagNumber(tagNumber.toLong()) }

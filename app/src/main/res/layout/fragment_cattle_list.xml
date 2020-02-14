@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
-                app:navigationIcon="@drawable/ic_menu_black"
+                app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/cattle" />
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -55,7 +55,7 @@
             android:id="@+id/fabButtonAddCattle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_black"
+            android:src="@drawable/ic_add"
             android:layout_marginBottom="@dimen/margin_normal"
             android:onClick="@{ () -> viewModel.addCattle() }"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,7 +70,7 @@
             android:layout_margin="@dimen/margin_large"
             android:text="@string/cattle_list_empty"
             android:textAlignment="center"
-            android:textColor="@color/grey"
+            android:textColor="?android:textColorHint"
             app:goneUnless="@{ viewModel.isEmpty }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

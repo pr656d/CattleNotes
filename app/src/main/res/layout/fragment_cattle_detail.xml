@@ -32,7 +32,7 @@
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
                 app:menu="@menu/cattle_detail_menu"
-                app:navigationIcon="@drawable/ic_menu_black"
+                app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/cattle_detail" />
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -209,7 +209,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/containerGroupLactation"
-                    app:startIconDrawable="@drawable/ic_date_grey">
+                    app:startIconDrawable="@drawable/ic_date">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextDateOfBirth"
@@ -226,7 +226,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:hint="@string/parent"
-                    app:endIconDrawable="@drawable/ic_arrow_right_white"
+                    app:endIconDrawable="@drawable/ic_arrow_right"
                     app:endIconMode="custom"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -290,7 +290,7 @@
                         android:layout_marginStart="@dimen/margin_micro"
                         android:layout_weight="1"
                         android:hint="@string/purchase_date"
-                        app:startIconDrawable="@drawable/ic_date_grey">
+                        app:startIconDrawable="@drawable/ic_date">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPurchaseDate"
@@ -306,7 +306,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:drawableEnd="@drawable/ic_arrow_right_white"
+                    android:drawableEnd="@drawable/ic_arrow_right"
                     android:onClick="@{ () -> viewModel.showActiveBreeding() }"
                     android:text="@string/show_active_breeding"
                     android:textAllCaps="false"
@@ -319,7 +319,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:drawableEnd="@drawable/ic_arrow_right_white"
+                    android:drawableEnd="@drawable/ic_arrow_right"
                     android:onClick="@{ () -> viewModel.addNewBreeding() }"
                     android:text="@string/add_new_breeding"
                     android:textAllCaps="false"
@@ -332,7 +332,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:drawableEnd="@drawable/ic_arrow_right_white"
+                    android:drawableEnd="@drawable/ic_arrow_right"
                     android:onClick="@{ () -> viewModel.showAllBreeding() }"
                     android:text="@string/show_all_breeding"
                     android:textAllCaps="false"

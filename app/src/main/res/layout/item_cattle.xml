@@ -17,12 +17,12 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/layout_cattle_item"
-        style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{ () -> eventListener.openCattle(cattle) }"
+        app:cardElevation="0dp"
         app:cardCornerRadius="0dp"
         app:rippleColor="@color/rippleColor">
 
@@ -78,6 +78,7 @@
                 android:layout_marginStart="@dimen/margin_small"
                 android:textAlignment="textStart"
                 android:text="@{ String.valueOf(cattle.tagNumber) }"
+                android:textAppearance="?textAppearanceListItem"
                 app:layout_constraintBottom_toTopOf="@+id/tvType"
                 app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
                 app:layout_constraintTop_toTopOf="@+id/guidelineTop"
@@ -85,11 +86,11 @@
 
             <TextView
                 android:id="@+id/tvName"
-                style="@style/AppTheme.Subtitle1"
+                style="@style/AppTheme.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grey"
                 android:text="@{ cattle.name }"
+                android:textAppearance="?textAppearanceListItemSecondary"
                 app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
                 app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
                 app:layout_constraintTop_toTopOf="@+id/guidelineTop"
@@ -100,8 +101,8 @@
                 style="@style/AppTheme.Body2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grey_light"
                 android:text="@{ cattle.type.displayName }"
+                android:textAppearance="?textAppearanceListItemSecondary"
                 app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
                 app:layout_constraintStart_toEndOf="@+id/tvGroup"
                 tools:text="Cow" />
@@ -113,8 +114,8 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="0dp"
                 android:paddingEnd="8dp"
-                android:textColor="@color/grey_light"
                 android:text="@{ cattle.group.displayName }"
+                android:textAppearance="?textAppearanceListItemSecondary"
                 app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
                 app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
                 tools:text="Milking"

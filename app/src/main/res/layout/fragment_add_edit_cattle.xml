@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
-                app:navigationIcon="@drawable/ic_menu_black" />
+                app:navigationIcon="@drawable/ic_menu" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <ScrollView
@@ -210,7 +210,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/containerGroupLactation"
-                    app:startIconDrawable="@drawable/ic_date_grey">
+                    app:startIconDrawable="@drawable/ic_date">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextDateOfBirth"
@@ -229,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:hint="@string/parent"
-                    app:endIconDrawable="@drawable/ic_arrow_right_white"
+                    app:endIconDrawable="@drawable/ic_arrow_right"
                     app:endIconMode="custom"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -297,7 +297,7 @@
                         android:layout_marginStart="@dimen/margin_micro"
                         android:hint="@string/purchase_date"
                         android:layout_weight="1"
-                        app:startIconDrawable="@drawable/ic_date_grey">
+                        app:startIconDrawable="@drawable/ic_date">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPurchaseDate"
@@ -329,7 +329,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/margin_normal"
-            android:src="@drawable/ic_check_black"
+            android:src="@drawable/ic_check"
             android:onClick="@{() -> viewModel.save() }"
             android:transitionName="@string/tn_fabButton" />
 

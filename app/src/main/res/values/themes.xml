@@ -2,7 +2,7 @@
 <resources>
 
     <!--  Fullscreen  -->
-    <style name="AppThemeFullscreen" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppThemeFullscreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimary</item>
         <item name="colorSecondary">@color/colorSecondary</item>
@@ -14,7 +14,7 @@
     </style>
 
     <!--  AppTheme  -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorSecondary">@color/colorSecondary</item>

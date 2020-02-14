@@ -7,26 +7,26 @@
         <item
             android:id="@id/cattleListScreen"
             android:checkable="true"
-            android:icon="@drawable/ic_cattle"
+            android:icon="@drawable/ic_nav_cattle"
             android:title="@string/cattle"
             android:checked="true"/>
 
         <item
             android:id="@id/timelineScreen"
             android:checkable="true"
-            android:icon="@drawable/ic_timeline"
+            android:icon="@drawable/ic_nav_timeline"
             android:title="@string/timeline" />
 
         <item
             android:id="@id/milkingScreen"
             android:checkable="true"
-            android:icon="@drawable/ic_milking"
+            android:icon="@drawable/ic_nav_milking"
             android:title="@string/milking" />
 
         <item
             android:id="@id/cashflowScreen"
             android:checkable="true"
-            android:icon="@drawable/ic_cashflow"
+            android:icon="@drawable/ic_nav_cashflow"
             android:title="@string/cashflow"/>
     </group>
 
@@ -35,12 +35,12 @@
 
         <item
             android:id="@id/settingsScreen"
-            android:icon="@drawable/ic_settings_black"
+            android:icon="@drawable/ic_nav_settings"
             android:title="@string/settings" />
 
         <item
             android:id="@id/aboutAppScreen"
-            android:icon="@drawable/ic_info_black"
+            android:icon="@drawable/ic_nav_about_app"
             android:title="@string/about_app" />
     </group>
 </menu>

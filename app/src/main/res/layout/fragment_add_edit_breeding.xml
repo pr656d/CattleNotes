@@ -35,7 +35,7 @@
                 android:layout_height="200dp"
                 app:titleEnabled="false"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:contentScrim="@color/white"
+                app:contentScrim="?colorSurface"
                 app:statusBarScrim="?colorSurface">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -60,6 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_normal"
                         android:text="@{ String.valueOf(cattle.tagNumber) }"
+                        android:textColor="?attr/colorOnBackground"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         tools:text="234293847207"/>
@@ -71,6 +72,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_normal"
                         android:text="@{ cattle.type.displayName }"
+                        android:textColor="?attr/colorOnBackground"
                         app:layout_constraintBaseline_toBaselineOf="@+id/textViewTagNumber"
                         app:layout_constraintEnd_toEndOf="parent"
                         tools:text="COW"/>
@@ -84,7 +86,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
                     app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/ic_arrow_back_black" />
+                    app:navigationIcon="@drawable/ic_arrow_back" />
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -396,7 +398,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/margin_normal"
-            android:src="@drawable/ic_check_black"
+            android:src="@drawable/ic_check"
             android:onClick="@{() -> viewModel.save(cattle) }" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
