@@ -3,6 +3,12 @@
     <color name="colorPrimaryDark">@color/black</color>
     <color name="colorSecondary">@color/white</color>
 
+    <!--
+      To match TextInputLayout box stroke color for MaterialSwitch and MaterialCheckbox
+      to look like TextInputLayout outlined box.
+    -->
+    <color name="outlined_box_stroke_color">#61FFFFFF</color> <!-- 38% black -->
+
     <color name="color_control_light">#2EFFFFFF</color> <!-- 18% white -->
 
     <!-- Scrim colors -->

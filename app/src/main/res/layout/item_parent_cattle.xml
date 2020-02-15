@@ -77,13 +77,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_small"
-                android:textSize="18sp"
                 android:text="@{ String.valueOf(cattle.tagNumber) }"
                 android:textAlignment="textStart"
                 android:textAppearance="?textAppearanceListItem"
+                android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/tvType"
                 app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
                 app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+                app:layout_constraintVertical_bias="0.100000024"
                 tools:text="123456789012" />
 
             <TextView

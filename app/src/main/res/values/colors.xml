@@ -6,6 +6,12 @@
   <color name="colorAccent">#FFFFFF</color>
   <color name="rippleColor">#20008577</color>
 
+  <!--
+    To match TextInputLayout box stroke color for MaterialSwitch and MaterialCheckbox
+    to look like TextInputLayout outlined box.
+  -->
+  <color name="outlined_box_stroke_color">#61000000</color> <!-- 38% black -->
+
   <color name="color_control_light">#2EFFFFFF</color> <!-- 18% white -->
 
   <!-- Scrim colors -->
