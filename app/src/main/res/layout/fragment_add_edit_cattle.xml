@@ -246,9 +246,9 @@
                         app:onLongClickRemoveText="@{ viewModel.parent }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/switchHomeBorn"
-                    style="@style/AppTheme.MaterialSwitch"
+                    style="@style/AppTheme.MaterialCheckBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
