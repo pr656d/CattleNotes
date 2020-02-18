@@ -6,6 +6,8 @@
     <!--
       To match TextInputLayout box stroke color for MaterialSwitch and MaterialCheckbox
       to look like TextInputLayout outlined box.
+
+      Reference : https://stackoverflow.com/a/11019879/8146210
     -->
     <color name="outlined_box_stroke_color">#61FFFFFF</color> <!-- 38% black -->
 

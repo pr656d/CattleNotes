@@ -1,34 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#008577</color>
-  <color name="colorPrimaryDark">#00574B</color>
-  <color name="colorSecondary">@color/white</color>
-  <color name="colorAccent">#FFFFFF</color>
-  <color name="rippleColor">#20008577</color>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorSecondary">@color/white</color>
+    <color name="colorAccent">#FFFFFF</color>
+    <color name="rippleColor">#20008577</color>
 
-  <!--
-    To match TextInputLayout box stroke color for MaterialSwitch and MaterialCheckbox
-    to look like TextInputLayout outlined box.
-  -->
-  <color name="outlined_box_stroke_color">#61000000</color> <!-- 38% black -->
+    <!--
+      To match TextInputLayout box stroke color for MaterialSwitch and MaterialCheckbox
+      to look like TextInputLayout outlined box.
 
-  <color name="color_control_light">#2EFFFFFF</color> <!-- 18% white -->
+      Reference : https://stackoverflow.com/a/11019879/8146210
+    -->
+    <color name="outlined_box_stroke_color">#61000000</color> <!-- 38% black -->
 
-  <!-- Scrim colors -->
-  <color name="system_ui_scrim_light">#B3FFFFFF</color> <!-- 70% white -->
-  <color name="system_ui_scrim_black">#40000000</color> <!-- 25% black -->
+    <color name="color_control_light">#2EFFFFFF</color> <!-- 18% white -->
 
-  <!-- We use a dark scrim by default since light status is API 23+ -->
-  <color name="status_bar_scrim">@color/system_ui_scrim_black</color>
-  <!-- We use a dark scrim by default since light nav bar is API 27+ -->
-  <color name="nav_bar_scrim">@color/system_ui_scrim_black</color>
+    <!-- Scrim colors -->
+    <color name="system_ui_scrim_light">#B3FFFFFF</color> <!-- 70% white -->
+    <color name="system_ui_scrim_black">#40000000</color> <!-- 25% black -->
 
-  <color name="black">#000000</color>
-  <color name="white">#FFFFFF</color>
-  <color name="transparent_white">#80FFFFFF</color>
-  <color name="grey">#999999</color>
-  <color name="grey_light">#AAAAAA</color>
-  <color name="transparent">#00000000</color>
-  <color name="fui_linkColor">#FFDE03</color>
-  <color name="list_divider">#1f000000</color>
+    <!-- We use a dark scrim by default since light status is API 23+ -->
+    <color name="status_bar_scrim">@color/system_ui_scrim_black</color>
+    <!-- We use a dark scrim by default since light nav bar is API 27+ -->
+    <color name="nav_bar_scrim">@color/system_ui_scrim_black</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent_white">#80FFFFFF</color>
+    <color name="grey">#999999</color>
+    <color name="grey_light">#AAAAAA</color>
+    <color name="transparent">#00000000</color>
+    <color name="fui_linkColor">#FFDE03</color>
+    <color name="list_divider">#1f000000</color>
 </resources>
