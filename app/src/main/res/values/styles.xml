@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--
     TO COME IN FUTURE MATERIAL LIBRARY
@@ -134,6 +134,15 @@
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
     </style>
 
+    <style name="AppTheme.MaterialCheckBox.Disabled">
+        <item name="android:background">@drawable/outline</item>
+        <item name="android:padding">@dimen/box_padding</item>
+        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:layoutDirection">rtl</item>
+        <item name="android:textAppearance">@style/AppTheme.Body1</item>
+        <item name="android:enabled">false</item>
+    </style>
+
     <style name="AppTheme.MaterialSwitch">
         <item name="android:background">@drawable/outline</item>
         <item name="android:paddingStart">@dimen/box_padding</item>
@@ -160,26 +169,19 @@
 
     <style name="AppTheme.Chip" parent="TextAppearance.MaterialComponents.Chip" />
 
-    <style name="AppTheme.Toolbar" parent="Base.Theme.MaterialComponents.Light.DarkActionBar">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">?attr/actionBarSize</item>
-    </style>
-
     <style name="AppTheme.AppBar" parent="Widget.Design.AppBarLayout">
         <item name="android:background">?colorSurface</item>
         <item name="android:fitsSystemWindows">true</item>
     </style>
 
-    <style name="progressBar" parent="Widget.AppCompat.ProgressBar">
-        <item name="android:indeterminateTint">?colorPrimary</item>
-    </style>
-
     <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.DayNight.Dialog">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/primaryColor</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowBackground">?attr/colorSurface</item>
+        <!--  Window decor  -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/use_light_status</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>

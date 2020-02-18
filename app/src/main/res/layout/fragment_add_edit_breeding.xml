@@ -82,7 +82,6 @@
                 <!-- Toolbar needs to be on top for the back button to be tappable -->
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
-                    style="@style/AppTheme.Toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
                     app:layout_collapseMode="pin"

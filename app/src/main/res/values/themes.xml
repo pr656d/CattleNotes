@@ -1,62 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <!--  Fullscreen  -->
-    <style name="AppThemeFullscreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimary</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--  Base theme for app  -->
+    <style name="Base.AppTheme"  parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!--  Custom theme  -->
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <!--  Font family for app  -->
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="android:textColorPrimary">@color/black</item>
+
+        <!--  Window decor  -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/use_light_status</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowContentTransitions">true</item>
+
+        <item name="colorButtonNormal">@color/primaryColor</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/primaryDarkColor</item>
     </style>
 
     <!--  AppTheme  -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/transparent</item>
-        <item name="android:fontFamily">@font/roboto_regular</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textColorHint">@color/grey</item>
-        <item name="colorButtonNormal">@color/colorPrimary</item>
-        <item name="colorControlHighlight">@color/colorAccent</item>
-        <item name="colorControlActivated">@color/colorPrimary</item>
-    </style>
+    <style name="AppTheme" parent="Base.AppTheme" />
 
     <!--  LaunchTheme  -->
-    <style name="LaunchTheme" parent="AppThemeFullscreen">
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <style name="LaunchTheme" parent="Base.AppTheme">
         <item name="android:windowBackground">@drawable/splash_screen</item>
-        <item name="android:background">@color/transparent</item>
     </style>
-
-    <!--  LoginTheme  -->
-    <style name="ThemeOverlay.LoginTheme" parent="LaunchTheme" />
 
     <!--  Firebase Theme  -->
     <style name="FirebaseTheme" parent="FirebaseUI">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="buttonStyle">@style/FirebaseButton</item>
-        <item name="android:windowBackground">@drawable/gradient_bg</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <!--  Window decor  -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/use_light_status</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="fontFamily">@font/roboto_regular</item>
-        <item name="android:textColorHint">@color/white</item>
-
-        <item name="colorControlNormal">@color/colorAccent</item>
-        <item name="colorControlActivated">@color/colorAccent</item>
-        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@drawable/gradient_bg</item>
+        <item name="android:textColor">?colorOnSurface</item>
+        <item name="android:textColorHint">?colorSecondary</item>
+        <item name="buttonStyle">@style/FirebaseButton</item>
+        <item name="colorControlNormal">?colorControlNormal</item>
+        <item name="colorControlActivated">?colorSurface</item>
+        <item name="colorControlHighlight">?colorPrimaryDark</item>
     </style>
 
     <style name="FirebaseButton" parent="FirebaseUI.Button">
@@ -64,9 +57,9 @@
     </style>
 
     <style name="DatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorAccent">@color/primaryColor</item>
     </style>
 
     <style name="AppTheme.DialogAnim">

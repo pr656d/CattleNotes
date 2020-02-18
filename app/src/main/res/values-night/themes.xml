@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--  Firebase Theme  -->
+    <style name="FirebaseTheme" parent="FirebaseUI">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!--  Window decor  -->
+        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/use_light_status</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:textColor">?colorOnSurface</item>
+        <item name="android:textColorHint">?colorSecondary</item>
+        <item name="buttonStyle">@style/FirebaseButton</item>
+        <item name="colorControlNormal">?colorControlNormal</item>
+        <item name="colorControlActivated">?colorOnSurface</item>
+        <item name="colorControlHighlight">?colorPrimaryDark</item>
+    </style>
+</resources>

@@ -6,4 +6,4 @@
     android:ellipsize="end"
     android:maxLines="1"
     android:textAppearance="@style/AppTheme.Subtitle1"
-    android:textColor="?android:textColorSecondary"/>
+    android:textColor="?colorOnSurface"/>
