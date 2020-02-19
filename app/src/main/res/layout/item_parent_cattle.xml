@@ -22,53 +22,26 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{ () -> eventListener.parentSelected(cattle) }"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/transparent"
         app:cardCornerRadius="0dp"
-        app:rippleColor="@color/rippleColor">
+        app:cardElevation="0dp"
+        app:rippleColor="?colorSecondary">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineLeft"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="@dimen/spacing_normal" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineRight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="@dimen/spacing_normal" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineBottom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_end="@dimen/spacing_normal" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guidelineTop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintGuide_begin="@dimen/spacing_normal" />
-
             <ImageView
                 android:id="@+id/ivProfileImage"
                 android:layout_width="@dimen/photo_width_normal"
                 android:layout_height="@dimen/photo_height_normal"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginStart="?listPreferredItemPaddingStart"
                 android:scaleType="centerCrop"
-                android:padding="@dimen/padding_micro"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_cattle"
-                app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-                app:layout_constraintStart_toStartOf="@+id/guidelineLeft"
-                app:layout_constraintTop_toTopOf="@+id/guidelineTop"
                 tools:ignore="ContentDescription" />
 
             <TextView
@@ -81,10 +54,8 @@
                 android:textAlignment="textStart"
                 android:textAppearance="?textAppearanceListItem"
                 android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/tvType"
                 app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-                app:layout_constraintTop_toTopOf="@+id/guidelineTop"
-                app:layout_constraintVertical_bias="0.100000024"
+                app:layout_constraintTop_toTopOf="@+id/ivProfileImage"
                 tools:text="123456789012" />
 
             <TextView
@@ -93,10 +64,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{ cattle.name }"
+                android:layout_marginEnd="?listPreferredItemPaddingEnd"
                 android:textAppearance="?textAppearanceListItemSecondary"
-                app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
-                app:layout_constraintEnd_toStartOf="@+id/guidelineRight"
-                app:layout_constraintTop_toTopOf="@+id/guidelineTop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Name" />
 
             <TextView
@@ -106,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{ cattle.type.displayName }"
                 android:textAppearance="?textAppearanceListItemSmall"
-                app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvGroup"
                 app:layout_constraintStart_toEndOf="@+id/tvGroup"
                 tools:text="Cow" />
 
@@ -115,25 +87,16 @@
                 style="@style/AppTheme.Body2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginTop="@dimen/margin_micro"
                 android:paddingStart="0dp"
                 android:paddingEnd="@dimen/padding_small"
                 android:text="@{ cattle.group.displayName }"
                 android:textAppearance="?textAppearanceListItemSmall"
-                app:layout_constraintBottom_toTopOf="@+id/guidelineBottom"
+                app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
                 app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
                 app:layout_constraintTop_toBottomOf="@+id/tvTagNumber"
                 tools:text="Milking"
                 tools:visibility="visible" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="match_parent"
-                android:layout_height="0.2dp"
-                android:background="@drawable/divider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -48,9 +48,8 @@ class CattleDetailFragment : NavigationFragment() {
 
         model.fetchCattle(Gson().fromJson(args.cattle, Cattle::class.java))
 
-        binding.toolbar.setOnMenuItemClickListener {
+        binding.bottomAppBarCattleDetail.setOnMenuItemClickListener {
             when (it.itemId) {
-                R.id.menu_item_edit -> model.editCattle()
                 R.id.menu_item_delete -> model.deleteCattleConfirmation()
             }
             true
