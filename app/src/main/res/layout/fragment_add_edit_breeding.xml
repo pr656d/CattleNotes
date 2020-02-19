@@ -320,15 +320,15 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
+            style="@style/AppTheme.AppBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?colorSecondary"
-            android:fitsSystemWindows="true">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/collapsing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
                 app:titleEnabled="false"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:contentScrim="?colorSurface"
@@ -359,6 +359,7 @@
                         android:layout_marginEnd="@dimen/margin_normal"
                         android:maxLines="1"
                         android:text="@{ String.valueOf(cattle.tagNumber) }"
+                        android:textAppearance="?textAppearanceHeadline6"
                         app:layout_constraintBottom_toBottomOf="@+id/imageView"
                         app:layout_constraintEnd_toStartOf="@+id/imageView"
                         app:layout_constraintStart_toStartOf="parent"
@@ -373,6 +374,7 @@
                         android:layout_marginStart="@dimen/margin_normal"
                         android:layout_marginBottom="@dimen/margin_small"
                         android:text="@{ cattle.breed.displayName }"
+                        android:textAppearance="?textAppearanceSubtitle1"
                         app:layout_constraintBottom_toBottomOf="@+id/textViewType"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/textViewType"
@@ -384,6 +386,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{ cattle.group.displayName }"
+                        android:textAppearance="?textAppearanceSubtitle1"
                         android:layout_marginStart="@dimen/margin_small"
                         app:layout_constraintBottom_toBottomOf="@+id/textViewBreed"
                         app:layout_constraintStart_toEndOf="@+id/textViewBreed"
@@ -398,12 +401,12 @@
                         android:layout_marginTop="@dimen/margin_small"
                         android:layout_marginBottom="@dimen/margin_small"
                         android:text="@{ cattle.type.displayName }"
+                        android:textAppearance="?textAppearanceSubtitle1"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/imageView"
                         app:layout_constraintStart_toStartOf="@+id/imageView"
                         app:layout_constraintTop_toBottomOf="@+id/imageView"
                         tools:text="COW" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <!-- Toolbar needs to be on top for the back button to be tappable -->
