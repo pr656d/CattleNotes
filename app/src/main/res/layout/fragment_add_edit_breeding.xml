@@ -19,28 +19,117 @@
         android:id="@+id/coordinator_layout_add_edit_breeding"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         tools:ignore="MergeRootFrame">
 
-        <androidx.core.widget.NestedScrollView
+        <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="@dimen/padding_normal">
+                android:paddingTop="@dimen/padding_normal"
+                android:paddingStart="@dimen/padding_normal"
+                android:paddingEnd="@dimen/padding_normal">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_micro"
+                    android:clickable="false">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_marginTop="@dimen/margin_normal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_cattle"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/textViewTagNumber"
+                            style="@style/AppTheme.Headline6"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_large"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:layout_marginEnd="@dimen/margin_large"
+                            android:ellipsize="middle"
+                            android:singleLine="true"
+                            android:text="@{ String.valueOf(cattle.tagNumber) }"
+                            android:textAlignment="center"
+                            android:textAppearance="?textAppearanceHeadline6"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView"
+                            tools:text="234293847209" />
+
+                        <TextView
+                            android:id="@+id/textViewBreed"
+                            style="@style/AppTheme.Subtitle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:layout_marginBottom="@dimen/margin_normal"
+                            android:text="@{ cattle.breed.displayName }"
+                            android:textAppearance="?textAppearanceSubtitle1"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/textViewGroup"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="@+id/imageView"
+                            app:layout_constraintTop_toBottomOf="@+id/textViewTagNumber"
+                            tools:text="HF" />
+
+                        <TextView
+                            android:id="@+id/textViewGroup"
+                            style="@style/AppTheme.Subtitle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_small"
+                            android:text="@{ cattle.group.displayName }"
+                            android:textAppearance="?textAppearanceSubtitle1"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/textViewBreed"
+                            app:layout_constraintEnd_toStartOf="@+id/textViewType"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textViewBreed"
+                            tools:text="Milking" />
+
+                        <TextView
+                            android:id="@+id/textViewType"
+                            style="@style/AppTheme.Subtitle1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/margin_small"
+                            android:text="@{ cattle.type.displayName }"
+                            android:textAppearance="?textAppearanceSubtitle1"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/textViewGroup"
+                            app:layout_constraintEnd_toEndOf="@+id/imageView"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/textViewGroup"
+                            tools:text="COW" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchActiveBreedingStatus"
                     style="@style/AppTheme.MaterialSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/mark_as_active"
-                    android:checked="@={ viewModel.active }"/>
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:checked="@={ viewModel.active }"
+                    android:text="@string/mark_as_active" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutAiDate"
@@ -57,7 +146,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:onClickPickDate="@{ viewModel.aiDate }"
-                        app:onLongClickRemoveText="@{ viewModel.aiDate }"/>
+                        app:onLongClickRemoveText="@{ viewModel.aiDate }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -73,7 +162,7 @@
                         style="@style/AppTheme.AppTextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={ viewModel.didBy }"/>
+                        android:text="@={ viewModel.didBy }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -89,7 +178,7 @@
                         style="@style/AppTheme.AppTextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={ viewModel.bullName }"/>
+                        android:text="@={ viewModel.bullName }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -105,7 +194,7 @@
                         style="@style/AppTheme.AppTextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={ viewModel.strawCode }"/>
+                        android:text="@={ viewModel.strawCode }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -120,9 +209,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextRepeatHeatDateExpected"
                         style="@style/AppTheme.AppTextInputDate"
+                        dateText="@{ viewModel.repeatHeatExpectedOn }"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        dateText="@{ viewModel.repeatHeatExpectedOn }"/>
+                        android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
@@ -131,9 +220,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
+                    android:checked="@={ viewModel.repeatHeatStatus }"
                     android:text="@string/repeat_heat_status"
                     android:visibility="visible"
-                    android:checked="@={ viewModel.repeatHeatStatus }"
                     tools:visibility="visible" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -144,8 +233,8 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:hint="@string/repeat_heat"
                     android:visibility="visible"
-                    app:helperText="@string/done_on"
                     app:goneUnless="@{ viewModel.repeatHeatStatus }"
+                    app:helperText="@string/done_on"
                     tools:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -153,9 +242,9 @@
                         style="@style/AppTheme.AppTextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:resetText="@{ !viewModel.repeatHeatStatus }"
                         app:onClickPickDate="@{ viewModel.repeatHeatDoneOn }"
-                        app:onLongClickRemoveText="@{ viewModel.repeatHeatDoneOn }"/>
+                        app:onLongClickRemoveText="@{ viewModel.repeatHeatDoneOn }"
+                        app:resetText="@{ !viewModel.repeatHeatStatus }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -170,9 +259,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextPregnancyCheckDateExpected"
                         style="@style/AppTheme.AppTextInputDate"
+                        dateText="@{ viewModel.pregnancyCheckExpectedOn }"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        dateText="@{ viewModel.pregnancyCheckExpectedOn }"/>
+                        android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
@@ -181,9 +270,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
+                    android:checked="@={ viewModel.pregnancyCheckStatus }"
                     android:text="@string/pregnancy_check_status"
                     android:visibility="visible"
-                    android:checked="@={ viewModel.pregnancyCheckStatus }"
                     tools:visibility="visible" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -194,8 +283,8 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:hint="@string/pregnancy_check"
                     android:visibility="visible"
-                    app:helperText="@string/done_on"
                     app:goneUnless="@{ viewModel.pregnancyCheckStatus }"
+                    app:helperText="@string/done_on"
                     tools:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -203,9 +292,9 @@
                         style="@style/AppTheme.AppTextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:resetText="@{ !viewModel.pregnancyCheckStatus }"
                         app:onClickPickDate="@{ viewModel.pregnancyCheckDoneOn }"
-                        app:onLongClickRemoveText="@{ viewModel.pregnancyCheckDoneOn }"/>
+                        app:onLongClickRemoveText="@{ viewModel.pregnancyCheckDoneOn }"
+                        app:resetText="@{ !viewModel.pregnancyCheckStatus }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -220,9 +309,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextDryOffDateExpected"
                         style="@style/AppTheme.AppTextInputDate"
+                        dateText="@{ viewModel.dryOffExpectedOn }"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        dateText="@{ viewModel.dryOffExpectedOn }"/>
+                        android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
@@ -231,9 +320,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
+                    android:checked="@{ viewModel.dryOffStatus }"
                     android:text="@string/dry_off_status"
                     android:visibility="visible"
-                    android:checked="@{ viewModel.dryOffStatus }"
                     tools:visibility="visible" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -244,8 +333,8 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:hint="@string/dry_off"
                     android:visibility="visible"
-                    app:helperText="@string/done_on"
                     app:goneUnless="@{ viewModel.dryOffStatus }"
+                    app:helperText="@string/done_on"
                     tools:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -253,9 +342,9 @@
                         style="@style/AppTheme.AppTextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:resetText="@{ !viewModel.dryOffStatus }"
                         app:onClickPickDate="@{ viewModel.dryOffDoneOn }"
-                        app:onLongClickRemoveText="@{ viewModel.dryOffDoneOn }"/>
+                        app:onLongClickRemoveText="@{ viewModel.dryOffDoneOn }"
+                        app:resetText="@{ !viewModel.dryOffStatus }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -270,9 +359,9 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextCalvingDateExpected"
                         style="@style/AppTheme.AppTextInputDate"
+                        dateText="@{ viewModel.calvingExpectedOn }"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        dateText="@{ viewModel.calvingExpectedOn }"/>
+                        android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
@@ -281,9 +370,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
+                    android:checked="@={ viewModel.calvingStatus }"
                     android:text="@string/calving_status"
                     android:visibility="visible"
-                    android:checked="@={ viewModel.calvingStatus }"
                     tools:visibility="visible" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -303,9 +392,9 @@
                         style="@style/AppTheme.AppTextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:resetText="@{ !viewModel.calvingStatus }"
                         app:onClickPickDate="@{ viewModel.calvingDoneOn }"
-                        app:onLongClickRemoveText="@{ viewModel.calvingDoneOn }"/>
+                        app:onLongClickRemoveText="@{ viewModel.calvingDoneOn }"
+                        app:resetText="@{ !viewModel.calvingStatus }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Space
@@ -316,7 +405,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/containerPurchase" />
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </ScrollView>
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -324,99 +413,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:titleEnabled="false"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                app:contentScrim="?colorSurface"
-                app:statusBarScrim="?colorSurface">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginTop="?actionBarSize"
-                        android:layout_marginEnd="@dimen/margin_normal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_cattle"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:id="@+id/textViewTagNumber"
-                        style="@style/AppTheme.Headline6"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_normal"
-                        android:layout_marginEnd="@dimen/margin_normal"
-                        android:maxLines="1"
-                        android:text="@{ String.valueOf(cattle.tagNumber) }"
-                        android:textAppearance="?textAppearanceHeadline6"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                        app:layout_constraintEnd_toStartOf="@+id/imageView"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/imageView"
-                        tools:text="234293847207" />
-
-                    <TextView
-                        android:id="@+id/textViewBreed"
-                        style="@style/AppTheme.Subtitle1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_normal"
-                        android:layout_marginBottom="@dimen/margin_small"
-                        android:text="@{ cattle.breed.displayName }"
-                        android:textAppearance="?textAppearanceSubtitle1"
-                        app:layout_constraintBottom_toBottomOf="@+id/textViewType"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/textViewType"
-                        tools:text="HF" />
-
-                    <TextView
-                        android:id="@+id/textViewGroup"
-                        style="@style/AppTheme.Subtitle1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{ cattle.group.displayName }"
-                        android:textAppearance="?textAppearanceSubtitle1"
-                        android:layout_marginStart="@dimen/margin_small"
-                        app:layout_constraintBottom_toBottomOf="@+id/textViewBreed"
-                        app:layout_constraintStart_toEndOf="@+id/textViewBreed"
-                        app:layout_constraintTop_toTopOf="@+id/textViewBreed"
-                        tools:text="Milking" />
-
-                    <TextView
-                        android:id="@+id/textViewType"
-                        style="@style/AppTheme.Subtitle1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:layout_marginBottom="@dimen/margin_small"
-                        android:text="@{ cattle.type.displayName }"
-                        android:textAppearance="?textAppearanceSubtitle1"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="@+id/imageView"
-                        app:layout_constraintStart_toStartOf="@+id/imageView"
-                        app:layout_constraintTop_toBottomOf="@+id/imageView"
-                        tools:text="COW" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <!-- Toolbar needs to be on top for the back button to be tappable -->
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize"
-                    app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/ic_arrow_back" />
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
+                android:layout_height="?actionBarSize"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrow_back" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -425,8 +427,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/margin_normal"
-            android:src="@drawable/ic_check"
-            android:onClick="@{() -> viewModel.save(cattle) }" />
+            android:onClick="@{() -> viewModel.save(cattle) }"
+            android:src="@drawable/ic_check" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
