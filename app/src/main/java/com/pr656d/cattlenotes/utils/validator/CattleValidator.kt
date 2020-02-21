@@ -10,11 +10,13 @@ object CattleValidator {
     const val VALID_FIELD = 0
 
     fun isValidTagNumber(
-        tagNumber: Long?,
+        tagNumber: String?,
         oldCattle: Cattle? = null
-    ): Int = when (tagNumber) {
-        null -> R.string.error_empty_field
-        oldCattle?.tagNumber -> VALID_FIELD
+    ): Int = when {
+        tagNumber == null -> R.string.error_empty_field
+        tagNumber.count() > 19 -> R.string.error_length_exceed
+        tagNumber.toLongOrNull() == null -> R.string.error_contain_digits_only
+        tagNumber.toLongOrNull() == oldCattle?.tagNumber -> VALID_FIELD
         else -> VALID_FIELD
     }
 

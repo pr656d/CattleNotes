@@ -24,7 +24,7 @@ class AddEditCattleViewModel @Inject constructor(
 
     val tagNumber = MutableLiveData<String>()
     val tagNumberErrorMessage: LiveData<Int> = tagNumber.map {
-        CattleValidator.isValidTagNumber(it.toLongOrNull(), oldCattle)
+        CattleValidator.isValidTagNumber(it, oldCattle)
     }
 
     val name = MutableLiveData<String?>()

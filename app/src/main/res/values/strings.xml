@@ -123,6 +123,7 @@
     <string name="error_already_exists">Already exists</string>
     <string name="error_empty_field">This field can\'t be empty</string>
     <string name="error_contain_digits_only">This field should contain digits only</string>
+    <string name="error_length_exceed">Length exceed</string>
     <!--  Active Breeding  -->
     <string name="mark_as_active">Mark as active</string>
     <string name="repeat_heat_status">Repeat heat status</string>

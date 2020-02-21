@@ -63,6 +63,8 @@
                     app:errorText="@{ viewModel.tagNumberErrorMessage }"
                     app:setRequired="@{ viewModel.tagNumber }"
                     app:helperTextEnabled="true"
+                    app:counterEnabled="true"
+                    app:counterMaxLength="19"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ivCattle">
