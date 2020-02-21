@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@id/cattleListScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.list.CattleListFragment"
+        android:name="com.pr656d.cattlenotes.ui.cattle.list.CattleListFragment"
         android:label="@string/cattle"
         tools:layout="@layout/fragment_cattle_list">
 
@@ -30,7 +30,7 @@
 
     <fragment
         android:id="@+id/cattleDetailScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.detail.CattleDetailFragment"
+        android:name="com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragment"
         android:label="@string/cattle_detail"
         tools:layout="@layout/fragment_cattle_detail">
 
@@ -74,7 +74,7 @@
 
     <fragment
         android:id="@+id/addEditCattleScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleFragment"
+        android:name="com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleFragment"
         android:label="@string/add_cattle"
         tools:layout="@layout/fragment_add_edit_cattle">
 
@@ -112,7 +112,7 @@
 
     <fragment
         android:id="@+id/activeBreedingScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.breeding.active.ActiveBreedingFragment"
+        android:name="com.pr656d.cattlenotes.ui.breeding.active.ActiveBreedingFragment"
         android:label="@string/active_breeding"
         tools:layout="@layout/fragment_active_breeding">
 
@@ -124,7 +124,7 @@
 
     <fragment
         android:id="@+id/addEditBreedingScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.breeding.addedit.AddEditBreedingFragment"
+        android:name="com.pr656d.cattlenotes.ui.breeding.addedit.AddEditBreedingFragment"
         android:label="@string/add_new_breeding"
         tools:layout="@layout/fragment_add_edit_breeding">
 
@@ -137,7 +137,7 @@
 
     <fragment
         android:id="@+id/breedingHistoryScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cattle.breeding.history.BreedingHistoryFragment"
+        android:name="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryFragment"
         android:label="@string/breeding_history"
         tools:layout="@layout/fragment_breeding_history">
 
@@ -150,31 +150,31 @@
 
     <fragment
         android:id="@id/timelineScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.timeline.TimelineFragment"
+        android:name="com.pr656d.cattlenotes.ui.timeline.TimelineFragment"
         android:label="@string/timeline"
         tools:layout="@layout/fragment_timeline" />
 
     <fragment
         android:id="@id/milkingScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.milking.MilkingFragment"
+        android:name="com.pr656d.cattlenotes.ui.milking.MilkingFragment"
         android:label="@string/milking"
         tools:layout="@layout/fragment_milking" />
 
     <fragment
         android:id="@id/cashflowScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.cashflow.CashflowFragment"
+        android:name="com.pr656d.cattlenotes.ui.cashflow.CashflowFragment"
         android:label="@string/cashflow"
         tools:layout="@layout/fragment_cashflow" />
 
     <fragment
         android:id="@id/settingsScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.settings.SettingsFragment"
+        android:name="com.pr656d.cattlenotes.ui.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@id/aboutAppScreen"
-        android:name="com.pr656d.cattlenotes.ui.main.aboutapp.AboutAppFragment"
+        android:name="com.pr656d.cattlenotes.ui.aboutapp.AboutAppFragment"
         android:label="@string/about_app"
         tools:layout="@layout/fragment_about_app" />
 

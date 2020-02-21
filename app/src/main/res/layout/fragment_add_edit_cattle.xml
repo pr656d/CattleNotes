@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.pr656d.cattlenotes.ui.main.cattle.addedit.AddEditCattleViewModel" />
+            type="com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleViewModel" />
 
     </data>
 

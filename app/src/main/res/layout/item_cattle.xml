@@ -7,7 +7,7 @@
 
         <variable
             name="eventListener"
-            type="com.pr656d.cattlenotes.ui.main.cattle.list.CattleActionListener" />
+            type="com.pr656d.cattlenotes.ui.cattle.list.CattleActionListener" />
 
         <variable
             name="cattle"
