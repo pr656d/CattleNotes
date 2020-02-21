@@ -33,25 +33,25 @@ class AddEditBreedingViewModel @Inject constructor(
 
     val repeatHeatExpectedOn: LiveData<Date> = aiDate.map { BreedingUtil.getExpectedRepeatHeatDate(it) }
 
-    val repeatHeatStatus = MutableLiveData<Boolean>(false)
+    val repeatHeatStatus = MutableLiveData<Boolean?>()
 
     val repeatHeatDoneOn = MutableLiveData<Date>()
 
     val pregnancyCheckExpectedOn: LiveData<Date> = aiDate.map { BreedingUtil.getExpectedPregnancyCheckDate(it) }
 
-    val pregnancyCheckStatus = MutableLiveData<Boolean>(false)
+    val pregnancyCheckStatus = MutableLiveData<Boolean?>()
 
     val pregnancyCheckDoneOn = MutableLiveData<Date>()
 
     val dryOffExpectedOn : LiveData<Date> = aiDate.map { BreedingUtil.getExpectedDryOffDate(it) }
 
-    val dryOffStatus = MutableLiveData<Boolean>(false)
+    val dryOffStatus = MutableLiveData<Boolean?>()
 
     val dryOffDoneOn = MutableLiveData<Date>()
 
     val calvingExpectedOn: LiveData<Date> = aiDate.map { BreedingUtil.getExpectedCalvingDate(it) }
 
-    val calvingStatus = MutableLiveData<Boolean>(false)
+    val calvingStatus = MutableLiveData<Boolean?>()
 
     val calvingDoneOn = MutableLiveData<Date>()
 

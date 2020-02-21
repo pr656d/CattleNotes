@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="cattleListScreen" type="id"/>
     <!-- These ids are used in both the menu (navigation.xml) and the nav graph (nav_graph.xml).
          Each menu item and nav graph fragment represent the same logical item. -->
+    <item name="cattleListScreen" type="id"/>
     <item name="timelineScreen" type="id" />
     <item name="milkingScreen" type="id" />
     <item name="cashflowScreen" type="id" />
