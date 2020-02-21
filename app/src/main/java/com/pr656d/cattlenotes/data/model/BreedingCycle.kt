@@ -95,7 +95,7 @@ class BreedingCycle(
 
         @SerializedName("status")
         @ColumnInfo(name = "status")
-        val status: Boolean = false,
+        val status: Boolean? = null,
 
         @SerializedName("done_on")
         @ColumnInfo(name = "done_on")

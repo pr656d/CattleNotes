@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
 import androidx.activity.addCallback
+import androidx.databinding.BindingAdapter
+import androidx.databinding.InverseBindingAdapter
+import androidx.databinding.InverseBindingListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
@@ -86,6 +90,42 @@ class AddEditBreedingFragment : NavigationFragment() {
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             model.onBackPressed()
+        }
+    }
+}
+
+@BindingAdapter("checkedButton")
+fun setCheckedButton(radioGroup: RadioGroup, state: Boolean?) {
+    val checkedButtonId = when (state) {
+        null -> R.id.rbRepeatHeatStatusNone
+        true -> R.id.rbRepeatHeatStatusPositive
+        else -> R.id.rbRepeatHeatStatusNegative
+    }
+    if (radioGroup.checkedRadioButtonId != checkedButtonId)
+        radioGroup.check(checkedButtonId)
+}
+
+@InverseBindingAdapter(attribute = "checkedButton")
+fun getCheckedButton(radioGroup: RadioGroup): Boolean? {
+    return when(radioGroup.checkedRadioButtonId) {
+        R.id.rbRepeatHeatStatusPositive -> true
+        R.id.rbRepeatHeatStatusNegative -> false
+        else -> null
+    }
+}
+
+@BindingAdapter(value = ["onCheckedChanged", "checkedButtonAttrChanged"], requireAll = false)
+fun setOnCheckedChangeListener(
+    radioGroup: RadioGroup,
+    listener: RadioGroup.OnCheckedChangeListener?,
+    attrChange: InverseBindingListener?
+) {
+    if (attrChange == null) {
+        radioGroup.setOnCheckedChangeListener(listener)
+    } else {
+        radioGroup.setOnCheckedChangeListener { group, checkedId ->
+            listener?.onCheckedChanged(group, checkedId)
+            attrChange.onChange()
         }
     }
 }

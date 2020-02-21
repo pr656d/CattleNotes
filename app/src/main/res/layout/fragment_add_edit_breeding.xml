@@ -214,16 +214,54 @@
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/checkBoxRepeatHeatStatus"
-                    style="@style/AppTheme.MaterialCheckBox"
+                <LinearLayout
+                    android:id="@+id/containerRepeatHeatStatus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/outline"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:checked="@={ viewModel.repeatHeatStatus }"
-                    android:text="@string/repeat_heat_status"
-                    android:visibility="visible"
-                    tools:visibility="visible" />
+                    android:padding="@dimen/padding_normal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/repeat_heat_status"
+                        android:textSize="@dimen/text_size_text_input_layout"/>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroupRepeatHeatStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="true"
+                        android:orientation="horizontal"
+                        app:checkedButton="@={ viewModel.repeatHeatStatus }"
+                        android:layout_marginTop="@dimen/margin_small">
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/rbRepeatHeatStatusNegative"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/negative"/>
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/rbRepeatHeatStatusNone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/none"/>
+
+                        <com.google.android.material.radiobutton.MaterialRadioButton
+                            android:id="@+id/rbRepeatHeatStatusPositive"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/positive"/>
+
+                    </RadioGroup>
+
+                </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutRepeatHeatDateActual"

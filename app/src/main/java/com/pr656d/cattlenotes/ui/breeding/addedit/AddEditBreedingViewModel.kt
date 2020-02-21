@@ -108,16 +108,16 @@ class AddEditBreedingViewModel @Inject constructor(
                 ArtificialInseminationInfo(it, didBy.value, bullName.value, strawCode.value)
             },
             repeatHeatExpectedOn.value?.let {
-                BreedingEvent(it, repeatHeatStatus.value ?: false, repeatHeatDoneOn.value)
+                BreedingEvent(it, repeatHeatStatus.value, repeatHeatDoneOn.value)
             },
             pregnancyCheckExpectedOn.value?.let {
-                BreedingEvent(it, pregnancyCheckStatus.value ?: false, pregnancyCheckDoneOn.value)
+                BreedingEvent(it, pregnancyCheckStatus.value, pregnancyCheckDoneOn.value)
             },
             dryOffExpectedOn.value?.let {
-                BreedingEvent(it, dryOffStatus.value ?: false, dryOffDoneOn.value)
+                BreedingEvent(it, dryOffStatus.value, dryOffDoneOn.value)
             },
             calvingExpectedOn.value?.let {
-                BreedingEvent(it, calvingStatus.value ?: false, calvingDoneOn.value)
+                BreedingEvent(it, calvingStatus.value, calvingDoneOn.value)
             }
         )
 
