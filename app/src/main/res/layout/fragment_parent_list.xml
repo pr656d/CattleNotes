@@ -50,12 +50,13 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layoutManager="LinearLayoutManager"
+            app:parentListItems="@{ viewModel.parentList }"
+            app:parentListViewModel="@{viewModel}"
+            app:showParentListDivider="@{true}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/selectParentAppbarLayout"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:parentListItems="@{ viewModel.parentList }"
-            app:parentListViewModel="@{viewModel}"
             tools:itemCount="2"
             tools:listitem="@layout/item_cattle" />
 

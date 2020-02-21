@@ -17,5 +17,5 @@
     <!-- In dark mode without light status bar we can use transparent -->
     <color name="status_bar_scrim">@color/transparent</color>
 
-    <color name="list_divider">#1fffffff</color>
+    <color name="color_list_divider">#1fffffff</color>
 </resources>

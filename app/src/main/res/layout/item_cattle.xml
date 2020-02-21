@@ -77,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:text="@{ cattle.type.displayName }"
                 android:textAppearance="?textAppearanceListItemSmall"
+                android:layout_marginStart="@dimen/margin_small"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvGroup"
                 app:layout_constraintStart_toEndOf="@+id/tvGroup"
                 tools:text="Cow" />
@@ -87,8 +88,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_micro"
-                android:paddingStart="0dp"
-                android:paddingEnd="@dimen/padding_small"
                 android:text="@{ cattle.group.displayName }"
                 android:textAppearance="?textAppearanceListItemSmall"
                 app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
@@ -96,15 +95,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvTagNumber"
                 tools:text="Milking"
                 tools:visibility="visible" />
-
-            <View
-                android:id="@+id/divider"
-                android:layout_width="0dp"
-                android:layout_height="0.2dp"
-                android:background="@drawable/divider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/tvName"
-                app:layout_constraintStart_toStartOf="@+id/tvGroup" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

@@ -42,6 +42,7 @@
             android:paddingBottom="100dp"
             app:cattleListItems="@{ viewModel.cattleList }"
             app:cattleListViewModel="@{viewModel}"
+            app:showCattleListDivider="@{true}"
             app:layoutManager="LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
