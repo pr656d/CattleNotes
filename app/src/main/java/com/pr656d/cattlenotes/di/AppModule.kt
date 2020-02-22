@@ -1,13 +1,13 @@
 package com.pr656d.cattlenotes.di
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.cattlenotes.data.local.db.AppDatabase
-import com.pr656d.cattlenotes.data.local.prefs.CattleNotesSharedPreferences
+import com.pr656d.cattlenotes.data.local.prefs.PreferenceStorage
+import com.pr656d.cattlenotes.data.local.prefs.SharedPreferenceStorage
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -29,8 +29,8 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideSharedPreferences(application: CattleNotesApplication): SharedPreferences =
-        CattleNotesSharedPreferences.build(application)
+    fun providesPreferenceStorage(context: Context): PreferenceStorage =
+        SharedPreferenceStorage(context)
 
     @Singleton
     @Provides

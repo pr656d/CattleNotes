@@ -121,9 +121,10 @@ dependencies {
     // Local Unit tests
     testImplementation "junit:junit:$rootProject.junitVersion"
     testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    testImplementation "com.nhaarman:mockito-kotlin:$rootProject.mockitoKotlinVersion"
+    testImplementation "org.hamcrest:hamcrest-library:$rootProject.hamcrestVersion"
     kaptTest "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
     testImplementation "android.arch.core:core-testing:$rootProject.coreTestingVersion"
-    testImplementation "org.hamcrest:hamcrest-library:$rootProject.hamcrestVersion"
 
     // UI Testing
     androidTestImplementation "androidx.test:runner:$rootProject.testRunnerVersion"
