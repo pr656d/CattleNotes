@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="secondaryColor">@color/secondaryDarkColor</color>
+
     <!--
       To match TextInputLayout box stroke color for MaterialSwitch and MaterialCheckbox
       to look like TextInputLayout outlined box.
