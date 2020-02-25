@@ -10,14 +10,11 @@ import com.pr656d.cattlenotes.shared.domain.result.Result
 import com.pr656d.cattlenotes.shared.domain.result.Result.Success
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
-import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate
 import javax.inject.Inject
 
 class LaunchViewModel @Inject constructor(
-    getLoginCompletedUseCase: GetLoginCompletedUseCase,
-    themedActivityDelegate: ThemedActivityDelegate
-) : ViewModel(),
-    ThemedActivityDelegate by themedActivityDelegate{
+    getLoginCompletedUseCase: GetLoginCompletedUseCase
+) : ViewModel() {
 
     val launchDestination: LiveData<Event<LaunchDestination>>
 

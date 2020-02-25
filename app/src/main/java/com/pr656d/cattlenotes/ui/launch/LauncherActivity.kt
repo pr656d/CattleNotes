@@ -3,14 +3,12 @@ package com.pr656d.cattlenotes.ui.launch
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.MainActivity
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.login.LoginActivity
-import com.pr656d.cattlenotes.utils.updateForTheme
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -25,11 +23,6 @@ class LauncherActivity : DaggerAppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val viewModel by viewModels<LaunchViewModel> { viewModelFactory }
-
-        // Update for Dark Mode straight away
-        updateForTheme(viewModel.currentTheme)
-
-        viewModel.theme.observe(this, Observer(::updateForTheme))
 
         viewModel.launchDestination.observe(this, EventObserver { destination ->
             when (destination) {
