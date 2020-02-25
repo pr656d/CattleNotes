@@ -12,8 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentParentListBinding
+import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleFragment
-import com.pr656d.cattlenotes.utils.EventObserver
 import dagger.android.support.DaggerDialogFragment
 import javax.inject.Inject
 

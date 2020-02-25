@@ -5,15 +5,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.data.local.prefs.SharedPreferenceStorage
+import com.pr656d.cattlenotes.shared.domain.launch.SetLoginCompletedUseCase
+import com.pr656d.cattlenotes.shared.domain.result.Event
 import com.pr656d.cattlenotes.shared.utils.network.NetworkHelper
-import com.pr656d.cattlenotes.utils.Event
+import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
     private val networkHelper: NetworkHelper,
-    private val userPreferences: SharedPreferenceStorage
-) : ViewModel() {
+    private val setLoginCompletedUseCase: SetLoginCompletedUseCase,
+    themedActivityDelegate: ThemedActivityDelegate
+) : ViewModel(),
+    ThemedActivityDelegate by themedActivityDelegate {
 
     private val _launchFirebaseLoginUI = MutableLiveData<Event<Unit>>()
     val launchFirebaseAuthUI: LiveData<Event<Unit>> = _launchFirebaseLoginUI
@@ -37,14 +40,14 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onLoginSuccess() {
-        userPreferences.loginCompleted = true
+        setLoginCompletedUseCase(true)
         _loginStatus.postValue(R.string.please_wait_text)
         _launchMain.postValue(Event(Unit))
         _logginIn.postValue(false)
     }
 
     fun onLoginFail() {
-        userPreferences.loginCompleted = false
+        setLoginCompletedUseCase(false)
         _loginStatus.postValue(R.string.try_login_again_text)
         _logginIn.postValue(false)
     }

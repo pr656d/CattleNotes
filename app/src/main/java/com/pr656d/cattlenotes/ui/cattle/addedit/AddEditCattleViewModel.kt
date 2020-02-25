@@ -5,7 +5,7 @@ import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
-import com.pr656d.cattlenotes.utils.Event
+import com.pr656d.cattlenotes.shared.domain.result.Event
 import com.pr656d.cattlenotes.utils.toBreed
 import com.pr656d.cattlenotes.utils.toGroup
 import com.pr656d.cattlenotes.utils.toType

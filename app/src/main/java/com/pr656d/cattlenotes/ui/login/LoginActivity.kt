@@ -5,14 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityLoginBinding
+import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import com.pr656d.cattlenotes.ui.MainActivity
-import com.pr656d.cattlenotes.utils.EventObserver
+import com.pr656d.cattlenotes.utils.updateForTheme
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -29,6 +31,9 @@ class LoginActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Update for Dark Mode straight away
+        updateForTheme(model.currentTheme)
 
         val binding: ActivityLoginBinding = DataBindingUtil.setContentView(
             this, R.layout.activity_login
@@ -65,6 +70,8 @@ class LoginActivity : DaggerAppCompatActivity() {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 finish()
             })
+
+        model.theme.observe(this, Observer(::updateForTheme))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

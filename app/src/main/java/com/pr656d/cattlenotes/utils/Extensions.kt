@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.utils
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -10,6 +11,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.ViewDataBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
@@ -17,6 +20,7 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.local.db.Converters
 import com.pr656d.cattlenotes.data.model.Animal
 import com.pr656d.cattlenotes.data.model.Cattle
+import com.pr656d.cattlenotes.data.model.Theme
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -142,3 +146,14 @@ fun String.toBreed(): Cattle.Breed = Converters().fromStringToBreed(this)
 fun String.toGroup(): Cattle.Group = Converters().fromStringToGroup(this)
 
 // end region
+
+/**
+ * Having to suppress lint. Bug raised: 128789886
+ */
+@SuppressLint("WrongConstant")
+fun AppCompatActivity.updateForTheme(theme: Theme) = when (theme) {
+    Theme.DARK -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+    Theme.LIGHT -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_NO
+    Theme.SYSTEM -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    Theme.BATTERY_SAVER -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
+}

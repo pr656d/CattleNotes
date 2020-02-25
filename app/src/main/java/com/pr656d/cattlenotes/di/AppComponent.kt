@@ -2,6 +2,7 @@ package com.pr656d.cattlenotes.di
 
 import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.cattlenotes.shared.di.ViewModelModule
+import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegateModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -21,7 +22,8 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         AppModule::class,
         ActivityBindingModule::class,
-        ViewModelModule::class
+        ViewModelModule::class,
+        ThemedActivityDelegateModule::class
     ]
 )
 interface AppComponent : AndroidInjector<CattleNotesApplication> {

@@ -1,37 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!--
-    TO COME IN FUTURE MATERIAL LIBRARY
-    Attribute name  	        Description
-    .............               ........................................
-    colorPrimary    	        Displayed most frequently across your app.
-    colorPrimaryVariant	        A tonal variation of primary color.
-    colorSecondary  	        Accents select parts of your UI. If not provided, use primary.
-    colorSecondaryVariant	    A tonal variation of secondary color.
-    colorBackground	            The underlying color of an app’s content. Typically the background color of scrollable content.
-    colorError          	    The color used to indicate error status.
-    colorSurface        	    The color of surfaces such as cards, sheets, menus.
-    colorOnPrimary	            A color that passes accessibility guidelines for text/iconography when drawn on top of primary.
-    colorOnSecondary    	    A color that passes accessibility guidelines for text/iconography when drawn on top of secondary.
-    colorOnBackground   	    A color that passes accessibility guidelines for text/iconography when drawn on top of background.
-    colorOnError	            A color that passes accessibility guidelines for text/iconography when drawn on top of error.
-    colorOnSurface      	    A color that passes accessibility guidelines for text/iconography when drawn on top of surface.
-
-    textAppearanceHeadline1	    Light 96sp
-    textAppearanceHeadline2	    Light 60sp
-    textAppearanceHeadline3	    Regular 48sp
-    textAppearanceHeadline4	    Regular 34sp
-    textAppearanceHeadline5	    Regular 24sp
-    textAppearanceHeadline6	    Regular 20sp
-    textAppearanceSubtitle1	    Regular 16sp
-    textAppearanceSubtitle2	    Medium 14sp
-    textAppearanceBody1	        Regular 16sp
-    textAppearanceBody2	        Regular 14sp
-    textAppearanceCaption	    Regular 12sp
-    textAppearanceButton	    Medium all caps 14sp
-    textAppearanceOverline	    Medium all caps 12sp
-    -->
-
     <style name="AppTheme.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="fontFamily">@font/roboto_bold</item>
         <item name="android:fontFamily">@font/roboto_bold</item>
@@ -182,5 +150,24 @@
         <!--  Window decor  -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/use_light_status</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <!-- Widget styles -->
+
+    <style name="Widget.CattleNOTES" parent="@android:style/Widget.Material" />
+
+    <!-- Settings -->
+    <style name="Widget.CattleNOTES.Settings" />
+
+    <style name="Widget.CattleNOTES.Settings.Button">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:minHeight">?listPreferredItemHeightSmall</item>
+        <item name="android:paddingBottom">@dimen/padding_normal</item>
+        <item name="android:paddingRight">?listPreferredItemPaddingEnd</item>
+        <item name="android:paddingStart">?listPreferredItemPaddingStart</item>
+        <item name="android:paddingTop">@dimen/padding_normal</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textAppearance">?textAppearanceBody2</item>
     </style>
 </resources>

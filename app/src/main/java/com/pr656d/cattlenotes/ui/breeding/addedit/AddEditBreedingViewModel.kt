@@ -8,9 +8,9 @@ import com.pr656d.cattlenotes.data.model.BreedingCycle.ArtificialInseminationInf
 import com.pr656d.cattlenotes.data.model.BreedingCycle.BreedingEvent
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.BreedingDataRepository
+import com.pr656d.cattlenotes.shared.domain.result.Event
 import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.utils.BreedingUtil
-import com.pr656d.cattlenotes.utils.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

@@ -23,9 +23,9 @@ import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
+import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentListDialogFragment
-import com.pr656d.cattlenotes.utils.EventObserver
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
 import com.pr656d.cattlenotes.utils.showDialog

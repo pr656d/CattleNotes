@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
+import com.pr656d.cattlenotes.shared.domain.result.Event
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailViewModel.Destination.DESTINATIONS.*
-import com.pr656d.cattlenotes.utils.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

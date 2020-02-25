@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -17,8 +18,9 @@ import com.google.android.material.navigation.NavigationView
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityMainBinding
 import com.pr656d.cattlenotes.databinding.NavHeaderBinding
+import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.login.LoginActivity
-import com.pr656d.cattlenotes.utils.EventObserver
+import com.pr656d.cattlenotes.utils.updateForTheme
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -54,6 +56,9 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
 
         val model by viewModels<MainViewModel> { viewModelFactory }
 
+        // Update for Dark Mode straight away
+        updateForTheme(model.currentTheme)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         drawer = binding.drawerLayout
@@ -79,6 +84,8 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
             }
             drawer.setDrawerLockMode(lockMode)
         }
+
+        model.theme.observe(this, Observer(::updateForTheme))
 
         model.redirectToLoginScreen.observe(this, EventObserver {
             startActivity(Intent(this, LoginActivity::class.java))

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleDataRepository
-import com.pr656d.cattlenotes.utils.Event
+import com.pr656d.cattlenotes.shared.domain.result.Event
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 

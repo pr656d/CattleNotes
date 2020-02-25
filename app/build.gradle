@@ -112,9 +112,6 @@ dependencies {
     // Debugging
     debugImplementation "com.amitshekhar.android:debug-db:$rootProject.debugDbVersion"
 
-    // Para camera
-    implementation "com.mindorks:paracamera:$rootProject.paracameraVersion"
-
     // Open-source licences
     implementation "com.google.android.gms:play-services-oss-licenses:$rootProject.openSourceLicencesVersion"
 
@@ -124,14 +121,14 @@ dependencies {
     testImplementation "com.nhaarman:mockito-kotlin:$rootProject.mockitoKotlinVersion"
     testImplementation "org.hamcrest:hamcrest-library:$rootProject.hamcrestVersion"
     kaptTest "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
-    testImplementation "android.arch.core:core-testing:$rootProject.coreTestingVersion"
+    testImplementation "androidx.arch.core:core-testing:$rootProject.archTestingVersion"
 
     // UI Testing
     androidTestImplementation "androidx.test:runner:$rootProject.testRunnerVersion"
     androidTestImplementation "androidx.test.ext:junit:$rootProject.testExtRunnerVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-intents:$rootProject.espressoVersion"
-    androidTestImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$rootProject.espressoVersion"
+    androidTestImplementation "androidx.test:rules:$rootProject.rulesVersion"
     kaptAndroidTest "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 }
 

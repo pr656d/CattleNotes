@@ -30,5 +30,12 @@ internal abstract class SettingsModule {
     @Binds
     @IntoMap
     @ViewModelKey(SettingsViewModel::class)
-    internal abstract fun bindSettingsViewModel(viewModel: SettingsViewModel): ViewModel
+    abstract fun bindSettingsViewModel(viewModel: SettingsViewModel): ViewModel
+
+    /**
+     * Generates an [AndroidInjector] for the [ThemeSettingDialogFragment].
+     */
+    @FragmentScoped
+    @ContributesAndroidInjector
+    internal abstract fun contributeThemeSettingFragment(): ThemeSettingDialogFragment
 }
