@@ -1,7 +1,6 @@
 package com.pr656d.cattlenotes.di
 
 import android.content.Context
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.CattleNotesApplication
@@ -36,6 +35,4 @@ class AppModule {
     @Provides
     fun providesAppDatabase(context: Context): AppDatabase = AppDatabase.buildDatabase(context)
 
-    @Provides
-    fun provideLinearLayoutManager(context: Context) = LinearLayoutManager(context)
 }
