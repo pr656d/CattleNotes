@@ -6,20 +6,35 @@ import com.pr656d.cattlenotes.data.model.Cattle
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Single point of access for [Cattle] data for the presentation layer.
+ */
+interface CattleRepository {
+    fun addCattle(cattle: Cattle)
+    fun addAllCattle(cattleList: List<Cattle>)
+    fun getObservableAllCattle(): LiveData<List<Cattle>>
+    fun getAllCattle(): List<Cattle>
+    fun getCattleById(id: Long): Cattle
+    fun deleteCattle(cattle: Cattle)
+    fun updateCattle(cattle: Cattle): Int
+}
+
 @Singleton
 open class CattleDataRepository @Inject constructor(
     private val appDatabase: AppDatabase
-) {
+) : CattleRepository {
 
-    suspend fun addCattle(cattle: Cattle) = appDatabase.cattleDao().insert(cattle)
+    override fun addCattle(cattle: Cattle) = appDatabase.cattleDao().insert(cattle)
 
-    suspend fun addAllCattle(cattleList: List<Cattle>) = appDatabase.cattleDao().insertAll(cattleList)
+    override fun addAllCattle(cattleList: List<Cattle>) = appDatabase.cattleDao().insertAll(cattleList)
 
-    fun getAllCattle(): LiveData<List<Cattle>> = appDatabase.cattleDao().getAll()
+    override fun getAllCattle(): List<Cattle> = appDatabase.cattleDao().getObservableAll().value ?: emptyList()
 
-    suspend fun getCattle(id: Long): Cattle? = appDatabase.cattleDao().getCattle(id)
+    override fun getObservableAllCattle(): LiveData<List<Cattle>> = appDatabase.cattleDao().getObservableAll()
 
-    suspend fun deleteCattle(cattle: Cattle) = appDatabase.cattleDao().delete(cattle)
+    override fun getCattleById(id: Long): Cattle = appDatabase.cattleDao().getCattle(id)
 
-    suspend fun updateCattle(cattle: Cattle): Int = appDatabase.cattleDao().update(cattle)
+    override fun deleteCattle(cattle: Cattle) = appDatabase.cattleDao().delete(cattle)
+
+    override fun updateCattle(cattle: Cattle): Int = appDatabase.cattleDao().update(cattle)
 }

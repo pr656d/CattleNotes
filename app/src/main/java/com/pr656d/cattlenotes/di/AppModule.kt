@@ -7,6 +7,8 @@ import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.cattlenotes.data.local.db.AppDatabase
 import com.pr656d.cattlenotes.data.local.prefs.PreferenceStorage
 import com.pr656d.cattlenotes.data.local.prefs.SharedPreferenceStorage
+import com.pr656d.cattlenotes.data.repository.CattleDataRepository
+import com.pr656d.cattlenotes.data.repository.CattleRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -34,5 +36,11 @@ class AppModule {
     @Singleton
     @Provides
     fun providesAppDatabase(context: Context): AppDatabase = AppDatabase.buildDatabase(context)
+
+    @Singleton
+    @Provides
+    fun provideCattleDataRepository(appDatabase: AppDatabase): CattleRepository {
+        return CattleDataRepository(appDatabase)
+    }
 
 }

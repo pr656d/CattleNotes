@@ -5,20 +5,21 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.data.model.Cattle
-import com.pr656d.cattlenotes.data.repository.CattleDataRepository
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.parent.GetParentListUseCase
 import com.pr656d.cattlenotes.shared.domain.result.Event
-import kotlinx.coroutines.runBlocking
+import com.pr656d.cattlenotes.shared.domain.result.Result
+import com.pr656d.cattlenotes.shared.domain.result.Result.Success
 import javax.inject.Inject
 
 class ParentListDialogViewModel @Inject constructor(
-    cattleDataRepository: CattleDataRepository
+    private val getParentListUseCase: GetParentListUseCase
 ) : ViewModel(), ParentActionListener {
 
-    private val _tagNumber = MutableLiveData<Long>()
+    private val parentListResult = MutableLiveData<Result<List<Cattle>>>()
 
-    fun setTagNumber(value: Long) { _tagNumber.value = value }
-
-    private val allCattle: LiveData<List<Cattle>> = cattleDataRepository.getAllCattle()
+    fun setTagNumber(value: Long) {
+        getParentListUseCase(value, parentListResult)
+    }
 
     private val _parentList = MediatorLiveData<List<Cattle>>()
     val parentList: LiveData<List<Cattle>> = _parentList
@@ -30,16 +31,13 @@ class ParentListDialogViewModel @Inject constructor(
     val isEmpty: LiveData<Boolean> = _isEmpty
 
     init {
-        _parentList.addSource(allCattle) {
-            _parentList.value = runBlocking {
-                val result = it.filter { cattle ->
-                    cattle.tagNumber != _tagNumber.value!!
-                }
-                _loading.postValue(false)
-                result
+        _parentList.addSource(parentListResult) {
+            (it as? Success)?.data?.let { list ->
+                _parentList.postValue(list)
             }
+            _loading.postValue(false)
         }
-        _isEmpty.addSource(_parentList) {
+        _isEmpty.addSource(parentList) {
             _isEmpty.value = it.isNullOrEmpty()
         }
     }

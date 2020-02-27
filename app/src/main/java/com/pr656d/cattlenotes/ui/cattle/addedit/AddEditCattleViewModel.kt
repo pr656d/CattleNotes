@@ -99,7 +99,6 @@ class AddEditCattleViewModel @Inject constructor(
                             cattleDataRepository.updateCattle(newCattle)
                         } else {
                             cattleDataRepository.addCattle(newCattle)
-
                         }
 
                         toggleSaving()

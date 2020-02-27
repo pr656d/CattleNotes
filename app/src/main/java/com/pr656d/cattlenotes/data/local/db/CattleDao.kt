@@ -11,24 +11,24 @@ import com.pr656d.cattlenotes.data.model.Cattle
 interface CattleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(cattle: Cattle)
+    fun insert(cattle: Cattle)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(cattle: List<Cattle>)
+    fun insertAll(cattle: List<Cattle>)
 
     /**
      * Internally Room will handle it on background thread.
      * If any change happens observer will be called by Room.
      */
     @Query("SELECT * FROM cattle_list ORDER BY tag_number")
-    fun getAll(): LiveData<List<Cattle>>
+    fun getObservableAll(): LiveData<List<Cattle>>
 
     @Query("SELECT * FROM cattle_list WHERE id == :id")
-    suspend fun getCattle(id: Long): Cattle?
+    fun getCattle(id: Long): Cattle
 
     @Update
-    suspend fun update(cattle: Cattle): Int
+    fun update(cattle: Cattle): Int
 
     @Delete
-    suspend fun delete(vararg cattle: Cattle)
+    fun delete(vararg cattle: Cattle)
 }

@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
@@ -18,8 +20,6 @@ import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Co
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddBreeding
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toBreedingHistory
-import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailViewModel.Destination
-import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailViewModel.Destination.DESTINATIONS.*
 import com.pr656d.cattlenotes.utils.showDialog
 import javax.inject.Inject
 
@@ -46,13 +46,17 @@ class CattleDetailFragment : NavigationFragment() {
             viewModel = model
         }
 
-        model.fetchCattle(Gson().fromJson(args.cattle, Cattle::class.java))
+        val cattle = Gson().fromJson(args.cattle, Cattle::class.java)
+        model.fetchCattle(cattle)
 
         binding.bottomAppBarCattleDetail.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.menu_item_delete -> model.deleteCattleConfirmation()
+             when (it.itemId) {
+                R.id.menu_item_delete -> {
+                    model.deleteCattleConfirmation()
+                    true
+                }
+                else -> false
             }
-            true
         }
 
         return binding.root
@@ -60,27 +64,38 @@ class CattleDetailFragment : NavigationFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        model.action.observe(viewLifecycleOwner, EventObserver { performAction(it) })
-    }
 
-    private fun performAction(action: Destination) = with(action) {
-        when (destination) {
-            ACTIVE_BREEDING -> data?.let { findNavController().navigate(toActiveBreeding(it)) }
+        model.launchActiveBreeding.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(toActiveBreeding(Gson().toJson(it)))
+        })
 
-            ALL_BREEDING_SCREEN -> data?.let { findNavController().navigate(toBreedingHistory(it)) }
+        model.launchAllBreeding.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(toBreedingHistory(Gson().toJson(it)))
+        })
 
-            ADD_BREEDING_SCREEN -> data?.let { findNavController().navigate(toAddBreeding(it)) }
+        model.launchAddBreeding.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(toAddBreeding(Gson().toJson(it)))
+        })
 
-            EDIT_CATTLE_SCREEN -> data?.let { findNavController().navigate(toAddEditCattle(it)) }
+        model.launchEditCattle.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(toAddEditCattle(Gson().toJson(it)))
+        })
 
-            DELETE_CATTLE_CONFIRMATION -> requireContext().showDialog(
+        model.launchDeleteConfirmation.observe(viewLifecycleOwner, EventObserver {
+            requireContext().showDialog(
                 title = R.string.delete_cattle_message,
                 positiveTextId = R.string.yes,
                 onPositiveSelected = { model.deleteCattle() },
                 negativeTextId = R.string.no
             )
+        })
 
-            NAVIGATE_UP -> findNavController().navigateUp()
+        model.navigateUp.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigateUp()
+        })
+
+        model.showMessage.observe(viewLifecycleOwner) { resId ->
+            Snackbar.make(requireView(), resId, Snackbar.LENGTH_LONG).show()
         }
     }
 }

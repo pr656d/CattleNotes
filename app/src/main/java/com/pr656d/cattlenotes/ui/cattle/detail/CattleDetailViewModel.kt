@@ -1,85 +1,119 @@
 package com.pr656d.cattlenotes.ui.cattle.detail
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
+import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
-import com.pr656d.cattlenotes.data.repository.CattleDataRepository
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.DeleteCattleUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.detail.GetCattleUseCase
 import com.pr656d.cattlenotes.shared.domain.result.Event
-import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailViewModel.Destination.DESTINATIONS.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.pr656d.cattlenotes.shared.domain.result.Result
+import com.pr656d.cattlenotes.shared.domain.result.Result.Error
+import com.pr656d.cattlenotes.shared.domain.result.Result.Success
 import javax.inject.Inject
 
 class CattleDetailViewModel @Inject constructor(
-    private val cattleDataRepository: CattleDataRepository
+    private val getCattleUseCase: GetCattleUseCase,
+    private val deleteCattleUseCase: DeleteCattleUseCase
 ) : ViewModel() {
 
-    val cattle = MutableLiveData<Cattle>()
+    private val cattleResult = MutableLiveData<Result<Cattle>>()
 
-    private val _action = MutableLiveData<Event<Destination>>()
-    val action: LiveData<Event<Destination>> = _action
+    private val _cattle = MediatorLiveData<Cattle>()
+    val cattle: LiveData<Cattle>
+        get() = _cattle
 
-    fun fetchCattle(c: Cattle) {
-        cattle.value = c
+    fun fetchCattle(cattle: Cattle) {
+        // Set cattle
+        _cattle.value = cattle
+        // Fetch cattle from database to update if there are any changes
+        getCattleUseCase(cattle.id, cattleResult)
+    }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            val newCattle = cattleDataRepository.getCattle(c.id)
-            withContext(Dispatchers.Main) {
-                newCattle?.let {
-                    if (newCattle != cattle.value)
-                        cattle.value = it
+    init {
+        _cattle.addSource(cattleResult) { result ->
+            when (result) {
+                is Success -> {
+                    val newCattle = result.data
+
+                    // Update cattle if there are any changes
+                    if (cattle.value != newCattle) {
+                        _cattle.value = newCattle
+                    }
                 }
+                is Error -> navigateUp()
             }
         }
     }
 
+    private val _showMessage = MutableLiveData<@StringRes Int>()
+    val showMessage: LiveData<Int>
+        get() = _showMessage
+
+    private val _launchAllBreeding = MutableLiveData<Event<Cattle>>()
+    val launchAllBreeding: LiveData<Event<Cattle>>
+        get() = _launchAllBreeding
+
+    private val _launchAddBreeding = MutableLiveData<Event<Cattle>>()
+    val launchAddBreeding: LiveData<Event<Cattle>>
+        get() = _launchAddBreeding
+
+    private val _launchActiveBreeding = MutableLiveData<Event<Cattle>>()
+    val launchActiveBreeding: LiveData<Event<Cattle>>
+        get() = _launchActiveBreeding
+
+    private val _launchEditCattle = MutableLiveData<Event<Cattle>>()
+    val launchEditCattle: LiveData<Event<Cattle>>
+        get() = _launchEditCattle
+
+    private val _launchDeleteConfirmation = MutableLiveData<Event<Unit>>()
+    val launchDeleteConfirmation: LiveData<Event<Unit>>
+        get() = _launchDeleteConfirmation
+
+    private val _navigateUp = MutableLiveData<Event<Unit>>()
+    val navigateUp: LiveData<Event<Unit>>
+        get() = _navigateUp
+
     fun showAllBreeding() {
-        cattle.value!!.tagNumber.toString().let {
-            _action.value = Event(Destination(ALL_BREEDING_SCREEN, it))
+        cattle.value?.let {
+            _launchAllBreeding.value = Event(it)
         }
     }
 
     fun addNewBreeding() {
-        cattle.value!!.let {
-            _action.value = Event(Destination(ADD_BREEDING_SCREEN, Gson().toJson(it)))
+        cattle.value?.let {
+            _launchAddBreeding.value = Event(it)
         }
     }
 
     fun showActiveBreeding() {
-        cattle.value!!.tagNumber.toString().let {
-            _action.value = Event(Destination(ACTIVE_BREEDING, it))
+        cattle.value?.let {
+            _launchActiveBreeding.value = Event(it)
         }
     }
 
     fun editCattle() {
         cattle.value?.let {
-            _action.value = Event(Destination(EDIT_CATTLE_SCREEN, Gson().toJson(it)))
+            _launchEditCattle.value = Event(it)
         }
     }
 
     fun deleteCattle() {
-        viewModelScope.launch {
-            cattleDataRepository.deleteCattle(cattle.value!!)
-            navigateUp()
+        val result = deleteCattleUseCase(cattle.value!!).value
+        when (result) {
+            is Success -> navigateUp()
+            is Error -> _showMessage.postValue(R.string.error_unknown)
         }
     }
 
     fun deleteCattleConfirmation() {
-        _action.value = Event(Destination(DELETE_CATTLE_CONFIRMATION))
+        _launchDeleteConfirmation.value = Event(Unit)
     }
 
     fun navigateUp() {
-        _action.value = Event(Destination(NAVIGATE_UP))
-    }
-
-    data class Destination(val destination: DESTINATIONS, val data: String? = null) {
-        enum class DESTINATIONS {
-            ACTIVE_BREEDING, ALL_BREEDING_SCREEN, ADD_BREEDING_SCREEN, EDIT_CATTLE_SCREEN,
-            DELETE_CATTLE_CONFIRMATION, NAVIGATE_UP
-        }
+        _navigateUp.value = Event(Unit)
     }
 }

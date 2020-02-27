@@ -147,6 +147,7 @@ fun String.toGroup(): Cattle.Group = Converters().fromStringToGroup(this)
 
 // end region
 
+// region Theme
 /**
  * Having to suppress lint. Bug raised: 128789886
  */
@@ -157,3 +158,4 @@ fun AppCompatActivity.updateForTheme(theme: Theme) = when (theme) {
     Theme.SYSTEM -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     Theme.BATTERY_SAVER -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 }
+// end region

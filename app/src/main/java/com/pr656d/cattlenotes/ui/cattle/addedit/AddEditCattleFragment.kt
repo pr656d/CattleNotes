@@ -194,13 +194,7 @@ fun setRequired(view: TextInputLayout, text: String?) {
  * when pre set option is needed.
  * pass false for filter while setting text which will not filter and shows all options of dropdown.
  */
-@BindingAdapter("dropDownText")
-fun dropDownText(view: AutoCompleteTextView, text: String?) {
-    view.apply {
-        if (text.isNullOrEmpty()) {
-            setText(null, false)
-        } else {
-            setText(text, false)
-        }
-    }
+@BindingAdapter("setText")
+fun dropDownSetText(view: AutoCompleteTextView, text: String?) {
+    view.setText(text, false)
 }

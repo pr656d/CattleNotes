@@ -124,7 +124,7 @@
                             style="@style/AppTheme.AutoCompleteTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownText="@{ viewModel.type }"
+                            app:setText="@{ viewModel.type }"
                             tools:ignore="LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -144,7 +144,7 @@
                             style="@style/AppTheme.AutoCompleteTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownText="@{ viewModel.breed }"
+                            app:setText="@{ viewModel.breed }"
                             tools:ignore="Deprecated,LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -177,7 +177,7 @@
                             style="@style/AppTheme.AutoCompleteTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownText="@{ viewModel.group }"
+                            app:setText="@{ viewModel.group }"
                             tools:ignore="Deprecated,LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>
 
