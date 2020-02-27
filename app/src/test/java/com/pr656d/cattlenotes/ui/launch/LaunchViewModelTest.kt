@@ -4,7 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.pr656d.cattlenotes.data.local.prefs.PreferenceStorage
+import com.pr656d.cattlenotes.shared.domain.launch.GetLoginCompletedUseCase
 import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
+import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
 import org.junit.Assert.assertEquals
@@ -20,13 +22,19 @@ class LaunchViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    // Executes tasks in a synchronous [TaskScheduler]
+    @get:Rule
+    var syncTaskExecutorRule = SyncTaskExecutorRule()
+
     @Test
     fun notCompletedLogIn_navigatesToLoginActivity() {
         // Given that user is *not* logged in.
         val prefs = mock<PreferenceStorage> {
             on { loginCompleted }.doReturn(false)
         }
-        val viewModel = LaunchViewModel(prefs)
+
+        val getLoginCompletedUseCase = GetLoginCompletedUseCase(prefs)
+        val viewModel = LaunchViewModel(getLoginCompletedUseCase)
 
         // When launchDestination is observed
         // Then verify user is navigated to the login activity
@@ -40,7 +48,10 @@ class LaunchViewModelTest {
         val prefs = mock<PreferenceStorage> {
             on { loginCompleted }.doReturn(true)
         }
-        val viewModel = LaunchViewModel(prefs)
+
+
+        val getLoginCompletedUseCase = GetLoginCompletedUseCase(prefs)
+        val viewModel = LaunchViewModel(getLoginCompletedUseCase)
 
         // When launchDestination is observed
         // Then verify user is navigated to the login activity
