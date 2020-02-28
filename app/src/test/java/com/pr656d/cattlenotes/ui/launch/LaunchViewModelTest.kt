@@ -48,8 +48,7 @@ class LaunchViewModelTest {
         val prefs = mock<PreferenceStorage> {
             on { loginCompleted }.doReturn(true)
         }
-
-
+        
         val getLoginCompletedUseCase = GetLoginCompletedUseCase(prefs)
         val viewModel = LaunchViewModel(getLoginCompletedUseCase)
 
