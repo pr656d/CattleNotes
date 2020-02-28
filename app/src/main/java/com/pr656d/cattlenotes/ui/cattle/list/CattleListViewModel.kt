@@ -21,7 +21,11 @@ class CattleListViewModel @Inject constructor(
     private val _launchCattleDetail = MutableLiveData<Event<Cattle>>()
     val launchCattleDetail: LiveData<Event<Cattle>> = _launchCattleDetail
 
-    val isEmpty: LiveData<Boolean> = cattleList.map { it.isNullOrEmpty() }
+    val isEmpty: LiveData<Boolean>
+
+    init {
+        isEmpty = cattleList.map { it.isNullOrEmpty() }
+    }
 
     fun addCattle() {
         _launchAddCattleScreen.value = Event(Unit)

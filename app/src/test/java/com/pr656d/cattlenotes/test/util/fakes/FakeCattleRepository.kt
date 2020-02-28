@@ -4,6 +4,17 @@ import androidx.lifecycle.LiveData
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleRepository
 
+/**
+ * Fake of [CattleRepository].
+ *
+ * Whoever needs this will override methods with desired output needed.
+ * This will allow us not to implement unnecessary methods every time we create it.
+ *
+ * Example:
+ *      val fakeCattleRepository = object : FakeCattleRepository {
+ *             // Override whatever method you want to use.
+ *      }
+ */
 open class FakeCattleRepository(
     private val fakeAppDatabase: FakeAppDatabase = FakeAppDatabase()
 ) : CattleRepository {

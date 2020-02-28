@@ -27,25 +27,37 @@ class CattleListViewModelTest {
     @get:Rule
     var syncTaskExecutorRule = SyncTaskExecutorRule()
 
-    private fun createCattleListViewModel(): CattleListViewModel {
-        return CattleListViewModel(
-            LoadObservableCattleListUseCase(
-                FakeCattleDataRepository()
-            )
-        )
-    }
-
     @Test
     fun cattleListIsLoaded() {
-        val viewModel = createCattleListViewModel()
+        val fakeCattleRepository = object : FakeCattleRepository() {
+            override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+                val result = MutableLiveData<List<Cattle>>()
+                result.postValue(TestData.cattleList)
+                return result
+            }
+        }
+
+        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+
+        val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
+
         val cattleList = LiveDataTestUtil.getValue(viewModel.cattleList)
-        // Check if data is equal
         assertThat(cattleList, isEqualTo(TestData.cattleList))
     }
 
     @Test
     fun openCattleIsCalled_launchCattleDetail() {
-        val viewModel = createCattleListViewModel()
+        val fakeCattleRepository = object : FakeCattleRepository() {
+            override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+                val result = MutableLiveData<List<Cattle>>()
+                result.postValue(TestData.cattleList)
+                return result
+            }
+        }
+
+        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+
+        val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
 
         // Take any random cattle from list
         val cattle = TestData.cattleList.random()
@@ -59,7 +71,11 @@ class CattleListViewModelTest {
 
     @Test
     fun addCattleIsCalled_launchAddCattle() {
-        val viewModel = createCattleListViewModel()
+        val fakeCattleRepository = FakeCattleRepository()
+
+        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+
+        val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
 
         // Call function to add cattle
         viewModel.addCattle()
@@ -68,11 +84,37 @@ class CattleListViewModelTest {
         assertThat(Unit, isEqualTo(launchAddCattleScreen?.getContentIfNotHandled()))
     }
 
-    internal class FakeCattleDataRepository : FakeCattleRepository() {
-        override fun getObservableAllCattle(): LiveData<List<Cattle>> {
-            val result = MutableLiveData<List<Cattle>>()
-            result.postValue(TestData.cattleList)
-            return result
+    @Test
+    fun cattleListIsEmpty_isEmptyShouldBeTrue() {
+        val fakeCattleRepository = object : FakeCattleRepository() {
+            override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+                return MutableLiveData<List<Cattle>>(emptyList())
+            }
         }
+
+        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+
+        val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
+
+        val isEmpty = LiveDataTestUtil.getValue(viewModel.isEmpty) ?: true
+        assertThat(isEmpty, isEqualTo(true))
+    }
+
+    @Test
+    fun cattleListIsAvailable_isEmptyShouldBeFalse() {
+        val fakeCattleRepository = object : FakeCattleRepository() {
+            override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+                val result = MutableLiveData<List<Cattle>>()
+                result.postValue(TestData.cattleList)
+                return result
+            }
+        }
+
+        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+
+        val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
+
+        val isEmpty = LiveDataTestUtil.getValue(viewModel.isEmpty) ?: true
+        assertThat(isEmpty, isEqualTo(false))
     }
 }
