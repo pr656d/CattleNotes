@@ -38,10 +38,10 @@ class CattleDetailViewModelTest {
                 return actualCattle
             }
         }
-        val getCattleUseCase = GetCattleUseCase(cattleRepository)
-        val deleteCattleUseCase = DeleteCattleUseCase(cattleRepository)
-
-        val viewModel = CattleDetailViewModel(getCattleUseCase, deleteCattleUseCase)
+        val viewModel = CattleDetailViewModel(
+            GetCattleUseCase(cattleRepository),
+            DeleteCattleUseCase(cattleRepository)
+        )
 
         // Call the method
         viewModel.fetchCattle(actualCattle)
@@ -58,9 +58,10 @@ class CattleDetailViewModelTest {
         // Mock the repository
         val cattleRepository = mock<CattleRepository>()
 
-        val getCattleUseCase = GetCattleUseCase(cattleRepository)
-        val deleteCattleUseCase = DeleteCattleUseCase(cattleRepository)
-        val viewModel = CattleDetailViewModel(getCattleUseCase, deleteCattleUseCase)
+        val viewModel = CattleDetailViewModel(
+            GetCattleUseCase(cattleRepository),
+            DeleteCattleUseCase(cattleRepository)
+        )
 
         `when`(cattleRepository.getCattleById(oldCattle.id)).thenReturn(oldCattle)
 
@@ -71,7 +72,7 @@ class CattleDetailViewModelTest {
         val newCattle = Cattle(
             tagNumber = oldCattle.tagNumber,
             name = "Modified name", // Modified
-            image = Cattle.Image(null, null),
+            image = oldCattle.image,
             type = oldCattle.type,
             breed = Cattle.Breed.JERSEY, // Modified
             group = oldCattle.group,
@@ -91,5 +92,156 @@ class CattleDetailViewModelTest {
 
         val cattle = LiveDataTestUtil.getValue(viewModel.cattle)
         assertThat(newCattle, isEqualTo(cattle))
+    }
+
+    @Test
+    fun deleteCattleIsCalledWithDeleteConfirmationIsFalse_launchDeleteConfirmation() {
+        val cattleRepository = object : FakeCattleRepository() {
+            override fun getCattleById(id: Long): Cattle {
+                // Returns any random cattle from the list
+                return TestData.cattleList.random()
+            }
+        }
+
+        val viewModel = CattleDetailViewModel(
+            GetCattleUseCase(cattleRepository),
+            DeleteCattleUseCase(cattleRepository)
+        )
+
+        // Delete cattle confirmation called
+        viewModel.deleteCattle()
+
+        val launchDeleteConfirmation = LiveDataTestUtil.getValue(viewModel.launchDeleteConfirmation)
+        assertThat(Unit, isEqualTo(launchDeleteConfirmation?.getContentIfNotHandled()))
+    }
+
+    @Test
+    fun deleteCattleIsCalledWithDeleteConfirmationIsTrue_navigateUpOnSuccess() {
+        // Returns any random cattle from the list
+        val cattle = TestData.cattleList.random()
+
+        val cattleRepository = object : FakeCattleRepository() {
+            override fun getCattleById(id: Long): Cattle {
+                return cattle
+            }
+        }
+
+        val viewModel = CattleDetailViewModel(
+            GetCattleUseCase(cattleRepository),
+            DeleteCattleUseCase(cattleRepository)
+        )
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle)
+
+        // Delete cattle confirmation called
+        viewModel.deleteCattle(deleteConfirmation = true)
+
+        val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
+        assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
+    }
+
+    @Test
+    fun showAllBreedingIsCalled_launchAllBreeding() {
+        // Returns any random cattle from the list
+        val cattle = TestData.cattleList.random()
+
+        val cattleRepository = object : FakeCattleRepository() {
+            override fun getCattleById(id: Long): Cattle {
+                return cattle
+            }
+        }
+
+        val viewModel = CattleDetailViewModel(
+            GetCattleUseCase(cattleRepository),
+            DeleteCattleUseCase(cattleRepository)
+        )
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle)
+
+        // Call method
+        viewModel.showAllBreeding()
+
+        val launchAllBreeding = LiveDataTestUtil.getValue(viewModel.launchAllBreeding)
+        assertThat(cattle, isEqualTo(launchAllBreeding?.getContentIfNotHandled()))
+    }
+
+    @Test
+    fun addNewBreedingIsCalled_launchAddNewBreeding() {
+        // Returns any random cattle from the list
+        val cattle = TestData.cattleList.random()
+
+        val cattleRepository = object : FakeCattleRepository() {
+            override fun getCattleById(id: Long): Cattle {
+                return cattle
+            }
+        }
+
+        val viewModel = CattleDetailViewModel(
+            GetCattleUseCase(cattleRepository),
+            DeleteCattleUseCase(cattleRepository)
+        )
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle)
+
+        // Call method
+        viewModel.addNewBreeding()
+
+        val launchAddBreeding = LiveDataTestUtil.getValue(viewModel.launchAddBreeding)
+        assertThat(cattle, isEqualTo(launchAddBreeding?.getContentIfNotHandled()))
+    }
+
+    @Test
+    fun showActiveBreedingIsCalled_launchActiveBreeding() {
+        // Returns any random cattle from the list
+        val cattle = TestData.cattleList.random()
+
+        val cattleRepository = object : FakeCattleRepository() {
+            override fun getCattleById(id: Long): Cattle {
+                return cattle
+            }
+        }
+
+        val viewModel = CattleDetailViewModel(
+            GetCattleUseCase(cattleRepository),
+            DeleteCattleUseCase(cattleRepository)
+        )
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle)
+
+        // Call method
+        viewModel.showActiveBreeding()
+
+        val launchActiveBreeding = LiveDataTestUtil.getValue(viewModel.launchActiveBreeding)
+        assertThat(cattle, isEqualTo(launchActiveBreeding?.getContentIfNotHandled()))
+    }
+
+    @Test
+    fun editCattleIsCalled_launchEditCattle() {
+        // Returns any random cattle from the list
+        val cattle = TestData.cattleList.random()
+
+        val cattleRepository = object : FakeCattleRepository() {
+            override fun getCattleById(id: Long): Cattle {
+                return cattle
+            }
+        }
+
+        val viewModel = CattleDetailViewModel(
+            GetCattleUseCase(cattleRepository),
+            DeleteCattleUseCase(cattleRepository)
+        )
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle)
+
+        // Call method
+        viewModel.editCattle()
+
+        val launchEditCattle = LiveDataTestUtil.getValue(viewModel.launchEditCattle)
+        assertThat(cattle, isEqualTo(launchEditCattle?.getContentIfNotHandled()))
     }
 }

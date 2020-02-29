@@ -112,11 +112,14 @@ class CattleDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteCattle() {
-        deleteCattleUseCase(cattle.value!!, deleteCattleResult)
+    fun deleteCattle(deleteConfirmation : Boolean = false) {
+        if (deleteConfirmation)
+            deleteCattleUseCase(cattle.value!!, deleteCattleResult)
+        else
+            deleteCattleConfirmation()
     }
 
-    fun deleteCattleConfirmation() {
+    private fun deleteCattleConfirmation() {
         _launchDeleteConfirmation.postValue(Event(Unit))
     }
 

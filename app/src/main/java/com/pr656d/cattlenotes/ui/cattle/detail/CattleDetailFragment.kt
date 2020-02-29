@@ -52,7 +52,7 @@ class CattleDetailFragment : NavigationFragment() {
         binding.bottomAppBarCattleDetail.setOnMenuItemClickListener {
              when (it.itemId) {
                 R.id.menu_item_delete -> {
-                    model.deleteCattleConfirmation()
+                    model.deleteCattle()
                     true
                 }
                 else -> false
@@ -85,7 +85,7 @@ class CattleDetailFragment : NavigationFragment() {
             requireContext().showDialog(
                 title = R.string.delete_cattle_message,
                 positiveTextId = R.string.yes,
-                onPositiveSelected = { model.deleteCattle() },
+                onPositiveSelected = { model.deleteCattle(deleteConfirmation = true) },
                 negativeTextId = R.string.no
             )
         })
@@ -95,7 +95,9 @@ class CattleDetailFragment : NavigationFragment() {
         })
 
         model.showMessage.observe(viewLifecycleOwner) { resId ->
-            Snackbar.make(requireView(), resId, Snackbar.LENGTH_LONG).show()
+            Snackbar.make(requireView(), resId, Snackbar.LENGTH_LONG)
+                .setAnchorView(binding.fabButtonEditCattle)
+                .show()
         }
     }
 }
