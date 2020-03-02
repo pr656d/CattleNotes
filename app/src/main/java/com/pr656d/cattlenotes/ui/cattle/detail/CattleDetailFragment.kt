@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -94,10 +93,10 @@ class CattleDetailFragment : NavigationFragment() {
             findNavController().navigateUp()
         })
 
-        model.showMessage.observe(viewLifecycleOwner) { resId ->
-            Snackbar.make(requireView(), resId, Snackbar.LENGTH_LONG)
+        model.showMessage.observe(viewLifecycleOwner, EventObserver {
+            Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
                 .setAnchorView(binding.fabButtonEditCattle)
                 .show()
-        }
+        })
     }
 }

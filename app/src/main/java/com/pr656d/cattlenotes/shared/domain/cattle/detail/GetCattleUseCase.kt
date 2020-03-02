@@ -5,7 +5,7 @@ import com.pr656d.cattlenotes.data.repository.CattleRepository
 import com.pr656d.cattlenotes.shared.domain.UseCase
 import javax.inject.Inject
 
-class GetCattleUseCase @Inject constructor(
+open class GetCattleUseCase @Inject constructor(
     private val cattleRepository: CattleRepository
 ) : UseCase<Long, Cattle>() {
 

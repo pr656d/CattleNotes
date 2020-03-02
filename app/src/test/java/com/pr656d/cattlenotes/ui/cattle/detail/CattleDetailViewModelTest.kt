@@ -11,6 +11,7 @@ import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.`when`
@@ -243,5 +244,73 @@ class CattleDetailViewModelTest {
 
         val launchEditCattle = LiveDataTestUtil.getValue(viewModel.launchEditCattle)
         assertThat(cattle, isEqualTo(launchEditCattle?.getContentIfNotHandled()))
+    }
+
+    /**
+     * Use case that always returns an error when executed.
+     */
+    object FailingDeleteCattleUseCase : DeleteCattleUseCase(cattleRepository = FakeCattleRepository()) {
+        override fun execute(parameters: Cattle) {
+            throw Exception("Error!")
+        }
+    }
+
+    @Test
+    fun deleteCattleIsCalled_showMessageOnError() {
+        val viewModel = CattleDetailViewModel(
+            GetCattleUseCase(FakeCattleRepository()),
+            FailingDeleteCattleUseCase
+        )
+
+        val cattle = TestData.cattle1
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle)
+
+        viewModel.deleteCattle(true)
+
+        val showMessage  = LiveDataTestUtil.getValue(viewModel.showMessage)
+        assertTrue(showMessage?.getContentIfNotHandled() != null)
+    }
+
+    /**
+     * Use case that always returns an error when executed.
+     */
+    object FailingGetCattleUseCase : GetCattleUseCase(cattleRepository = FakeCattleRepository()) {
+        override fun execute(parameters: Long): Cattle {
+            throw Exception("Error!")
+        }
+    }
+
+    @Test
+    fun fetchCattleIsCalled_showMessageOnError() {
+        val viewModel = CattleDetailViewModel(
+            FailingGetCattleUseCase,
+            DeleteCattleUseCase(FakeCattleRepository())
+        )
+
+        val cattle = TestData.cattle1
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle)
+
+        val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
+        assertTrue(showMessage?.getContentIfNotHandled() != null)
+    }
+
+    @Test
+    fun fetchCattleIsCalled_navigateUpOnError() {
+        val viewModel = CattleDetailViewModel(
+            FailingGetCattleUseCase,
+            DeleteCattleUseCase(FakeCattleRepository())
+        )
+
+        val cattle = TestData.cattle1
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle)
+
+        val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
+        assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
     }
 }

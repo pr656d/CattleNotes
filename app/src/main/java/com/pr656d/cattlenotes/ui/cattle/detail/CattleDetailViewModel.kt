@@ -27,8 +27,8 @@ class CattleDetailViewModel @Inject constructor(
     val cattle: LiveData<Cattle>
         get() = _cattle
 
-    private val _showMessage = MutableLiveData<@StringRes Int>()
-    val showMessage: LiveData<Int>
+    private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
+    val showMessage: LiveData<Event<Int>>
         get() = _showMessage
 
     private val _launchAllBreeding = MutableLiveData<Event<Cattle>>()
@@ -56,27 +56,37 @@ class CattleDetailViewModel @Inject constructor(
         get() = _navigateUp
 
     init {
-        _cattle.addSource(cattleResult) { result ->
-            when (result) {
-                is Success -> {
-                    val newCattle = result.data
-
-                    // Update cattle if there are any changes
-                    if (cattle.value != newCattle) {
-                        _cattle.value = newCattle
-                    }
-                }
-                is Error -> {
-                    _showMessage.postValue(R.string.error_unknown)
-                    navigateUp()
+        _cattle.addSource(cattleResult) {
+            if (it is Success) {
+                val newCattle = it.data
+                // Update cattle if there are any changes
+                if (cattle.value != newCattle) {
+                    _cattle.value = newCattle
                 }
             }
         }
 
+        _showMessage.addSource(cattleResult) {
+            if (it is Error) {
+                showMessage()
+            }
+        }
+
+        _navigateUp.addSource(cattleResult) {
+            if (it is Error) {
+                navigateUp()
+            }
+        }
+
+        _showMessage.addSource(deleteCattleResult) {
+            if (it is Error) {
+                showMessage()
+            }
+        }
+
         _navigateUp.addSource(deleteCattleResult) {
-            when(it) {
-                is Success -> navigateUp()
-                is Error -> _showMessage.postValue(R.string.error_unknown)
+            if (it is Success) {
+                navigateUp()
             }
         }
     }
@@ -121,6 +131,10 @@ class CattleDetailViewModel @Inject constructor(
 
     private fun deleteCattleConfirmation() {
         _launchDeleteConfirmation.postValue(Event(Unit))
+    }
+
+    private fun showMessage(@StringRes messageId: Int = R.string.error_unknown) {
+        _showMessage.postValue(Event(messageId))
     }
 
     fun navigateUp() {
