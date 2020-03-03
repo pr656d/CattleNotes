@@ -4,6 +4,7 @@
 
     <data>
 
+        <import type="com.pr656d.cattlenotes.BuildConfig" />
 
     </data>
 
@@ -27,13 +28,48 @@
                 app:title="@string/about_app" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <TextView
-            style="@style/AppTheme.Headline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="About App\nComing soon"
-            android:textAlignment="center" />
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/settings_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:id="@+id/layoutSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/padding_normal"
+                android:paddingBottom="@dimen/padding_normal">
+
+                <TextView
+                    android:id="@+id/version_build_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|center_vertical"
+                    android:minHeight="48dp"
+                    android:padding="@dimen/margin_normal"
+                    android:textAppearance="?textAppearanceBody2"
+                    app:versionName="@{BuildConfig.VERSION_NAME}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:drawablePadding="@dimen/margin_small"
+                    android:drawableStart="@drawable/ic_logo_components"
+                    android:gravity="center"
+                    android:paddingEnd="@dimen/margin_normal"
+                    android:paddingStart="@dimen/margin_normal"
+                    android:text="@string/built_with_material_components"
+                    android:textAppearance="?attr/textAppearanceBody1" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

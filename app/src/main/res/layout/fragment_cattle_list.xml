@@ -11,7 +11,7 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,9 +20,7 @@
             style="@style/AppTheme.AppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:liftOnScroll="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -30,25 +28,24 @@
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_menu"
-                app:title="@string/cattle" />
+                tools:title="@string/cattle" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCattleList"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:clipToPadding="false"
             android:orientation="vertical"
             android:paddingBottom="100dp"
+            android:layout_below="@+id/appBarLayout"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="insideOverlay"
             app:cattleListItems="@{ viewModel.cattleList }"
             app:cattleListViewModel="@{viewModel}"
             app:showCattleListDivider="@{true}"
             app:layoutManager="LinearLayoutManager"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             tools:itemCount="20"
             tools:listitem="@layout/item_cattle" />
 
@@ -56,12 +53,10 @@
             android:id="@+id/fabButtonAddCattle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
             android:src="@drawable/ic_add"
             android:layout_marginBottom="@dimen/margin_normal"
-            android:onClick="@{ () -> viewModel.addCattle() }"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:onClick="@{ () -> viewModel.addCattle() }"/>
 
         <TextView
             android:id="@+id/tvEmptyListMessage"
@@ -72,12 +67,9 @@
             android:text="@string/cattle_list_empty"
             android:textAlignment="center"
             android:textColor="?android:textColorHint"
-            app:goneUnless="@{ viewModel.isEmpty }"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_gravity="center"
+            app:goneUnless="@{ viewModel.isEmpty }" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
