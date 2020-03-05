@@ -14,7 +14,8 @@ interface CattleRepository {
     fun addAllCattle(cattleList: List<Cattle>)
     fun getObservableAllCattle(): LiveData<List<Cattle>>
     fun getAllCattle(): List<Cattle>
-    fun getCattleById(id: Long): Cattle
+    fun getCattleById(id: Long): Cattle?
+    fun getCattleByTagNumber(tagNumber: Long): Cattle?
     fun deleteCattle(cattle: Cattle)
     fun updateCattle(cattle: Cattle): Int
 }
@@ -32,7 +33,9 @@ open class CattleDataRepository @Inject constructor(
 
     override fun getObservableAllCattle(): LiveData<List<Cattle>> = appDatabase.cattleDao().getObservableAll()
 
-    override fun getCattleById(id: Long): Cattle = appDatabase.cattleDao().getCattle(id)
+    override fun getCattleById(id: Long): Cattle? = appDatabase.cattleDao().getCattleById(id)
+
+    override fun getCattleByTagNumber(tagNumber: Long): Cattle? = appDatabase.cattleDao().getCattleByTagNumber(tagNumber)
 
     override fun deleteCattle(cattle: Cattle) = appDatabase.cattleDao().delete(cattle)
 

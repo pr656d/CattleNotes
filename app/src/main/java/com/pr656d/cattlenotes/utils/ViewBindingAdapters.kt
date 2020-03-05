@@ -40,6 +40,7 @@ fun errorText(view: TextInputLayout, @StringRes messageId: Int) {
     view.apply {
         if (messageId == 0) {
             isErrorEnabled = false
+            error = null
         } else {
             isErrorEnabled = true
             error = context.getString(messageId)

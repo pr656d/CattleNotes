@@ -314,8 +314,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="@{ InputType.TYPE_NULL }"
-                            app:onClickPickDate="@{ viewModel.dob }"
-                            app:onLongClickRemoveText="@{ viewModel.dob }"
+                            app:onClickPickDate="@{ viewModel.purchaseDate }"
+                            app:onLongClickRemoveText="@{ viewModel.purchaseDate }"
                             app:resetText="@{ viewModel.homeBorn }"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>

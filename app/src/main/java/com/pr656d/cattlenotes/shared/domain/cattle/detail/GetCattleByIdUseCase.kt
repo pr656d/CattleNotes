@@ -5,11 +5,12 @@ import com.pr656d.cattlenotes.data.repository.CattleRepository
 import com.pr656d.cattlenotes.shared.domain.UseCase
 import javax.inject.Inject
 
-open class GetCattleUseCase @Inject constructor(
+open class GetCattleByIdUseCase @Inject constructor(
     private val cattleRepository: CattleRepository
 ) : UseCase<Long, Cattle>() {
 
     override fun execute(parameters: Long): Cattle {
         return cattleRepository.getCattleById(parameters)
+            ?: throw Exception("Cattle not found with id $parameters")
     }
 }

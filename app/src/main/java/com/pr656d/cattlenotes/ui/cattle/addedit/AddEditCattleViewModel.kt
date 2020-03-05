@@ -4,28 +4,35 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
-import com.pr656d.cattlenotes.data.repository.CattleDataRepository
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.AddCattleUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.UpdateCattleUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleValidatorUseCase
 import com.pr656d.cattlenotes.shared.domain.result.Event
+import com.pr656d.cattlenotes.shared.domain.result.Result
+import com.pr656d.cattlenotes.shared.domain.result.Result.Error
+import com.pr656d.cattlenotes.shared.domain.result.Result.Success
 import com.pr656d.cattlenotes.utils.toBreed
 import com.pr656d.cattlenotes.utils.toGroup
 import com.pr656d.cattlenotes.utils.toType
-import com.pr656d.cattlenotes.utils.validator.CattleValidator
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
 
 class AddEditCattleViewModel @Inject constructor(
-    private val cattleDataRepository: CattleDataRepository
+    private val addCattleUseCase: AddCattleUseCase,
+    private val updateCattleUseCase: UpdateCattleUseCase,
+    cattleValidatorUseCase: CattleValidatorUseCase
 ) : ViewModel() {
+
+    companion object {
+        const val TAG = "AddEditCattleViewModel"
+    }
 
     private var oldCattle: Cattle? = null
 
     val tagNumber = MutableLiveData<String>()
-    val tagNumberErrorMessage: LiveData<Int> = tagNumber.map {
-        CattleValidator.isValidTagNumber(it, oldCattle)
-    }
+    private val _tagNumberErrorMessage = MediatorLiveData<@StringRes Int>()
+    val tagNumberErrorMessage: LiveData<Int>
+        get() = _tagNumberErrorMessage
 
     val name = MutableLiveData<String?>()
 
@@ -33,22 +40,30 @@ class AddEditCattleViewModel @Inject constructor(
     fun setType(text: String?) { _type.value = text }
     val type: LiveData<String>
         get() = _type
-    val typeErrorMessage: LiveData<Int> = type.map { CattleValidator.isValidType(it) }
+    val typeErrorMessage: LiveData<Int> = type.map {
+        cattleValidatorUseCase.isValidType(it)
+    }
 
     private val _breed = MutableLiveData<String>()
     fun setBreed(text: String?) { _breed.value = text }
     val breed: LiveData<String>
         get() = _breed
-    val breedErrorMessage: LiveData<Int> = _breed.map { CattleValidator.isValidBreed(it) }
+    val breedErrorMessage: LiveData<Int> = _breed.map {
+        cattleValidatorUseCase.isValidBreed(it)
+    }
 
     private val _group = MutableLiveData<String>()
     fun setGroup(text: String?) { _group.value = text }
     val group: LiveData<String>
         get() = _group
-    val groupErrorMessage: LiveData<Int> = _group.map { CattleValidator.isValidGroup(it) }
+    val groupErrorMessage: LiveData<Int> = _group.map {
+        cattleValidatorUseCase.isValidGroup(it)
+    }
 
     val lactation = MutableLiveData<String>()
-    val lactationErrorMessage: LiveData<Int> = lactation.map { CattleValidator.isValidLactation(it) }
+    val lactationErrorMessage: LiveData<Int> = lactation.map {
+        cattleValidatorUseCase.isValidLactation(it)
+    }
 
     val dob = MutableLiveData<Date>()
 
@@ -69,54 +84,65 @@ class AddEditCattleViewModel @Inject constructor(
     val showBackConfirmationDialog: LiveData<Event<Unit>>
         get() = _showBackConfirmationDialog
 
-    private val _navigateUp = MutableLiveData<Event<Unit>>()
+    private val _navigateUp = MediatorLiveData<Event<Unit>>()
     val navigateUp: LiveData<Event<Unit>>
         get() = _navigateUp
 
-    private val _saving = MutableLiveData<Boolean>(false)
+    private val _saving = MediatorLiveData<Boolean>().apply { value = false }
     val saving: LiveData<Boolean>
         get() = _saving
 
-    private val _showMessage = MutableLiveData<@StringRes Int>()
-    val showMessage: LiveData<Event<Int>> = _showMessage.map { Event(it) }
+    private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
+    val showMessage: LiveData<Event<Int>>
+        get() = _showMessage
 
-    fun save() {
-        val toggleSaving: suspend () -> Unit = {
-            withContext(Dispatchers.Main) {
-                _saving.value = _saving.value!!.not()
+    private val addUpdateCattleResult = MutableLiveData<Result<Unit>>()
+
+    init {
+        _tagNumberErrorMessage.addSource(tagNumber) {
+            cattleValidatorUseCase.execute(Pair(it, oldCattle?.tagNumber))
+        }
+
+        _tagNumberErrorMessage.addSource(cattleValidatorUseCase.observe()) { result ->
+            (result as? Success)?.data?.let {
+                _tagNumberErrorMessage.value = it
             }
         }
 
+        _navigateUp.addSource(addUpdateCattleResult) {
+            if (it is Success) {
+                _navigateUp.value = Event(Unit)
+            }
+        }
+
+        _showMessage.addSource(addUpdateCattleResult) {
+            if (it is Error) {
+                _showMessage.value = Event(R.string.retry)
+            }
+        }
+
+        _saving.addSource(addUpdateCattleResult) {
+            _saving.value = false
+        }
+    }
+
+    fun save() {
         if (isAllFieldsValid()) {
             val newCattle = getCattle()
 
             if (oldCattle != newCattle) {
-                viewModelScope.launch(Dispatchers.IO) {
-                    try {
-                        toggleSaving()
+                _saving.value = true
 
-                        if (oldCattle != null) {
-                            cattleDataRepository.updateCattle(newCattle)
-                        } else {
-                            cattleDataRepository.addCattle(newCattle)
-                        }
+                if (oldCattle != null)
+                    updateCattleUseCase(newCattle, addUpdateCattleResult)
+                else
+                    addCattleUseCase(newCattle, addUpdateCattleResult)
 
-                        toggleSaving()
-
-                        withContext(Dispatchers.Main) {
-                            navigateUp()
-                        }
-                    } catch (e: Exception) {
-                        if (_saving.value!!)
-                            toggleSaving()
-                        _showMessage.postValue(R.string.retry)
-                    }
-                }
             } else {
                 navigateUp()
             }
         } else {
-            _showMessage.value = R.string.error_fill_empty_fields
+            _showMessage.value = Event(R.string.error_fill_empty_fields)
         }
     }
 
@@ -158,11 +184,11 @@ class AddEditCattleViewModel @Inject constructor(
         }
 
     private fun isAllFieldsValid(): Boolean {
-        return tagNumberErrorMessage.value == CattleValidator.VALID_FIELD &&
-                typeErrorMessage.value == CattleValidator.VALID_FIELD &&
-                breedErrorMessage.value == CattleValidator.VALID_FIELD &&
-                groupErrorMessage.value == CattleValidator.VALID_FIELD &&
-                lactationErrorMessage.value == CattleValidator.VALID_FIELD
+        return tagNumberErrorMessage.value == CattleValidatorUseCase.VALID_FIELD &&
+                typeErrorMessage.value == CattleValidatorUseCase.VALID_FIELD &&
+                breedErrorMessage.value == CattleValidatorUseCase.VALID_FIELD &&
+                groupErrorMessage.value == CattleValidatorUseCase.VALID_FIELD &&
+                lactationErrorMessage.value == CattleValidatorUseCase.VALID_FIELD
     }
 
     private fun isAllFieldsEmpty(): Boolean {
@@ -183,7 +209,7 @@ class AddEditCattleViewModel @Inject constructor(
         if (it != null)
             _selectParent.value = Event(it)
         else
-            _showMessage.value = R.string.provide_tag_number
+            _showMessage.value = Event(R.string.provide_tag_number)
     }
 
     fun onBackPressed() {

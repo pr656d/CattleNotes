@@ -5,7 +5,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleRepository
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.DeleteCattleUseCase
-import com.pr656d.cattlenotes.shared.domain.cattle.detail.GetCattleUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.cattlenotes.test.data.TestData
 import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
@@ -40,7 +40,7 @@ class CattleDetailViewModelTest {
             }
         }
         val viewModel = CattleDetailViewModel(
-            GetCattleUseCase(cattleRepository),
+            GetCattleByIdUseCase(cattleRepository),
             DeleteCattleUseCase(cattleRepository)
         )
 
@@ -60,7 +60,7 @@ class CattleDetailViewModelTest {
         val cattleRepository = mock<CattleRepository>()
 
         val viewModel = CattleDetailViewModel(
-            GetCattleUseCase(cattleRepository),
+            GetCattleByIdUseCase(cattleRepository),
             DeleteCattleUseCase(cattleRepository)
         )
 
@@ -105,7 +105,7 @@ class CattleDetailViewModelTest {
         }
 
         val viewModel = CattleDetailViewModel(
-            GetCattleUseCase(cattleRepository),
+            GetCattleByIdUseCase(cattleRepository),
             DeleteCattleUseCase(cattleRepository)
         )
 
@@ -128,7 +128,7 @@ class CattleDetailViewModelTest {
         }
 
         val viewModel = CattleDetailViewModel(
-            GetCattleUseCase(cattleRepository),
+            GetCattleByIdUseCase(cattleRepository),
             DeleteCattleUseCase(cattleRepository)
         )
 
@@ -154,7 +154,7 @@ class CattleDetailViewModelTest {
         }
 
         val viewModel = CattleDetailViewModel(
-            GetCattleUseCase(cattleRepository),
+            GetCattleByIdUseCase(cattleRepository),
             DeleteCattleUseCase(cattleRepository)
         )
 
@@ -180,7 +180,7 @@ class CattleDetailViewModelTest {
         }
 
         val viewModel = CattleDetailViewModel(
-            GetCattleUseCase(cattleRepository),
+            GetCattleByIdUseCase(cattleRepository),
             DeleteCattleUseCase(cattleRepository)
         )
 
@@ -206,7 +206,7 @@ class CattleDetailViewModelTest {
         }
 
         val viewModel = CattleDetailViewModel(
-            GetCattleUseCase(cattleRepository),
+            GetCattleByIdUseCase(cattleRepository),
             DeleteCattleUseCase(cattleRepository)
         )
 
@@ -232,7 +232,7 @@ class CattleDetailViewModelTest {
         }
 
         val viewModel = CattleDetailViewModel(
-            GetCattleUseCase(cattleRepository),
+            GetCattleByIdUseCase(cattleRepository),
             DeleteCattleUseCase(cattleRepository)
         )
 
@@ -258,7 +258,7 @@ class CattleDetailViewModelTest {
     @Test
     fun deleteCattleIsCalled_showMessageOnError() {
         val viewModel = CattleDetailViewModel(
-            GetCattleUseCase(FakeCattleRepository()),
+            GetCattleByIdUseCase(FakeCattleRepository()),
             FailingDeleteCattleUseCase
         )
 
@@ -276,7 +276,7 @@ class CattleDetailViewModelTest {
     /**
      * Use case that always returns an error when executed.
      */
-    object FailingGetCattleUseCase : GetCattleUseCase(cattleRepository = FakeCattleRepository()) {
+    object FailingGetCattleUseCase : GetCattleByIdUseCase(cattleRepository = FakeCattleRepository()) {
         override fun execute(parameters: Long): Cattle {
             throw Exception("Error!")
         }

@@ -34,8 +34,12 @@ open class FakeCattleRepository(
         return fakeAppDatabase.cattleDao().getObservableAll().value ?: emptyList()
     }
 
-    override fun getCattleById(id: Long): Cattle {
-        return fakeAppDatabase.cattleDao().getCattle(id)
+    override fun getCattleById(id: Long): Cattle? {
+        return fakeAppDatabase.cattleDao().getCattleById(id)
+    }
+
+    override fun getCattleByTagNumber(tagNumber: Long): Cattle? {
+        return fakeAppDatabase.cattleDao().getCattleByTagNumber(tagNumber)
     }
 
     override fun deleteCattle(cattle: Cattle) {
