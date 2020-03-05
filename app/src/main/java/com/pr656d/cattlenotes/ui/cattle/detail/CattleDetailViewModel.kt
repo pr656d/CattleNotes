@@ -56,9 +56,9 @@ class CattleDetailViewModel @Inject constructor(
         get() = _navigateUp
 
     init {
-        _cattle.addSource(cattleResult) {
-            if (it is Success) {
-                val newCattle = it.data
+        _cattle.addSource(cattleResult) { result ->
+            (result as? Success)?.let {
+                val newCattle = result.data
                 // Update cattle if there are any changes
                 if (cattle.value != newCattle) {
                     _cattle.value = newCattle
@@ -66,26 +66,26 @@ class CattleDetailViewModel @Inject constructor(
             }
         }
 
-        _showMessage.addSource(cattleResult) {
-            if (it is Error) {
+        _showMessage.addSource(cattleResult) { result ->
+            (result as? Error)?.exception?.let {
                 showMessage()
             }
         }
 
-        _navigateUp.addSource(cattleResult) {
-            if (it is Error) {
+        _navigateUp.addSource(cattleResult) { result ->
+            (result as? Error)?.exception?.let {
                 navigateUp()
             }
         }
 
-        _showMessage.addSource(deleteCattleResult) {
-            if (it is Error) {
+        _showMessage.addSource(deleteCattleResult) { result ->
+            (result as? Error)?.exception?.let {
                 showMessage()
             }
         }
 
-        _navigateUp.addSource(deleteCattleResult) {
-            if (it is Success) {
+        _navigateUp.addSource(deleteCattleResult) { result ->
+            (result as? Error)?.exception?.let {
                 navigateUp()
             }
         }

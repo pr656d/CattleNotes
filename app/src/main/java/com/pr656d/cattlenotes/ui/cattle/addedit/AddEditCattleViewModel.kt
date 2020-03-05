@@ -110,13 +110,13 @@ class AddEditCattleViewModel @Inject constructor(
         }
 
         _navigateUp.addSource(addUpdateCattleResult) {
-            if (it is Success) {
+            (it as? Success)?.let {
                 _navigateUp.value = Event(Unit)
             }
         }
 
         _showMessage.addSource(addUpdateCattleResult) {
-            if (it is Error) {
+            (it as? Error)?.exception?.let {
                 _showMessage.value = Event(R.string.retry)
             }
         }

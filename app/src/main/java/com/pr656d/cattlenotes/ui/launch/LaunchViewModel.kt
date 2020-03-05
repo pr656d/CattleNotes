@@ -23,7 +23,7 @@ class LaunchViewModel @Inject constructor(
     init {
         getLoginCompletedUseCase(Unit, loginCompletedResult)
         launchDestination = loginCompletedResult.map {
-            if ((it as Success).data)
+            if ((it as? Success)?.data == true)
                 Event(MAIN_ACTIVITY)
             else
                 Event(LOGIN_ACTIVITY)
