@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
@@ -28,7 +29,7 @@ import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentListDialogFragment
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
-import com.pr656d.cattlenotes.utils.showDialog
+import com.pr656d.cattlenotes.utils.onPositiveSelected
 import javax.inject.Inject
 
 class AddEditCattleFragment : NavigationFragment() {
@@ -92,7 +93,7 @@ class AddEditCattleFragment : NavigationFragment() {
 
         model.selectParent.observe(viewLifecycleOwner, EventObserver { tagNumber ->
             with (binding.editTextParent) {
-                requireActivity().hideKeyboard(requireView())
+                hideKeyboard(requireView())
                 focus()
 
                 ParentListDialogFragment.newInstance(tagNumber)
@@ -104,13 +105,17 @@ class AddEditCattleFragment : NavigationFragment() {
         })
 
         model.showBackConfirmationDialog.observe(viewLifecycleOwner, EventObserver {
-            requireContext().showDialog(
-                title = R.string.back_pressed_message,
-                message = R.string.changes_not_saved_message,
-                positiveTextId = R.string.yes,
-                onPositiveSelected = { model.navigateUp() },
-                negativeTextId = R.string.no
-            )
+            val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
+                setTitle(R.string.back_pressed_message)
+                setMessage(R.string.changes_not_saved_message)
+                setPositiveButton(R.string.yes) { _, which ->
+                    onPositiveSelected(which) {
+                        model.navigateUp()
+                    }
+                }
+                setNegativeButton(R.string.no, null)
+            }
+            dialog.create().show()
         })
 
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {
@@ -125,9 +130,7 @@ class AddEditCattleFragment : NavigationFragment() {
         }
 
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
-                .setAnchorView(binding.fabButtonSaveCattle.id)
-                .show()
+            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()
         })
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -170,7 +173,7 @@ class AddEditCattleFragment : NavigationFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        requireActivity().hideKeyboard(requireView())
+        hideKeyboard(requireView())
     }
 }
 

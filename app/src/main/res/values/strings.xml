@@ -10,7 +10,7 @@
     <string name="back">Go Back</string>
     <string name="retry">Retry</string>
     <string name="more">More</string>
-    <string name="remove_text">Reset data on this field?</string>
+    <string name="remove_text">Remove %1$s?</string>
     <string name="required">Required</string>
     <string name="zero">0</string>
     <string name="cow">Cow</string>

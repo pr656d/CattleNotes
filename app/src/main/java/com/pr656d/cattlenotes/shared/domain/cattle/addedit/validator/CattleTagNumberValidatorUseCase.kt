@@ -1,23 +1,17 @@
 package com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator
 
 import androidx.annotation.StringRes
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.MutableLiveData
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.domain.MediatorUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.IsCattleExistWithTagNumberUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleValidator.VALID_FIELD
 import com.pr656d.cattlenotes.shared.domain.result.Result
 import javax.inject.Inject
 
-class CattleValidatorUseCase @Inject constructor(
+class CattleTagNumberValidatorUseCase @Inject constructor(
     private val isCattleExistWithTagNumberUseCase: IsCattleExistWithTagNumberUseCase
 ) : MediatorUseCase<Pair<String?, Long?>, @StringRes Int>() {
-    companion object {
-        const val TAG = "CattleValidatorUseCase"
-
-        const val VALID_FIELD = 0
-    }
-
     private val isCattleExistResult = MutableLiveData<Result<Boolean>>()
 
     init {
@@ -60,31 +54,5 @@ class CattleValidatorUseCase @Inject constructor(
         }
 
         isCattleExistWithTagNumberUseCase(tagNumber.toLong(), isCattleExistResult)
-    }
-
-    fun isValidType(type: String?): Int = when {
-        type.isNullOrBlank() -> R.string.error_empty_field
-        else -> VALID_FIELD
-    }
-
-    fun isValidLactation(totalCalving: String?): Int = when {
-        totalCalving.isNullOrBlank() -> R.string.error_empty_field
-        !totalCalving.isDigitsOnly() -> R.string.error_contain_digits_only
-        else -> VALID_FIELD
-    }
-
-    fun isValidBreed(breed: String?): Int = when {
-        breed.isNullOrBlank() -> R.string.error_empty_field
-        else -> VALID_FIELD
-    }
-
-    fun isValidGroup(group: String?): Int = when {
-        group.isNullOrBlank() -> R.string.error_empty_field
-        else -> VALID_FIELD
-    }
-
-    fun isValidAmount(amount: Long?): Int = when (amount) {
-        null -> VALID_FIELD
-        else -> VALID_FIELD
     }
 }

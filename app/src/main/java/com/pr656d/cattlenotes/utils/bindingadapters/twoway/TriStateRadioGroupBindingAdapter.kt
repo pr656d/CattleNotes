@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.breeding.addedit
+package com.pr656d.cattlenotes.utils.bindingadapters.twoway
 
 import android.widget.RadioGroup
 import androidx.databinding.BindingAdapter

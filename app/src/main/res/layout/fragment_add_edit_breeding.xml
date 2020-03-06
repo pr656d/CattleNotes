@@ -162,8 +162,9 @@
                         style="@style/AppTheme.AppTextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:onClickPickDate="@{ viewModel.aiDate }"
-                        app:onLongClickRemoveText="@{ viewModel.aiDate }" />
+                        app:dateText="@={ viewModel.aiDate }"
+                        app:onLongClickRemoveText="@{true}"
+                        app:onClickShowDatePicker="@{true}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -226,7 +227,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextRepeatHeatDateExpected"
                         style="@style/AppTheme.AppTextInputDate"
-                        dateText="@{ viewModel.repeatHeatExpectedOn }"
+                        app:dateText="@{ viewModel.repeatHeatExpectedOn }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -256,8 +257,9 @@
                         style="@style/AppTheme.AppTextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:onClickPickDate="@{ viewModel.repeatHeatDoneOn }"
-                        app:onLongClickRemoveText="@{ viewModel.repeatHeatDoneOn }"
+                        app:dateText="@={ viewModel.repeatHeatDoneOn }"
+                        app:onLongClickRemoveText="@{true}"
+                        app:onClickShowDatePicker="@{true}"
                         app:resetText="@{ !viewModel.repeatHeatStatus }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -273,7 +275,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextPregnancyCheckDateExpected"
                         style="@style/AppTheme.AppTextInputDate"
-                        dateText="@{ viewModel.pregnancyCheckExpectedOn }"
+                        app:dateText="@{ viewModel.pregnancyCheckExpectedOn }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -304,8 +306,9 @@
                         style="@style/AppTheme.AppTextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:onClickPickDate="@{ viewModel.pregnancyCheckDoneOn }"
-                        app:onLongClickRemoveText="@{ viewModel.pregnancyCheckDoneOn }"
+                        app:dateText="@={ viewModel.pregnancyCheckDoneOn }"
+                        app:onLongClickRemoveText="@{true}"
+                        app:onClickShowDatePicker="@{true}"
                         app:resetText="@{ !viewModel.pregnancyCheckStatus }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -321,7 +324,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextDryOffDateExpected"
                         style="@style/AppTheme.AppTextInputDate"
-                        dateText="@{ viewModel.dryOffExpectedOn }"
+                        app:dateText="@{ viewModel.dryOffExpectedOn }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -352,8 +355,9 @@
                         style="@style/AppTheme.AppTextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:onClickPickDate="@{ viewModel.dryOffDoneOn }"
-                        app:onLongClickRemoveText="@{ viewModel.dryOffDoneOn }"
+                        app:dateText="@={ viewModel.dryOffDoneOn }"
+                        app:onLongClickRemoveText="@{true}"
+                        app:onClickShowDatePicker="@{true}"
                         app:resetText="@{ !viewModel.dryOffStatus }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -369,7 +373,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextCalvingDateExpected"
                         style="@style/AppTheme.AppTextInputDate"
-                        dateText="@{ viewModel.calvingExpectedOn }"
+                        app:dateText="@{ viewModel.calvingExpectedOn }"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -400,8 +404,9 @@
                         style="@style/AppTheme.AppTextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:onClickPickDate="@{ viewModel.calvingDoneOn }"
-                        app:onLongClickRemoveText="@{ viewModel.calvingDoneOn }"
+                        app:dateText="@={ viewModel.calvingDoneOn }"
+                        app:onLongClickRemoveText="@{true}"
+                        app:onClickShowDatePicker="@{true}"
                         app:resetText="@{ !viewModel.calvingStatus }" />
                 </com.google.android.material.textfield.TextInputLayout>
 

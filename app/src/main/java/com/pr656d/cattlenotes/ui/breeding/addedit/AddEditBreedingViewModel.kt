@@ -14,7 +14,7 @@ import com.pr656d.cattlenotes.utils.BreedingUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.*
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class AddEditBreedingViewModel @Inject constructor(
@@ -23,7 +23,7 @@ class AddEditBreedingViewModel @Inject constructor(
 
     val active = MutableLiveData<Boolean>(false)
 
-    val aiDate = MutableLiveData<Date>()
+    val aiDate = MutableLiveData<LocalDate>()
 
     val didBy = MutableLiveData<String>()
 
@@ -31,29 +31,37 @@ class AddEditBreedingViewModel @Inject constructor(
 
     val strawCode = MutableLiveData<String>()
 
-    val repeatHeatExpectedOn: LiveData<Date> = aiDate.map { BreedingUtil.getExpectedRepeatHeatDate(it) }
+    val repeatHeatExpectedOn: LiveData<LocalDate> = aiDate.map {
+        BreedingUtil.getExpectedRepeatHeatDate(it)
+    }
 
     val repeatHeatStatus = MutableLiveData<Boolean?>()
 
-    val repeatHeatDoneOn = MutableLiveData<Date>()
+    val repeatHeatDoneOn = MutableLiveData<LocalDate>()
 
-    val pregnancyCheckExpectedOn: LiveData<Date> = aiDate.map { BreedingUtil.getExpectedPregnancyCheckDate(it) }
+    val pregnancyCheckExpectedOn: LiveData<LocalDate> = aiDate.map {
+        BreedingUtil.getExpectedPregnancyCheckDate(it)
+    }
 
     val pregnancyCheckStatus = MutableLiveData<Boolean?>()
 
-    val pregnancyCheckDoneOn = MutableLiveData<Date>()
+    val pregnancyCheckDoneOn = MutableLiveData<LocalDate>()
 
-    val dryOffExpectedOn : LiveData<Date> = aiDate.map { BreedingUtil.getExpectedDryOffDate(it) }
+    val dryOffExpectedOn : LiveData<LocalDate> = aiDate.map {
+        BreedingUtil.getExpectedDryOffDate(it)
+    }
 
     val dryOffStatus = MutableLiveData<Boolean?>()
 
-    val dryOffDoneOn = MutableLiveData<Date>()
+    val dryOffDoneOn = MutableLiveData<LocalDate>()
 
-    val calvingExpectedOn: LiveData<Date> = aiDate.map { BreedingUtil.getExpectedCalvingDate(it) }
+    val calvingExpectedOn: LiveData<LocalDate> = aiDate.map {
+        BreedingUtil.getExpectedCalvingDate(it)
+    }
 
     val calvingStatus = MutableLiveData<Boolean?>()
 
-    val calvingDoneOn = MutableLiveData<Date>()
+    val calvingDoneOn = MutableLiveData<LocalDate>()
 
     private val _saving = MutableLiveData<Boolean>(false)
     val saving: LiveData<Boolean> = _saving

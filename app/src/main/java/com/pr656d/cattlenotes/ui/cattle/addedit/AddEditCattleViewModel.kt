@@ -6,7 +6,8 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.AddCattleUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.UpdateCattleUseCase
-import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleValidatorUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleTagNumberValidatorUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleValidator
 import com.pr656d.cattlenotes.shared.domain.result.Event
 import com.pr656d.cattlenotes.shared.domain.result.Result
 import com.pr656d.cattlenotes.shared.domain.result.Result.Error
@@ -14,19 +15,14 @@ import com.pr656d.cattlenotes.shared.domain.result.Result.Success
 import com.pr656d.cattlenotes.utils.toBreed
 import com.pr656d.cattlenotes.utils.toGroup
 import com.pr656d.cattlenotes.utils.toType
-import java.util.*
+import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class AddEditCattleViewModel @Inject constructor(
     private val addCattleUseCase: AddCattleUseCase,
     private val updateCattleUseCase: UpdateCattleUseCase,
-    cattleValidatorUseCase: CattleValidatorUseCase
+    cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase
 ) : ViewModel() {
-
-    companion object {
-        const val TAG = "AddEditCattleViewModel"
-    }
-
     private var oldCattle: Cattle? = null
 
     val tagNumber = MutableLiveData<String>()
@@ -34,14 +30,14 @@ class AddEditCattleViewModel @Inject constructor(
     val tagNumberErrorMessage: LiveData<Int>
         get() = _tagNumberErrorMessage
 
-    val name = MutableLiveData<String?>()
+    val name = MutableLiveData<String>()
 
     private val _type = MutableLiveData<String>()
     fun setType(text: String?) { _type.value = text }
     val type: LiveData<String>
         get() = _type
     val typeErrorMessage: LiveData<Int> = type.map {
-        cattleValidatorUseCase.isValidType(it)
+        CattleValidator.isValidType(it)
     }
 
     private val _breed = MutableLiveData<String>()
@@ -49,7 +45,7 @@ class AddEditCattleViewModel @Inject constructor(
     val breed: LiveData<String>
         get() = _breed
     val breedErrorMessage: LiveData<Int> = _breed.map {
-        cattleValidatorUseCase.isValidBreed(it)
+        CattleValidator.isValidBreed(it)
     }
 
     private val _group = MutableLiveData<String>()
@@ -57,15 +53,15 @@ class AddEditCattleViewModel @Inject constructor(
     val group: LiveData<String>
         get() = _group
     val groupErrorMessage: LiveData<Int> = _group.map {
-        cattleValidatorUseCase.isValidGroup(it)
+        CattleValidator.isValidGroup(it)
     }
 
     val lactation = MutableLiveData<String>()
     val lactationErrorMessage: LiveData<Int> = lactation.map {
-        cattleValidatorUseCase.isValidLactation(it)
+        CattleValidator.isValidLactation(it)
     }
 
-    val dob = MutableLiveData<Date>()
+    val dob = MutableLiveData<LocalDate>()
 
     val parent = MutableLiveData<String>()
     fun setParent(value: String?) { parent.value = value }
@@ -74,7 +70,7 @@ class AddEditCattleViewModel @Inject constructor(
 
     val purchaseAmount = MutableLiveData<String>()
 
-    val purchaseDate = MutableLiveData<Date>()
+    val purchaseDate = MutableLiveData<LocalDate>()
 
     private val _selectParent = MutableLiveData<Event<String>>()
     val selectParent: LiveData<Event<String>>
@@ -100,10 +96,10 @@ class AddEditCattleViewModel @Inject constructor(
 
     init {
         _tagNumberErrorMessage.addSource(tagNumber) {
-            cattleValidatorUseCase.execute(Pair(it, oldCattle?.tagNumber))
+            cattleTagNumberValidatorUseCase.execute(Pair(it, oldCattle?.tagNumber))
         }
 
-        _tagNumberErrorMessage.addSource(cattleValidatorUseCase.observe()) { result ->
+        _tagNumberErrorMessage.addSource(cattleTagNumberValidatorUseCase.observe()) { result ->
             (result as? Success)?.data?.let {
                 _tagNumberErrorMessage.value = it
             }
@@ -184,11 +180,11 @@ class AddEditCattleViewModel @Inject constructor(
         }
 
     private fun isAllFieldsValid(): Boolean {
-        return tagNumberErrorMessage.value == CattleValidatorUseCase.VALID_FIELD &&
-                typeErrorMessage.value == CattleValidatorUseCase.VALID_FIELD &&
-                breedErrorMessage.value == CattleValidatorUseCase.VALID_FIELD &&
-                groupErrorMessage.value == CattleValidatorUseCase.VALID_FIELD &&
-                lactationErrorMessage.value == CattleValidatorUseCase.VALID_FIELD
+        return tagNumberErrorMessage.value == CattleValidator.VALID_FIELD &&
+                typeErrorMessage.value == CattleValidator.VALID_FIELD &&
+                breedErrorMessage.value == CattleValidator.VALID_FIELD &&
+                groupErrorMessage.value == CattleValidator.VALID_FIELD &&
+                lactationErrorMessage.value == CattleValidator.VALID_FIELD
     }
 
     private fun isAllFieldsEmpty(): Boolean {

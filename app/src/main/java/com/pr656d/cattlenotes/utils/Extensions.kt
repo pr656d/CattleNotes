@@ -9,7 +9,6 @@ import android.text.format.DateFormat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
-import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -31,6 +30,31 @@ fun TextInputEditText.focus() {
     isFocusableInTouchMode = true
     // Take view in focus.
     requestFocus()
+}
+
+// end region
+
+// region MaterialAlertDialogBuilder
+
+fun MaterialAlertDialogBuilder.onPositiveSelected(
+    which: Int, block: MaterialAlertDialogBuilder.() -> Unit
+) {
+    if (which == AlertDialog.BUTTON_POSITIVE)
+        block()
+}
+
+fun MaterialAlertDialogBuilder.onNegativeSelected(
+    which: Int, block: MaterialAlertDialogBuilder.() -> Unit
+) {
+    if (which == AlertDialog.BUTTON_NEGATIVE)
+        block()
+}
+
+fun MaterialAlertDialogBuilder.onNeutralSelected(
+    which: Int, block: MaterialAlertDialogBuilder.() -> Unit
+) {
+    if (which == AlertDialog.BUTTON_NEUTRAL)
+        block()
 }
 
 // end region
@@ -68,49 +92,10 @@ fun View.pickADate(
 }
 // end region
 
-// region dialog
-
-/**
- * Wrapper function for showing Material dialog.
- */
-fun Context.showDialog(
-    @StringRes title: Int,
-    @StringRes message: Int? = null,
-    @StringRes positiveTextId: Int,
-    onPositiveSelected: () -> Unit = {},
-    @StringRes negativeTextId: Int? = null,
-    onNegativeSelected: () -> Unit = {},
-    @StringRes neutralTextId: Int? = null,
-    onNeutralSelected: () -> Unit = {}
-) {
-    val dialog = MaterialAlertDialogBuilder(this)
-    dialog.setTitle(title)
-    message?.let { dialog.setMessage(it) }
-    dialog.setPositiveButton(positiveTextId) { _, which ->
-        if (which == AlertDialog.BUTTON_POSITIVE)
-            onPositiveSelected()
-    }
-    negativeTextId?.let {
-        dialog.setNegativeButton(it) { _, which ->
-            if (which == AlertDialog.BUTTON_NEGATIVE)
-                onNegativeSelected()
-        }
-    }
-    neutralTextId?.let {
-        dialog.setNeutralButton(it) { _, which ->
-            if (which == AlertDialog.BUTTON_NEUTRAL)
-                onNeutralSelected()
-        }
-    }
-    dialog.create().show()
-}
-// end region
-
-
 // region Soft input
 
-fun Context.hideKeyboard(view: View) {
-    (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
+fun hideKeyboard(view: View) {
+    (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
         .hideSoftInputFromWindow(view.windowToken, 0)
 }
 
@@ -131,6 +116,21 @@ fun Context.toDate(dayOfMonth: Int, month: Int, year: Int): Date? {
         else
             resources.configuration.locale
     ).parse(string)
+}
+
+fun Context.toDate(dateString: String): Date? {
+    var date = Date()
+    val pattern = SimpleDateFormat(
+        "dd/MM/yyyy",
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            resources.configuration.locales.get(0)
+        else
+            resources.configuration.locale
+    ).run {
+        parse(dateString)
+        format(this)
+    }
+    return date
 }
 
 fun Context.getString(date: Date): String = DateFormat.getMediumDateFormat(this).format(date)

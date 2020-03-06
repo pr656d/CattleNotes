@@ -2,7 +2,7 @@ package com.pr656d.cattlenotes.data.model
 
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
-import java.util.*
+import org.threeten.bp.LocalDate
 
 @Entity(
     tableName = "breeding_cycle",
@@ -73,7 +73,7 @@ class BreedingCycle(
     data class ArtificialInseminationInfo(
         @SerializedName("date")
         @ColumnInfo(name = "date")
-        val date: Date,
+        val date: LocalDate,
 
         @SerializedName("did_by")
         @ColumnInfo(name = "did_by")
@@ -91,7 +91,7 @@ class BreedingCycle(
     data class BreedingEvent(
         @SerializedName("expected_on")
         @ColumnInfo(name = "expected_on")
-        val expectedOn: Date,
+        val expectedOn: LocalDate,
 
         @SerializedName("status")
         @ColumnInfo(name = "status")
@@ -99,6 +99,6 @@ class BreedingCycle(
 
         @SerializedName("done_on")
         @ColumnInfo(name = "done_on")
-        val doneOn: Date? = null
+        val doneOn: LocalDate? = null
     )
 }

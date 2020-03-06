@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
@@ -18,7 +19,7 @@ import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.FragmentAddEditBreedingBinding
 import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.NavigationFragment
-import com.pr656d.cattlenotes.utils.showDialog
+import com.pr656d.cattlenotes.utils.onPositiveSelected
 import javax.inject.Inject
 
 class AddEditBreedingFragment : NavigationFragment() {
@@ -65,19 +66,21 @@ class AddEditBreedingFragment : NavigationFragment() {
         }
 
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
-                .setAnchorView(binding.fabButtonSaveBreeding.id)
-                .show()
+            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()
         })
 
         model.showBackConfirmationDialog.observe(viewLifecycleOwner, EventObserver {
-            requireContext().showDialog(
-                title = R.string.back_pressed_message,
-                message = R.string.changes_not_saved_message,
-                positiveTextId = R.string.yes,
-                onPositiveSelected = { model.navigateUp() },
-                negativeTextId = R.string.no
-            )
+            val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
+                setTitle(R.string.back_pressed_message)
+                setMessage(R.string.changes_not_saved_message)
+                setPositiveButton(R.string.yes) { _, which ->
+                    onPositiveSelected(which) {
+                        model.navigateUp()
+                    }
+                }
+                setNegativeButton(R.string.no, null)
+            }
+            dialog.create().show()
         })
 
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {

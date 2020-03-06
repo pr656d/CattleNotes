@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
@@ -19,7 +20,7 @@ import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Co
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddBreeding
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toBreedingHistory
-import com.pr656d.cattlenotes.utils.showDialog
+import com.pr656d.cattlenotes.utils.onPositiveSelected
 import javax.inject.Inject
 
 class CattleDetailFragment : NavigationFragment() {
@@ -81,12 +82,16 @@ class CattleDetailFragment : NavigationFragment() {
         })
 
         model.launchDeleteConfirmation.observe(viewLifecycleOwner, EventObserver {
-            requireContext().showDialog(
-                title = R.string.delete_cattle_message,
-                positiveTextId = R.string.yes,
-                onPositiveSelected = { model.deleteCattle(deleteConfirmation = true) },
-                negativeTextId = R.string.no
-            )
+            val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
+                setTitle(R.string.delete_cattle_message)
+                setPositiveButton(R.string.yes) { _, which ->
+                    onPositiveSelected(which) {
+                        model.deleteCattle(deleteConfirmation = true)
+                    }
+                }
+                setNegativeButton(R.string.no, null)
+            }
+            dialog.create().show()
         })
 
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {
@@ -94,9 +99,7 @@ class CattleDetailFragment : NavigationFragment() {
         })
 
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
-                .setAnchorView(binding.fabButtonEditCattle)
-                .show()
+            Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG).show()
         })
     }
 }

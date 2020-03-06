@@ -5,7 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import java.util.*
+import org.threeten.bp.LocalDate
 
 @Entity(tableName = "cattle_list")
 data class Cattle(
@@ -47,11 +47,11 @@ data class Cattle(
 
     @SerializedName("purchased_on")
     @ColumnInfo(name = "purchased_on")
-    val purchaseDate: Date? = null,
+    val purchaseDate: LocalDate? = null,
 
     @SerializedName("date_of_birth")
     @ColumnInfo(name = "date_of_birth")
-    val dateOfBirth: Date? = null,
+    val dateOfBirth: LocalDate? = null,
 
     @SerializedName("parent")
     @ColumnInfo(name = "parent")

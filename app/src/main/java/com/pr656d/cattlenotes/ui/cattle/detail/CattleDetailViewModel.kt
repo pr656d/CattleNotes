@@ -67,26 +67,26 @@ class CattleDetailViewModel @Inject constructor(
         }
 
         _showMessage.addSource(cattleResult) { result ->
-            (result as? Error)?.exception?.let {
+            (result as? Error)?.let {
                 showMessage()
             }
         }
 
         _navigateUp.addSource(cattleResult) { result ->
-            (result as? Error)?.exception?.let {
+            (result as? Error)?.let {
+                navigateUp()
+            }
+        }
+
+        _navigateUp.addSource(deleteCattleResult) { result ->
+            (result as? Success)?.let {
                 navigateUp()
             }
         }
 
         _showMessage.addSource(deleteCattleResult) { result ->
-            (result as? Error)?.exception?.let {
+            (result as? Error)?.let {
                 showMessage()
-            }
-        }
-
-        _navigateUp.addSource(deleteCattleResult) { result ->
-            (result as? Error)?.exception?.let {
-                navigateUp()
             }
         }
     }
