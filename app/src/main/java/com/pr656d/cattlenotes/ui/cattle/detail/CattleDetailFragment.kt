@@ -20,7 +20,6 @@ import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Co
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddBreeding
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toBreedingHistory
-import com.pr656d.cattlenotes.utils.onPositiveSelected
 import javax.inject.Inject
 
 class CattleDetailFragment : NavigationFragment() {
@@ -82,16 +81,14 @@ class CattleDetailFragment : NavigationFragment() {
         })
 
         model.launchDeleteConfirmation.observe(viewLifecycleOwner, EventObserver {
-            val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
-                setTitle(R.string.delete_cattle_message)
-                setPositiveButton(R.string.yes) { _, which ->
-                    onPositiveSelected(which) {
-                        model.deleteCattle(deleteConfirmation = true)
-                    }
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.delete_cattle_message)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    model.deleteCattle(deleteConfirmation = true)
                 }
-                setNegativeButton(R.string.no, null)
-            }
-            dialog.create().show()
+                .setNegativeButton(R.string.no, null)
+                .create()
+                .show()
         })
 
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {

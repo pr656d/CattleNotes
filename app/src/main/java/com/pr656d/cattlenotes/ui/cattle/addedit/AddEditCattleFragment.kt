@@ -29,7 +29,6 @@ import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentListDialogFragment
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
-import com.pr656d.cattlenotes.utils.onPositiveSelected
 import javax.inject.Inject
 
 class AddEditCattleFragment : NavigationFragment() {
@@ -57,6 +56,7 @@ class AddEditCattleFragment : NavigationFragment() {
         @Suppress("DEPRECATION")
         ProgressDialog(requireContext()).apply {
             setMessage(requireContext().getString(R.string.saving_dialog_message))
+            setCancelable(false)
         }
     }
 
@@ -105,17 +105,15 @@ class AddEditCattleFragment : NavigationFragment() {
         })
 
         model.showBackConfirmationDialog.observe(viewLifecycleOwner, EventObserver {
-            val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
-                setTitle(R.string.back_pressed_message)
-                setMessage(R.string.changes_not_saved_message)
-                setPositiveButton(R.string.yes) { _, which ->
-                    onPositiveSelected(which) {
-                        model.navigateUp()
-                    }
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.back_pressed_message)
+                .setMessage(R.string.changes_not_saved_message)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    model.navigateUp()
                 }
-                setNegativeButton(R.string.no, null)
-            }
-            dialog.create().show()
+                .setNegativeButton(R.string.no, null)
+                .create()
+                .show()
         })
 
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {

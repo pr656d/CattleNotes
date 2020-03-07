@@ -4,23 +4,18 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
-import android.os.Build
-import android.text.format.DateFormat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.ViewDataBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.local.db.Converters
 import com.pr656d.cattlenotes.data.model.Animal
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.model.Theme
-import java.text.SimpleDateFormat
 import java.util.*
 
 // region TextInputEditText
@@ -30,31 +25,6 @@ fun TextInputEditText.focus() {
     isFocusableInTouchMode = true
     // Take view in focus.
     requestFocus()
-}
-
-// end region
-
-// region MaterialAlertDialogBuilder
-
-fun MaterialAlertDialogBuilder.onPositiveSelected(
-    which: Int, block: MaterialAlertDialogBuilder.() -> Unit
-) {
-    if (which == AlertDialog.BUTTON_POSITIVE)
-        block()
-}
-
-fun MaterialAlertDialogBuilder.onNegativeSelected(
-    which: Int, block: MaterialAlertDialogBuilder.() -> Unit
-) {
-    if (which == AlertDialog.BUTTON_NEGATIVE)
-        block()
-}
-
-fun MaterialAlertDialogBuilder.onNeutralSelected(
-    which: Int, block: MaterialAlertDialogBuilder.() -> Unit
-) {
-    if (which == AlertDialog.BUTTON_NEUTRAL)
-        block()
 }
 
 // end region
@@ -105,37 +75,6 @@ inline fun <T : ViewDataBinding> T.executeAfter(block: T.() -> Unit) {
     block()
     executePendingBindings()
 }
-
-// region date to string
-fun Context.toDate(dayOfMonth: Int, month: Int, year: Int): Date? {
-    val string = "$dayOfMonth/${month + 1}/$year"
-    return SimpleDateFormat(
-        "dd/MM/yyyy",
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            resources.configuration.locales.get(0)
-        else
-            resources.configuration.locale
-    ).parse(string)
-}
-
-fun Context.toDate(dateString: String): Date? {
-    var date = Date()
-    val pattern = SimpleDateFormat(
-        "dd/MM/yyyy",
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-            resources.configuration.locales.get(0)
-        else
-            resources.configuration.locale
-    ).run {
-        parse(dateString)
-        format(this)
-    }
-    return date
-}
-
-fun Context.getString(date: Date): String = DateFormat.getMediumDateFormat(this).format(date)
-
-// end region
 
 // region converters
 

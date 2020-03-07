@@ -8,7 +8,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.shared.utils.TimeUtils
-import com.pr656d.cattlenotes.utils.*
+import com.pr656d.cattlenotes.utils.focus
+import com.pr656d.cattlenotes.utils.hideKeyboard
+import com.pr656d.cattlenotes.utils.pickADate
 import org.threeten.bp.LocalDate
 
 /**
@@ -104,22 +106,18 @@ fun setListeners(
 
                 if (!view.text.isNullOrEmpty()) {
                     // Show dialog.
-                    val dialog = MaterialAlertDialogBuilder(context).apply {
-                        setMessage(context.getString(R.string.remove_text, view.hint.toString()))
-                        setPositiveButton(R.string.yes) { _, which ->
-                            onPositiveSelected(which) {
-                                view.text = null
-                                view.isFocusableInTouchMode = false
-                                attrChange.onChange()
-                            }
+                    MaterialAlertDialogBuilder(context)
+                        .setMessage(context.getString(R.string.remove_text, view.hint.toString()))
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            view.text = null
+                            view.isFocusableInTouchMode = false
+                            attrChange.onChange()
                         }
-                        setNegativeButton(R.string.no) { _, which ->
-                            onNegativeSelected(which) {
-                                view.isFocusableInTouchMode = false
-                            }
+                        .setNegativeButton(R.string.no) { _, _ ->
+                            view.isFocusableInTouchMode = false
                         }
-                    }
-                    dialog.create().show()
+                        .create()
+                        .show()
                 }
                 true
             }
