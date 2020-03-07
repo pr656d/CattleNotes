@@ -32,27 +32,18 @@ class AddEditCattleViewModel @Inject constructor(
 
     val name = MutableLiveData<String>()
 
-    private val _type = MutableLiveData<String>()
-    fun setType(text: String?) { _type.value = text }
-    val type: LiveData<String>
-        get() = _type
+    val type = MutableLiveData<String>()
     val typeErrorMessage: LiveData<Int> = type.map {
         CattleValidator.isValidType(it)
     }
 
-    private val _breed = MutableLiveData<String>()
-    fun setBreed(text: String?) { _breed.value = text }
-    val breed: LiveData<String>
-        get() = _breed
-    val breedErrorMessage: LiveData<Int> = _breed.map {
+    val breed = MutableLiveData<String>()
+    val breedErrorMessage: LiveData<Int> = breed.map {
         CattleValidator.isValidBreed(it)
     }
 
-    private val _group = MutableLiveData<String>()
-    fun setGroup(text: String?) { _group.value = text }
-    val group: LiveData<String>
-        get() = _group
-    val groupErrorMessage: LiveData<Int> = _group.map {
+    val group = MutableLiveData<String>()
+    val groupErrorMessage: LiveData<Int> = group.map {
         CattleValidator.isValidGroup(it)
     }
 
@@ -150,9 +141,9 @@ class AddEditCattleViewModel @Inject constructor(
     private fun bindData(cattle: Cattle) {
         tagNumber.value = cattle.tagNumber.toString()
         name.value = cattle.name
-        _type.value = cattle.type.displayName
-        _breed.value = cattle.breed.displayName
-        _group.value = cattle.group.displayName
+        type.value = cattle.type.displayName
+        breed.value = cattle.breed.displayName
+        group.value = cattle.group.displayName
         lactation.value = cattle.lactation.toString()
         dob.value = cattle.dateOfBirth
         parent.value = cattle.parent?.toString()

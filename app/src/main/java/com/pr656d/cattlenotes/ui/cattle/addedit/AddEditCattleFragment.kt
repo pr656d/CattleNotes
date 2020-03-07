@@ -7,10 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import androidx.activity.addCallback
-import androidx.annotation.ArrayRes
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -76,10 +73,6 @@ class AddEditCattleFragment : NavigationFragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = model
-            /** Setup dropdown adapters for drop down option */
-            exposedDropDownBreed.setupDropDownAdapters(R.array.list_breed)
-            exposedDropDownType.setupDropDownAdapters(R.array.list_type)
-            exposedDropDownGroup.setupDropDownAdapters(R.array.list_group)
         }
 
         return binding.root
@@ -149,26 +142,6 @@ class AddEditCattleFragment : NavigationFragment() {
         }
     }
 
-    private fun AutoCompleteTextView.setupDropDownAdapters(@ArrayRes listId: Int) {
-        val stringArray: Array<String> = resources.getStringArray(listId)
-
-        setAdapter(
-            ArrayAdapter<String>(
-                requireContext(),
-                R.layout.dropdown_menu_popup_item,
-                stringArray
-            )
-        )
-
-        setOnItemClickListener { _, _, position, _ ->
-            when(listId) {
-                R.array.list_type -> model.setType(stringArray[position])
-                R.array.list_breed -> model.setBreed(stringArray[position])
-                R.array.list_group -> model.setGroup(stringArray[position])
-            }
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         hideKeyboard(requireView())
@@ -187,15 +160,4 @@ fun setRequired(view: TextInputLayout, text: String?) {
             helperText = null
         }
     }
-}
-
-/**
- * Set text on [AutoCompleteTextView] which is used in [TextInputLayout] for dropdown menu.
- * Default [AutoCompleteTextView.setText] method filters so dropdown doesn't show all options
- * when pre set option is needed.
- * pass false for filter while setting text which will not filter and shows all options of dropdown.
- */
-@BindingAdapter("setText")
-fun dropDownSetText(view: AutoCompleteTextView, text: String?) {
-    view.setText(text, false)
 }

@@ -24,7 +24,7 @@ import org.threeten.bp.LocalDate
  *      app:onLongClickRemoveText="@{true}"
  */
 
-@BindingAdapter("app:dateText")
+@BindingAdapter("dateText")
 fun setDate(view: TextInputEditText, newDate: LocalDate?) {
     view.text?.toString().let { text ->
         val date = if (!text.isNullOrEmpty())
@@ -42,7 +42,7 @@ fun setDate(view: TextInputEditText, newDate: LocalDate?) {
     }
 }
 
-@InverseBindingAdapter(attribute = "app:dateText")
+@InverseBindingAdapter(attribute = "dateText")
 fun getDate(view: TextInputEditText): LocalDate? {
     view.text?.toString()?.let {
         if (it.isNotEmpty())
