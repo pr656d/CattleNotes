@@ -1,7 +1,6 @@
 package com.pr656d.cattlenotes.ui.cattle.addedit
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +10,6 @@ import androidx.activity.addCallback
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -49,13 +47,6 @@ class AddEditCattleFragment : NavigationFragment() {
     private val model by viewModels<AddEditCattleViewModel> { viewModelFactory }
     private lateinit var binding: FragmentAddEditCattleBinding
     private val args by navArgs<AddEditCattleFragmentArgs>()
-    private val progressDialog by lazy {
-        @Suppress("DEPRECATION")
-        ProgressDialog(requireContext()).apply {
-            setMessage(requireContext().getString(R.string.saving_dialog_message))
-            setCancelable(false)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,13 +103,6 @@ class AddEditCattleFragment : NavigationFragment() {
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigateUp()
         })
-
-        model.saving.observe(viewLifecycleOwner) {
-            if (it)
-                progressDialog.show()
-            else
-                progressDialog.hide()
-        }
 
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()

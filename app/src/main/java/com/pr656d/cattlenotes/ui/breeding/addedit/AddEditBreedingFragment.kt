@@ -1,6 +1,5 @@
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -32,13 +30,6 @@ class AddEditBreedingFragment : NavigationFragment() {
     private val model by viewModels<AddEditBreedingViewModel> { viewModelFactory }
     private val args by navArgs<AddEditBreedingFragmentArgs>()
     private lateinit var binding: FragmentAddEditBreedingBinding
-    private val progressDialog by lazy {
-        @Suppress("DEPRECATION")
-        ProgressDialog(requireContext()).apply {
-            setMessage(requireContext().getString(R.string.saving_dialog_message))
-            setCancelable(false)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,13 +48,6 @@ class AddEditBreedingFragment : NavigationFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        model.saving.observe(viewLifecycleOwner) {
-            if (it)
-                progressDialog.show()
-            else
-                progressDialog.hide()
-        }
 
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()

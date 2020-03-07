@@ -70,6 +70,15 @@
             android:layout_gravity="center"
             app:goneUnless="@{ viewModel.isEmpty }" />
 
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_anchorGravity="bottom"
+            app:layout_anchor="@id/appBarLayout"
+            app:goneUnless="@{viewModel.loading}"/>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

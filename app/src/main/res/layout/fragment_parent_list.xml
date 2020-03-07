@@ -11,52 +11,36 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/selectParentAppbarLayout"
+            android:id="@+id/appBarLayout"
             style="@style/AppTheme.AppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:liftOnScroll="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:navigationIcon="@drawable/ic_close"
+                app:layout_scrollFlags="noScroll"
                 app:title="@string/select_parent" />
         </com.google.android.material.appbar.AppBarLayout>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:goneUnless="@{ viewModel.loading }"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/selectParentAppbarLayout" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvParentList"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layoutManager="LinearLayoutManager"
             app:parentListItems="@{ viewModel.parentList }"
             app:parentListViewModel="@{viewModel}"
             app:showParentListDivider="@{true}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/selectParentAppbarLayout"
-            app:layout_constraintBottom_toBottomOf="parent"
             tools:itemCount="2"
             tools:listitem="@layout/item_cattle" />
 
@@ -68,12 +52,17 @@
             android:text="@string/parent_list_empty"
             android:textAlignment="center"
             android:textColor="@color/grey"
-            app:goneUnless="@{ viewModel.isEmpty }"
-            app:layout_anchorGravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/selectParentAppbarLayout" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_gravity="center"
+            app:goneUnless="@{ viewModel.isEmpty }" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_anchorGravity="bottom"
+            app:layout_anchor="@id/appBarLayout"
+            app:goneUnless="@{viewModel.loading}"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

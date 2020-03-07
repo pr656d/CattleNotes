@@ -34,7 +34,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/scrollView"
+            android:id="@+id/layout_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/appBarLayout"
@@ -345,6 +345,15 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_anchorGravity="bottom"
+            app:layout_anchor="@id/appBarLayout"
+            app:goneUnless="@{ viewModel.loading }"/>
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBarCattleDetail"

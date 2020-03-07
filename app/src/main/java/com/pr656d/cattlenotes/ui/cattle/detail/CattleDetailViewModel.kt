@@ -55,6 +55,10 @@ class CattleDetailViewModel @Inject constructor(
     val navigateUp: LiveData<Event<Unit>>
         get() = _navigateUp
 
+    private val _loading = MediatorLiveData<Boolean>().apply { value = true }
+    val loading: LiveData<Boolean>
+        get() = _loading
+
     init {
         _cattle.addSource(cattleResult) { result ->
             (result as? Success)?.let {
@@ -76,6 +80,14 @@ class CattleDetailViewModel @Inject constructor(
             (result as? Error)?.let {
                 navigateUp()
             }
+        }
+
+        _loading.addSource(cattleResult) {
+            _loading.value = false
+        }
+
+        _loading.addSource(deleteCattleResult) {
+            _loading.value = false
         }
 
         _navigateUp.addSource(deleteCattleResult) { result ->
