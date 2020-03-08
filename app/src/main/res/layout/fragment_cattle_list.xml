@@ -38,7 +38,6 @@
             android:clipToPadding="false"
             android:orientation="vertical"
             android:paddingBottom="100dp"
-            android:layout_below="@+id/appBarLayout"
             android:scrollbars="vertical"
             android:scrollbarStyle="insideOverlay"
             app:cattleListItems="@{ viewModel.cattleList }"
@@ -71,6 +70,7 @@
             app:goneUnless="@{ viewModel.isEmpty }" />
 
         <ProgressBar
+            android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

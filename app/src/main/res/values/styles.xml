@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="AppTheme.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
         <item name="fontFamily">@font/roboto_bold</item>
@@ -139,17 +139,6 @@
 
     <style name="AppTheme.AppBar" parent="Widget.MaterialComponents.AppBarLayout.Surface">
         <item name="android:fitsSystemWindows">true</item>
-    </style>
-
-    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.DayNight.Dialog">
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowBackground">?attr/colorSurface</item>
-        <!--  Window decor  -->
-        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/use_light_status</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <!-- Widget styles -->

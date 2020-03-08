@@ -36,13 +36,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="insideOverlay"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layoutManager="LinearLayoutManager"
             app:parentListItems="@{ viewModel.parentList }"
             app:parentListViewModel="@{viewModel}"
             app:showParentListDivider="@{true}"
             tools:itemCount="2"
-            tools:listitem="@layout/item_cattle" />
+            tools:listitem="@layout/item_parent_cattle" />
 
         <TextView
             android:id="@+id/tvEmptyListMessage"

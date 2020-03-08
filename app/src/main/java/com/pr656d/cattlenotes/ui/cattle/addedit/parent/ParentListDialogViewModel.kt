@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.parent.GetParentListUseCase
 import com.pr656d.cattlenotes.shared.domain.result.Event
-import com.pr656d.cattlenotes.shared.domain.result.Result
 import com.pr656d.cattlenotes.shared.domain.result.Result.Success
 import javax.inject.Inject
 
@@ -15,16 +14,16 @@ class ParentListDialogViewModel @Inject constructor(
     private val getParentListUseCase: GetParentListUseCase
 ) : ViewModel(), ParentActionListener {
 
-    private val parentListResult = MutableLiveData<Result<List<Cattle>>>()
+    private val parentListResult = getParentListUseCase.observe()
 
     fun setTagNumber(value: Long) {
-        getParentListUseCase(value, parentListResult)
+        getParentListUseCase.execute(value)
     }
 
     private val _parentList = MediatorLiveData<List<Cattle>>()
     val parentList: LiveData<List<Cattle>> = _parentList
 
-    private val _loading = MutableLiveData<Boolean>(true)
+    private val _loading = MediatorLiveData<Boolean>().apply { value = true }
     val loading: LiveData<Boolean> = _loading
 
     private val _isEmpty = MediatorLiveData<Boolean>()
@@ -35,10 +34,14 @@ class ParentListDialogViewModel @Inject constructor(
             (it as? Success)?.data?.let { list ->
                 _parentList.postValue(list)
             }
-            _loading.postValue(false)
         }
+
         _isEmpty.addSource(parentList) {
             _isEmpty.value = it.isNullOrEmpty()
+        }
+
+        _loading.addSource(parentListResult) {
+            _loading.value = false
         }
     }
 

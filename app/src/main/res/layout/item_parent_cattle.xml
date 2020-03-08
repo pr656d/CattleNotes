@@ -22,9 +22,10 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{ () -> eventListener.parentSelected(cattle) }"
+        android:background="?attr/selectableItemBackgroundBorderless"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
-        app:rippleColor="?colorSecondary">
+        app:rippleColor="@color/secondaryColor">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -62,8 +63,8 @@
                 style="@style/AppTheme.Subtitle2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="?listPreferredItemPaddingEnd"
                 android:text="@{ cattle.name }"
+                android:layout_marginEnd="?listPreferredItemPaddingEnd"
                 android:textAppearance="?textAppearanceListItemSecondary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
