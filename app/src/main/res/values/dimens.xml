@@ -27,6 +27,8 @@
 
     <dimen name="a11y_min_touch_target">48dp</dimen>
 
+    <dimen name="parent_list_sheet_elevation">8dp</dimen>
+
     <!--  AddEditCattle  -->
     <dimen name="parent_list_bottom_sheet_peek_height">@dimen/a11y_min_touch_target</dimen>
 </resources>

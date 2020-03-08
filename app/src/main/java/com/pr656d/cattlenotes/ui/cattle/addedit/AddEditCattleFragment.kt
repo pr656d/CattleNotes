@@ -83,6 +83,7 @@ class AddEditCattleFragment : NavigationFragment() {
                     View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
                 } else {
                     goneUnless(binding.fabButtonSaveCattle, true)
+                    binding.editTextParent.isFocusableInTouchMode = false
                     View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
                 }
                 binding.layoutContainer.importantForAccessibility = state
