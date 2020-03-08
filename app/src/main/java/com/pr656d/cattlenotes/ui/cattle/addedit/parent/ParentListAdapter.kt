@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.ItemParentCattleBinding
+import com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleViewModel
 
 class ParentListAdapter(
-    private val parentListDialogViewModel: ParentListDialogViewModel
+    private val parentListDialogViewModel: AddEditCattleViewModel
 ): ListAdapter<Cattle, ParentListViewHolder>(CattleDiff) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ParentListViewHolder {
@@ -26,11 +27,11 @@ class ParentListAdapter(
 
 class ParentListViewHolder(
     private val binding: ItemParentCattleBinding,
-    private val parentListDialogViewModel: ParentListDialogViewModel
+    private val addEditCattleViewModel: AddEditCattleViewModel
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(data: Cattle) {
         binding.cattle = data
-        binding.eventListener = parentListDialogViewModel
+        binding.eventListener = addEditCattleViewModel
         binding.executePendingBindings()
     }
 }

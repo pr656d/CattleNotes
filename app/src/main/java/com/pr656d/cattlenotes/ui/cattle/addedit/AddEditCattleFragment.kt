@@ -1,7 +1,5 @@
 package com.pr656d.cattlenotes.ui.cattle.addedit
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +8,11 @@ import androidx.activity.addCallback
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -21,7 +22,7 @@ import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
 import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.NavigationFragment
-import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentListDialogFragment
+import com.pr656d.cattlenotes.utils.bindingadapters.goneUnless
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
 import javax.inject.Inject
@@ -30,28 +31,26 @@ class AddEditCattleFragment : NavigationFragment() {
 
     companion object {
         const val TAG = "AddCattleFragment"
-        const val SELECT_PARENT_REQUEST_CODE = 0
-        private const val EXTRA_PARENT_TAG_NUMBER = "extra_parent_tag_number"
-
-        /**
-         * Use only if you want to pass data back to this fragment by setting this fragment
-         * as target fragment.
-         */
-        fun newIntent(tagNumber: String): Intent = Intent().apply {
-            putExtra(EXTRA_PARENT_TAG_NUMBER, tagNumber)
-        }
     }
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val model by viewModels<AddEditCattleViewModel> { viewModelFactory }
+
     private lateinit var binding: FragmentAddEditCattleBinding
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
+
     private val args by navArgs<AddEditCattleFragmentArgs>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         args.cattle?.let {
             model.setCattle(Gson().fromJson(it, Cattle::class.java))
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            onBackPressed()
         }
     }
 
@@ -75,18 +74,35 @@ class AddEditCattleFragment : NavigationFragment() {
         if (args.cattle != null)
             binding.toolbar.setTitle(R.string.edit_cattle_details)
 
-        model.selectParent.observe(viewLifecycleOwner, EventObserver { tagNumber ->
-            with (binding.editTextParent) {
-                hideKeyboard(requireView())
-                focus()
+        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.parentList_sheet) as View)
 
-                ParentListDialogFragment.newInstance(tagNumber)
-                    .apply {
-                        setTargetFragment(this@AddEditCattleFragment, SELECT_PARENT_REQUEST_CODE)
-                    }
-                    .show(parentFragmentManager, TAG)
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                val state = if (newState == STATE_EXPANDED) {
+                    goneUnless(binding.fabButtonSaveCattle, false)
+                    View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+                } else {
+                    goneUnless(binding.fabButtonSaveCattle, true)
+                    View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+                }
+                binding.layoutContainer.importantForAccessibility = state
+                binding.appBarLayout.importantForAccessibility = state
             }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
+
+        model.selectingParent.observe(viewLifecycleOwner) {
+            bottomSheetBehavior.state = if (it) {
+                with (binding.editTextParent) {
+                    hideKeyboard(requireView())
+                    focus()
+                }
+                STATE_EXPANDED
+            } else {
+                STATE_HIDDEN
+            }
+        }
 
         model.showBackConfirmationDialog.observe(viewLifecycleOwner, EventObserver {
             MaterialAlertDialogBuilder(requireContext())
@@ -107,23 +123,25 @@ class AddEditCattleFragment : NavigationFragment() {
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()
         })
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            model.onBackPressed()
-        }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == SELECT_PARENT_REQUEST_CODE) {
-            when(resultCode) {
-                Activity.RESULT_OK -> {
-                    data?.extras?.getString(EXTRA_PARENT_TAG_NUMBER)?.let {
-                        model.setParent(it)
-                    }
-                }
+    private fun onBackPressed(): Boolean {
+        if (::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state == STATE_EXPANDED) {
+            // collapse or hide the sheet
+            if (bottomSheetBehavior.isHideable && bottomSheetBehavior.skipCollapsed) {
+                bottomSheetBehavior.state = STATE_HIDDEN
+            } else {
+                bottomSheetBehavior.state = STATE_COLLAPSED
             }
-            binding.editTextParent.isFocusableInTouchMode = false
+            return true
         }
+
+        if(::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state != STATE_EXPANDED) {
+            model.onBackPressed()
+            return true
+        }
+
+        return false
     }
 
     override fun onDestroyView() {

@@ -10,6 +10,9 @@ import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.local.db.Converters
@@ -85,6 +88,19 @@ fun String.toBreed(): Cattle.Breed = Converters().fromStringToBreed(this)
 fun String.toGroup(): Cattle.Group = Converters().fromStringToGroup(this)
 
 // end region
+
+// region viewmodel
+
+/**
+ * Like [Fragment.viewModelProvider] for Fragments that want a [ViewModel] scoped to the parent
+ * Fragment.
+ */
+inline fun <reified VM : ViewModel> Fragment.parentViewModelProvider(
+    provider: ViewModelProvider.Factory
+) =
+    ViewModelProvider(parentFragment!!, provider).get(VM::class.java)
+
+// region end
 
 // region Theme
 /**

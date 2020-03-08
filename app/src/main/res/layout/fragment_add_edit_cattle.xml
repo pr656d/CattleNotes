@@ -356,5 +356,18 @@
             android:onClick="@{() -> viewModel.save() }"
             android:transitionName="@string/tn_fabButton" />
 
+        <fragment
+            android:id="@+id/parentList_sheet"
+            android:name="com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/margin_micro"
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="@dimen/parent_list_bottom_sheet_peek_height"
+            app:behavior_skipCollapsed="true"
+            tools:layout="@layout/fragment_parent_list"/>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

@@ -3,6 +3,7 @@ package com.pr656d.cattlenotes.ui.cattle.addedit
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.shared.di.FragmentScoped
 import com.pr656d.cattlenotes.shared.di.ViewModelKey
+import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentListFragment
 import dagger.Binds
 import dagger.Module
 import dagger.android.AndroidInjector
@@ -24,11 +25,18 @@ internal abstract class AddEditCattleModule {
     internal abstract fun contributeAddEditCattleFragment(): AddEditCattleFragment
 
     /**
+     * Generates an [AndroidInjector] for the [ParentListFragment].
+     */
+    @FragmentScoped
+    @ContributesAndroidInjector
+    internal abstract fun contributeParentListFragment(): ParentListFragment
+
+    /**
      * The ViewModels are created by Dagger in a map. Via the @ViewModelKey, we define that we
      * want to get a [AddEditCattleViewModel] class.
      */
     @Binds
     @IntoMap
     @ViewModelKey(AddEditCattleViewModel::class)
-    internal abstract fun bindAddCattleViewModel(viewModel: AddEditCattleViewModel): ViewModel
+    abstract fun bindAddCattleViewModel(viewModel: AddEditCattleViewModel): ViewModel
 }

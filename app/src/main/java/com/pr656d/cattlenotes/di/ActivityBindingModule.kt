@@ -1,21 +1,20 @@
 package com.pr656d.cattlenotes.di
 
 import com.pr656d.cattlenotes.shared.di.ActivityScoped
+import com.pr656d.cattlenotes.ui.MainActivity
+import com.pr656d.cattlenotes.ui.MainBindingModule
+import com.pr656d.cattlenotes.ui.aboutapp.AboutAppModule
+import com.pr656d.cattlenotes.ui.breeding.active.ActiveBreedingModule
+import com.pr656d.cattlenotes.ui.breeding.addedit.AddEditBreedingModule
+import com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryModule
+import com.pr656d.cattlenotes.ui.cashflow.CashflowModule
+import com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleModule
+import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailModule
+import com.pr656d.cattlenotes.ui.cattle.list.CattleListBindingModule
 import com.pr656d.cattlenotes.ui.launch.LaunchBindingModule
 import com.pr656d.cattlenotes.ui.launch.LauncherActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.login.LoginBindingModule
-import com.pr656d.cattlenotes.ui.MainActivity
-import com.pr656d.cattlenotes.ui.MainBindingModule
-import com.pr656d.cattlenotes.ui.aboutapp.AboutAppModule
-import com.pr656d.cattlenotes.ui.cashflow.CashflowModule
-import com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleModule
-import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentListDialogModule
-import com.pr656d.cattlenotes.ui.breeding.active.ActiveBreedingModule
-import com.pr656d.cattlenotes.ui.breeding.addedit.AddEditBreedingModule
-import com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryModule
-import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailModule
-import com.pr656d.cattlenotes.ui.cattle.list.CattleListBindingModule
 import com.pr656d.cattlenotes.ui.milking.MilkingModule
 import com.pr656d.cattlenotes.ui.settings.SettingsModule
 import com.pr656d.cattlenotes.ui.timeline.TimelineModule
@@ -59,9 +58,7 @@ abstract class ActivityBindingModule {
             MilkingModule::class,
             CashflowModule::class,
             SettingsModule::class,
-            AboutAppModule::class,
-            // Others
-            ParentListDialogModule::class
+            AboutAppModule::class
         ]
     )
     internal abstract fun mainActivity(): MainActivity

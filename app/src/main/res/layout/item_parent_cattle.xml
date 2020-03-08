@@ -22,10 +22,9 @@
         android:clickable="true"
         android:focusable="true"
         android:onClick="@{ () -> eventListener.parentSelected(cattle) }"
-        android:background="?attr/selectableItemBackgroundBorderless"
         app:cardCornerRadius="0dp"
         app:cardElevation="0dp"
-        app:rippleColor="@color/secondaryColor">
+        app:rippleColor="?colorSecondary">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

@@ -6,12 +6,14 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.AddCattleUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.UpdateCattleUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.parent.GetParentListUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleTagNumberValidatorUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleValidator
 import com.pr656d.cattlenotes.shared.domain.result.Event
 import com.pr656d.cattlenotes.shared.domain.result.Result
 import com.pr656d.cattlenotes.shared.domain.result.Result.Error
 import com.pr656d.cattlenotes.shared.domain.result.Result.Success
+import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentActionListener
 import com.pr656d.cattlenotes.utils.toBreed
 import com.pr656d.cattlenotes.utils.toGroup
 import com.pr656d.cattlenotes.utils.toType
@@ -21,8 +23,9 @@ import javax.inject.Inject
 class AddEditCattleViewModel @Inject constructor(
     private val addCattleUseCase: AddCattleUseCase,
     private val updateCattleUseCase: UpdateCattleUseCase,
-    cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase
-) : ViewModel() {
+    cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase,
+    private val getParentListUseCase: GetParentListUseCase
+) : ViewModel(), ParentActionListener {
     private var oldCattle: Cattle? = null
 
     val tagNumber = MutableLiveData<String>()
@@ -63,9 +66,9 @@ class AddEditCattleViewModel @Inject constructor(
 
     val purchaseDate = MutableLiveData<LocalDate>()
 
-    private val _selectParent = MutableLiveData<Event<String>>()
-    val selectParent: LiveData<Event<String>>
-        get() = _selectParent
+    private val _selectingParent = MutableLiveData<Boolean>(false)
+    val selectingParent: LiveData<Boolean>
+        get() = _selectingParent
 
     private val _showBackConfirmationDialog = MutableLiveData<Event<Unit>>()
     val showBackConfirmationDialog: LiveData<Event<Unit>>
@@ -82,6 +85,17 @@ class AddEditCattleViewModel @Inject constructor(
     private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
     val showMessage: LiveData<Event<Int>>
         get() = _showMessage
+
+    private val _parentList = MediatorLiveData<List<Cattle>>()
+    val parentList: LiveData<List<Cattle>> = _parentList
+
+    private val _loadingParentList = MutableLiveData<Boolean>()
+    val loadingParentList: LiveData<Boolean> = _loadingParentList
+
+    private val _isEmptyParentList = MediatorLiveData<Boolean>()
+    val isEmptyParentList: LiveData<Boolean> = _isEmptyParentList
+
+    private val parentListResult = getParentListUseCase.observe()
 
     private val addUpdateCattleResult = MutableLiveData<Result<Unit>>()
 
@@ -110,6 +124,24 @@ class AddEditCattleViewModel @Inject constructor(
 
         _saving.addSource(addUpdateCattleResult) {
             _saving.value = false
+        }
+
+        _parentList.addSource(tagNumber) {
+            it.toLongOrNull()?.let { tagNumber ->
+                _loadingParentList.postValue(true)
+                getParentListUseCase.execute(tagNumber)
+            }
+        }
+
+        _isEmptyParentList.addSource(parentList) {
+            _isEmptyParentList.value = it.isNullOrEmpty()
+        }
+
+        _parentList.addSource(parentListResult) {
+            (it as? Success)?.data?.let { list ->
+                _parentList.postValue(list)
+                _loadingParentList.postValue(false)
+            }
         }
     }
 
@@ -192,11 +224,17 @@ class AddEditCattleViewModel @Inject constructor(
                 purchaseDate.value == null
     }
 
+    override fun parentSelected(cattle: Cattle) {
+        parent.postValue(cattle.tagNumber.toString())
+        _selectingParent.postValue(false)
+    }
+
     fun pickParent() = tagNumber.value.let {
-        if (it != null)
-            _selectParent.value = Event(it)
-        else
+        if (it != null) {
+            _selectingParent.postValue(true)
+        } else {
             _showMessage.value = Event(R.string.provide_tag_number)
+        }
     }
 
     fun onBackPressed() {

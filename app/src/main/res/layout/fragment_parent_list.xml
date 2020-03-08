@@ -7,13 +7,16 @@
 
         <variable
             name="viewModel"
-            type="com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentListDialogViewModel" />
+            type="com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleViewModel" />
 
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/parent_list_sheet"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        android:backgroundTint="?attr/colorSurface">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -55,7 +58,7 @@
             android:textAlignment="center"
             android:textColor="@color/grey"
             android:layout_gravity="center"
-            app:goneUnless="@{ viewModel.isEmpty }" />
+            app:goneUnless="@{ viewModel.isEmptyParentList }" />
 
         <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"
@@ -64,7 +67,7 @@
             android:indeterminate="true"
             app:layout_anchorGravity="bottom"
             app:layout_anchor="@id/appBarLayout"
-            app:goneUnless="@{viewModel.loading}"/>
+            app:goneUnless="@{viewModel.loadingParentList}"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

@@ -12,15 +12,16 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
+import com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleViewModel
 
 @BindingAdapter(value = ["parentListItems", "parentListViewModel"], requireAll = true)
 fun parentListItems(
     recyclerView: RecyclerView,
     list: List<Cattle>?,
-    parentListDialogViewModel: ParentListDialogViewModel
+    addEditCattleViewModel: AddEditCattleViewModel
 ) {
     if (recyclerView.adapter == null) {
-        recyclerView.adapter = ParentListAdapter(parentListDialogViewModel)
+        recyclerView.adapter = ParentListAdapter(addEditCattleViewModel)
     }
 
     if (list.isNullOrEmpty()) {
