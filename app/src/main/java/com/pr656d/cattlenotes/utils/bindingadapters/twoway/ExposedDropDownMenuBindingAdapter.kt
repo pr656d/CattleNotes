@@ -39,7 +39,7 @@ fun setListeners(
     view.setAdapter(
         ArrayAdapter(
             view.context,
-            R.layout.dropdown_menu_popup_item,
+            R.layout.item_dropdown_menu_popup,
             dropDownList
         )
     )

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
-            type="com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleViewModel" />
+            type="com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/parent_list_sheet"
+        android:id="@+id/parent_detail_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="@dimen/parent_list_sheet_elevation"
@@ -34,53 +34,45 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_close"
-                app:title="@string/select_parent" />
+                app:title="@string/parent_detail" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvParentList"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/layout_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
-            android:scrollbarStyle="insideOverlay"
+            android:layout_below="@+id/appBarLayout"
             android:scrollbars="vertical"
-            app:layoutManager="LinearLayoutManager"
+            android:scrollbarStyle="insideOverlay"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar2"
-            app:parentListItems="@{ viewModel.parentList }"
-            app:parentListViewModel="@{viewModel}"
-            app:showParentListDivider="@{true}"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_parent_cattle" />
+            app:layout_constraintTop_toBottomOf="@+id/progressBar">
 
-        <TextView
-            android:id="@+id/tvEmptyListMessage"
-            style="@style/AppTheme.Headline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/parent_list_empty"
-            android:textAlignment="center"
-            android:textColor="@color/grey"
-            app:goneUnless="@{ viewModel.isEmptyParentList }"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <include
+                android:id="@+id/include_cattle_detail"
+                layout="@layout/layout_cattle_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_normal"
+                bind:cattle="@{viewModel.parentCattle}" />
+
+        </androidx.core.widget.NestedScrollView>
 
         <ProgressBar
-            android:id="@+id/progressBar2"
+            android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            app:goneUnless="@{viewModel.loadingParentList}"
+            app:layout_anchorGravity="bottom"
+            app:layout_anchor="@id/appBarLayout"
+            app:goneUnless="@{ viewModel.loadingParent }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />

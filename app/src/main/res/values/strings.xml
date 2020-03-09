@@ -113,6 +113,7 @@
     <string name="error_unknown">Something went wrong. Try again.</string>
     <string name="error_fill_empty_fields">Fill required fields.</string>
     <string name="provide_tag_number">Provide tag number</string>
+    <string name="parent_detail">Parent detail</string>
 
     <!--  Add cattle  -->
     <string name="add_cattle">Add new cattle</string>

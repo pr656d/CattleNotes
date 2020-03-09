@@ -18,6 +18,10 @@
 
     <dimen name="list_divider_height">0.5dp</dimen>
 
+    <!-- Dialog -->
+    <dimen name="dialog_corner_radius">8dp</dimen>
+    <dimen name="dialogPreferredPadding">24dp</dimen>
+
     <!--  Dimensions for TextInputLayout  -->
     <dimen name="text_size_text_input_layout">16sp</dimen>
     <dimen name="box_stroke_width">1dp</dimen>
@@ -29,6 +33,8 @@
 
     <dimen name="parent_list_sheet_elevation">8dp</dimen>
 
+    <!--  CattleDetail  -->
+    <dimen name="parent_detail_bottom_sheet_peek_height">@dimen/a11y_min_touch_target</dimen>
     <!--  AddEditCattle  -->
     <dimen name="parent_list_bottom_sheet_peek_height">@dimen/a11y_min_touch_target</dimen>
 </resources>

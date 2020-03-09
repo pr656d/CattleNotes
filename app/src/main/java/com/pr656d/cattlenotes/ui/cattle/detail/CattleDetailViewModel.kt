@@ -9,6 +9,7 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.DeleteCattleUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.detail.GetCattleByIdUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.detail.GetParentDetailUseCase
 import com.pr656d.cattlenotes.shared.domain.result.Event
 import com.pr656d.cattlenotes.shared.domain.result.Result
 import com.pr656d.cattlenotes.shared.domain.result.Result.Error
@@ -17,15 +18,21 @@ import javax.inject.Inject
 
 class CattleDetailViewModel @Inject constructor(
     private val getCattleUseCase: GetCattleByIdUseCase,
+    private val getParentDetailUseCase: GetParentDetailUseCase,
     private val deleteCattleUseCase: DeleteCattleUseCase
 ) : ViewModel() {
 
     private val cattleResult = MutableLiveData<Result<Cattle>>()
+    private val parentResult = MediatorLiveData<Result<Cattle>>()
     private val deleteCattleResult = MutableLiveData<Result<Unit>>()
 
     private val _cattle = MediatorLiveData<Cattle>()
     val cattle: LiveData<Cattle>
         get() = _cattle
+
+    private val _parentCattle = MediatorLiveData<Cattle>()
+    val parentCattle: LiveData<Cattle>
+        get() = _parentCattle
 
     private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
     val showMessage: LiveData<Event<Int>>
@@ -58,6 +65,10 @@ class CattleDetailViewModel @Inject constructor(
     private val _loading = MediatorLiveData<Boolean>().apply { value = true }
     val loading: LiveData<Boolean>
         get() = _loading
+
+    private val _loadingParent = MediatorLiveData<Boolean>().apply { value = true }
+    val loadingParent: LiveData<Boolean>
+        get() = _loadingParent
 
     init {
         _cattle.addSource(cattleResult) { result ->
@@ -100,6 +111,22 @@ class CattleDetailViewModel @Inject constructor(
             (result as? Error)?.let {
                 showMessage()
             }
+        }
+
+        parentResult.addSource(cattle) { cattle ->
+            cattle.parent?.let {
+                getParentDetailUseCase(it, parentResult)
+            }
+        }
+
+        _parentCattle.addSource(parentResult) { result ->
+            (result as? Success)?.let {
+                _parentCattle.value = it.data
+            }
+        }
+
+        _loadingParent.addSource(parentResult) {
+            _loadingParent.value = false
         }
     }
 

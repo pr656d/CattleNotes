@@ -74,7 +74,7 @@ class AddEditCattleFragment : NavigationFragment() {
         if (args.cattle != null)
             binding.toolbar.setTitle(R.string.edit_cattle_details)
 
-        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.parentList_sheet) as View)
+        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.parent_list_sheet) as View)
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -95,10 +95,8 @@ class AddEditCattleFragment : NavigationFragment() {
 
         model.selectingParent.observe(viewLifecycleOwner) {
             bottomSheetBehavior.state = if (it) {
-                with (binding.editTextParent) {
-                    hideKeyboard(requireView())
-                    focus()
-                }
+                hideKeyboard(requireView())
+                binding.editTextParent.focus()
                 STATE_EXPANDED
             } else {
                 STATE_HIDDEN

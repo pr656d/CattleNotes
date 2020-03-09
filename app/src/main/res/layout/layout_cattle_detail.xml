@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="cattle"
+            type="com.pr656d.cattlenotes.data.model.Cattle" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view_cattle_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivCattle"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_cattle"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutTagNumber"
+            style="@style/Widget.CattleNOTES.AppTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:hint="@string/tag_number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivCattle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextTagNumber"
+                style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberSigned"
+                android:text="@{ String.valueOf(cattle.tagNumber) }" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutName"
+            style="@style/Widget.CattleNOTES.AppTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:hint="@string/name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutTagNumber">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextName"
+                style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{ cattle.name }" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/containerTypeBreed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:baselineAligned="true"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutName">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutType"
+                style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_micro"
+                android:layout_weight="1"
+                android:hint="@string/type">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextType"
+                    style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{ cattle.type.displayName }" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutBreed"
+                style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_micro"
+                android:layout_weight="1"
+                android:hint="@string/breed">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextBreed"
+                    style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{ cattle.breed.displayName }" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/containerGroupLactation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:baselineAligned="true"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/containerTypeBreed">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutGroup"
+                style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_micro"
+                android:layout_weight="1"
+                android:hint="@string/group">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextGroup"
+                    style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{ cattle.group.displayName }" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutLactation"
+                style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_micro"
+                android:layout_weight="1"
+                android:hint="@string/lactation">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextLactation"
+                    style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="@{ String.valueOf(cattle.lactation) }" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutDateOfBirth"
+            style="@style/Widget.CattleNOTES.AppTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:hint="@string/date_of_birth"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/containerGroupLactation"
+            app:startIconDrawable="@drawable/ic_date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextDateOfBirth"
+                style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dateText="@{ cattle.dateOfBirth }" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutParent"
+            style="@style/Widget.CattleNOTES.AppTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:hint="@string/parent"
+            app:endIconDrawable="@drawable/ic_arrow_right"
+            app:endIconMode="custom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutDateOfBirth">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextParent"
+                style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{ cattle.parent != null ? String.valueOf(cattle.parent) : null }" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/switchHomeBorn"
+            style="@style/Widget.CattleNOTES.MaterialCheckBox.Disabled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:checked="@{ cattle.homeBorn }"
+            android:text="@string/home_born"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutParent" />
+
+        <LinearLayout
+            android:id="@+id/containerPurchase"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:baselineAligned="true"
+            android:orientation="horizontal"
+            app:goneUnless="@{ !cattle.homeBorn }"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switchHomeBorn">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutPurchaseAmount"
+                style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_micro"
+                android:layout_weight="1"
+                android:hint="@string/purchase_amount">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextPurchaseAmount"
+                    style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:text="@{ cattle.purchaseAmount != null ? String.valueOf(cattle.purchaseAmount) : null }" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutPurchaseDate"
+                style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_micro"
+                android:layout_weight="1"
+                android:hint="@string/purchase_date"
+                app:startIconDrawable="@drawable/ic_date">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextPurchaseDate"
+                    style="@style/Widget.CattleNOTES.AppTextInputEditText.Disabled"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dateText="@{ cattle.purchaseDate }" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

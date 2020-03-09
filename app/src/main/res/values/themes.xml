@@ -12,6 +12,9 @@
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="fontFamily">@font/roboto_regular</item>
 
+        <!-- Dialogs -->
+        <item name="materialAlertDialogTheme">@style/AlertDialog.Theme</item>
+
         <!--  Window decor  -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/use_light_status</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -28,6 +31,15 @@
     <!--  LaunchTheme  -->
     <style name="LaunchTheme" parent="Base.AppTheme">
         <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
+
+    <style name="AlertDialog.Theme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarStyle">@style/AlertDialog.ButtonBar</item>
+        <item name="dialogCornerRadius">@dimen/dialog_corner_radius</item>
+        <item name="dialogPreferredPadding">@dimen/dialogPreferredPadding</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/AlertDialog.TitleText</item>
+        <item name="materialAlertDialogTitlePanelStyle">@style/AlertDialog.TitlePanel</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/AlertDialog.BodyText</item>
     </style>
 
     <!--  Firebase Theme  -->
@@ -67,7 +79,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="android:windowIsFloating">false</item>
-        <item name="background">?attr/colorSurface</item>
+        <item name="background">?attr/colorSurface</item>g
         <!--  Window decor  -->
         <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/use_light_status</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

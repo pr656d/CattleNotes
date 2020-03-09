@@ -45,7 +45,7 @@ class SettingsFragment : NavigationFragment() {
 
         model.navigateToThemeSelector.observe(viewLifecycleOwner, EventObserver {
             ThemeSettingDialogFragment.newInstance()
-                .show(requireFragmentManager(), null)
+                .show(parentFragmentManager, null)
         })
     }
 }

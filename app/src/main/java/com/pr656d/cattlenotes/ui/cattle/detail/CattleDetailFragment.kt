@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
@@ -30,9 +33,21 @@ class CattleDetailFragment : NavigationFragment() {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val args by navArgs<CattleDetailFragmentArgs>()
     private val model by viewModels<CattleDetailViewModel> { viewModelFactory }
+
     private lateinit var binding: FragmentCattleDetailBinding
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
+
+    private val args by navArgs<CattleDetailFragmentArgs>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback {
+            onBackPressed()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,6 +78,32 @@ class CattleDetailFragment : NavigationFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.parent_detail_sheet) as View)
+
+        bottomSheetBehavior.state = if (bottomSheetBehavior.skipCollapsed)
+            STATE_HIDDEN
+        else
+            STATE_COLLAPSED
+
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                val state = if (newState == STATE_EXPANDED) {
+                    View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+                } else {
+                    View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+                }
+                binding.layoutContainer.importantForAccessibility = state
+                binding.appBarLayout.importantForAccessibility = state
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
+        binding.includeCattleDetail.layoutParent.setEndIconOnClickListener {
+            if (model.parentCattle.value != null)
+                bottomSheetBehavior.state = STATE_EXPANDED
+        }
 
         model.launchActiveBreeding.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(toActiveBreeding(Gson().toJson(it)))
@@ -98,5 +139,20 @@ class CattleDetailFragment : NavigationFragment() {
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG).show()
         })
+    }
+
+    private fun onBackPressed(): Boolean {
+        return if (::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state == STATE_EXPANDED) {
+            // collapse or hide the sheet
+            if (bottomSheetBehavior.isHideable && bottomSheetBehavior.skipCollapsed) {
+                bottomSheetBehavior.state = STATE_HIDDEN
+            } else {
+                bottomSheetBehavior.state = STATE_COLLAPSED
+            }
+            true
+        } else {
+            findNavController().navigateUp()
+            true
+        }
     }
 }
