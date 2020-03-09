@@ -109,7 +109,7 @@
             app:goneUnless="@{ viewModel.loading }"
             app:layout_anchor="@id/appBarLayout"
             app:layout_anchorGravity="bottom"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
         <com.google.android.material.bottomappbar.BottomAppBar
             android:id="@+id/bottomAppBarCattleDetail"
