@@ -9,6 +9,7 @@ import com.pr656d.cattlenotes.shared.domain.cattle.addedit.UpdateCattleUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.parent.GetParentListUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleTagNumberValidatorUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleValidator
+import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleValidator.VALID_FIELD
 import com.pr656d.cattlenotes.shared.domain.result.Event
 import com.pr656d.cattlenotes.shared.domain.result.Result
 import com.pr656d.cattlenotes.shared.domain.result.Result.Error
@@ -27,6 +28,10 @@ class AddEditCattleViewModel @Inject constructor(
     private val getParentListUseCase: GetParentListUseCase
 ) : ViewModel(), ParentActionListener {
     private var oldCattle: Cattle? = null
+
+    private val _editing = MutableLiveData<Boolean>(false)
+    val editing: LiveData<Boolean>
+        get() = _editing
 
     val tagNumber = MutableLiveData<String>()
     private val _tagNumberErrorMessage = MediatorLiveData<@StringRes Int>()
@@ -58,7 +63,6 @@ class AddEditCattleViewModel @Inject constructor(
     val dob = MutableLiveData<LocalDate>()
 
     val parent = MutableLiveData<String>()
-    fun setParent(value: String?) { parent.value = value }
 
     val homeBorn = MutableLiveData<Boolean>()
 
@@ -166,6 +170,7 @@ class AddEditCattleViewModel @Inject constructor(
     }
 
     fun setCattle(cattle: Cattle) {
+        _editing.postValue(true)
         oldCattle = cattle
         bindData(cattle)
     }
@@ -199,15 +204,15 @@ class AddEditCattleViewModel @Inject constructor(
             dob.value,
             parent.value?.toLongOrNull()
         ).apply {
-            oldCattle?.id?.let { id = it }
+            oldCattle?.id!!.let { id = it }
         }
 
     private fun isAllFieldsValid(): Boolean {
-        return tagNumberErrorMessage.value == CattleValidator.VALID_FIELD &&
-                typeErrorMessage.value == CattleValidator.VALID_FIELD &&
-                breedErrorMessage.value == CattleValidator.VALID_FIELD &&
-                groupErrorMessage.value == CattleValidator.VALID_FIELD &&
-                lactationErrorMessage.value == CattleValidator.VALID_FIELD
+        return tagNumberErrorMessage.value == VALID_FIELD &&
+                typeErrorMessage.value == VALID_FIELD &&
+                breedErrorMessage.value == VALID_FIELD &&
+                groupErrorMessage.value == VALID_FIELD &&
+                lactationErrorMessage.value == VALID_FIELD
     }
 
     private fun isAllFieldsEmpty(): Boolean {
@@ -230,6 +235,10 @@ class AddEditCattleViewModel @Inject constructor(
     }
 
     fun pickParent() = tagNumber.value.let {
+        if (tagNumberErrorMessage.value != VALID_FIELD) {
+            _showMessage.value = Event(R.string.provide_valid_tag_number)
+            return
+        }
         if (it != null) {
             _selectingParent.postValue(true)
         } else {
@@ -237,11 +246,12 @@ class AddEditCattleViewModel @Inject constructor(
         }
     }
 
-    fun onBackPressed() {
-        if (isAllFieldsEmpty())
-            navigateUp()
-        else
-            _showBackConfirmationDialog.value = Event(Unit)
+    fun onBackPressed(deleteConfirmation : Boolean = false) {
+        when {
+            isAllFieldsEmpty() -> navigateUp()
+            deleteConfirmation -> navigateUp()
+            !deleteConfirmation -> _showBackConfirmationDialog.value = Event(Unit)
+        }
     }
 
     fun navigateUp() {

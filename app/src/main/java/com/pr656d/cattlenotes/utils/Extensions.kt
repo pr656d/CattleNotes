@@ -69,7 +69,8 @@ fun View.pickADate(
 
 fun hideKeyboard(view: View) {
     (view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-        .hideSoftInputFromWindow(view.windowToken, 0)
+        .hideSoftInputFromWindow(view.rootView.windowToken, 0)
+    view.clearFocus()
 }
 
 // region end

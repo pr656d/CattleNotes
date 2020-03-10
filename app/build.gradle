@@ -21,7 +21,7 @@ android {
         debug {
             versionNameSuffix = '-debug'
 //            minifyEnabled true  // To enable proguard
-//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
             minifyEnabled true  // To enable proguard

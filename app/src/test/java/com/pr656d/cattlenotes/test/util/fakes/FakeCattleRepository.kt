@@ -30,10 +30,6 @@ open class FakeCattleRepository(
         return fakeAppDatabase.cattleDao().getObservableAll()
     }
 
-    override fun getAllCattle(): List<Cattle> {
-        return fakeAppDatabase.cattleDao().getObservableAll().value ?: emptyList()
-    }
-
     override fun getCattleById(id: Long): Cattle? {
         return fakeAppDatabase.cattleDao().getCattleById(id)
     }

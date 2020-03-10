@@ -6,6 +6,7 @@ import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleRepository
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.DeleteCattleUseCase
 import com.pr656d.cattlenotes.shared.domain.cattle.detail.GetCattleByIdUseCase
+import com.pr656d.cattlenotes.shared.domain.cattle.detail.GetParentDetailUseCase
 import com.pr656d.cattlenotes.test.data.TestData
 import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
@@ -29,20 +30,35 @@ class CattleDetailViewModelTest {
     @get:Rule
     var syncTaskExecutorRule = SyncTaskExecutorRule()
 
+    private val cattleRepository = object : FakeCattleRepository() {
+        override fun getCattleById(id: Long): Cattle? {
+            return TestData.cattleList.firstOrNull { it.id == id }
+        }
+
+        override fun getCattleByTagNumber(tagNumber: Long): Cattle? {
+            return TestData.cattleList.firstOrNull { it.tagNumber == tagNumber }
+        }
+    }
+
+    private fun createCattleDetailViewModel(
+        repository: CattleRepository = cattleRepository,
+        getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(repository),
+        getParentDetailUseCase: GetParentDetailUseCase = GetParentDetailUseCase(repository),
+        deleteCattleUseCase: DeleteCattleUseCase = DeleteCattleUseCase(repository)
+    ): CattleDetailViewModel {
+        return CattleDetailViewModel(
+            getCattleByIdUseCase,
+            getParentDetailUseCase,
+            deleteCattleUseCase
+        )
+    }
+
     @Test
     fun fetchCattleIsCalledWithAvailableCattle_setCattle() {
         // Every time test runs we will get any random value from list
         val actualCattle = TestData.cattleList.random()
 
-        val cattleRepository = object : FakeCattleRepository() {
-            override fun getCattleById(id: Long): Cattle {
-                return actualCattle
-            }
-        }
-        val viewModel = CattleDetailViewModel(
-            GetCattleByIdUseCase(cattleRepository),
-            DeleteCattleUseCase(cattleRepository)
-        )
+        val viewModel = createCattleDetailViewModel()
 
         // Call the method
         viewModel.fetchCattle(actualCattle)
@@ -59,11 +75,9 @@ class CattleDetailViewModelTest {
         // Mock the repository
         val cattleRepository = mock<CattleRepository>()
 
-        val viewModel = CattleDetailViewModel(
-            GetCattleByIdUseCase(cattleRepository),
-            DeleteCattleUseCase(cattleRepository)
-        )
+        val viewModel = createCattleDetailViewModel(cattleRepository)
 
+        // Return cattle which will be modified later
         `when`(cattleRepository.getCattleById(oldCattle.id)).thenReturn(oldCattle)
 
         // First call for the method
@@ -83,6 +97,7 @@ class CattleDetailViewModelTest {
             purchaseDate = oldCattle.purchaseDate
         ).apply { id = oldCattle.id }
 
+        // Returns new updated cattle
         `when`(cattleRepository.getCattleById(oldCattle.id)).thenReturn(newCattle)
 
         /**
@@ -97,17 +112,7 @@ class CattleDetailViewModelTest {
 
     @Test
     fun deleteCattleIsCalledWithDeleteConfirmationIsFalse_launchDeleteConfirmation() {
-        val cattleRepository = object : FakeCattleRepository() {
-            override fun getCattleById(id: Long): Cattle {
-                // Returns any random cattle from the list
-                return TestData.cattleList.random()
-            }
-        }
-
-        val viewModel = CattleDetailViewModel(
-            GetCattleByIdUseCase(cattleRepository),
-            DeleteCattleUseCase(cattleRepository)
-        )
+        val viewModel = createCattleDetailViewModel()
 
         // Delete cattle confirmation called
         viewModel.deleteCattle()
@@ -121,16 +126,7 @@ class CattleDetailViewModelTest {
         // Returns any random cattle from the list
         val cattle = TestData.cattleList.random()
 
-        val cattleRepository = object : FakeCattleRepository() {
-            override fun getCattleById(id: Long): Cattle {
-                return cattle
-            }
-        }
-
-        val viewModel = CattleDetailViewModel(
-            GetCattleByIdUseCase(cattleRepository),
-            DeleteCattleUseCase(cattleRepository)
-        )
+        val viewModel = createCattleDetailViewModel()
 
         // Fetch cattle first
         viewModel.fetchCattle(cattle)
@@ -147,16 +143,7 @@ class CattleDetailViewModelTest {
         // Returns any random cattle from the list
         val cattle = TestData.cattleList.random()
 
-        val cattleRepository = object : FakeCattleRepository() {
-            override fun getCattleById(id: Long): Cattle {
-                return cattle
-            }
-        }
-
-        val viewModel = CattleDetailViewModel(
-            GetCattleByIdUseCase(cattleRepository),
-            DeleteCattleUseCase(cattleRepository)
-        )
+        val viewModel = createCattleDetailViewModel()
 
         // Fetch cattle first
         viewModel.fetchCattle(cattle)
@@ -173,16 +160,7 @@ class CattleDetailViewModelTest {
         // Returns any random cattle from the list
         val cattle = TestData.cattleList.random()
 
-        val cattleRepository = object : FakeCattleRepository() {
-            override fun getCattleById(id: Long): Cattle {
-                return cattle
-            }
-        }
-
-        val viewModel = CattleDetailViewModel(
-            GetCattleByIdUseCase(cattleRepository),
-            DeleteCattleUseCase(cattleRepository)
-        )
+        val viewModel = createCattleDetailViewModel()
 
         // Fetch cattle first
         viewModel.fetchCattle(cattle)
@@ -199,16 +177,7 @@ class CattleDetailViewModelTest {
         // Returns any random cattle from the list
         val cattle = TestData.cattleList.random()
 
-        val cattleRepository = object : FakeCattleRepository() {
-            override fun getCattleById(id: Long): Cattle {
-                return cattle
-            }
-        }
-
-        val viewModel = CattleDetailViewModel(
-            GetCattleByIdUseCase(cattleRepository),
-            DeleteCattleUseCase(cattleRepository)
-        )
+        val viewModel = createCattleDetailViewModel()
 
         // Fetch cattle first
         viewModel.fetchCattle(cattle)
@@ -225,16 +194,7 @@ class CattleDetailViewModelTest {
         // Returns any random cattle from the list
         val cattle = TestData.cattleList.random()
 
-        val cattleRepository = object : FakeCattleRepository() {
-            override fun getCattleById(id: Long): Cattle {
-                return cattle
-            }
-        }
-
-        val viewModel = CattleDetailViewModel(
-            GetCattleByIdUseCase(cattleRepository),
-            DeleteCattleUseCase(cattleRepository)
-        )
+        val viewModel = createCattleDetailViewModel()
 
         // Fetch cattle first
         viewModel.fetchCattle(cattle)
@@ -257,9 +217,8 @@ class CattleDetailViewModelTest {
 
     @Test
     fun deleteCattleIsCalled_showMessageOnError() {
-        val viewModel = CattleDetailViewModel(
-            GetCattleByIdUseCase(FakeCattleRepository()),
-            FailingDeleteCattleUseCase
+        val viewModel = createCattleDetailViewModel(
+            deleteCattleUseCase = FailingDeleteCattleUseCase
         )
 
         val cattle = TestData.cattle1
@@ -284,9 +243,8 @@ class CattleDetailViewModelTest {
 
     @Test
     fun fetchCattleIsCalled_showMessageOnError() {
-        val viewModel = CattleDetailViewModel(
-            FailingGetCattleUseCase,
-            DeleteCattleUseCase(FakeCattleRepository())
+        val viewModel = createCattleDetailViewModel(
+            getCattleByIdUseCase = FailingGetCattleUseCase
         )
 
         val cattle = TestData.cattle1
@@ -300,9 +258,8 @@ class CattleDetailViewModelTest {
 
     @Test
     fun fetchCattleIsCalled_navigateUpOnError() {
-        val viewModel = CattleDetailViewModel(
-            FailingGetCattleUseCase,
-            DeleteCattleUseCase(FakeCattleRepository())
+        val viewModel = createCattleDetailViewModel(
+            getCattleByIdUseCase = FailingGetCattleUseCase
         )
 
         val cattle = TestData.cattle1
@@ -312,5 +269,19 @@ class CattleDetailViewModelTest {
 
         val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
         assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
+    }
+
+    @Test
+    fun cattleIsLoaded_hasParentThenFetchParentDetail() {
+        val viewModel = createCattleDetailViewModel()
+
+        val cattle = TestData.cattle2
+        val parentCattle = TestData.cattle1 // Parent of cattle2
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle)
+
+        val parentDetail = LiveDataTestUtil.getValue(viewModel.parentCattle)
+        assertThat(parentCattle, isEqualTo(parentDetail))
     }
 }

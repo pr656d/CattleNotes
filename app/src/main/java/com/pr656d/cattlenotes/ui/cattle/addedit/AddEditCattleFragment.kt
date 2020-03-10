@@ -22,7 +22,6 @@ import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
 import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.NavigationFragment
-import com.pr656d.cattlenotes.utils.bindingadapters.goneUnless
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
 import javax.inject.Inject
@@ -71,27 +70,31 @@ class AddEditCattleFragment : NavigationFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (args.cattle != null)
-            binding.toolbar.setTitle(R.string.edit_cattle_details)
+        model.editing.observe(viewLifecycleOwner) {
+            if (it)
+                binding.toolbar.setTitle(R.string.edit_cattle_details)
+            else
+                binding.toolbar.setTitle(R.string.add_cattle)
+        }
 
         bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.parent_list_sheet) as View)
 
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                val state = if (newState == STATE_EXPANDED) {
-                    goneUnless(binding.fabButtonSaveCattle, false)
-                    View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
-                } else {
-                    goneUnless(binding.fabButtonSaveCattle, true)
-                    binding.editTextParent.isFocusableInTouchMode = false
-                    View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+        bottomSheetBehavior.addBottomSheetCallback(
+            object : BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    val state = if (newState == STATE_EXPANDED) {
+                        View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+                    } else {
+                        binding.editTextParent.isFocusableInTouchMode = false
+                        View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+                    }
+                    binding.layoutContainer.importantForAccessibility = state
+                    binding.appBarLayout.importantForAccessibility = state
                 }
-                binding.layoutContainer.importantForAccessibility = state
-                binding.appBarLayout.importantForAccessibility = state
-            }
 
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-        })
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+            }
+        )
 
         model.selectingParent.observe(viewLifecycleOwner) {
             bottomSheetBehavior.state = if (it) {
@@ -108,7 +111,7 @@ class AddEditCattleFragment : NavigationFragment() {
                 .setTitle(R.string.back_pressed_message)
                 .setMessage(R.string.changes_not_saved_message)
                 .setPositiveButton(R.string.yes) { _, _ ->
-                    model.navigateUp()
+                    model.onBackPressed(true)
                 }
                 .setNegativeButton(R.string.no, null)
                 .create()
