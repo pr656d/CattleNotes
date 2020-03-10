@@ -35,6 +35,21 @@
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_arrow_back"
                 tools:title="@string/add_new_breeding"/>
+
+            <!--
+            ~ TODO : Use better progress indicator
+            ~ Material progress indicator is planned
+            ~ Reference : https://material.io/components/progress-indicators/
+            -->
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                app:layout_anchorGravity="bottom"
+                app:layout_anchor="@id/appBarLayout"
+                app:goneUnless="@{viewModel.saving}" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -50,14 +65,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingStart="@dimen/padding_normal"
-                android:paddingTop="@dimen/padding_normal"
-                android:paddingEnd="@dimen/padding_normal">
+                android:paddingTop="@dimen/padding_normal">
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_micro"
+                    android:layout_marginHorizontal="@dimen/margin_normal"
                     android:clickable="false">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -140,276 +153,283 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/switchActiveBreedingStatus"
-                    style="@style/Widget.CattleNOTES.MaterialSwitch"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:layout_marginTop="@dimen/margin_normal"
-                    android:checked="@={ viewModel.active }"
-                    android:text="@string/mark_as_active" />
+                    android:layout_marginHorizontal="@dimen/margin_normal">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutAiDate"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/artificial_insemination"
-                    app:helperText="@string/required">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextAiDate"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/switchActiveBreedingStatus"
+                        style="@style/Widget.CattleNOTES.MaterialSwitch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:dateText="@={ viewModel.aiDate }"
-                        app:onLongClickRemoveText="@{true}"
-                        app:onClickShowDatePicker="@{true}" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:checked="@={ viewModel.active }"
+                        android:text="@string/mark_as_active" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutAiDidBy"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/did_by">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextAiDidBy"
-                        style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutAiDate"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={ viewModel.didBy }" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/artificial_insemination"
+                        app:helperText="@string/required">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutAiBullName"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/bull_name">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextAiDate"
+                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:dateText="@={ viewModel.aiDate }"
+                            app:onLongClickRemoveText="@{true}"
+                            app:onClickShowDatePicker="@{true}" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextAiBullName"
-                        style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutAiDidBy"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={ viewModel.bullName }" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/did_by">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutStrawCode"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/straw_code">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextAiDidBy"
+                            style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={ viewModel.didBy }" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextStrawCode"
-                        style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutAiBullName"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@={ viewModel.strawCode }" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/bull_name">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutRepeatHeatDateExpected"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/repeat_heat"
-                    app:helperText="@string/expected">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextAiBullName"
+                            style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={ viewModel.bullName }" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextRepeatHeatDateExpected"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
-                        app:dateText="@{ viewModel.repeatHeatExpectedOn }"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <include
-                    android:id="@+id/containerRepeatHeatStatus"
-                    layout="@layout/tri_state_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    bind:status="@={ viewModel.repeatHeatStatus }"
-                    bind:title="@{ @string/repeat_heat_status }" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutRepeatHeatDateActual"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/repeat_heat"
-                    app:goneUnless="@{ viewModel.repeatHeatStatus }"
-                    app:helperText="@string/done_on"
-                    tools:visibility="visible">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextRepeatHeatDateActual"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutStrawCode"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:dateText="@={ viewModel.repeatHeatDoneOn }"
-                        app:onLongClickRemoveText="@{true}"
-                        app:onClickShowDatePicker="@{true}"
-                        app:resetText="@{ !viewModel.repeatHeatStatus }" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/straw_code">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutPregnancyCheckDateExpected"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/pregnancy_check"
-                    app:helperText="@string/expected">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextStrawCode"
+                            style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={ viewModel.strawCode }" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextPregnancyCheckDateExpected"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
-                        app:dateText="@{ viewModel.pregnancyCheckExpectedOn }"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <include
-                    android:id="@+id/containerPregnancyCheckStatus"
-                    layout="@layout/tri_state_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    bind:status="@={ viewModel.pregnancyCheckStatus }"
-                    bind:title="@{ @string/pregnancy_check_status }" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutPregnancyCheckDateActual"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/pregnancy_check"
-                    android:visibility="visible"
-                    app:goneUnless="@{ viewModel.pregnancyCheckStatus }"
-                    app:helperText="@string/done_on"
-                    tools:visibility="visible">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextPregnancyCheckDateActual"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutRepeatHeatDateExpected"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:dateText="@={ viewModel.pregnancyCheckDoneOn }"
-                        app:onLongClickRemoveText="@{true}"
-                        app:onClickShowDatePicker="@{true}"
-                        app:resetText="@{ !viewModel.pregnancyCheckStatus }" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/repeat_heat"
+                        app:helperText="@string/expected">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutDryOffDateExpected"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/dry_off"
-                    app:helperText="@string/expected">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextRepeatHeatDateExpected"
+                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            app:dateText="@{ viewModel.repeatHeatExpectedOn }"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextDryOffDateExpected"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
-                        app:dateText="@{ viewModel.dryOffExpectedOn }"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <include
-                    android:id="@+id/containerDryOffStatus"
-                    layout="@layout/tri_state_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    bind:status="@={ viewModel.dryOffStatus }"
-                    bind:title="@{ @string/dry_off_status }" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutDryOffDateActual"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/dry_off"
-                    android:visibility="visible"
-                    app:goneUnless="@{ viewModel.dryOffStatus }"
-                    app:helperText="@string/done_on"
-                    tools:visibility="visible">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextDryOffDateActual"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
+                    <include
+                        android:id="@+id/containerRepeatHeatStatus"
+                        layout="@layout/tri_state_radio_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:dateText="@={ viewModel.dryOffDoneOn }"
-                        app:onLongClickRemoveText="@{true}"
-                        app:onClickShowDatePicker="@{true}"
-                        app:resetText="@{ !viewModel.dryOffStatus }" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="@dimen/margin_small"
+                        bind:status="@={ viewModel.repeatHeatStatus }"
+                        bind:title="@{ @string/repeat_heat_status }" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutCalvingDateExpected"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/calving_date"
-                    app:helperText="@string/expected">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextCalvingDateExpected"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
-                        app:dateText="@{ viewModel.calvingExpectedOn }"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <include
-                    android:id="@+id/containerCalvingStatus"
-                    layout="@layout/tri_state_radio_group"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    bind:status="@={ viewModel.calvingStatus }"
-                    bind:title="@{ @string/calving_status }" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutCalvingDateActual"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:hint="@string/calving_date"
-                    android:visibility="visible"
-                    app:goneUnless="@{ viewModel.calvingStatus }"
-                    app:helperText="@string/done_on"
-                    tools:visibility="visible">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editTextCalvingDateActual"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutRepeatHeatDateActual"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:dateText="@={ viewModel.calvingDoneOn }"
-                        app:onLongClickRemoveText="@{true}"
-                        app:onClickShowDatePicker="@{true}"
-                        app:resetText="@{ !viewModel.calvingStatus }" />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/repeat_heat"
+                        app:goneUnless="@{ viewModel.repeatHeatStatus }"
+                        app:helperText="@string/done_on"
+                        tools:visibility="visible">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextRepeatHeatDateActual"
+                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:dateText="@={ viewModel.repeatHeatDoneOn }"
+                            app:onLongClickRemoveText="@{true}"
+                            app:onClickShowDatePicker="@{true}"
+                            app:resetText="@{ !viewModel.repeatHeatStatus }" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutPregnancyCheckDateExpected"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/pregnancy_check"
+                        app:helperText="@string/expected">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextPregnancyCheckDateExpected"
+                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            app:dateText="@{ viewModel.pregnancyCheckExpectedOn }"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <include
+                        android:id="@+id/containerPregnancyCheckStatus"
+                        layout="@layout/tri_state_radio_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        bind:status="@={ viewModel.pregnancyCheckStatus }"
+                        bind:title="@{ @string/pregnancy_check_status }" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutPregnancyCheckDateActual"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/pregnancy_check"
+                        android:visibility="visible"
+                        app:goneUnless="@{ viewModel.pregnancyCheckStatus }"
+                        app:helperText="@string/done_on"
+                        tools:visibility="visible">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextPregnancyCheckDateActual"
+                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:dateText="@={ viewModel.pregnancyCheckDoneOn }"
+                            app:onLongClickRemoveText="@{true}"
+                            app:onClickShowDatePicker="@{true}"
+                            app:resetText="@{ !viewModel.pregnancyCheckStatus }" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutDryOffDateExpected"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/dry_off"
+                        app:helperText="@string/expected">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextDryOffDateExpected"
+                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            app:dateText="@{ viewModel.dryOffExpectedOn }"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <include
+                        android:id="@+id/containerDryOffStatus"
+                        layout="@layout/tri_state_radio_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        bind:status="@={ viewModel.dryOffStatus }"
+                        bind:title="@{ @string/dry_off_status }" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutDryOffDateActual"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/dry_off"
+                        android:visibility="visible"
+                        app:goneUnless="@{ viewModel.dryOffStatus }"
+                        app:helperText="@string/done_on"
+                        tools:visibility="visible">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextDryOffDateActual"
+                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:dateText="@={ viewModel.dryOffDoneOn }"
+                            app:onLongClickRemoveText="@{true}"
+                            app:onClickShowDatePicker="@{true}"
+                            app:resetText="@{ !viewModel.dryOffStatus }" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutCalvingDateExpected"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/calving_date"
+                        app:helperText="@string/expected">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextCalvingDateExpected"
+                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            app:dateText="@{ viewModel.calvingExpectedOn }"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <include
+                        android:id="@+id/containerCalvingStatus"
+                        layout="@layout/tri_state_radio_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        bind:status="@={ viewModel.calvingStatus }"
+                        bind:title="@{ @string/calving_status }" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/layoutCalvingDateActual"
+                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:hint="@string/calving_date"
+                        android:visibility="visible"
+                        app:goneUnless="@{ viewModel.calvingStatus }"
+                        app:helperText="@string/done_on"
+                        tools:visibility="visible">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextCalvingDateActual"
+                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:dateText="@={ viewModel.calvingDoneOn }"
+                            app:onLongClickRemoveText="@{true}"
+                            app:onClickShowDatePicker="@{true}"
+                            app:resetText="@{ !viewModel.calvingStatus }" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
                 <Space
                     android:layout_width="0dp"
@@ -420,15 +440,6 @@
                     app:layout_constraintTop_toBottomOf="@+id/containerPurchase" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:layout_anchorGravity="bottom"
-            app:layout_anchor="@id/appBarLayout"
-            app:goneUnless="@{viewModel.saving}" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabButtonSaveBreeding"

@@ -74,6 +74,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!--
+            ~ TODO : Use better progress indicator
+            ~ Material progress indicator is planned
+            ~ Reference : https://material.io/components/progress-indicators/
+            -->
         <ProgressBar
             android:id="@+id/progressBar2"
             style="?android:attr/progressBarStyleHorizontal"

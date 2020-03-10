@@ -31,6 +31,21 @@
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_menu"
                 tools:title="@string/add_cattle"/>
+
+            <!--
+            ~ TODO : Use better progress indicator
+            ~ Material progress indicator is planned
+            ~ Reference : https://material.io/components/progress-indicators/
+            -->
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                app:layout_anchorGravity="bottom"
+                app:layout_anchor="@id/appBarLayout"
+                app:goneUnless="@{viewModel.saving}"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -334,15 +349,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:layout_anchorGravity="bottom"
-            app:layout_anchor="@id/appBarLayout"
-            app:goneUnless="@{viewModel.saving}"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabButtonSaveCattle"
