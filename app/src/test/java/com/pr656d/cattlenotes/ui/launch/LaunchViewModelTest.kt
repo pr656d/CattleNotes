@@ -9,9 +9,10 @@ import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
-import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThat
 import org.junit.Rule
 import org.junit.Test
+import org.hamcrest.Matchers.equalTo as isEqualTo
 
 /**
  * Unit tests for the [LaunchViewModel].
@@ -30,7 +31,7 @@ class LaunchViewModelTest {
     fun notCompletedLogIn_navigatesToLoginActivity() {
         // Given that user is *not* logged in.
         val prefs = mock<PreferenceStorage> {
-            on { loginCompleted }.doReturn(false)
+            on { loginCompleted }.thenReturn(false)
         }
 
         val getLoginCompletedUseCase = GetLoginCompletedUseCase(prefs)
@@ -39,7 +40,7 @@ class LaunchViewModelTest {
         // When launchDestination is observed
         // Then verify user is navigated to the login activity
         val navigateEvent = LiveDataTestUtil.getValue(viewModel.launchDestination)
-        assertEquals(LOGIN_ACTIVITY, navigateEvent?.getContentIfNotHandled())
+        assertThat(LOGIN_ACTIVITY, isEqualTo(navigateEvent?.getContentIfNotHandled()))
     }
 
     @Test
@@ -55,6 +56,6 @@ class LaunchViewModelTest {
         // When launchDestination is observed
         // Then verify user is navigated to the login activity
         val navigateEvent = LiveDataTestUtil.getValue(viewModel.launchDestination)
-        assertEquals(MAIN_ACTIVITY, navigateEvent?.getContentIfNotHandled())
+        assertThat(MAIN_ACTIVITY, isEqualTo(navigateEvent?.getContentIfNotHandled()))
     }
 }

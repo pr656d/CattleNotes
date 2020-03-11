@@ -2,6 +2,7 @@ package com.pr656d.cattlenotes.ui.cattle.detail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.data.repository.CattleRepository
 import com.pr656d.cattlenotes.shared.domain.cattle.addedit.DeleteCattleUseCase
@@ -12,10 +13,9 @@ import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Assert.assertTrue
+import org.junit.Assert.assertNotNull
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.`when`
 import org.hamcrest.Matchers.equalTo as isEqualTo
 
 /**
@@ -78,7 +78,7 @@ class CattleDetailViewModelTest {
         val viewModel = createCattleDetailViewModel(cattleRepository)
 
         // Return cattle which will be modified later
-        `when`(cattleRepository.getCattleById(oldCattle.id)).thenReturn(oldCattle)
+        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(oldCattle)
 
         // First call for the method
         viewModel.fetchCattle(oldCattle)
@@ -98,7 +98,7 @@ class CattleDetailViewModelTest {
         ).apply { id = oldCattle.id }
 
         // Returns new updated cattle
-        `when`(cattleRepository.getCattleById(oldCattle.id)).thenReturn(newCattle)
+        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(newCattle)
 
         /**
          * Second call for the method
@@ -229,7 +229,7 @@ class CattleDetailViewModelTest {
         viewModel.deleteCattle(true)
 
         val showMessage  = LiveDataTestUtil.getValue(viewModel.showMessage)
-        assertTrue(showMessage?.getContentIfNotHandled() != null)
+        assertNotNull(showMessage?.getContentIfNotHandled())
     }
 
     /**
@@ -253,7 +253,7 @@ class CattleDetailViewModelTest {
         viewModel.fetchCattle(cattle)
 
         val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
-        assertTrue(showMessage?.getContentIfNotHandled() != null)
+        assertNotNull(showMessage?.getContentIfNotHandled())
     }
 
     @Test

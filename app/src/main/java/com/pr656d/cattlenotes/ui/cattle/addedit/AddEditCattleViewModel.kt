@@ -91,13 +91,16 @@ class AddEditCattleViewModel @Inject constructor(
         get() = _showMessage
 
     private val _parentList = MediatorLiveData<List<Cattle>>()
-    val parentList: LiveData<List<Cattle>> = _parentList
+    val parentList: LiveData<List<Cattle>>
+        get() = _parentList
 
     private val _loadingParentList = MutableLiveData<Boolean>()
-    val loadingParentList: LiveData<Boolean> = _loadingParentList
+    val loadingParentList: LiveData<Boolean>
+        get() = _loadingParentList
 
     private val _isEmptyParentList = MediatorLiveData<Boolean>()
-    val isEmptyParentList: LiveData<Boolean> = _isEmptyParentList
+    val isEmptyParentList: LiveData<Boolean>
+        get() = _isEmptyParentList
 
     private val parentListResult = getParentListUseCase.observe()
 
@@ -116,7 +119,7 @@ class AddEditCattleViewModel @Inject constructor(
 
         _navigateUp.addSource(addUpdateCattleResult) {
             (it as? Success)?.let {
-                _navigateUp.value = Event(Unit)
+                navigateUp()
             }
         }
 
@@ -204,7 +207,7 @@ class AddEditCattleViewModel @Inject constructor(
             dob.value,
             parent.value?.toLongOrNull()
         ).apply {
-            oldCattle?.id!!.let { id = it }
+            oldCattle?.id?.let { id = it }
         }
 
     private fun isAllFieldsValid(): Boolean {
@@ -246,15 +249,15 @@ class AddEditCattleViewModel @Inject constructor(
         }
     }
 
-    fun onBackPressed(deleteConfirmation : Boolean = false) {
+    fun onBackPressed(backConfirmation : Boolean = false) {
         when {
             isAllFieldsEmpty() -> navigateUp()
-            deleteConfirmation -> navigateUp()
-            !deleteConfirmation -> _showBackConfirmationDialog.value = Event(Unit)
+            backConfirmation -> navigateUp()
+            !backConfirmation -> _showBackConfirmationDialog.value = Event(Unit)
         }
     }
 
-    fun navigateUp() {
+    private fun navigateUp() {
         _navigateUp.value = Event(Unit)
     }
 }

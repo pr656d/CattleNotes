@@ -6,10 +6,12 @@ import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeThemedActivityDelegate
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate
-import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito.mock
+import org.hamcrest.Matchers.equalTo as isEqualTo
 
 /**
  * Unit tests for [MainViewModel].
@@ -43,7 +45,7 @@ class MainViewModelTest {
 
         val redirectToLoginActivity = LiveDataTestUtil.getValue(viewModel.redirectToLoginScreen)
 
-        assertEquals(Unit, redirectToLoginActivity?.getContentIfNotHandled())
+        assertThat(Unit, isEqualTo(redirectToLoginActivity?.getContentIfNotHandled()))
     }
 
     @Test
@@ -55,7 +57,7 @@ class MainViewModelTest {
 
         val redirectToLoginActivity = LiveDataTestUtil.getValue(viewModel.redirectToLoginScreen)
 
-        assertEquals(null, redirectToLoginActivity?.getContentIfNotHandled())
+        assertNull(redirectToLoginActivity?.getContentIfNotHandled())
     }
 
 }

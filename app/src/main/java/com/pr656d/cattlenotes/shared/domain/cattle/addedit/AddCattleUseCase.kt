@@ -5,7 +5,7 @@ import com.pr656d.cattlenotes.data.repository.CattleRepository
 import com.pr656d.cattlenotes.shared.domain.UseCase
 import javax.inject.Inject
 
-class AddCattleUseCase @Inject constructor(
+open class AddCattleUseCase @Inject constructor(
     private val cattleRepository: CattleRepository
 ) : UseCase<Cattle, Unit>() {
     override fun execute(parameters: Cattle) {

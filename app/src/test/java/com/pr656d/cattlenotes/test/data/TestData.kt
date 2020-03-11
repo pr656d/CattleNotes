@@ -39,7 +39,7 @@ object TestData {
         type = Animal.Type.COW, breed = Cattle.Breed.HF, group = Cattle.Group.DRY, lactation = 1,
         homeBorn = false, purchaseAmount = null, purchaseDate = LocalDate.ofEpochDay(1562606700),
         dateOfBirth = LocalDate.ofEpochDay(1562606700), parent = null
-    ).apply { id = 6 }
+    ).apply { id = 5 }
 
     val cattleList = listOf(cattle1, cattle2, cattle3, cattle4, cattle5)
 
