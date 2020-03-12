@@ -2,7 +2,7 @@ package com.pr656d.cattlenotes.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.firebase.auth.FirebaseUser
-import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
+import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeThemedActivityDelegate
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate

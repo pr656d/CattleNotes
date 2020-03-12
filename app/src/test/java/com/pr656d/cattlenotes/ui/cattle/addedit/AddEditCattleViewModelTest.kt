@@ -3,7 +3,7 @@ package com.pr656d.cattlenotes.ui.cattle.addedit
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
+import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
 import com.pr656d.model.Animal

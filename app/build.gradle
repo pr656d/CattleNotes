@@ -46,6 +46,7 @@ android {
 dependencies {
     implementation project(':shared')
     testImplementation project(':test-shared')
+    testImplementation project(':androidTest-shared')
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // UI
