@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pr656d.cattlenotes
+package com.pr656d.cattlenotes.rules
 
 import androidx.test.core.app.ApplicationProvider
 import com.pr656d.shared.data.prefs.SharedPreferenceStorage

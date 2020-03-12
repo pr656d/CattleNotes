@@ -29,6 +29,9 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
     companion object {
         const val TAG = "MainActivity"
 
+        /** Key for an int extra defining the initial navigation target. */
+        const val EXTRA_NAVIGATION_ID = "extra.NAVIGATION_ID"
+
         private const val NAV_ID_NONE = -1
 
         private val TOP_LEVEL_DESTINATIONS = setOf(
@@ -85,12 +88,31 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
             drawer.setDrawerLockMode(lockMode)
         }
 
+        if (savedInstanceState == null) {
+            // default showing cattle list
+            val initialNavId = intent.getIntExtra(EXTRA_NAVIGATION_ID, R.id.cattleListScreen)
+            navigation.setCheckedItem(initialNavId) // doesn't trigger listener
+            navigateTo(initialNavId)
+        }
+
         model.theme.observe(this, Observer(::updateForTheme))
 
         model.redirectToLoginScreen.observe(this, EventObserver {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         })
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        currentNavId = navigation.checkedItem?.itemId ?: NAV_ID_NONE
+    }
+
+    private fun navigateTo(navId: Int) {
+        if (navId == currentNavId) {
+            return // user tapped the current item
+        }
+        navController.navigate(navId)
     }
 
     override fun onBackPressed() {

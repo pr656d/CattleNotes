@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.pr656d.cattlenotes
+package com.pr656d.cattlenotes.rules
 
 import android.content.Intent
 import androidx.test.rule.ActivityTestRule
@@ -28,6 +28,8 @@ class MainActivityTestRule(
 ) : ActivityTestRule<MainActivity>(MainActivity::class.java) {
 
     override fun getActivityIntent(): Intent {
-        return Intent(Intent.ACTION_MAIN)
+        return Intent(Intent.ACTION_MAIN).apply {
+            putExtra(MainActivity.EXTRA_NAVIGATION_ID, initialNavId)
+        }
     }
 }
