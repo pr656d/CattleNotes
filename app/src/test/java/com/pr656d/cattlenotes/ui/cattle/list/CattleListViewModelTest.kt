@@ -3,13 +3,14 @@ package com.pr656d.cattlenotes.ui.cattle.list
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pr656d.cattlenotes.data.model.Cattle
-import com.pr656d.cattlenotes.shared.domain.cattle.list.LoadObservableCattleListUseCase
-import com.pr656d.cattlenotes.test.data.TestData
 import com.pr656d.cattlenotes.test.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
+import com.pr656d.model.Cattle
+import com.pr656d.shared.domain.cattle.list.LoadObservableCattleListUseCase
+import com.pr656d.test.TestData
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
 import org.hamcrest.Matchers.equalTo as isEqualTo
@@ -114,7 +115,7 @@ class CattleListViewModelTest {
 
         val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
 
-        val isEmpty = LiveDataTestUtil.getValue(viewModel.isEmpty) ?: true
-        assertThat(isEmpty, isEqualTo(false))
+        val isEmpty = LiveDataTestUtil.getValue(viewModel.isEmpty)!!
+        assertFalse(isEmpty)
     }
 }

@@ -3,9 +3,9 @@ package com.pr656d.cattlenotes.test.util.fakes
 import androidx.room.DatabaseConfiguration
 import androidx.room.InvalidationTracker
 import androidx.sqlite.db.SupportSQLiteOpenHelper
-import com.pr656d.cattlenotes.data.local.db.AppDatabase
-import com.pr656d.cattlenotes.data.local.db.BreedingDao
-import com.pr656d.cattlenotes.data.local.db.CattleDao
+import com.pr656d.shared.data.db.AppDatabase
+import com.pr656d.shared.data.db.BreedingDao
+import com.pr656d.shared.data.db.CattleDao
 import org.mockito.Mockito
 
 class FakeAppDatabase : AppDatabase() {

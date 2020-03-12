@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Cattle NOTES</string>
+
+    <!--  Cattle details  -->
+    <string name="error_save">Could not save cattle. Try again.</string>
+    <string name="error_unknown">Something went wrong. Try again.</string>
+    <string name="error_fill_empty_fields">Fill required fields.</string>
+    <string name="error_provide_tag_number">Provide tag number</string>
+    <string name="error_provide_valid_tag_number">Provide valid tag number</string>
+
+    <!--  Edit cattle details  -->
+    <string name="error_already_exists">Already exists</string>
+    <string name="error_empty_field">This field can\'t be empty</string>
+    <string name="error_contain_digits_only">This field should contain digits only</string>
+    <string name="error_length_exceed">Length exceed</string>
+
+</resources>

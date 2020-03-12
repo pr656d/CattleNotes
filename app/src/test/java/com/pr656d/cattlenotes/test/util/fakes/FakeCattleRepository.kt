@@ -1,8 +1,8 @@
 package com.pr656d.cattlenotes.test.util.fakes
 
 import androidx.lifecycle.LiveData
-import com.pr656d.cattlenotes.data.model.Cattle
-import com.pr656d.cattlenotes.data.repository.CattleRepository
+import com.pr656d.model.Cattle
+import com.pr656d.shared.data.cattle.CattleRepository
 
 /**
  * Fake of [CattleRepository].

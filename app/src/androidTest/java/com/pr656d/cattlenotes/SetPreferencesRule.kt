@@ -17,7 +17,7 @@
 package com.pr656d.cattlenotes
 
 import androidx.test.core.app.ApplicationProvider
-import com.pr656d.cattlenotes.data.local.prefs.SharedPreferenceStorage
+import com.pr656d.shared.data.prefs.SharedPreferenceStorage
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
@@ -29,7 +29,8 @@ class SetPreferencesRule : TestWatcher() {
 
     override fun starting(description: Description?) {
         super.starting(description)
-        SharedPreferenceStorage(ApplicationProvider.getApplicationContext()).apply {
+        SharedPreferenceStorage(ApplicationProvider.getApplicationContext())
+            .apply {
             onboardingCompleted = true
             loginCompleted = true
         }

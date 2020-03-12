@@ -1,9 +1,9 @@
 package com.pr656d.cattlenotes.ui.cattle.list
 
 import androidx.lifecycle.*
-import com.pr656d.cattlenotes.data.model.Cattle
-import com.pr656d.cattlenotes.shared.domain.cattle.list.LoadObservableCattleListUseCase
-import com.pr656d.cattlenotes.shared.domain.result.Event
+import com.pr656d.model.Cattle
+import com.pr656d.shared.domain.cattle.list.LoadObservableCattleListUseCase
+import com.pr656d.shared.domain.result.Event
 import javax.inject.Inject
 
 class CattleListViewModel @Inject constructor(

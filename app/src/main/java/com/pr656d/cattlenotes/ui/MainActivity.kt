@@ -18,9 +18,9 @@ import com.google.android.material.navigation.NavigationView
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityMainBinding
 import com.pr656d.cattlenotes.databinding.NavHeaderBinding
-import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.utils.updateForTheme
+import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 

@@ -1,0 +1,74 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        debug {
+
+        }
+
+        release {
+//            minifyEnabled false
+//            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    api project(":model")
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    // Architecture Components
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
+    kapt "androidx.lifecycle:lifecycle-common-java8:$rootProject.lifecycleVersion"
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+
+    // JetPack
+    implementation "androidx.core:core-ktx:$rootProject.corektxVersion"
+
+    // ThreeTenBP for the shared module only. Date and time API for Java.
+    testImplementation "org.threeten:threetenbp:$rootProject.threetenbpVersion"
+    compileOnly "org.threeten:threetenbp:$rootProject.threetenbpVersion:no-tzdb"
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlinVersion"
+
+    // Multidex
+    implementation "androidx.multidex:multidex:$rootProject.multidexVersion"
+
+    // Dagger
+    implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+
+    // Timber
+    implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+
+    // Local Unit tests
+    testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation "org.mockito:mockito-core:$rootProject.mockitoVersion"
+    testImplementation "com.nhaarman:mockito-kotlin:$rootProject.mockitoKotlinVersion"
+    testImplementation "org.hamcrest:hamcrest-library:$rootProject.hamcrestVersion"
+    testImplementation "androidx.arch.core:core-testing:$rootProject.archTestingVersion"
+}

@@ -4,11 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
-import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.MainActivity
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.login.LoginActivity
+import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 

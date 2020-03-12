@@ -10,8 +10,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentSettingsBinding
-import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.NavigationFragment
+import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
 class SettingsFragment : NavigationFragment() {

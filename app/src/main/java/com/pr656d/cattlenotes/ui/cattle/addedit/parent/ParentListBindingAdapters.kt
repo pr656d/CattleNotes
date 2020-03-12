@@ -11,8 +11,8 @@ import androidx.core.view.marginStart
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleViewModel
+import com.pr656d.model.Cattle
 
 @BindingAdapter(value = ["parentListItems", "parentListViewModel"], requireAll = true)
 fun parentListItems(

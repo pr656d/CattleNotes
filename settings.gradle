@@ -1,2 +1,5 @@
 include ':app'
 rootProject.name='Cattle NOTES'
+include ':shared'
+include ':model'
+include ':test-shared'

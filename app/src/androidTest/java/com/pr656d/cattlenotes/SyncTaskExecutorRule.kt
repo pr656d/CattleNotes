@@ -16,8 +16,8 @@
 
 package com.pr656d.cattlenotes
 
-import com.pr656d.cattlenotes.shared.domain.internal.DefaultScheduler
-import com.pr656d.cattlenotes.shared.domain.internal.SyncScheduler
+import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.domain.internal.SyncScheduler
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 

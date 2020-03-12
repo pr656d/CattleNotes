@@ -3,14 +3,14 @@ package com.pr656d.cattlenotes.ui.breeding.addedit
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.data.model.BreedingCycle
-import com.pr656d.cattlenotes.data.model.BreedingCycle.ArtificialInseminationInfo
-import com.pr656d.cattlenotes.data.model.BreedingCycle.BreedingEvent
-import com.pr656d.cattlenotes.data.model.Cattle
-import com.pr656d.cattlenotes.data.repository.BreedingDataRepository
-import com.pr656d.cattlenotes.shared.domain.result.Event
-import com.pr656d.cattlenotes.shared.log.Logger
 import com.pr656d.cattlenotes.utils.BreedingUtil
+import com.pr656d.model.BreedingCycle
+import com.pr656d.model.BreedingCycle.ArtificialInseminationInfo
+import com.pr656d.model.BreedingCycle.BreedingEvent
+import com.pr656d.model.Cattle
+import com.pr656d.shared.data.breeding.BreedingDataRepository
+import com.pr656d.shared.domain.result.Event
+import com.pr656d.shared.log.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -113,7 +113,12 @@ class AddEditBreedingViewModel @Inject constructor(
             cattle.type,
             active.value ?: false,
             aiDate.value?.let {
-                ArtificialInseminationInfo(it, didBy.value, bullName.value, strawCode.value)
+                ArtificialInseminationInfo(
+                    it,
+                    didBy.value,
+                    bullName.value,
+                    strawCode.value
+                )
             },
             repeatHeatExpectedOn.value?.let {
                 BreedingEvent(it, repeatHeatStatus.value, repeatHeatDoneOn.value)

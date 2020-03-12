@@ -1,6 +1,5 @@
 package com.pr656d.cattlenotes.di
 
-import com.pr656d.cattlenotes.shared.di.ActivityScoped
 import com.pr656d.cattlenotes.ui.MainActivity
 import com.pr656d.cattlenotes.ui.MainBindingModule
 import com.pr656d.cattlenotes.ui.aboutapp.AboutAppModule
@@ -18,6 +17,7 @@ import com.pr656d.cattlenotes.ui.login.LoginBindingModule
 import com.pr656d.cattlenotes.ui.milking.MilkingModule
 import com.pr656d.cattlenotes.ui.settings.SettingsModule
 import com.pr656d.cattlenotes.ui.timeline.TimelineModule
+import com.pr656d.shared.di.ActivityScoped
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

@@ -109,11 +109,6 @@
     <string name="show_all_breeding">Show all breeding</string>
     <string name="parent_helper_text">Press and hold to remove</string>
     <string name="show_active_breeding">Show active breeding</string>
-    <string name="error_save">Could not save cattle. Try again.</string>
-    <string name="error_unknown">Something went wrong. Try again.</string>
-    <string name="error_fill_empty_fields">Fill required fields.</string>
-    <string name="provide_tag_number">Provide tag number</string>
-    <string name="provide_valid_tag_number">Provide valid tag number</string>
     <string name="parent_detail">Parent detail</string>
 
     <!--  Add cattle  -->
@@ -125,10 +120,6 @@
     <string name="menu_item_edit">Edit</string>
     <string name="menu_item_delete">Delete</string>
     <string name="delete_cattle_message">Delete cattle?</string>
-    <string name="error_already_exists">Already exists</string>
-    <string name="error_empty_field">This field can\'t be empty</string>
-    <string name="error_contain_digits_only">This field should contain digits only</string>
-    <string name="error_length_exceed">Length exceed</string>
 
     <!-- Breeding  -->
     <string name="mark_as_active">Mark as active</string>

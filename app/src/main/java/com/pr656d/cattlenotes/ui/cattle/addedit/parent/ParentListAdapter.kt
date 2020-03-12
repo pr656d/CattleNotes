@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.ItemParentCattleBinding
 import com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleViewModel
+import com.pr656d.model.Cattle
 
 class ParentListAdapter(
     private val parentListDialogViewModel: AddEditCattleViewModel

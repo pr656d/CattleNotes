@@ -3,21 +3,21 @@ package com.pr656d.cattlenotes.ui.cattle.addedit
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.data.model.Cattle
-import com.pr656d.cattlenotes.shared.domain.cattle.addedit.AddCattleUseCase
-import com.pr656d.cattlenotes.shared.domain.cattle.addedit.UpdateCattleUseCase
-import com.pr656d.cattlenotes.shared.domain.cattle.addedit.parent.GetParentListUseCase
-import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleTagNumberValidatorUseCase
-import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleValidator
-import com.pr656d.cattlenotes.shared.domain.cattle.addedit.validator.CattleValidator.VALID_FIELD
-import com.pr656d.cattlenotes.shared.domain.result.Event
-import com.pr656d.cattlenotes.shared.domain.result.Result
-import com.pr656d.cattlenotes.shared.domain.result.Result.Error
-import com.pr656d.cattlenotes.shared.domain.result.Result.Success
 import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentActionListener
 import com.pr656d.cattlenotes.utils.toBreed
 import com.pr656d.cattlenotes.utils.toGroup
 import com.pr656d.cattlenotes.utils.toType
+import com.pr656d.model.Cattle
+import com.pr656d.shared.domain.cattle.addedit.AddCattleUseCase
+import com.pr656d.shared.domain.cattle.addedit.UpdateCattleUseCase
+import com.pr656d.shared.domain.cattle.addedit.parent.GetParentListUseCase
+import com.pr656d.shared.domain.cattle.validator.CattleTagNumberValidatorUseCase
+import com.pr656d.shared.domain.cattle.validator.CattleValidator
+import com.pr656d.shared.domain.cattle.validator.CattleValidator.VALID_FIELD
+import com.pr656d.shared.domain.result.Event
+import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.Result.Error
+import com.pr656d.shared.domain.result.Result.Success
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
@@ -239,13 +239,13 @@ class AddEditCattleViewModel @Inject constructor(
 
     fun pickParent() = tagNumber.value.let {
         if (tagNumberErrorMessage.value != VALID_FIELD) {
-            _showMessage.value = Event(R.string.provide_valid_tag_number)
+            _showMessage.value = Event(R.string.error_provide_valid_tag_number)
             return
         }
         if (it != null) {
             _selectingParent.postValue(true)
         } else {
-            _showMessage.value = Event(R.string.provide_tag_number)
+            _showMessage.value = Event(R.string.error_provide_tag_number)
         }
     }
 

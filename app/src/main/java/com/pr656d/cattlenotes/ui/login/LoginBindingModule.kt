@@ -1,7 +1,7 @@
 package com.pr656d.cattlenotes.ui.login
 
 import androidx.lifecycle.ViewModel
-import com.pr656d.cattlenotes.shared.di.ViewModelKey
+import com.pr656d.shared.di.ViewModelKey
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

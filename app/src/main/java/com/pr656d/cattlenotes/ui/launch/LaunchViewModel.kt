@@ -4,12 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
-import com.pr656d.cattlenotes.shared.domain.launch.GetLoginCompletedUseCase
-import com.pr656d.cattlenotes.shared.domain.result.Event
-import com.pr656d.cattlenotes.shared.domain.result.Result
-import com.pr656d.cattlenotes.shared.domain.result.Result.Success
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
+import com.pr656d.shared.domain.launch.GetLoginCompletedUseCase
+import com.pr656d.shared.domain.result.Event
+import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.Result.Success
 import javax.inject.Inject
 
 class LaunchViewModel @Inject constructor(

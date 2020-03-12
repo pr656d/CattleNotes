@@ -18,12 +18,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.data.model.Cattle
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
-import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
+import com.pr656d.model.Cattle
+import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
 class AddEditCattleFragment : NavigationFragment() {

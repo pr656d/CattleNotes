@@ -6,14 +6,14 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.data.model.Cattle
-import com.pr656d.cattlenotes.shared.domain.cattle.addedit.DeleteCattleUseCase
-import com.pr656d.cattlenotes.shared.domain.cattle.detail.GetCattleByIdUseCase
-import com.pr656d.cattlenotes.shared.domain.cattle.detail.GetParentDetailUseCase
-import com.pr656d.cattlenotes.shared.domain.result.Event
-import com.pr656d.cattlenotes.shared.domain.result.Result
-import com.pr656d.cattlenotes.shared.domain.result.Result.Error
-import com.pr656d.cattlenotes.shared.domain.result.Result.Success
+import com.pr656d.model.Cattle
+import com.pr656d.shared.domain.cattle.addedit.DeleteCattleUseCase
+import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
+import com.pr656d.shared.domain.cattle.detail.GetParentDetailUseCase
+import com.pr656d.shared.domain.result.Event
+import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.Result.Error
+import com.pr656d.shared.domain.result.Result.Success
 import javax.inject.Inject
 
 class CattleDetailViewModel @Inject constructor(

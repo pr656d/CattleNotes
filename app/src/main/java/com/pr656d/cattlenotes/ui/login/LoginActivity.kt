@@ -11,10 +11,10 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityLoginBinding
-import com.pr656d.cattlenotes.shared.domain.result.EventObserver
-import com.pr656d.cattlenotes.shared.utils.display.Toaster
 import com.pr656d.cattlenotes.ui.MainActivity
+import com.pr656d.cattlenotes.utils.display.Toaster
 import com.pr656d.cattlenotes.utils.updateForTheme
+import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 

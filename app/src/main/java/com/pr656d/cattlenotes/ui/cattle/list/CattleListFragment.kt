@@ -9,10 +9,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.pr656d.cattlenotes.databinding.FragmentCattleListBinding
-import com.pr656d.cattlenotes.shared.domain.result.EventObserver
 import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.cattle.list.CattleListFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.cattle.list.CattleListFragmentDirections.Companion.toCattleDetail
+import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
 class CattleListFragment : NavigationFragment() {

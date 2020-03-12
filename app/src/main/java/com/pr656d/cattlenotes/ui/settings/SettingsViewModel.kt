@@ -4,13 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
-import com.pr656d.cattlenotes.data.model.Theme
-import com.pr656d.cattlenotes.shared.domain.result.Event
-import com.pr656d.cattlenotes.shared.domain.result.Result
-import com.pr656d.cattlenotes.shared.domain.result.Result.Success
-import com.pr656d.cattlenotes.shared.domain.settings.GetAvailableThemesUseCase
-import com.pr656d.cattlenotes.shared.domain.settings.GetThemeUseCase
-import com.pr656d.cattlenotes.shared.domain.settings.SetThemeUseCase
+import com.pr656d.model.Theme
+import com.pr656d.shared.domain.result.Event
+import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.Result.Success
+import com.pr656d.shared.domain.settings.GetAvailableThemesUseCase
+import com.pr656d.shared.domain.settings.GetThemeUseCase
+import com.pr656d.shared.domain.settings.SetThemeUseCase
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(

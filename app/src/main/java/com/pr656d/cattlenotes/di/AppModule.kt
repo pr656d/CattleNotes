@@ -4,11 +4,11 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.CattleNotesApplication
-import com.pr656d.cattlenotes.data.local.db.AppDatabase
-import com.pr656d.cattlenotes.data.local.prefs.PreferenceStorage
-import com.pr656d.cattlenotes.data.local.prefs.SharedPreferenceStorage
-import com.pr656d.cattlenotes.data.repository.CattleDataRepository
-import com.pr656d.cattlenotes.data.repository.CattleRepository
+import com.pr656d.shared.data.cattle.CattleDataRepository
+import com.pr656d.shared.data.cattle.CattleRepository
+import com.pr656d.shared.data.db.AppDatabase
+import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.SharedPreferenceStorage
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -40,7 +40,9 @@ class AppModule {
     @Singleton
     @Provides
     fun provideCattleDataRepository(appDatabase: AppDatabase): CattleRepository {
-        return CattleDataRepository(appDatabase)
+        return CattleDataRepository(
+            appDatabase
+        )
     }
 
 }

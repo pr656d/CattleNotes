@@ -6,7 +6,7 @@
     <data>
         <variable
             name="cattle"
-            type="com.pr656d.cattlenotes.data.model.Cattle" />
+            type="com.pr656d.model.Cattle" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
