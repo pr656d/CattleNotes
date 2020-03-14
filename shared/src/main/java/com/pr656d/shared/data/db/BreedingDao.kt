@@ -11,25 +11,24 @@ import com.pr656d.model.BreedingCycle
 interface BreedingDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(breedingCycle: BreedingCycle)
+    fun insert(breedingCycle: BreedingCycle)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(breedingCycle: List<BreedingCycle>)
+    fun insertAll(breedingCycle: List<BreedingCycle>)
 
     /**
      * Internally Room will handle it on background thread.
      * If any change happens observer will be called by Room.
      */
-    @Query("SELECT * FROM breeding_cycle ORDER BY cattle_tag_number")
-    fun getAll(): LiveData<List<BreedingCycle>>
+    @Query("SELECT * FROM breeding_cycle ORDER BY cattle_id")
+    fun getObservableAll(): LiveData<List<BreedingCycle>>
 
     @Query("SELECT * FROM breeding_cycle WHERE cattle_id == :cattleId")
-    suspend fun getBreedingCycleByCattleId(cattleId: Long): BreedingCycle?
+    fun getByCattleId(cattleId: Long): BreedingCycle?
 
     @Update
-    suspend fun update(breedingCycle: BreedingCycle): Int
+    fun update(breedingCycle: BreedingCycle): Int
 
     @Delete
-    suspend fun delete(vararg breedingCycle: BreedingCycle)
-
+    fun delete(vararg breedingCycle: BreedingCycle)
 }

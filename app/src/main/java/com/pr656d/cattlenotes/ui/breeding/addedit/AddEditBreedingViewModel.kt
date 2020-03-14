@@ -8,22 +8,41 @@ import com.pr656d.model.BreedingCycle
 import com.pr656d.model.BreedingCycle.ArtificialInseminationInfo
 import com.pr656d.model.BreedingCycle.BreedingEvent
 import com.pr656d.model.Cattle
-import com.pr656d.shared.data.breeding.BreedingDataRepository
+import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
+import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
+import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.shared.domain.result.Event
-import com.pr656d.shared.log.Logger
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.Result.Error
+import com.pr656d.shared.domain.result.Result.Success
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class AddEditBreedingViewModel @Inject constructor(
-    private val breedingDataRepository: BreedingDataRepository
+    private val addBreedingUseCase: AddBreedingUseCase,
+    private val updateBreedingUseCase: UpdateBreedingUseCase,
+    private val getCattleByIdUseCase: GetCattleByIdUseCase
 ) : ViewModel() {
+
+    private var oldBreedingCycle: BreedingCycle? = null
+
+    private val _editing = MutableLiveData<Boolean>(false)
+
+    val editing: LiveData<Boolean>
+        get() = _editing
+
+    private val addUpdateBreedingResult = MutableLiveData<Result<Unit>>()
+
+    private val getCattleResult = MutableLiveData<Result<Cattle>>()
+
+    val cattle = MediatorLiveData<Cattle>()
 
     val active = MutableLiveData<Boolean>(false)
 
-    val aiDate = MutableLiveData<LocalDate>()
+    val aiDate = MutableLiveData<LocalDate?>(null)
+
+    val hasAiDate: LiveData<Boolean>
+        get() = aiDate.map { it?.let { true } ?: false }
 
     val didBy = MutableLiveData<String>()
 
@@ -31,86 +50,122 @@ class AddEditBreedingViewModel @Inject constructor(
 
     val strawCode = MutableLiveData<String>()
 
-    val repeatHeatExpectedOn: LiveData<LocalDate> = aiDate.map {
-        BreedingUtil.getExpectedRepeatHeatDate(it)
+    val repeatHeatExpectedOn: LiveData<LocalDate?> = aiDate.map { date ->
+        date?.let { BreedingUtil.getExpectedRepeatHeatDate(it) }
     }
 
-    val repeatHeatStatus = MutableLiveData<Boolean?>()
+    val repeatHeatStatus = MediatorLiveData<Boolean?>()
 
     val repeatHeatDoneOn = MutableLiveData<LocalDate>()
 
-    val pregnancyCheckExpectedOn: LiveData<LocalDate> = aiDate.map {
-        BreedingUtil.getExpectedPregnancyCheckDate(it)
+    val pregnancyCheckExpectedOn: LiveData<LocalDate?> = aiDate.map { date ->
+        date?.let { BreedingUtil.getExpectedPregnancyCheckDate(it) }
     }
 
-    val pregnancyCheckStatus = MutableLiveData<Boolean?>()
+    val pregnancyCheckStatus = MediatorLiveData<Boolean?>()
 
     val pregnancyCheckDoneOn = MutableLiveData<LocalDate>()
 
-    val dryOffExpectedOn : LiveData<LocalDate> = aiDate.map {
-        BreedingUtil.getExpectedDryOffDate(it)
+    val dryOffExpectedOn : LiveData<LocalDate?> = aiDate.map { date ->
+        date?.let { BreedingUtil.getExpectedDryOffDate(it) }
     }
 
-    val dryOffStatus = MutableLiveData<Boolean?>()
+    val dryOffStatus = MediatorLiveData<Boolean?>()
 
     val dryOffDoneOn = MutableLiveData<LocalDate>()
 
-    val calvingExpectedOn: LiveData<LocalDate> = aiDate.map {
-        BreedingUtil.getExpectedCalvingDate(it)
+    val calvingExpectedOn: LiveData<LocalDate?> = aiDate.map { date ->
+        date?.let { BreedingUtil.getExpectedCalvingDate(it) }
     }
 
-    val calvingStatus = MutableLiveData<Boolean?>()
+    val calvingStatus = MediatorLiveData<Boolean?>()
 
     val calvingDoneOn = MutableLiveData<LocalDate>()
 
-    private val _saving = MutableLiveData<Boolean>(false)
+    private val _saving = MediatorLiveData<Boolean>().apply { value = false }
     val saving: LiveData<Boolean> = _saving
 
-    private val _showMessage = MutableLiveData<@StringRes Int>()
-    val showMessage: LiveData<Event<Int>> = _showMessage.map { Event(it) }
+    private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
+    val showMessage: LiveData<Event<Int>>
+        get() = _showMessage
 
     private val _showBackConfirmationDialog = MutableLiveData<Event<Unit>>()
     val showBackConfirmationDialog: LiveData<Event<Unit>>
         get() = _showBackConfirmationDialog
 
-    private val _navigateUp = MutableLiveData<Event<Unit>>()
+    private val _navigateUp = MediatorLiveData<Event<Unit>>()
     val navigateUp: LiveData<Event<Unit>>
         get() = _navigateUp
 
-    fun save(cattle: Cattle) {
-        val toggleSaving: suspend () -> Unit = {
-            withContext(Dispatchers.Main) {
-                _saving.value = _saving.value!!.not()
+    init {
+        cattle.addSource(getCattleResult) { result ->
+            (result as? Success)?.data?.let {
+                cattle.value = it
             }
         }
 
+        repeatHeatStatus.addSource(aiDate) {
+            if (it == null) repeatHeatStatus.value = null
+        }
+
+        pregnancyCheckStatus.addSource(repeatHeatStatus) {
+            if (it == null) pregnancyCheckStatus.value = null
+        }
+
+        dryOffStatus.addSource(pregnancyCheckStatus) {
+            if (it == null) dryOffStatus.value = null
+        }
+
+        calvingStatus.addSource(dryOffStatus) {
+            if (it == null) calvingStatus.value = null
+        }
+
+        _saving.addSource(addUpdateBreedingResult) {
+            _saving.value = false
+        }
+
+        _navigateUp.addSource(addUpdateBreedingResult) {
+            (it as? Success)?.let {
+                navigateUp()
+            }
+        }
+
+        _showMessage.addSource(addUpdateBreedingResult) {
+            (it as? Error)?.let {
+                _showMessage.value = Event(R.string.retry)
+            }
+        }
+    }
+
+    fun setBreedingCycle(breedingCycle: BreedingCycle) {
+        _editing.value = true
+        oldBreedingCycle = breedingCycle
+        getCattleByIdUseCase(breedingCycle.cattleId, getCattleResult)
+        breedingCycle.bindData()
+    }
+
+    fun save(cattle: Cattle) {
         if (aiDate.value != null) {
-            val breedingCycle = getBreedingCycle(cattle)
-            viewModelScope.launch(Dispatchers.IO) {
-                try {
-                    toggleSaving()
-                    breedingDataRepository.addBreeding(breedingCycle)
-                    toggleSaving()
-                    withContext(Dispatchers.Main) {
-                        navigateUp()
-                    }
-                } catch (e: Exception) {
-                    Logger.d(AddEditBreedingFragment.TAG, "${e.printStackTrace()}")
-                    if (_saving.value!!)
-                        toggleSaving()
-                    _showMessage.postValue(R.string.retry)
-                }
+            val newBreedingCycle = getBreedingCycle(cattle)
+            if (oldBreedingCycle != newBreedingCycle) {
+                _saving.value = true
+
+                if (oldBreedingCycle == null)
+                    addBreedingUseCase(newBreedingCycle, addUpdateBreedingResult)
+                else
+                    updateBreedingUseCase(newBreedingCycle, addUpdateBreedingResult)
+
+            } else {
+                navigateUp()
             }
         } else {
-            _showMessage.value = R.string.provide_ai_date
+            _showMessage.value = Event(R.string.provide_ai_date)
         }
     }
 
     private fun getBreedingCycle(cattle: Cattle): BreedingCycle =
         BreedingCycle(
             cattle.id,
-            cattle.tagNumber,
-            cattle.type,
             active.value ?: false,
             aiDate.value?.let {
                 ArtificialInseminationInfo(
@@ -134,11 +189,39 @@ class AddEditBreedingViewModel @Inject constructor(
             }
         )
 
-    fun onBackPressed() {
+    private fun BreedingCycle.bindData() {
+        // AI
+        aiDate.value = artificialInsemination?.date
+        didBy.value = artificialInsemination?.didBy
+        bullName.value = artificialInsemination?.bullName
+        strawCode.value = artificialInsemination?.strawCode
+        // Repeat Heat
+        repeatHeatStatus.value = repeatHeat?.status
+        repeatHeatDoneOn.value = repeatHeat?.doneOn
+        // Pregnancy Check
+        pregnancyCheckStatus.value = pregnancyCheck?.status
+        pregnancyCheckDoneOn.value = pregnancyCheck?.doneOn
+        // Dry Off
+        dryOffStatus.value = dryOff?.status
+        dryOffDoneOn.value = dryOff?.doneOn
+        // Calving
+        calvingStatus.value = calving?.status
+        calvingDoneOn.value = calving?.doneOn
+    }
+
+    fun onBackPressed(backConfirmation: Boolean = false) {
+        when {
+            aiDate.value == null -> navigateUp()
+            backConfirmation -> navigateUp()
+            else -> showBackConfirmation()
+        }
+    }
+
+    private fun showBackConfirmation() {
         _showBackConfirmationDialog.value = Event(Unit)
     }
 
-    fun navigateUp() {
+    private fun navigateUp() {
         _navigateUp.value = Event(Unit)
     }
 }

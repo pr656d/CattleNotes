@@ -107,7 +107,7 @@ fun setListeners(
                 if (!view.text.isNullOrEmpty()) {
                     // Show dialog.
                     MaterialAlertDialogBuilder(context)
-                        .setMessage(context.getString(R.string.remove_text, view.hint.toString()))
+                        .setTitle(context.getString(R.string.remove_text, view.hint.toString()))
                         .setPositiveButton(R.string.yes) { _, _ ->
                             view.text = null
                             view.isFocusableInTouchMode = false

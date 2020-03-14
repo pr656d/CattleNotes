@@ -6,6 +6,18 @@
         <variable
             name="title"
             type="String" />
+
+        <variable
+            name="negativeVisibility"
+            type="Boolean" />
+
+        <variable
+            name="neutralVisibility"
+            type="Boolean" />
+
+        <variable
+            name="positiveVisibility"
+            type="Boolean" />
         
         <variable
             name="status"
@@ -41,21 +53,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/negative" />
+                android:text="@string/negative"
+                app:goneUnless="@{ negativeVisibility == null ? true : negativeVisibility }"/>
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radioButtonNeutral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/none" />
+                android:text="@string/none"
+                app:goneUnless="@{ neutralVisibility == null ? true : neutralVisibility }"/>
 
             <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/radioButtonPositive"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/positive" />
+                android:text="@string/positive"
+                app:goneUnless="@{ positiveVisibility == null ? true : positiveVisibility }"/>
 
         </RadioGroup>
 

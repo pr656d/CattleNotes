@@ -60,6 +60,15 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
+    <!-- Widget styles -->
+    <style name="Widget.CattleNOTES" parent="@android:style/Widget.Material" />
+
+    <!--  AddEdit Breeding title  -->
+    <style name="Widget.CattleNOTES.BreedingTitle" parent="AppTheme.Body2">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
     <!--  Alert dialog  -->
     <style name="AlertDialog.TitleText" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
         <item name="android:fontFamily">@font/roboto_medium</item>
@@ -82,9 +91,6 @@
         <item name="android:paddingBottom">@dimen/margin_small</item>
         <item name="android:paddingTop">@dimen/margin_small</item>
     </style>
-
-    <!-- Widget styles -->
-    <style name="Widget.CattleNOTES" parent="@android:style/Widget.Material" />
 
     <style name="Widget.CattleNOTES.Button" parent="Widget.MaterialComponents.Button">
         <item name="fontFamily">@font/roboto_bold</item>

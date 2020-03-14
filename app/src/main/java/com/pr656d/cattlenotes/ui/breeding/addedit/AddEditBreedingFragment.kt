@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -49,6 +50,13 @@ class AddEditBreedingFragment : NavigationFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        model.editing.observe(viewLifecycleOwner) {
+            if (it)
+                binding.toolbar.setTitle(R.string.edit_breeding)
+            else
+                binding.toolbar.setTitle(R.string.add_new_breeding)
+        }
+
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
             Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()
         })
@@ -58,7 +66,7 @@ class AddEditBreedingFragment : NavigationFragment() {
                 .setTitle(R.string.back_pressed_message)
                 .setMessage(R.string.changes_not_saved_message)
                 .setPositiveButton(R.string.yes) { _, _ ->
-                    model.navigateUp()
+                    model.onBackPressed(true)
                 }
                 .setNegativeButton(R.string.no, null)
                 .create()

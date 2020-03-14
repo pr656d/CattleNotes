@@ -20,14 +20,6 @@ class BreedingCycle(
     @ColumnInfo(name = "cattle_id", index = true)
     val cattleId: Long,
 
-    @SerializedName("cattle_tag_number")
-    @ColumnInfo(name = "cattle_tag_number")
-    val tagNumber: Long,
-
-    @SerializedName("cattle_type")
-    @ColumnInfo(name = "cattle_type")
-    val type: Animal.Type,
-
     @SerializedName("is_active")
     @ColumnInfo(name = "is_active")
     val isActive: Boolean = false,
@@ -51,18 +43,18 @@ class BreedingCycle(
      */
     @SerializedName("pregnancy_check")
     @Embedded(prefix = "pregnancy_check_")
-    val pregnancyCheckDate: BreedingEvent? = null,
+    val pregnancyCheck: BreedingEvent? = null,
 
     /**
      * Depends on pregnancy check status.
      */
     @SerializedName("dry_off")
     @Embedded(prefix = "dry_off_")
-    val dryOffDate: BreedingEvent? = null,
+    val dryOff: BreedingEvent? = null,
 
     @SerializedName("calving")
     @Embedded(prefix = "calving_")
-    val calvingDate: BreedingEvent? = null
+    val calving: BreedingEvent? = null
 ) {
 
     @SerializedName("id")

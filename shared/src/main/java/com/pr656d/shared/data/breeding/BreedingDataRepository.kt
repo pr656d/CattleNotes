@@ -6,25 +6,37 @@ import com.pr656d.shared.data.db.AppDatabase
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Single point of access for [BreedingCycle] data for the presentation layer.
+ */
+interface BreedingRepository {
+    fun addBreeding(breedingCycle: BreedingCycle)
+    fun addAllBreeding(breedingCycleList: List<BreedingCycle>)
+    fun getObservableAllBreeding(): LiveData<List<BreedingCycle>>
+    fun getBreedingById(cattleId: Long): BreedingCycle?
+    fun deleteBreeding(breedingCycle: BreedingCycle)
+    fun updateBreeding(breedingCycle: BreedingCycle): Int
+}
+
 @Singleton
 open class BreedingDataRepository @Inject constructor(
     private val appDatabase: AppDatabase
-) {
-
-    suspend fun addBreeding(breedingCycle: BreedingCycle) =
+) : BreedingRepository {
+    override fun addBreeding(breedingCycle: BreedingCycle) =
         appDatabase.breedingDao().insert(breedingCycle)
 
-    suspend fun addAllBreeding(breedingCycle: List<BreedingCycle>) =
-        appDatabase.breedingDao().insertAll(breedingCycle)
+    override fun addAllBreeding(breedingCycleList: List<BreedingCycle>) =
+        appDatabase.breedingDao().insertAll(breedingCycleList)
 
-    fun getAllBreedingCycle(): LiveData<List<BreedingCycle>> = appDatabase.breedingDao().getAll()
+    override fun getObservableAllBreeding(): LiveData<List<BreedingCycle>> =
+        appDatabase.breedingDao().getObservableAll()
 
-    suspend fun getBreedingCycleByTagNumber(cattleId: Long): BreedingCycle? =
-        appDatabase.breedingDao().getBreedingCycleByCattleId(cattleId)
+    override fun getBreedingById(cattleId: Long): BreedingCycle? =
+        appDatabase.breedingDao().getByCattleId(cattleId)
 
-    suspend fun deleteBreeding(breedingCycle: BreedingCycle) =
+    override fun deleteBreeding(breedingCycle: BreedingCycle) =
         appDatabase.breedingDao().delete(breedingCycle)
 
-    suspend fun updateBreeding(breedingCycle: BreedingCycle): Int =
+    override fun updateBreeding(breedingCycle: BreedingCycle): Int =
         appDatabase.breedingDao().update(breedingCycle)
 }

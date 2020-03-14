@@ -6,9 +6,9 @@ import com.pr656d.shared.data.cattle.CattleRepository
 import javax.inject.Inject
 
 open class LoadObservableCattleListUseCase @Inject constructor(
-    private val repository: CattleRepository
+    private val cattleRepository: CattleRepository
 ) {
     operator fun invoke(): LiveData<List<Cattle>> {
-        return repository.getObservableAllCattle()
+        return cattleRepository.getObservableAllCattle()
     }
 }

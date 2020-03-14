@@ -24,10 +24,10 @@ interface CattleDao {
     fun getObservableAll(): LiveData<List<Cattle>>
 
     @Query("SELECT * FROM cattle_list WHERE id == :id")
-    fun getCattleById(id: Long): Cattle?
+    fun getById(id: Long): Cattle?
 
     @Query("SELECT * FROM cattle_list WHERE tag_number == :tagNumber")
-    fun getCattleByTagNumber(tagNumber: Long): Cattle?
+    fun getByTagNumber(tagNumber: Long): Cattle?
 
     @Update
     fun update(cattle: Cattle): Int

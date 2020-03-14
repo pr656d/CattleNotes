@@ -26,13 +26,16 @@ open class CattleDataRepository @Inject constructor(
 
     override fun addCattle(cattle: Cattle) = appDatabase.cattleDao().insert(cattle)
 
-    override fun addAllCattle(cattleList: List<Cattle>) = appDatabase.cattleDao().insertAll(cattleList)
+    override fun addAllCattle(cattleList: List<Cattle>) =
+        appDatabase.cattleDao().insertAll(cattleList)
 
-    override fun getObservableAllCattle(): LiveData<List<Cattle>> = appDatabase.cattleDao().getObservableAll()
+    override fun getObservableAllCattle(): LiveData<List<Cattle>> =
+        appDatabase.cattleDao().getObservableAll()
 
-    override fun getCattleById(id: Long): Cattle? = appDatabase.cattleDao().getCattleById(id)
+    override fun getCattleById(id: Long): Cattle? = appDatabase.cattleDao().getById(id)
 
-    override fun getCattleByTagNumber(tagNumber: Long): Cattle? = appDatabase.cattleDao().getCattleByTagNumber(tagNumber)
+    override fun getCattleByTagNumber(tagNumber: Long): Cattle? =
+        appDatabase.cattleDao().getByTagNumber(tagNumber)
 
     override fun deleteCattle(cattle: Cattle) = appDatabase.cattleDao().delete(cattle)
 

@@ -31,11 +31,11 @@ open class FakeCattleRepository(
     }
 
     override fun getCattleById(id: Long): Cattle? {
-        return fakeAppDatabase.cattleDao().getCattleById(id)
+        return fakeAppDatabase.cattleDao().getById(id)
     }
 
     override fun getCattleByTagNumber(tagNumber: Long): Cattle? {
-        return fakeAppDatabase.cattleDao().getCattleByTagNumber(tagNumber)
+        return fakeAppDatabase.cattleDao().getByTagNumber(tagNumber)
     }
 
     override fun deleteCattle(cattle: Cattle) {

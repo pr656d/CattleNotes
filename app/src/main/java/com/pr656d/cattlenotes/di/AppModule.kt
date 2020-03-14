@@ -4,6 +4,8 @@ import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.CattleNotesApplication
+import com.pr656d.shared.data.breeding.BreedingDataRepository
+import com.pr656d.shared.data.breeding.BreedingRepository
 import com.pr656d.shared.data.cattle.CattleDataRepository
 import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.data.db.AppDatabase
@@ -41,6 +43,14 @@ class AppModule {
     @Provides
     fun provideCattleDataRepository(appDatabase: AppDatabase): CattleRepository {
         return CattleDataRepository(
+            appDatabase
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideBreedingRepository(appDatabase: AppDatabase): BreedingRepository {
+        return BreedingDataRepository(
             appDatabase
         )
     }
