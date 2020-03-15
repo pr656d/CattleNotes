@@ -210,11 +210,14 @@ class AddEditBreedingViewModel @Inject constructor(
     }
 
     fun onBackPressed(backConfirmation: Boolean = false) {
-        when {
-            aiDate.value == null -> navigateUp()
-            backConfirmation -> navigateUp()
-            else -> showBackConfirmation()
+        if (aiDate.value == null) {
+            navigateUp()
+            return
         }
+        if (backConfirmation)
+            navigateUp()
+        else
+            showBackConfirmation()
     }
 
     private fun showBackConfirmation() {
