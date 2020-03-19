@@ -1,9 +1,11 @@
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.utils.BreedingUtil
 import com.pr656d.model.BreedingCycle
 import com.pr656d.model.BreedingCycle.ArtificialInseminationInfo
 import com.pr656d.model.BreedingCycle.BreedingEvent
@@ -15,14 +17,15 @@ import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Error
 import com.pr656d.shared.domain.result.Result.Success
-import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
 class AddEditBreedingViewModel @Inject constructor(
+    breedingBehaviour: BreedingBehaviour,
     private val addBreedingUseCase: AddBreedingUseCase,
     private val updateBreedingUseCase: UpdateBreedingUseCase,
     private val getCattleByIdUseCase: GetCattleByIdUseCase
-) : ViewModel() {
+) : ViewModel(),
+    BreedingBehaviour by breedingBehaviour {
 
     private var oldBreedingCycle: BreedingCycle? = null
 
@@ -34,53 +37,6 @@ class AddEditBreedingViewModel @Inject constructor(
     private val addUpdateBreedingResult = MutableLiveData<Result<Unit>>()
 
     private val getCattleResult = MutableLiveData<Result<Cattle>>()
-
-    val cattle = MediatorLiveData<Cattle>()
-
-    val active = MutableLiveData<Boolean>(false)
-
-    val aiDate = MutableLiveData<LocalDate?>(null)
-
-    val hasAiDate: LiveData<Boolean>
-        get() = aiDate.map { it?.let { true } ?: false }
-
-    val didBy = MutableLiveData<String>()
-
-    val bullName = MutableLiveData<String>()
-
-    val strawCode = MutableLiveData<String>()
-
-    val repeatHeatExpectedOn: LiveData<LocalDate?> = aiDate.map { date ->
-        date?.let { BreedingUtil.getExpectedRepeatHeatDate(it) }
-    }
-
-    val repeatHeatStatus = MediatorLiveData<Boolean?>()
-
-    val repeatHeatDoneOn = MutableLiveData<LocalDate>()
-
-    val pregnancyCheckExpectedOn: LiveData<LocalDate?> = aiDate.map { date ->
-        date?.let { BreedingUtil.getExpectedPregnancyCheckDate(it) }
-    }
-
-    val pregnancyCheckStatus = MediatorLiveData<Boolean?>()
-
-    val pregnancyCheckDoneOn = MutableLiveData<LocalDate>()
-
-    val dryOffExpectedOn : LiveData<LocalDate?> = aiDate.map { date ->
-        date?.let { BreedingUtil.getExpectedDryOffDate(it) }
-    }
-
-    val dryOffStatus = MediatorLiveData<Boolean?>()
-
-    val dryOffDoneOn = MutableLiveData<LocalDate>()
-
-    val calvingExpectedOn: LiveData<LocalDate?> = aiDate.map { date ->
-        date?.let { BreedingUtil.getExpectedCalvingDate(it) }
-    }
-
-    val calvingStatus = MediatorLiveData<Boolean?>()
-
-    val calvingDoneOn = MutableLiveData<LocalDate>()
 
     private val _saving = MediatorLiveData<Boolean>().apply { value = false }
     val saving: LiveData<Boolean> = _saving
@@ -102,22 +58,6 @@ class AddEditBreedingViewModel @Inject constructor(
             (result as? Success)?.data?.let {
                 cattle.value = it
             }
-        }
-
-        repeatHeatStatus.addSource(aiDate) {
-            if (it == null) repeatHeatStatus.value = null
-        }
-
-        pregnancyCheckStatus.addSource(repeatHeatStatus) {
-            if (it == null) pregnancyCheckStatus.value = null
-        }
-
-        dryOffStatus.addSource(pregnancyCheckStatus) {
-            if (it == null) dryOffStatus.value = null
-        }
-
-        calvingStatus.addSource(dryOffStatus) {
-            if (it == null) calvingStatus.value = null
         }
 
         _saving.addSource(addUpdateBreedingResult) {
@@ -147,6 +87,7 @@ class AddEditBreedingViewModel @Inject constructor(
     fun save(cattle: Cattle) {
         if (aiDate.value != null) {
             val newBreedingCycle = getBreedingCycle(cattle)
+
             if (oldBreedingCycle != newBreedingCycle) {
                 _saving.value = true
 

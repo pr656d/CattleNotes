@@ -24,6 +24,16 @@ internal abstract class AddEditBreedingModule {
     @ContributesAndroidInjector
     internal abstract fun contributeAddBreedingFragment(): AddEditBreedingFragment
 
+    @Binds
+    internal abstract fun provideBreedingUiDelegate(
+        impl: BreedingUiImplDelegate
+    ): BreedingUiDelegate
+
+    @Binds
+    internal abstract fun provideBreedingBehaviour(
+        impl: BreedingBehaviourImpl
+    ): BreedingBehaviour
+
     /**
      * The ViewModels are created by Dagger in a map. Via the @ViewModelKey, we define that we
      * want to get a [AddEditBreedingViewModel] class.

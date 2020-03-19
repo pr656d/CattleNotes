@@ -18,14 +18,18 @@ object TimeUtils {
      */
     fun toLocalDate(dateString: String): LocalDate {
         val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
-        return LocalDate.parse(dateString, formatter)
+        return LocalDate
+            .parse(dateString, formatter)
+            .minusMonths(1)     // Month starts from 0
+    }
+
+    fun dateString(localDate: LocalDate): String {
+        return DateTimeFormatter
+            .ofPattern("dd/MM/yyyy")
+            .format(localDate.plusMonths(1))    // Month starts from 0
     }
 
     fun toEpochMillis(localDate: LocalDate): Long {
         return localDate.toEpochDay()
-    }
-
-    fun dateString(localDate: LocalDate): String {
-        return DateTimeFormatter.ofPattern("dd/MM/yyyy").format(localDate)
     }
 }

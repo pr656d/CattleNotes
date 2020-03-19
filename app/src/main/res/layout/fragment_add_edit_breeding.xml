@@ -206,7 +206,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
                         android:hint="@string/did_by"
-                        app:goneUnless="@{ viewModel.hasAiDate }">
+                        app:goneUnless="@{ viewModel.didByVisibility }">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextAiDidBy"
@@ -214,7 +214,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={ viewModel.didBy }"
-                            app:resetText="@{ !viewModel.hasAiDate }"/>
+                            app:resetText="@{ viewModel.resetDidBy }"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -224,7 +224,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
                         android:hint="@string/bull_name"
-                        app:goneUnless="@{ viewModel.hasAiDate }">
+                        app:goneUnless="@{ viewModel.bullNameVisibility }">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextAiBullName"
@@ -232,7 +232,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={ viewModel.bullName }"
-                            app:resetText="@{ !viewModel.hasAiDate }" />
+                            app:resetText="@{ viewModel.resetBullName }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -242,7 +242,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
                         android:hint="@string/straw_code"
-                        app:goneUnless="@{ viewModel.hasAiDate }">
+                        app:goneUnless="@{ viewModel.strawCodeVisibility }">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextStrawCode"
@@ -250,7 +250,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={ viewModel.strawCode }"
-                            app:resetText="@{ !viewModel.hasAiDate }" />
+                            app:resetText="@{ viewModel.resetStrawCode }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -259,7 +259,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/repeat_heat"
                         android:layout_marginTop="@dimen/margin_large"
-                        app:goneUnless="@{ viewModel.hasAiDate }"/>
+                        app:goneUnless="@{ viewModel.repeatHeatTitleVisibility }"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutRepeatHeatDateExpected"
@@ -269,7 +269,7 @@
                         android:layout_marginTop="@dimen/margin_normal"
                         android:hint="@string/repeat_heat_date"
                         app:helperText="@string/expected"
-                        app:goneUnless="@{ viewModel.hasAiDate }">
+                        app:goneUnless="@{ viewModel.repeatHeatDateExpectedVisibility }">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextRepeatHeatDateExpected"
@@ -287,7 +287,7 @@
                         android:layout_marginTop="@dimen/margin_small"
                         bind:status="@={ viewModel.repeatHeatStatus }"
                         bind:title="@{ @string/repeat_heat_status }"
-                        app:goneUnless="@{ viewModel.hasAiDate }"/>
+                        app:goneUnless="@{ viewModel.repeatHeatStatusVisibility }"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutRepeatHeatDateActual"
@@ -297,7 +297,7 @@
                         android:layout_marginTop="@dimen/margin_small"
                         android:hint="@string/repeat_heat_date"
                         app:helperText="@string/done_on"
-                        app:goneUnless="@{ viewModel.repeatHeatStatus != null ? true : false }"
+                        app:goneUnless="@{ viewModel.repeatHeatDateActualVisibility }"
                         tools:visibility="visible">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -308,7 +308,7 @@
                             app:dateText="@={ viewModel.repeatHeatDoneOn }"
                             app:onLongClickRemoveText="@{true}"
                             app:onClickShowDatePicker="@{true}"
-                            app:resetText="@{ viewModel.repeatHeatStatus == null ? true : false }" />
+                            app:resetText="@{ viewModel.resetRepeatHeatDateActual }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -317,7 +317,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/pregnancy_check"
                         android:layout_marginTop="@dimen/margin_large"
-                        app:goneUnless="@{ viewModel.repeatHeatStatus != null ? !viewModel.repeatHeatStatus : false }"/>
+                        app:goneUnless="@{ viewModel.pregnancyCheckTitleVisibility }"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutPregnancyCheckDateExpected"
@@ -327,7 +327,7 @@
                         android:layout_marginTop="@dimen/margin_normal"
                         android:hint="@string/pregnancy_check_date"
                         app:helperText="@string/expected"
-                        app:goneUnless="@{ viewModel.repeatHeatStatus != null ? !viewModel.repeatHeatStatus : false }">
+                        app:goneUnless="@{ viewModel.pregnancyCheckDateExpectedVisibility }">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPregnancyCheckDateExpected"
@@ -345,7 +345,7 @@
                         android:layout_marginTop="@dimen/margin_small"
                         bind:status="@={ viewModel.pregnancyCheckStatus }"
                         bind:title="@{ @string/pregnancy_check_status }"
-                        app:goneUnless="@{ viewModel.repeatHeatStatus != null ? !viewModel.repeatHeatStatus : false }"/>
+                        app:goneUnless="@{ viewModel.pregnancyCheckStatusVisibility }"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutPregnancyCheckDateActual"
@@ -356,7 +356,7 @@
                         android:hint="@string/pregnancy_check_date"
                         android:visibility="visible"
                         app:helperText="@string/done_on"
-                        app:goneUnless="@{ viewModel.pregnancyCheckStatus != null ? true : false }"
+                        app:goneUnless="@{ viewModel.pregnancyCheckDateActualVisibility }"
                         tools:visibility="visible">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -367,7 +367,7 @@
                             app:dateText="@={ viewModel.pregnancyCheckDoneOn }"
                             app:onLongClickRemoveText="@{true}"
                             app:onClickShowDatePicker="@{true}"
-                            app:resetText="@{ viewModel.pregnancyCheckStatus == null ? true : false }" />
+                            app:resetText="@{ viewModel.resetPregnancyCheckDateActual }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
@@ -376,7 +376,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/dry_off"
                         android:layout_marginTop="@dimen/margin_large"
-                        app:goneUnless="@{ viewModel.pregnancyCheckStatus  != null ? viewModel.pregnancyCheckStatus : false }"/>
+                        app:goneUnless="@{ viewModel.dryOffTitleVisibility }"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutDryOffDateExpected"
@@ -386,7 +386,7 @@
                         android:layout_marginTop="@dimen/margin_normal"
                         android:hint="@string/dry_off_date"
                         app:helperText="@string/expected"
-                        app:goneUnless="@{ viewModel.pregnancyCheckStatus  != null ? viewModel.pregnancyCheckStatus : false }">
+                        app:goneUnless="@{ viewModel.dryOffDateExpectedVisibility }">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextDryOffDateExpected"
@@ -405,7 +405,7 @@
                         bind:status="@={ viewModel.dryOffStatus }"
                         bind:title="@{ @string/dry_off_status }"
                         bind:negativeVisibility="@{false}"
-                        app:goneUnless="@{ viewModel.pregnancyCheckStatus != null ? viewModel.pregnancyCheckStatus : false }" />
+                        app:goneUnless="@{ viewModel.dryOffStatusVisibility }" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutDryOffDateActual"
@@ -416,7 +416,7 @@
                         android:hint="@string/dry_off_date"
                         android:visibility="visible"
                         app:helperText="@string/done_on"
-                        app:goneUnless="@{ viewModel.dryOffStatus != null ? true : false }"
+                        app:goneUnless="@{ viewModel.dryOffDateActualVisibility }"
                         tools:visibility="visible">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -427,7 +427,7 @@
                             app:dateText="@={ viewModel.dryOffDoneOn }"
                             app:onLongClickRemoveText="@{true}"
                             app:onClickShowDatePicker="@{true}"
-                            app:resetText="@{ viewModel.dryOffStatus == null ? true : false }" />
+                            app:resetText="@{ viewModel.resetDryOffDateActual }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -437,7 +437,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/calving"
                         android:layout_marginTop="@dimen/margin_large"
-                        app:goneUnless="@{ viewModel.dryOffStatus != null ? true: false }"/>
+                        app:goneUnless="@{ viewModel.calvingTitleVisibility }"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutCalvingDateExpected"
@@ -447,7 +447,7 @@
                         android:layout_marginTop="@dimen/margin_normal"
                         android:hint="@string/calving_date"
                         app:helperText="@string/expected"
-                        app:goneUnless="@{ viewModel.dryOffStatus != null ? true : false }">
+                        app:goneUnless="@{ viewModel.calvingDateExpectedVisibility }">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextCalvingDateExpected"
@@ -466,7 +466,7 @@
                         bind:status="@={ viewModel.calvingStatus }"
                         bind:title="@{ @string/calving_status }"
                         bind:negativeVisibility="@{false}"
-                        app:goneUnless="@{ viewModel.dryOffStatus != null ? true : false }"/>
+                        app:goneUnless="@{ viewModel.calvingStatusVisibility }"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutCalvingDateActual"
@@ -477,7 +477,7 @@
                         android:hint="@string/calving_date"
                         android:visibility="visible"
                         app:helperText="@string/done_on"
-                        app:goneUnless="@{ viewModel.calvingStatus != null ? true : false }"
+                        app:goneUnless="@{ viewModel.calvingDateActualVisibility }"
                         tools:visibility="visible">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -488,7 +488,7 @@
                             app:dateText="@={ viewModel.calvingDoneOn }"
                             app:onLongClickRemoveText="@{true}"
                             app:onClickShowDatePicker="@{true}"
-                            app:resetText="@{ viewModel.calvingStatus == null ? true : false }" />
+                            app:resetText="@{ viewModel.resetCalvingDateActual }" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
