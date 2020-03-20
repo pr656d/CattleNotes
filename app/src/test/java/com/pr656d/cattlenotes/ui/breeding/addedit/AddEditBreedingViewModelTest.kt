@@ -1900,10 +1900,12 @@ class AddEditBreedingViewModelTest {
         val resetStrawCode = LiveDataTestUtil.getValue(viewModel.resetStrawCode)!!
         assertTrue(resetStrawCode)
 
-        val resetRepeatHeatDateActual = LiveDataTestUtil.getValue(viewModel.resetRepeatHeatDateActual)!!
+        val resetRepeatHeatDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetRepeatHeatDateActual)!!
         assertTrue(resetRepeatHeatDateActual)
 
-        val resetPregnancyCheckDateActual = LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
+        val resetPregnancyCheckDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
         assertTrue(resetPregnancyCheckDateActual)
 
         val resetDryOffDateActual = LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!
@@ -1990,5 +1992,168 @@ class AddEditBreedingViewModelTest {
         val calvingDateActualVisibility =
             LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
         assertFalse(calvingDateActualVisibility)
+    }
+
+    @Test
+    fun repeatHeatStatusIsNoneFromPositive_resetRepeatHeatDateActualIsTrue() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Set repeat heat status as Positive
+        viewModel.repeatHeatStatus.value = true
+
+        // Set repeat heat date done on
+        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+
+        // Set repeat heat status as None
+        viewModel.repeatHeatStatus.value = null
+
+        val resetRepeatHeatDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetRepeatHeatDateActual)!!
+        assertTrue(resetRepeatHeatDateActual)
+    }
+
+    @Test
+    fun repeatHeatStatusIsNegativeFromNone_resetRepeatHeatDateActualIsTrue() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Set repeat heat status as None
+        viewModel.repeatHeatStatus.value = null
+
+        // Set repeat heat date done on
+        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+
+        // Set repeat heat status as Negative
+        viewModel.repeatHeatStatus.value = false
+
+        val resetRepeatHeatDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetRepeatHeatDateActual)!!
+        assertTrue(resetRepeatHeatDateActual)
+    }
+
+    @Test
+    fun pregnancyCheckStatusIsNoneFromPositive_resetPregnancyCheckDateActualIsTrue() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Set repeat heat status as Positive
+        viewModel.repeatHeatStatus.value = false
+
+        // Set repeat heat date done on
+        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+
+        // Set pregnancy check status positive
+        viewModel.pregnancyCheckStatus.value = true
+
+        // Set pregnancy check done on
+        viewModel.pregnancyCheckDoneOn.value = LocalDate.now()
+
+        // Set pregnancy check status none
+        viewModel.pregnancyCheckStatus.value = null
+
+        val resetPregnancyCheckDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
+        assertTrue(resetPregnancyCheckDateActual)
+    }
+
+    @Test
+    fun pregnancyCheckStatusIsNoneFromNegative_resetPregnancyCheckDateActualIsTrue() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Set repeat heat status as Positive
+        viewModel.repeatHeatStatus.value = false
+
+        // Set repeat heat date done on
+        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+
+        // Set pregnancy check status negative
+        viewModel.pregnancyCheckStatus.value = false
+
+        // Set pregnancy check done on
+        viewModel.pregnancyCheckDoneOn.value = LocalDate.now()
+
+        // Set pregnancy check status none
+        viewModel.pregnancyCheckStatus.value = null
+
+        val resetPregnancyCheckDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
+        assertTrue(resetPregnancyCheckDateActual)
+    }
+
+    @Test
+    fun dryOffStatusIsNoneFromPositive_resetDryOffDateActualIsTrue() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Set repeat heat status as Positive
+        viewModel.repeatHeatStatus.value = false
+
+        // Set repeat heat date done on
+        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+
+        // Set pregnancy check status as Positive
+        viewModel.pregnancyCheckStatus.value = true
+
+        // Set dry off status as Positive
+        viewModel.dryOffStatus.value = true
+
+        // Set dry off date done on
+        viewModel.dryOffDoneOn.value = LocalDate.now()
+
+        // Set dry off status as None
+        viewModel.dryOffStatus.value = null
+
+
+        val resetDryOffDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!
+        assertTrue(resetDryOffDateActual)
+    }
+
+    @Test
+    fun calvingIsNoneFromPositive_resetCalvingDateActualIsTrue() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Set repeat heat status as Positive
+        viewModel.repeatHeatStatus.value = false
+
+        // Set repeat heat date done on
+        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+
+        // Set pregnancy check status as Positive
+        viewModel.pregnancyCheckStatus.value = true
+
+        // Set dry off status as Positive
+        viewModel.dryOffStatus.value = true
+
+        // Set dry off date done on
+        viewModel.dryOffDoneOn.value = LocalDate.now()
+
+        // Set calving status as Positive
+        viewModel.calvingStatus.value = true
+
+        // Set calving date done on
+        viewModel.calvingDoneOn.value = LocalDate.now()
+
+        // Set calving status as None
+        viewModel.calvingStatus.value = null
+
+        val resetCalvingDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetCalvingDateActual)!!
+        assertTrue(resetCalvingDateActual)
     }
 }
