@@ -10,9 +10,6 @@
             name="viewModel"
             type="com.pr656d.cattlenotes.ui.breeding.addedit.AddEditBreedingViewModel" />
 
-        <variable
-            name="cattle"
-            type="com.pr656d.model.Cattle" />
     </data>
 
 
@@ -103,7 +100,7 @@
                             android:layout_marginEnd="@dimen/margin_large"
                             android:ellipsize="middle"
                             android:singleLine="true"
-                            android:text="@{ String.valueOf(cattle.tagNumber) }"
+                            android:text="@{ String.valueOf(viewModel.cattle.tagNumber) }"
                             android:textAlignment="center"
                             android:textAppearance="?textAppearanceHeadline6"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -118,7 +115,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
                             android:layout_marginBottom="@dimen/margin_normal"
-                            android:text="@{ cattle.breed.displayName }"
+                            android:text="@{ viewModel.cattle.breed.displayName }"
                             android:textAppearance="?textAppearanceSubtitle1"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/textViewGroup"
@@ -133,7 +130,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/margin_small"
-                            android:text="@{ cattle.group.displayName }"
+                            android:text="@{ viewModel.cattle.group.displayName }"
                             android:textAppearance="?textAppearanceSubtitle1"
                             app:layout_constraintBaseline_toBaselineOf="@+id/textViewBreed"
                             app:layout_constraintEnd_toStartOf="@+id/textViewType"
@@ -147,7 +144,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/margin_small"
-                            android:text="@{ cattle.type.displayName }"
+                            android:text="@{ viewModel.cattle.type.displayName }"
                             android:textAppearance="?textAppearanceSubtitle1"
                             app:layout_constraintBaseline_toBaselineOf="@+id/textViewGroup"
                             app:layout_constraintEnd_toEndOf="@+id/imageView"
@@ -508,7 +505,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/margin_normal"
-            android:onClick="@{() -> viewModel.save(cattle) }"
+            android:onClick="@{() -> viewModel.save() }"
             android:src="@drawable/ic_check"
             app:goneUnless="@{ viewModel.hasAiDate }"/>
 

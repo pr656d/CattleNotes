@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
-import com.pr656d.cattlenotes.utils.BreedingUtil
 import com.pr656d.model.Cattle
+import com.pr656d.shared.utils.BreedingUtil
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 

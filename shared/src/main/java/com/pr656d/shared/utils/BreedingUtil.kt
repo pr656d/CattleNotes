@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.utils
+package com.pr656d.shared.utils
 
 import org.threeten.bp.LocalDate
 

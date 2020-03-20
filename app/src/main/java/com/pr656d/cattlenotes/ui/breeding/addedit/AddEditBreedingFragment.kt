@@ -40,7 +40,6 @@ class AddEditBreedingFragment : NavigationFragment() {
         binding = FragmentAddEditBreedingBinding.inflate(inflater, container, false)
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            cattle = Gson().fromJson(args.cattle, Cattle::class.java)
             viewModel = model
         }
 
@@ -49,6 +48,10 @@ class AddEditBreedingFragment : NavigationFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        model.setCattle(
+            Gson().fromJson(args.cattle, Cattle::class.java)
+        )
 
         model.editing.observe(viewLifecycleOwner) {
             if (it)

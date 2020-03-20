@@ -56,7 +56,8 @@ class AddEditBreedingViewModel @Inject constructor(
     init {
         cattle.addSource(getCattleResult) { result ->
             (result as? Success)?.data?.let {
-                cattle.value = it
+                if (it != cattle.value)
+                    cattle.value = it
             }
         }
 
@@ -84,7 +85,14 @@ class AddEditBreedingViewModel @Inject constructor(
         breedingCycle.bindData()
     }
 
-    fun save(cattle: Cattle) {
+    fun setCattle(c: Cattle) {
+        cattle.value = c
+        getCattleByIdUseCase(c.id, getCattleResult)
+    }
+
+    fun save() {
+        val cattle = cattle.value ?: return
+
         if (aiDate.value != null) {
             val newBreedingCycle = getBreedingCycle(cattle)
 
@@ -151,10 +159,11 @@ class AddEditBreedingViewModel @Inject constructor(
     }
 
     fun onBackPressed(backConfirmation: Boolean = false) {
-        if (aiDate.value == null) {
+        if (aiDate.value == null && !_editing.value!!) {
             navigateUp()
             return
         }
+
         if (backConfirmation)
             navigateUp()
         else

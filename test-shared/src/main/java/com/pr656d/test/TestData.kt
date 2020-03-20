@@ -1,10 +1,19 @@
 package com.pr656d.test
 
 import com.pr656d.model.Animal
+import com.pr656d.model.BreedingCycle
+import com.pr656d.model.BreedingCycle.ArtificialInseminationInfo
+import com.pr656d.model.BreedingCycle.BreedingEvent
 import com.pr656d.model.Cattle
+import com.pr656d.test.utils.BreedingUtil.getExpectedCalvingDate
+import com.pr656d.test.utils.BreedingUtil.getExpectedDryOffDate
+import com.pr656d.test.utils.BreedingUtil.getExpectedPregnancyCheckDate
+import com.pr656d.test.utils.BreedingUtil.getExpectedRepeatHeatDate
 import org.threeten.bp.LocalDate
 
 object TestData {
+
+    /* Cattle */
 
     val cattle1 = Cattle(
         tagNumber = 1, name = "Janu", image = Cattle.Image(localPath = null, remotePath =  null),
@@ -43,4 +52,23 @@ object TestData {
 
     val cattleList = listOf(cattle1, cattle2, cattle3, cattle4, cattle5)
 
+
+    /* Breeding Cycle */
+
+    val breedingCycle1 = BreedingCycle(
+        cattleId = cattle1.id,
+        isActive = false,
+        artificialInsemination = ArtificialInseminationInfo(
+            date = LocalDate.now(),
+            didBy = null,
+            bullName = null,
+            strawCode = null
+        ),
+        repeatHeat = BreedingEvent(getExpectedRepeatHeatDate(LocalDate.now())),
+        pregnancyCheck = BreedingEvent(getExpectedPregnancyCheckDate(LocalDate.now())),
+        dryOff = BreedingEvent(getExpectedDryOffDate(LocalDate.now())),
+        calving = BreedingEvent(getExpectedCalvingDate(LocalDate.now()))
+    )
+
+    val breedingList = listOf(breedingCycle1)
 }
