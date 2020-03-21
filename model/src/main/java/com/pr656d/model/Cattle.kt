@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import org.threeten.bp.LocalDate
 
-@Entity(tableName = "cattle_list")
+@Entity(tableName = "cattle")
 data class Cattle(
     @SerializedName("tag_number")
     @ColumnInfo(name = "tag_number", index = true)

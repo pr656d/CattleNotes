@@ -1,9 +1,9 @@
 package com.pr656d.test
 
 import com.pr656d.model.Animal
-import com.pr656d.model.BreedingCycle
-import com.pr656d.model.BreedingCycle.ArtificialInseminationInfo
-import com.pr656d.model.BreedingCycle.BreedingEvent
+import com.pr656d.model.Breeding
+import com.pr656d.model.Breeding.ArtificialInseminationInfo
+import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.Cattle
 import com.pr656d.test.utils.BreedingUtil.getExpectedCalvingDate
 import com.pr656d.test.utils.BreedingUtil.getExpectedDryOffDate
@@ -55,7 +55,7 @@ object TestData {
 
     /* Breeding Cycle */
 
-    val breedingCycle1 = BreedingCycle(
+    val breedingCycle1 = Breeding(
         cattleId = cattle1.id,
         isActive = false,
         artificialInsemination = ArtificialInseminationInfo(

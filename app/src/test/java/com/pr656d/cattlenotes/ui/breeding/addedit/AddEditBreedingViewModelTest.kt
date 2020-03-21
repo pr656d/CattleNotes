@@ -5,7 +5,7 @@ import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeBreedingRepository
 import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
-import com.pr656d.model.BreedingCycle
+import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
@@ -168,7 +168,7 @@ class AddEditBreedingViewModelTest {
     }
 
     private object FailingAddBreedingUseCase : AddBreedingUseCase(FakeBreedingRepository()) {
-        override fun execute(parameters: BreedingCycle) {
+        override fun execute(parameters: Breeding) {
             throw Exception("Error!")
         }
     }

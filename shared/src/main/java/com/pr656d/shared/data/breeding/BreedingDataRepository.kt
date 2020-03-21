@@ -1,42 +1,53 @@
 package com.pr656d.shared.data.breeding
 
 import androidx.lifecycle.LiveData
-import com.pr656d.model.BreedingCycle
+import com.pr656d.model.Breeding
+import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.data.db.AppDatabase
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Single point of access for [BreedingCycle] data for the presentation layer.
+ * Single point of access for [Breeding] data for the presentation layer.
  */
 interface BreedingRepository {
-    fun addBreeding(breedingCycle: BreedingCycle)
-    fun addAllBreeding(breedingCycleList: List<BreedingCycle>)
-    fun getObservableAllBreeding(): LiveData<List<BreedingCycle>>
-    fun getBreedingById(cattleId: Long): BreedingCycle?
-    fun deleteBreeding(breedingCycle: BreedingCycle)
-    fun updateBreeding(breedingCycle: BreedingCycle): Int
+    fun addBreeding(breeding: Breeding)
+
+    fun addAllBreeding(breedingList: List<Breeding>)
+
+    fun getObservableAllBreeding(): LiveData<List<Breeding>>
+
+    fun getAllBreedingWithCattle(): List<BreedingWithCattle>
+
+    fun getAllBreedingByCattleId(cattleId: Long): List<Breeding>
+
+    fun deleteBreeding(breeding: Breeding)
+
+    fun updateBreeding(breeding: Breeding): Int
 }
 
 @Singleton
 open class BreedingDataRepository @Inject constructor(
     private val appDatabase: AppDatabase
 ) : BreedingRepository {
-    override fun addBreeding(breedingCycle: BreedingCycle) =
-        appDatabase.breedingDao().insert(breedingCycle)
+    override fun addBreeding(breeding: Breeding) =
+        appDatabase.breedingDao().insert(breeding)
 
-    override fun addAllBreeding(breedingCycleList: List<BreedingCycle>) =
-        appDatabase.breedingDao().insertAll(breedingCycleList)
+    override fun addAllBreeding(breedingList: List<Breeding>) =
+        appDatabase.breedingDao().insertAll(breedingList)
 
-    override fun getObservableAllBreeding(): LiveData<List<BreedingCycle>> =
+    override fun getObservableAllBreeding(): LiveData<List<Breeding>> =
         appDatabase.breedingDao().getObservableAll()
 
-    override fun getBreedingById(cattleId: Long): BreedingCycle? =
-        appDatabase.breedingDao().getByCattleId(cattleId)
+    override fun getAllBreedingWithCattle(): List<BreedingWithCattle> =
+        appDatabase.breedingDao().getAllBreedingCycleWithCattle()
 
-    override fun deleteBreeding(breedingCycle: BreedingCycle) =
-        appDatabase.breedingDao().delete(breedingCycle)
+    override fun getAllBreedingByCattleId(cattleId: Long): List<Breeding> =
+        appDatabase.breedingDao().getAllByCattleId(cattleId)
 
-    override fun updateBreeding(breedingCycle: BreedingCycle): Int =
-        appDatabase.breedingDao().update(breedingCycle)
+    override fun deleteBreeding(breeding: Breeding) =
+        appDatabase.breedingDao().delete(breeding)
+
+    override fun updateBreeding(breeding: Breeding): Int =
+        appDatabase.breedingDao().update(breeding)
 }

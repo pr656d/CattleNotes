@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import org.threeten.bp.LocalDate
 
 @Entity(
-    tableName = "breeding_cycle",
+    tableName = "breeding",
     foreignKeys = [
         ForeignKey(
             entity = Cattle::class,
@@ -15,7 +15,7 @@ import org.threeten.bp.LocalDate
         )
     ]
 )
-class BreedingCycle(
+data class Breeding(
     @SerializedName("cattle_id")
     @ColumnInfo(name = "cattle_id", index = true)
     val cattleId: Long,
@@ -92,5 +92,12 @@ class BreedingCycle(
         @SerializedName("done_on")
         @ColumnInfo(name = "done_on")
         val doneOn: LocalDate? = null
-    )
+    ) {
+        @Ignore
+        val statusString = when (status) {
+            null -> "None"
+            true -> "Positive"
+            false -> "Negative"
+        }
+    }
 }

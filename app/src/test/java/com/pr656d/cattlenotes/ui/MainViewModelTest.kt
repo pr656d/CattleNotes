@@ -50,13 +50,11 @@ class MainViewModelTest {
 
     @Test
     fun firebaseUserIsNotNull_stayOnMainActivity() {
-        // If we get firebaseUser as null
         val firebaseUser: FirebaseUser = mock(FirebaseUser::class.java)
         // Given that firebase user is *null*.
         val viewModel = createMainViewModel(firebaseUser)
 
         val redirectToLoginActivity = LiveDataTestUtil.getValue(viewModel.redirectToLoginScreen)
-
         assertNull(redirectToLoginActivity?.getContentIfNotHandled())
     }
 

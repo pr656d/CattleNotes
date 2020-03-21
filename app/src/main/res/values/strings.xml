@@ -131,6 +131,8 @@
     <string name="positive">Positive</string>
     <string name="negative">Negative</string>
     <string name="none">None</string>
+    <string name="status">Status</string>
+    <string name="empty_breeding">No breeding available</string>
 
     <!--  Settings  -->
     <string name="theme_title">Choose theme</string>

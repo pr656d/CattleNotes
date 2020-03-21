@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.pr656d.model.BreedingCycle
+import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 
 /**
@@ -13,7 +13,7 @@ import com.pr656d.model.Cattle
  */
 @Database(entities = [
     Cattle::class,
-    BreedingCycle::class
+    Breeding::class
 ],
     version = 1,
     exportSchema = false

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryViewModel" />
 
     </data>
 
@@ -24,16 +28,35 @@
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_menu"
-                app:title="@string/breeding_history" />
+                app:title="@string/breeding_history"
+                app:subtitle="@{ String.valueOf(viewModel.cattle.tagNumber) }"/>
         </com.google.android.material.appbar.AppBarLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_large"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="insideOverlay"
+            app:breedingHistoryListItems="@{ viewModel.breedingList }"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layoutManager="LinearLayoutManager"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_breeding_history"/>
+
         <TextView
-            style="@style/AppTheme.Headline3"
+            android:id="@+id/tvEmptyListMessage"
+            style="@style/AppTheme.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_large"
+            android:text="@string/empty_breeding"
+            android:textAlignment="center"
+            android:textColor="?android:textColorHint"
             android:layout_gravity="center"
-            android:text="Breeding History"
-            android:textAlignment="center" />
+            app:goneUnless="@{ viewModel.isEmpty }" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

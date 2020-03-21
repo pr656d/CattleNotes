@@ -6,9 +6,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
-import com.pr656d.model.BreedingCycle
-import com.pr656d.model.BreedingCycle.ArtificialInseminationInfo
-import com.pr656d.model.BreedingCycle.BreedingEvent
+import com.pr656d.model.Breeding
+import com.pr656d.model.Breeding.ArtificialInseminationInfo
+import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
@@ -27,7 +27,7 @@ class AddEditBreedingViewModel @Inject constructor(
 ) : ViewModel(),
     BreedingBehaviour by breedingBehaviour {
 
-    private var oldBreedingCycle: BreedingCycle? = null
+    private var oldBreeding: Breeding? = null
 
     private val _editing = MutableLiveData<Boolean>(false)
 
@@ -78,11 +78,11 @@ class AddEditBreedingViewModel @Inject constructor(
         }
     }
 
-    fun setBreedingCycle(breedingCycle: BreedingCycle) {
+    fun setBreedingCycle(breeding: Breeding) {
         _editing.value = true
-        oldBreedingCycle = breedingCycle
-        getCattleByIdUseCase(breedingCycle.cattleId, getCattleResult)
-        breedingCycle.bindData()
+        oldBreeding = breeding
+        getCattleByIdUseCase(breeding.cattleId, getCattleResult)
+        breeding.bindData()
     }
 
     fun setCattle(c: Cattle) {
@@ -96,10 +96,10 @@ class AddEditBreedingViewModel @Inject constructor(
         if (aiDate.value != null) {
             val newBreedingCycle = getBreedingCycle(cattle)
 
-            if (oldBreedingCycle != newBreedingCycle) {
+            if (oldBreeding != newBreedingCycle) {
                 _saving.value = true
 
-                if (oldBreedingCycle == null)
+                if (oldBreeding == null)
                     addBreedingUseCase(newBreedingCycle, addUpdateBreedingResult)
                 else
                     updateBreedingUseCase(newBreedingCycle, addUpdateBreedingResult)
@@ -112,8 +112,8 @@ class AddEditBreedingViewModel @Inject constructor(
         }
     }
 
-    private fun getBreedingCycle(cattle: Cattle): BreedingCycle =
-        BreedingCycle(
+    private fun getBreedingCycle(cattle: Cattle): Breeding =
+        Breeding(
             cattle.id,
             active.value ?: false,
             aiDate.value?.let {
@@ -138,7 +138,7 @@ class AddEditBreedingViewModel @Inject constructor(
             }
         )
 
-    private fun BreedingCycle.bindData() {
+    private fun Breeding.bindData() {
         // AI
         aiDate.value = artificialInsemination?.date
         didBy.value = artificialInsemination?.didBy
