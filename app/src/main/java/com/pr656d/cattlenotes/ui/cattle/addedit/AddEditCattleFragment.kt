@@ -130,18 +130,6 @@ class AddEditCattleFragment : NavigationFragment() {
             hideKeyboard(requireView())
             Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()
         })
-
-        binding.exposedDropDownType.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) hideKeyboard(requireView())
-        }
-
-        binding.exposedDropDownBreed.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) hideKeyboard(requireView())
-        }
-
-        binding.exposedDropDownGroup.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) hideKeyboard(requireView())
-        }
     }
 
     private fun onBackPressed(): Boolean {
