@@ -88,6 +88,10 @@ class CattleDetailFragment : NavigationFragment() {
 
         bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
+                // On drag it can be collapsed, hide if it is.
+                if (newState == STATE_COLLAPSED && bottomSheetBehavior.skipCollapsed)
+                    bottomSheetBehavior.state = STATE_HIDDEN
+
                 val state = if (newState == STATE_EXPANDED) {
                     View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
                 } else {

@@ -17,8 +17,7 @@
         android:layout_height="match_parent"
         android:elevation="@dimen/parent_list_sheet_elevation"
         android:background="?attr/colorSurface"
-        android:backgroundTint="?attr/colorSurface"
-        android:focusable="true">
+        android:backgroundTint="?attr/colorSurface">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -38,6 +37,20 @@
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_close"
                 app:title="@string/select_parent" />
+
+            <!--
+            ~ TODO : Use better progress indicator
+            ~ Material progress indicator is planned
+            ~ Reference : https://material.io/components/progress-indicators/
+            -->
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                app:goneUnless="@{viewModel.loadingParentList}" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -52,7 +65,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar2"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             app:parentListItems="@{ viewModel.parentList }"
             app:parentListViewModel="@{viewModel}"
             app:showParentListDivider="@{true}"
@@ -65,30 +78,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/parent_list_empty"
+            android:hint="@string/parent_list_empty"
             android:textAlignment="center"
-            android:textColor="@color/grey"
+            android:gravity="center"
             app:goneUnless="@{ viewModel.isEmptyParentList }"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!--
-            ~ TODO : Use better progress indicator
-            ~ Material progress indicator is planned
-            ~ Reference : https://material.io/components/progress-indicators/
-            -->
-        <ProgressBar
-            android:id="@+id/progressBar2"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:goneUnless="@{viewModel.loadingParentList}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

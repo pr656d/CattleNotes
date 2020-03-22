@@ -15,87 +15,77 @@
 
     </data>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/layout_cattle_item"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        android:onClick="@{ () -> eventListener.openCattle(cattle) }"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="0dp"
-        app:rippleColor="?colorSecondary">
+        android:background="?attr/selectableItemBackground"
+        android:onClick="@{ () -> eventListener.openCattle(cattle) }">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivProfileImage"
+            android:layout_width="@dimen/photo_width_normal"
+            android:layout_height="@dimen/photo_height_normal"
+            android:layout_marginStart="?listPreferredItemPaddingStart"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_cattle"
+            tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/ivProfileImage"
-                android:layout_width="@dimen/photo_width_normal"
-                android:layout_height="@dimen/photo_height_normal"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:layout_marginStart="?listPreferredItemPaddingStart"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_cattle"
-                tools:ignore="ContentDescription" />
+        <TextView
+            android:id="@+id/tvTagNumber"
+            style="@style/AppTheme.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:text="@{ String.valueOf(cattle.tagNumber) }"
+            android:textAlignment="textStart"
+            android:textAppearance="?textAppearanceListItem"
+            app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
+            app:layout_constraintTop_toTopOf="@+id/ivProfileImage"
+            tools:text="123456789012" />
 
-            <TextView
-                android:id="@+id/tvTagNumber"
-                style="@style/AppTheme.Subtitle1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_small"
-                android:text="@{ String.valueOf(cattle.tagNumber) }"
-                android:textAlignment="textStart"
-                android:textAppearance="?textAppearanceListItem"
-                app:layout_constraintStart_toEndOf="@+id/ivProfileImage"
-                app:layout_constraintTop_toTopOf="@+id/ivProfileImage"
-                tools:text="123456789012" />
+        <TextView
+            android:id="@+id/tvName"
+            style="@style/AppTheme.Subtitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="?listPreferredItemPaddingEnd"
+            android:text="@{ cattle.name }"
+            android:textAppearance="?textAppearanceListItemSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Name" />
 
-            <TextView
-                android:id="@+id/tvName"
-                style="@style/AppTheme.Subtitle2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ cattle.name }"
-                android:layout_marginEnd="?listPreferredItemPaddingEnd"
-                android:textAppearance="?textAppearanceListItemSecondary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Name" />
+        <TextView
+            android:id="@+id/tvType"
+            style="@style/AppTheme.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:text="@{ cattle.type.displayName }"
+            android:textAppearance="?textAppearanceListItemSmall"
+            app:layout_constraintBaseline_toBaselineOf="@+id/tvGroup"
+            app:layout_constraintStart_toEndOf="@+id/tvGroup"
+            tools:text="Cow" />
 
-            <TextView
-                android:id="@+id/tvType"
-                style="@style/AppTheme.Body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ cattle.type.displayName }"
-                android:textAppearance="?textAppearanceListItemSmall"
-                android:layout_marginStart="@dimen/margin_small"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tvGroup"
-                app:layout_constraintStart_toEndOf="@+id/tvGroup"
-                tools:text="Cow" />
+        <TextView
+            android:id="@+id/tvGroup"
+            style="@style/AppTheme.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_micro"
+            android:text="@{ cattle.group.displayName }"
+            android:textAppearance="?textAppearanceListItemSmall"
+            app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
+            app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
+            app:layout_constraintTop_toBottomOf="@+id/tvTagNumber"
+            tools:text="Milking"
+            tools:visibility="visible" />
 
-            <TextView
-                android:id="@+id/tvGroup"
-                style="@style/AppTheme.Body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_micro"
-                android:text="@{ cattle.group.displayName }"
-                android:textAppearance="?textAppearanceListItemSmall"
-                app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
-                app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
-                app:layout_constraintTop_toBottomOf="@+id/tvTagNumber"
-                tools:text="Milking"
-                tools:visibility="visible" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

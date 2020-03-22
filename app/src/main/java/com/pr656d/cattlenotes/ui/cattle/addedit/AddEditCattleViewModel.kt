@@ -243,7 +243,10 @@ class AddEditCattleViewModel @Inject constructor(
             return
         }
         if (it != null) {
-            _selectingParent.postValue(true)
+            if (!parentList.value.isNullOrEmpty())
+                _selectingParent.postValue(true)
+            else
+                _showMessage.value = Event(R.string.parent_list_empty)
         } else {
             _showMessage.value = Event(R.string.error_provide_tag_number)
         }

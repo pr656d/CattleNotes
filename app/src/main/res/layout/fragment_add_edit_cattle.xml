@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="android.text.InputType"/>
+        <import type="android.text.InputType" />
 
         <variable
             name="viewModel"
@@ -30,7 +30,7 @@
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_menu"
-                tools:title="@string/add_cattle"/>
+                tools:title="@string/add_cattle" />
 
             <!--
             ~ TODO : Use better progress indicator
@@ -41,11 +41,11 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:indeterminate="true"
                 android:layout_marginHorizontal="@dimen/margin_normal"
-                app:layout_anchorGravity="bottom"
+                android:indeterminate="true"
+                app:goneUnless="@{viewModel.saving}"
                 app:layout_anchor="@id/appBarLayout"
-                app:goneUnless="@{viewModel.saving}"/>
+                app:layout_anchorGravity="bottom" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -53,16 +53,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/appBarLayout"
-            android:scrollbars="vertical"
             android:scrollbarStyle="insideOverlay"
+            android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/view_cattle_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
                 android:layout_marginStart="@dimen/margin_normal"
+                android:layout_marginTop="@dimen/margin_normal"
                 android:layout_marginEnd="@dimen/margin_normal">
 
                 <ImageView
@@ -83,14 +83,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:hint="@string/tag_number"
-                    app:errorText="@{ viewModel.tagNumberErrorMessage }"
-                    app:setRequired="@{ viewModel.tagNumber }"
-                    app:helperTextEnabled="true"
                     app:counterEnabled="true"
                     app:counterMaxLength="19"
+                    app:errorText="@{ viewModel.tagNumberErrorMessage }"
+                    app:helperTextEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ivCattle">
+                    app:layout_constraintTop_toBottomOf="@+id/ivCattle"
+                    app:setRequired="@{ viewModel.tagNumber }">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextTagNumber"
@@ -98,7 +98,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned"
-                        android:text="@={ viewModel.tagNumber }"/>
+                        android:text="@={ viewModel.tagNumber }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -118,19 +118,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
-                        android:text="@={ viewModel.name }"/>
+                        android:text="@={ viewModel.name }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:id="@+id/containerTypeBreed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="@dimen/margin_small"
-                    app:layout_constraintTop_toBottomOf="@+id/layoutName"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:baselineAligned="true">
+                    app:layout_constraintTop_toBottomOf="@+id/layoutName">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutType"
@@ -138,8 +138,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_micro"
-                        android:hint="@string/type"
                         android:layout_weight="1"
+                        android:hint="@string/type"
                         app:errorText="@{ viewModel.typeErrorMessage }"
                         app:setRequired="@{ viewModel.type }">
 
@@ -148,8 +148,8 @@
                             style="@style/Widget.CattleNOTES.AutoCompleteTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownText="@={ viewModel.type }"
                             app:dropDownList="@{@stringArray/list_type}"
+                            app:dropDownText="@={ viewModel.type }"
                             tools:ignore="LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,8 +159,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_micro"
-                        android:hint="@string/breed"
                         android:layout_weight="1"
+                        android:hint="@string/breed"
                         app:errorText="@{ viewModel.breedErrorMessage }"
                         app:setRequired="@{ viewModel.breed }">
 
@@ -169,8 +169,8 @@
                             style="@style/Widget.CattleNOTES.AutoCompleteTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownText="@={ viewModel.breed }"
                             app:dropDownList="@{@stringArray/list_breed}"
+                            app:dropDownText="@={ viewModel.breed }"
                             tools:ignore="Deprecated,LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,12 +180,12 @@
                     android:id="@+id/containerGroupLactation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="@dimen/margin_small"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/containerTypeBreed"
-                    android:baselineAligned="true">
+                    app:layout_constraintTop_toBottomOf="@+id/containerTypeBreed">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutGroup"
@@ -203,8 +203,8 @@
                             style="@style/Widget.CattleNOTES.AutoCompleteTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownText="@={ viewModel.group }"
                             app:dropDownList="@{@stringArray/list_group}"
+                            app:dropDownText="@={ viewModel.group }"
                             tools:ignore="Deprecated,LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -248,8 +248,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="@{ InputType.TYPE_NULL }"
                         app:dateText="@={ viewModel.dob }"
-                        app:onLongClickRemoveText="@{true}"
-                        app:onClickShowDatePicker="@{true}"/>
+                        app:onClickShowDatePicker="@{true}"
+                        app:onLongClickRemoveText="@{true}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -270,8 +270,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="@{ InputType.TYPE_NULL }"
-                        android:text="@={ viewModel.parent }"
-                        android:onClick="@{ () -> viewModel.pickParent() }" />
+                        android:onClick="@{ () -> viewModel.pickParent() }"
+                        android:text="@={ viewModel.parent }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.checkbox.MaterialCheckBox
@@ -280,8 +280,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
-                    android:text="@string/home_born"
                     android:checked="@={ viewModel.homeBorn }"
+                    android:text="@string/home_born"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/layoutParent" />
@@ -290,13 +290,13 @@
                     android:id="@+id/containerPurchase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:baselineAligned="true"
                     android:layout_marginTop="@dimen/margin_small"
+                    android:baselineAligned="true"
+                    android:orientation="horizontal"
                     app:goneUnless="@{ !viewModel.homeBorn }"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/switchHomeBorn"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toBottomOf="@+id/switchHomeBorn">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutPurchaseAmount"
@@ -304,8 +304,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_micro"
-                        android:hint="@string/purchase_amount"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:hint="@string/purchase_amount">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPurchaseAmount"
@@ -314,7 +314,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="number"
                             android:text="@={ viewModel.purchaseAmount }"
-                            app:resetText="@{ viewModel.homeBorn }"/>
+                            app:resetText="@{ viewModel.homeBorn }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -323,8 +323,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_micro"
-                        android:hint="@string/purchase_date"
                         android:layout_weight="1"
+                        android:hint="@string/purchase_date"
                         app:startIconDrawable="@drawable/ic_date">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -334,9 +334,9 @@
                             android:layout_height="wrap_content"
                             android:inputType="@{ InputType.TYPE_NULL }"
                             app:dateText="@={ viewModel.purchaseDate }"
-                            app:onLongClickRemoveText="@{true}"
                             app:onClickShowDatePicker="@{true}"
-                            app:resetText="@{ viewModel.homeBorn }"/>
+                            app:onLongClickRemoveText="@{true}"
+                            app:resetText="@{ viewModel.homeBorn }" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
@@ -358,8 +358,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/margin_normal"
-            android:src="@drawable/ic_check"
             android:onClick="@{() -> viewModel.save() }"
+            android:src="@drawable/ic_check"
             android:transitionName="@string/tn_fabButton" />
 
         <fragment
@@ -369,11 +369,11 @@
             android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:layout_marginBottom="@dimen/margin_micro"
-            app:layout_behavior="@string/bottom_sheet_behavior"
             app:behavior_hideable="true"
             app:behavior_peekHeight="@dimen/parent_list_bottom_sheet_peek_height"
             app:behavior_skipCollapsed="true"
-            tools:layout="@layout/fragment_parent_list"/>
+            app:layout_behavior="@string/bottom_sheet_behavior"
+            tools:layout="@layout/fragment_parent_list" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

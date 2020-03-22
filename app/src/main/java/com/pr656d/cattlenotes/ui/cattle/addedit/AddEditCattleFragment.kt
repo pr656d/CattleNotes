@@ -82,14 +82,18 @@ class AddEditCattleFragment : NavigationFragment() {
         bottomSheetBehavior.addBottomSheetCallback(
             object : BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    val state = if (newState == STATE_EXPANDED) {
+                    // On drag it can be collapsed, hide if it is.
+                    if (newState == STATE_COLLAPSED && bottomSheetBehavior.skipCollapsed)
+                        bottomSheetBehavior.state = STATE_HIDDEN
+
+                    val a11yState = if (newState == STATE_EXPANDED) {
                         View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
                     } else {
                         binding.editTextParent.isFocusableInTouchMode = false
                         View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
                     }
-                    binding.layoutContainer.importantForAccessibility = state
-                    binding.appBarLayout.importantForAccessibility = state
+                    binding.layoutContainer.importantForAccessibility = a11yState
+                    binding.appBarLayout.importantForAccessibility = a11yState
                 }
 
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {}
@@ -123,8 +127,21 @@ class AddEditCattleFragment : NavigationFragment() {
         })
 
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
+            hideKeyboard(requireView())
             Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()
         })
+
+        binding.exposedDropDownType.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) hideKeyboard(requireView())
+        }
+
+        binding.exposedDropDownBreed.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) hideKeyboard(requireView())
+        }
+
+        binding.exposedDropDownGroup.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) hideKeyboard(requireView())
+        }
     }
 
     private fun onBackPressed(): Boolean {
