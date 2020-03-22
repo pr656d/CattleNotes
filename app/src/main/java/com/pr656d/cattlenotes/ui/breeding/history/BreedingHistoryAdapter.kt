@@ -32,27 +32,63 @@ class BreedingHistoryListViewHolder(
     private val binding: ItemBreedingHistoryBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private lateinit var uiBehaviour: ItemBreedingUiBehaviour
+
     fun bind(data: Breeding) {
+        uiBehaviour = ItemBreedingUiBehaviour(data)
+
         binding.executeAfter {
             breeding = data
-            binding.isExpanded = isExpanded
+            behaviour = uiBehaviour
         }
 
         itemView.setOnClickListener {
             val parent = itemView.parent as? ViewGroup ?: return@setOnClickListener
-            val expanded = binding.isExpanded ?: false
+            uiBehaviour.expanded = binding.behaviour?.expanded?.not() ?: return@setOnClickListener
 
             val transition = TransitionInflater.from(itemView.context)
                 .inflateTransition(R.transition.expand_shrink_toggle)
             TransitionManager.beginDelayedTransition(parent, transition)
 
             binding.executeAfter {
-                isExpanded = !expanded
+                behaviour = uiBehaviour
             }
         }
     }
-}
 
+    /**
+     * Holds UI behaviour of item.
+     * See for reference [AddEditBreedingFragment] UI behaviour.
+     */
+    internal class ItemBreedingUiBehaviour(val breeding: Breeding) {
+
+        var expanded = false
+
+        val repeatHeatVisibility: Boolean
+            get() = expanded && breeding.artificialInsemination?.date != null
+
+        val repeatHeatDoneOnVisibility: Boolean
+            get() = expanded && breeding.repeatHeat?.status == true
+
+        val pregnancyCheckVisibility: Boolean
+            get() = expanded && breeding.repeatHeat?.status == false
+
+        val pregnancyCheckDoneOnVisibility: Boolean
+            get() = expanded && breeding.pregnancyCheck?.status != null
+
+        val dryOffVisibility: Boolean
+            get() = expanded && breeding.pregnancyCheck?.status == true
+
+        val dryOffDoneOnVisibility: Boolean
+            get() = expanded && breeding.dryOff?.status == true
+
+        val calvingVisibility: Boolean
+            get() = expanded && breeding.dryOff?.status == true
+
+        val calvingDoneOnVisibility: Boolean
+            get() = expanded && breeding.calving?.status == true
+    }
+}
 
 object BreedingDiff : DiffUtil.ItemCallback<Breeding>() {
     override fun areItemsTheSame(oldItem: Breeding, newItem: Breeding) =
