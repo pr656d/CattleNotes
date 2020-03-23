@@ -6,11 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
+import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentBreedingHistoryBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
+import com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryFragmentDirections.Companion.toAddEditBreeding
 import com.pr656d.model.Cattle
+import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
 class BreedingHistoryFragment : NavigationFragment() {
@@ -19,7 +24,8 @@ class BreedingHistoryFragment : NavigationFragment() {
         const val TAG = "BreedingHistoryFragment"
     }
 
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val model by viewModels<BreedingHistoryViewModel> { viewModelFactory }
 
@@ -45,5 +51,30 @@ class BreedingHistoryFragment : NavigationFragment() {
         )
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        model.launchDeleteConfirmation.observe(viewLifecycleOwner, EventObserver {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.delete_breeding)
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    model.deleteBreeding(it, deleteConfirmation = true)
+                }
+                .setNegativeButton(R.string.no, null)
+                .create()
+                .show()
+        })
+
+        model.launchEditBreeding.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(
+                toAddEditBreeding(
+                    cattle = Gson().toJson(it.first),
+                    breeding = Gson().toJson(it.second)
+                )
+            )
+        })
+
     }
 }

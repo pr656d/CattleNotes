@@ -13,6 +13,10 @@
             name="behaviour"
             type="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryListViewHolder.ItemBreedingUiBehaviour" />
 
+        <variable
+            name="listener"
+            type="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryActionListener" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +37,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             bind:breeding="@{breeding}"
-            bind:behaviour="@{behaviour}"/>
+            bind:behaviour="@{behaviour}"
+            bind:listener="@{listener}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

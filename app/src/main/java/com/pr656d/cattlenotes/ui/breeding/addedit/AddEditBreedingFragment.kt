@@ -16,6 +16,7 @@ import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentAddEditBreedingBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
+import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
@@ -52,6 +53,12 @@ class AddEditBreedingFragment : NavigationFragment() {
         model.setCattle(
             Gson().fromJson(args.cattle, Cattle::class.java)
         )
+
+        args.breeding?.let {
+            model.setBreeding(
+                Gson().fromJson(it, Breeding::class.java)
+            )
+        }
 
         model.editing.observe(viewLifecycleOwner) {
             if (it)

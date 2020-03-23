@@ -12,14 +12,17 @@ import com.pr656d.cattlenotes.databinding.ItemBreedingHistoryBinding
 import com.pr656d.cattlenotes.utils.executeAfter
 import com.pr656d.model.Breeding
 
-class BreedingHistoryAdapter : ListAdapter<Breeding, BreedingHistoryListViewHolder>(BreedingDiff) {
+class BreedingHistoryAdapter(
+    private val listener: BreedingHistoryActionListener
+) : ListAdapter<Breeding, BreedingHistoryListViewHolder>(BreedingDiff) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): BreedingHistoryListViewHolder {
         return BreedingHistoryListViewHolder(
-            ItemBreedingHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemBreedingHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            listener
         )
     }
 
@@ -29,7 +32,8 @@ class BreedingHistoryAdapter : ListAdapter<Breeding, BreedingHistoryListViewHold
 }
 
 class BreedingHistoryListViewHolder(
-    private val binding: ItemBreedingHistoryBinding
+    private val binding: ItemBreedingHistoryBinding,
+    private val listener: BreedingHistoryActionListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var uiBehaviour: ItemBreedingUiBehaviour
@@ -40,6 +44,7 @@ class BreedingHistoryListViewHolder(
         binding.executeAfter {
             breeding = data
             behaviour = uiBehaviour
+            listener = this@BreedingHistoryListViewHolder.listener
         }
 
         itemView.setOnClickListener {
@@ -58,35 +63,52 @@ class BreedingHistoryListViewHolder(
 
     /**
      * Holds UI behaviour of item.
-     * See for reference [AddEditBreedingFragment] UI behaviour.
+     * See for reference [BreedingBehaviour] for [AddEditBreedingFragment] UI behaviour.
      */
     internal class ItemBreedingUiBehaviour(val breeding: Breeding) {
 
         var expanded = false
 
+        val aiDidByVisibility: Boolean
+            get() = breeding.artificialInsemination?.didBy.isNullOrEmpty().not()
+
+        val aiBullNameVisibility: Boolean
+            get() = breeding.artificialInsemination?.bullName.isNullOrEmpty().not()
+
+        val aiStrawCodeVisibility: Boolean
+            get() = breeding.artificialInsemination?.strawCode.isNullOrEmpty().not()
+
         val repeatHeatVisibility: Boolean
             get() = expanded && breeding.artificialInsemination?.date != null
 
         val repeatHeatDoneOnVisibility: Boolean
-            get() = expanded && breeding.repeatHeat?.status == true
+            get() = expanded &&
+                    breeding.repeatHeat?.status == true &&
+                    breeding.repeatHeat?.doneOn != null
 
         val pregnancyCheckVisibility: Boolean
             get() = expanded && breeding.repeatHeat?.status == false
 
         val pregnancyCheckDoneOnVisibility: Boolean
-            get() = expanded && breeding.pregnancyCheck?.status != null
+            get() = expanded &&
+                    breeding.pregnancyCheck?.status != null &&
+                    breeding.pregnancyCheck?.doneOn != null
 
         val dryOffVisibility: Boolean
             get() = expanded && breeding.pregnancyCheck?.status == true
 
         val dryOffDoneOnVisibility: Boolean
-            get() = expanded && breeding.dryOff?.status == true
+            get() = expanded &&
+                    breeding.dryOff?.status == true &&
+                    breeding.dryOff?.doneOn != null
 
         val calvingVisibility: Boolean
             get() = expanded && breeding.dryOff?.status == true
 
         val calvingDoneOnVisibility: Boolean
-            get() = expanded && breeding.calving?.status == true
+            get() = expanded &&
+                    breeding.calving?.status == true &&
+                    breeding.calving?.doneOn != null
     }
 }
 

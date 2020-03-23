@@ -5,13 +5,16 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pr656d.model.Breeding
 
-@BindingAdapter(value = ["breedingHistoryListItems"], requireAll = true)
+@BindingAdapter(value = ["breedingHistoryListItems", "breedingHistoryViewModel"], requireAll = true)
 fun breedingHistoryListItems(
     recyclerView: RecyclerView,
-    list: List<Breeding>?
+    list: List<Breeding>?,
+    breedingHistoryViewModel: BreedingHistoryViewModel
 ) {
     if (recyclerView.adapter == null) {
-        recyclerView.adapter = BreedingHistoryAdapter()
+        recyclerView.adapter = BreedingHistoryAdapter(
+            breedingHistoryViewModel as BreedingHistoryActionListener
+        )
     }
 
     if (list.isNullOrEmpty()) {

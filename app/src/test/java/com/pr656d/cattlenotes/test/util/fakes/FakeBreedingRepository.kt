@@ -35,8 +35,8 @@ open class FakeBreedingRepository(
         return fakeAppDatabase.breedingDao().getAllBreedingCycleWithCattle()
     }
 
-    override fun getBreedingById(cattleId: Long): Breeding? {
-        return fakeAppDatabase.breedingDao().getByCattleId(cattleId)
+    override fun getAllBreedingByCattleId(cattleId: Long): List<Breeding> {
+        return fakeAppDatabase.breedingDao().getAllByCattleId(cattleId)
     }
 
     override fun deleteBreeding(breeding: Breeding) {

@@ -11,399 +11,598 @@
 
         <variable
             name="behaviour"
-            type="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryListViewHolder.ItemBreedingUiBehaviour"/>
+            type="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryListViewHolder.ItemBreedingUiBehaviour" />
+
+        <variable
+            name="listener"
+            type="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryActionListener" />
 
     </data>
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="6dp"
+        android:layout_margin="@dimen/margin_small"
         android:minHeight="?listPreferredItemHeight">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="?attr/listPreferredItemPaddingStart"
-            android:paddingEnd="?attr/listPreferredItemPaddingEnd"
-            android:paddingBottom="@dimen/padding_normal">
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textViewAiTitle"
-                style="@style/Widget.CattleNOTES.BreedingTitle"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/artificial_insemination"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:padding="@dimen/padding_normal">
 
-            <TextView
-                android:id="@+id/textViewAiDoneOnTitle"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/textViewAiTitle"
+                    style="@style/Widget.CattleNOTES.BreedingTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/artificial_insemination"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textViewAiDoneOnTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/done_on"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewAiTitle" />
+
+                <TextView
+                    android:id="@+id/textViewAiDoneOnValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@{ breeding.artificialInsemination.date }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewAiDoneOnTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="20/03/2020" />
+
+                <TextView
+                    android:id="@+id/textViewAiDidByTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/did_by"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.aiDidByVisibility }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewAiDoneOnTitle" />
+
+                <TextView
+                    android:id="@+id/textViewAiDidByValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.artificialInsemination.didBy }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.aiDidByVisibility }"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewAiDidByTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="AI person name" />
+
+                <TextView
+                    android:id="@+id/textViewAiBullNameTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/bull_name"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.aiBullNameVisibility }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewAiDidByTitle" />
+
+                <TextView
+                    android:id="@+id/textViewAiBullNameValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.artificialInsemination.bullName }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.aiBullNameVisibility }"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewAiBullNameTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="Name" />
+
+                <TextView
+                    android:id="@+id/textViewAiStrawCodeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/straw_code"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.aiStrawCodeVisibility }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewAiBullNameTitle" />
+
+                <TextView
+                    android:id="@+id/textViewAiStrawCodeValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:text="@{ breeding.artificialInsemination.strawCode }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.aiStrawCodeVisibility }"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewAiStrawCodeTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="Name" />
+
+                <TextView
+                    android:id="@+id/textViewRHTitle"
+                    style="@style/Widget.CattleNOTES.BreedingTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/repeat_heat"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewAiStrawCodeTitle" />
+
+                <TextView
+                    android:id="@+id/textViewRHExpectedTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/expected"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewRHTitle" />
+
+                <TextView
+                    android:id="@+id/textViewRHExpectedValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.repeatHeat.expectedOn }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewRHExpectedTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="20/03/2020" />
+
+                <TextView
+                    android:id="@+id/textViewRHStatusTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/status"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewRHExpectedTitle" />
+
+                <TextView
+                    android:id="@+id/textViewRHStatusValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.repeatHeat.statusString }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewRHStatusTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="Negative" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupRHTitleExpectedStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="textViewRHTitle,textViewRHExpectedTitle,textViewRHExpectedValue,textViewRHStatusTitle,textViewRHStatusValue"
+                    app:goneUnless="@{ behaviour.repeatHeatVisibility }"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewRHDoneOnTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/done_on"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewRHStatusTitle"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewRHDoneOnValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.repeatHeat.doneOn }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewRHDoneOnTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="20/03/2020"
+                    tools:visibility="gone" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupRHDoneOnTitleValue"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="textViewRHDoneOnTitle,textViewRHDoneOnValue"
+                    app:goneUnless="@{ behaviour.repeatHeatDoneOnVisibility }"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewPCTitle"
+                    style="@style/Widget.CattleNOTES.BreedingTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/pregnancy_check"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewRHDoneOnTitle" />
+
+                <TextView
+                    android:id="@+id/textViewPCExpectedTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/expected"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewPCTitle" />
+
+                <TextView
+                    android:id="@+id/textViewPCExpectedValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.pregnancyCheck.expectedOn }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewPCExpectedTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="20/03/2020" />
+
+                <TextView
+                    android:id="@+id/textViewPCStatusTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/status"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewPCExpectedTitle" />
+
+                <TextView
+                    android:id="@+id/textViewPCStatusValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.pregnancyCheck.statusString }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewPCStatusTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="Negative" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupPCTitleExpectedStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="textViewPCTitle,textViewPCExpectedTitle,textViewPCExpectedValue,textViewPCStatusTitle,textViewPCStatusValue"
+                    app:goneUnless="@{ behaviour.pregnancyCheckVisibility }"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewPCDoneOnTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/done_on"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.pregnancyCheckDoneOnVisibility }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewPCStatusTitle"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewPCDoneOnValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.pregnancyCheck.doneOn }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.pregnancyCheckDoneOnVisibility }"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewPCDoneOnTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="20/03/2020"
+                    tools:visibility="gone" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupPCDoneOnTitleValue"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="textViewPCDoneOnTitle,textViewPCDoneOnValue"
+                    app:goneUnless="@{ behaviour.pregnancyCheckDoneOnVisibility }"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewDOTitle"
+                    style="@style/Widget.CattleNOTES.BreedingTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/dry_off"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewPCDoneOnTitle" />
+
+                <TextView
+                    android:id="@+id/textViewDOExpectedTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/expected"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewDOTitle" />
+
+                <TextView
+                    android:id="@+id/textViewDOExpectedValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.dryOff.expectedOn }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewDOExpectedTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="20/03/2020" />
+
+                <TextView
+                    android:id="@+id/textViewDOStatusTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/status"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewDOExpectedTitle" />
+
+                <TextView
+                    android:id="@+id/textViewDOStatusValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.dryOff.statusString }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewDOStatusTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="Negative" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupDOTitleExpectedStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="textViewDOTitle,textViewDOExpectedTitle,textViewDOExpectedValue,textViewDOStatusTitle,textViewDOStatusValue"
+                    app:goneUnless="@{ behaviour.dryOffVisibility }"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewDODoneOnTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/done_on"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.dryOffDoneOnVisibility }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewDOStatusTitle"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewDODoneOnValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.dryOff.doneOn }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.dryOffDoneOnVisibility }"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewDODoneOnTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="20/03/2020"
+                    tools:visibility="gone" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupDODoneOnTitleValue"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="textViewDODoneOnTitle,textViewDODoneOnValue"
+                    app:goneUnless="@{ behaviour.dryOffDoneOnVisibility }"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewCalvingTitle"
+                    style="@style/Widget.CattleNOTES.BreedingTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/calving"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewDODoneOnTitle" />
+
+                <TextView
+                    android:id="@+id/textViewCalvingExpectedTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/expected"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewCalvingTitle" />
+
+                <TextView
+                    android:id="@+id/textViewCalvingExpectedValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.calving.expectedOn }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewCalvingExpectedTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="20/03/2020" />
+
+                <TextView
+                    android:id="@+id/textViewCalvingStatusTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/status"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewCalvingExpectedTitle" />
+
+                <TextView
+                    android:id="@+id/textViewCalvingStatusValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.calving.statusString }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewCalvingStatusTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="Negative" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupCalvingTitleExpectedStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="textViewCalvingTitle,textViewCalvingExpectedTitle,textViewCalvingExpectedValue,textViewCalvingStatusTitle,textViewCalvingStatusValue"
+                    app:goneUnless="@{ behaviour.calvingVisibility }"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewCalvingDoneOnTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:text="@string/done_on"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.calvingDoneOnVisibility }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewCalvingStatusTitle"
+                    tools:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/textViewCalvingDoneOnValue"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@{ breeding.calving.doneOn }"
+                    android:textAlignment="textEnd"
+                    android:textAppearance="?attr/textAppearanceListItem"
+                    app:goneUnless="@{ behaviour.calvingDoneOnVisibility }"
+                    app:layout_constraintBaseline_toBaselineOf="@+id/textViewCalvingDoneOnTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    tools:text="20/03/2020"
+                    tools:visibility="gone" />
+
+                <androidx.constraintlayout.widget.Group
+                    android:id="@+id/groupCalvingDoneOnTitleValue"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:constraint_referenced_ids="textViewCalvingDoneOnTitle,textViewCalvingDoneOnValue"
+                    app:goneUnless="@{ behaviour.calvingDoneOnVisibility }"
+                    tools:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/expand_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:importantForAccessibility="no"
+                    android:rotationX="@{ behaviour.expanded ? 180f : 0f}"
+                    android:src="@drawable/ic_expand_more"
+                    app:layout_constraintBottom_toBottomOf="@+id/textViewAiTitle"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textViewAiTitle"
+                    tools:ignore="ContentDescription" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.4" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/done_on"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewAiTitle" />
+                android:layout_marginHorizontal="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textViewAiDoneOnValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.artificialInsemination.date }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewAiDoneOnTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="20/03/2020" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/ivEdit"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:onClick="@{ () -> listener.editBreeding(breeding) }"
+                    android:text="@string/edit"
+                    android:textAlignment="textStart"
+                    tools:ignore="ContentDescription" />
 
-            <TextView
-                android:id="@+id/textViewRHTitle"
-                style="@style/Widget.CattleNOTES.BreedingTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                android:text="@string/repeat_heat"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewAiDoneOnTitle" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/margin_micro"
+                    android:layoutDirection="rtl"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textViewRHExpectedTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/expected"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewRHTitle" />
+                    <ImageButton
+                        android:id="@+id/ivDelete"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="end"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:onClick="@{ () -> listener.deleteBreeding(breeding) }"
+                        android:padding="@dimen/padding_micro"
+                        app:srcCompat="@drawable/ic_delete"
+                        tools:ignore="ContentDescription" />
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewRHExpectedValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.repeatHeat.expectedOn }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewRHExpectedTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="20/03/2020" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/textViewRHStatusTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/status"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewRHExpectedTitle" />
-
-            <TextView
-                android:id="@+id/textViewRHStatusValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.repeatHeat.statusString }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewRHStatusTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="Negative" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupRHTitleExpectedStatus"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:goneUnless="@{ behaviour.repeatHeatVisibility }"
-                app:constraint_referenced_ids="textViewRHTitle,textViewRHExpectedTitle,textViewRHExpectedValue,textViewRHStatusTitle,textViewRHStatusValue"
-                tools:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/textViewRHDoneOnTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/done_on"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:goneUnless="@{ behaviour.repeatHeatDoneOnVisibility }"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewRHStatusTitle"
-                tools:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/textViewRHDoneOnValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.repeatHeat.doneOn }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:goneUnless="@{ behaviour.repeatHeatDoneOnVisibility }"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewRHDoneOnTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="20/03/2020"
-                tools:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/textViewPCTitle"
-                style="@style/Widget.CattleNOTES.BreedingTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                android:text="@string/pregnancy_check"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewRHDoneOnTitle" />
-
-            <TextView
-                android:id="@+id/textViewPCExpectedTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/expected"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewPCTitle" />
-
-            <TextView
-                android:id="@+id/textViewPCExpectedValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.pregnancyCheck.expectedOn }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewPCExpectedTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="20/03/2020" />
-
-            <TextView
-                android:id="@+id/textViewPCStatusTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/status"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewPCExpectedTitle" />
-
-            <TextView
-                android:id="@+id/textViewPCStatusValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.pregnancyCheck.statusString }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewPCStatusTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="Negative" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupPCTitleExpectedStatus"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:goneUnless="@{ behaviour.pregnancyCheckVisibility }"
-                app:constraint_referenced_ids="textViewPCTitle,textViewPCExpectedTitle,textViewPCExpectedValue,textViewPCStatusTitle,textViewPCStatusValue"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/textViewPCDoneOnTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/done_on"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:goneUnless="@{ behaviour.pregnancyCheckDoneOnVisibility }"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewPCStatusTitle"
-                tools:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/textViewPCDoneOnValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.pregnancyCheck.doneOn }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:goneUnless="@{ behaviour.pregnancyCheckDoneOnVisibility }"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewPCDoneOnTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="20/03/2020"
-                tools:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/textViewDOTitle"
-                style="@style/Widget.CattleNOTES.BreedingTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                android:text="@string/dry_off"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewPCDoneOnTitle" />
-
-            <TextView
-                android:id="@+id/textViewDOExpectedTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/expected"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewDOTitle" />
-
-            <TextView
-                android:id="@+id/textViewDOExpectedValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.dryOff.expectedOn }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewDOExpectedTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="20/03/2020" />
-
-            <TextView
-                android:id="@+id/textViewDOStatusTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/status"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewDOExpectedTitle" />
-
-            <TextView
-                android:id="@+id/textViewDOStatusValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.dryOff.statusString }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewDOStatusTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="Negative" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupDOTitleExpectedStatus"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:goneUnless="@{ behaviour.dryOffVisibility }"
-                app:constraint_referenced_ids="textViewDOTitle,textViewDOExpectedTitle,textViewDOExpectedValue,textViewDOStatusTitle,textViewDOStatusValue"
-                tools:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/textViewDODoneOnTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/done_on"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:goneUnless="@{ behaviour.dryOffDoneOnVisibility }"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewDOStatusTitle"
-                tools:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/textViewDODoneOnValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.dryOff.doneOn }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:goneUnless="@{ behaviour.dryOffDoneOnVisibility }"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewDODoneOnTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="20/03/2020"
-                tools:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/textViewCalvingTitle"
-                style="@style/Widget.CattleNOTES.BreedingTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
-                android:text="@string/calving"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewDODoneOnTitle"/>
-
-            <TextView
-                android:id="@+id/textViewCalvingExpectedTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/expected"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCalvingTitle" />
-
-            <TextView
-                android:id="@+id/textViewCalvingExpectedValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.calving.expectedOn }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewCalvingExpectedTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="20/03/2020" />
-
-            <TextView
-                android:id="@+id/textViewCalvingStatusTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/status"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCalvingExpectedTitle" />
-
-            <TextView
-                android:id="@+id/textViewCalvingStatusValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.calving.statusString }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewCalvingStatusTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="Negative" />
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/groupCalvingTitleExpectedStatus"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:goneUnless="@{ behaviour.calvingVisibility }"
-                app:constraint_referenced_ids="textViewCalvingTitle,textViewCalvingExpectedTitle,textViewCalvingExpectedValue,textViewCalvingStatusTitle,textViewCalvingStatusValue"
-                tools:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/textViewCalvingDoneOnTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_normal"
-                android:text="@string/done_on"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:goneUnless="@{ behaviour.calvingDoneOnVisibility }"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCalvingStatusTitle"
-                tools:visibility="gone" />
-
-            <TextView
-                android:id="@+id/textViewCalvingDoneOnValue"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{ breeding.calving.doneOn }"
-                android:textAppearance="?attr/textAppearanceListItem"
-                app:goneUnless="@{ behaviour.calvingDoneOnVisibility }"
-                app:layout_constraintBaseline_toBaselineOf="@+id/textViewCalvingDoneOnTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                tools:text="20/03/2020"
-                tools:visibility="gone"/>
-
-            <ImageView
-                android:id="@+id/expand_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
-                android:rotationX="@{ behaviour.expanded ? 180f : 0f}"
-                android:src="@drawable/ic_expand_more"
-                android:layout_marginTop="@dimen/margin_normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="ContentDescription" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

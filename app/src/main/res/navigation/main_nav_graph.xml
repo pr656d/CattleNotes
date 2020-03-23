@@ -34,7 +34,7 @@
         android:label="@string/cattle_detail"
         tools:layout="@layout/fragment_cattle_detail">
 
-        <!--  Pass as JSON using Gson library  -->
+        <!--  Pass Cattle as JSON  -->
         <argument
             android:name="cattle"
             app:argType="string" />
@@ -78,7 +78,7 @@
         android:label="@string/add_cattle"
         tools:layout="@layout/fragment_add_edit_cattle">
 
-        <!--  Pass as JSON using Gson library  -->
+        <!--  Pass Cattle as JSON  -->
         <argument
             android:name="cattle"
             app:argType="string"
@@ -116,7 +116,7 @@
         android:label="@string/active_breeding"
         tools:layout="@layout/fragment_active_breeding">
 
-        <!--  Pass as JSON using Gson library  -->
+        <!--  Pass Cattle as JSON  -->
         <argument
             android:name="cattle"
             app:argType="string" />
@@ -128,10 +128,17 @@
         android:label="@string/add_new_breeding"
         tools:layout="@layout/fragment_add_edit_breeding">
 
-        <!--  Pass as JSON using Gson library  -->
+        <!--  Pass Cattle as JSON  -->
         <argument
             android:name="cattle"
             app:argType="string" />
+        
+        <!--  Pass Breeding as JSON  -->
+        <argument
+            android:name="breeding"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
 
     </fragment>
 
@@ -141,10 +148,18 @@
         android:label="@string/breeding_history"
         tools:layout="@layout/fragment_breeding_history">
 
-        <!--  Pass as JSON using Gson library  -->
+        <!--  Pass Cattle as JSON  -->
         <argument
             android:name="cattle"
             app:argType="string" />
+
+        <action
+            android:id="@+id/to_add_edit_breeding"
+            app:destination="@id/addEditBreedingScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
 

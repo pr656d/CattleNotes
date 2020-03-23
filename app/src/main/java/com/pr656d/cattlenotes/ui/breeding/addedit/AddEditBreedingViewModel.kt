@@ -78,7 +78,7 @@ class AddEditBreedingViewModel @Inject constructor(
         }
     }
 
-    fun setBreedingCycle(breeding: Breeding) {
+    fun setBreeding(breeding: Breeding) {
         _editing.value = true
         oldBreeding = breeding
         getCattleByIdUseCase(breeding.cattleId, getCattleResult)
@@ -136,7 +136,9 @@ class AddEditBreedingViewModel @Inject constructor(
             calvingExpectedOn.value?.let {
                 BreedingEvent(it, calvingStatus.value, calvingDoneOn.value)
             }
-        )
+        ).apply {
+            oldBreeding?.id?.let { id = it }
+        }
 
     private fun Breeding.bindData() {
         // AI

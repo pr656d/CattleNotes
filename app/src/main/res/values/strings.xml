@@ -9,6 +9,7 @@
     <string name="ok">OK</string>
     <string name="back">Go Back</string>
     <string name="retry">Retry</string>
+    <string name="edit">Edit</string>
     <string name="more">More</string>
     <string name="remove_text">Remove %1$s?</string>
     <string name="required">Required</string>
@@ -120,7 +121,7 @@
     <string name="edit_cattle_details">Edit cattle details</string>
     <string name="menu_item_edit">Edit</string>
     <string name="menu_item_delete">Delete</string>
-    <string name="delete_cattle_message">Delete cattle?</string>
+    <string name="delete_cattle">Delete cattle?</string>
 
     <!-- Breeding  -->
     <string name="mark_as_active">Mark as active</string>
@@ -133,6 +134,8 @@
     <string name="none">None</string>
     <string name="status">Status</string>
     <string name="empty_breeding">No breeding available</string>
+    <string name="delete_breeding">Delete breeding?</string>
+    <string name="not_set">Not set</string>
 
     <!--  Settings  -->
     <string name="theme_title">Choose theme</string>

@@ -211,6 +211,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={ viewModel.didBy }"
+                            android:singleLine="true"
+                            android:inputType="textPersonName"
                             app:resetText="@{ viewModel.resetDidBy }"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -229,6 +231,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={ viewModel.bullName }"
+                            android:singleLine="true"
                             app:resetText="@{ viewModel.resetBullName }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -247,6 +250,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={ viewModel.strawCode }"
+                            android:singleLine="true"
                             app:resetText="@{ viewModel.resetStrawCode }" />
                     </com.google.android.material.textfield.TextInputLayout>
 
