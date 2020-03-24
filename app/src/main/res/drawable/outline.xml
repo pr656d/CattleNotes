@@ -4,14 +4,14 @@
     android:shape="rectangle">
 
     <stroke
-        android:width="@dimen/box_stroke_width"
-        android:color="@color/outlined_box_stroke_color">
+        android:width="@dimen/textinput_box_stroke_width"
+        android:color="@color/mtrl_outlined_stroke_color_copy">
     </stroke>
 
     <solid android:color="@android:color/transparent"/>
 
     <corners
-        android:radius="@dimen/box_corner_radius">
+        android:radius="@dimen/textinput_box_corner_radius_medium">
     </corners>
 
 </shape>

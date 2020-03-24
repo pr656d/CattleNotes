@@ -14,14 +14,6 @@
     <color name="secondaryTextColor">#000000</color>
     <color name="colorAccent">#FFFFFF</color>
 
-    <!--
-      To match TextInputLayout box stroke color for MaterialSwitch and MaterialCheckbox
-      to look like TextInputLayout outlined box.
-
-      Reference : https://stackoverflow.com/a/11019879/8146210
-    -->
-    <color name="outlined_box_stroke_color">#61000000</color> <!-- 38% black -->
-
     <color name="color_control_light">#2EFFFFFF</color> <!-- 18% white -->
 
     <!-- Scrim colors -->

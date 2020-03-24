@@ -23,9 +23,12 @@
     <dimen name="dialogPreferredPadding">24dp</dimen>
 
     <!--  Dimensions for TextInputLayout  -->
-    <dimen name="text_size_text_input_layout">16sp</dimen>
-    <dimen name="box_stroke_width">1dp</dimen>
-    <dimen name="box_corner_radius">4dp</dimen>
+    <!--  Copy of mtrl_textinput_box_stroke_width_default  -->
+    <dimen name="textinput_box_stroke_width">1dp</dimen>
+    <!--  Copy of mtrl_textinput_box_corner_radius_medium  -->
+    <dimen name="textinput_box_corner_radius_medium">4dp</dimen>
+    <!--  Copy of mtrl_textinput_box_corner_radius_small  -->
+    <dimen name="textinput_box_corner_radius_small">0dp</dimen>
 
     <dimen name="box_padding">16dp</dimen>
 

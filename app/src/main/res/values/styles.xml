@@ -115,7 +115,7 @@
     <style name="Widget.CattleNOTES.AppTextInputEditText" parent="Theme.MaterialComponents.Light">
         <item name="android:paddingStart">@dimen/box_padding</item>
         <item name="android:maxLines">1</item>
-        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:textColor">@color/always_color_on_surface</item>
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
     </style>
 
@@ -124,12 +124,16 @@
         <item name="android:enabled">false</item>
     </style>
 
-    <style name="Widget.CattleNOTES.TextInputParent" parent="Widget.CattleNOTES.AppTextInputDate"/>
+    <style name="Widget.CattleNOTES.TextInputParent" parent="Widget.CattleNOTES.AppTextInputEditText">
+        <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
+        <item name="android:cursorVisible">false</item>
+    </style>
 
     <style name="Widget.CattleNOTES.MaterialCheckBox">
         <item name="android:background">@drawable/outline</item>
         <item name="android:padding">@dimen/box_padding</item>
-        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:textColor">@color/always_color_on_surface</item>
         <item name="android:layoutDirection">rtl</item>
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
     </style>
@@ -137,7 +141,7 @@
     <style name="Widget.CattleNOTES.MaterialCheckBox.Disabled">
         <item name="android:background">@drawable/outline</item>
         <item name="android:padding">@dimen/box_padding</item>
-        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:textColor">@color/always_color_on_surface</item>
         <item name="android:layoutDirection">rtl</item>
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
         <item name="android:enabled">false</item>
@@ -149,7 +153,7 @@
         <item name="android:paddingEnd">@dimen/padding_micro</item>
         <item name="android:paddingTop">@dimen/box_padding</item>
         <item name="android:paddingBottom">@dimen/box_padding</item>
-        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:textColor">@color/always_color_on_surface</item>
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
     </style>
 
@@ -161,7 +165,7 @@
     <style name="Widget.CattleNOTES.AutoCompleteTextView">
         <item name="android:editable">false</item>
         <item name="android:paddingStart">@dimen/box_padding</item>
-        <item name="android:textColor">@drawable/selector_text_color</item>
+        <item name="android:textColor">@color/always_color_on_surface</item>
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
     </style>
 
