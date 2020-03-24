@@ -37,4 +37,7 @@
     <dimen name="parent_detail_bottom_sheet_peek_height">@dimen/a11y_min_touch_target</dimen>
     <!--  AddEditCattle  -->
     <dimen name="parent_list_bottom_sheet_peek_height">@dimen/a11y_min_touch_target</dimen>
+
+    <dimen name="item_breeding_history_card_stroke_width">1dp</dimen>
+    <dimen name="item_breeding_history_card_elevation">0dp</dimen>
 </resources>
