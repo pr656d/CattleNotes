@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- These ids are used in both the menu (navigation.xml) and the nav graph (nav_graph.xml).
-         Each menu item and nav graph fragment represent the same logical item. -->
-    <item name="cattleListScreen" type="id"/>
-    <item name="timelineScreen" type="id" />
-    <item name="milkingScreen" type="id" />
-    <item name="cashflowScreen" type="id" />
-    <item name="settingsScreen" type="id" />
-    <item name="aboutAppScreen" type="id" />
+    <!-- These ids are used in both the menu (navigation.xml) and the nav graph (main_nav_graph.xml).
+         Each menu item and nested graph represent the same logical item. -->
+    <item name="cattle_graph" type="id"/>
+    <item name="timeline_graph" type="id" />
+    <item name="milking_graph" type="id" />
+    <item name="cashflow_graph" type="id" />
+    <item name="settings_graph" type="id" />
+    <item name="about_app_graph" type="id" />
 </resources>
