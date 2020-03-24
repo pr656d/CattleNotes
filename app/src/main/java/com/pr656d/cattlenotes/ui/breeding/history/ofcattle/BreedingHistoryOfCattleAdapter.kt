@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.breeding.history
+package com.pr656d.cattlenotes.ui.breeding.history.ofcattle
 
 import android.transition.TransitionInflater
 import android.transition.TransitionManager
@@ -8,43 +8,53 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.databinding.ItemBreedingHistoryBinding
+import com.pr656d.cattlenotes.databinding.ItemBreedingHistoryOfCattleBinding
+import com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryActionListener
 import com.pr656d.cattlenotes.utils.executeAfter
 import com.pr656d.model.Breeding
 
-class BreedingHistoryAdapter(
+class BreedingHistoryOfCattleAdapter(
     private val listener: BreedingHistoryActionListener
-) : ListAdapter<Breeding, BreedingHistoryListViewHolder>(BreedingDiff) {
+) : ListAdapter<Breeding, BreedingHistoryOfCattleListViewHolder>(
+    BreedingDiff
+) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BreedingHistoryListViewHolder {
-        return BreedingHistoryListViewHolder(
-            ItemBreedingHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+    ): BreedingHistoryOfCattleListViewHolder {
+        return BreedingHistoryOfCattleListViewHolder(
+            ItemBreedingHistoryOfCattleBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ),
             listener
         )
     }
 
-    override fun onBindViewHolder(holder: BreedingHistoryListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BreedingHistoryOfCattleListViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 }
 
-class BreedingHistoryListViewHolder(
-    private val binding: ItemBreedingHistoryBinding,
+class BreedingHistoryOfCattleListViewHolder(
+    private val binding: ItemBreedingHistoryOfCattleBinding,
     private val listener: BreedingHistoryActionListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
     private lateinit var uiBehaviour: ItemBreedingUiBehaviour
 
     fun bind(data: Breeding) {
-        uiBehaviour = ItemBreedingUiBehaviour(data)
+        uiBehaviour =
+            ItemBreedingUiBehaviour(
+                data
+            )
 
         binding.executeAfter {
             breeding = data
             behaviour = uiBehaviour
-            listener = this@BreedingHistoryListViewHolder.listener
+            listener = this@BreedingHistoryOfCattleListViewHolder.listener
         }
 
         itemView.setOnClickListener {

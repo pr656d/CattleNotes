@@ -1,6 +1,7 @@
-package com.pr656d.cattlenotes.ui.breeding.history
+package com.pr656d.cattlenotes.ui.breeding.history.ofcattle
 
 import androidx.lifecycle.*
+import com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryActionListener
 import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.DeleteBreedingUseCase
@@ -12,10 +13,11 @@ import com.pr656d.shared.domain.result.Result.Success
 import com.pr656d.shared.log.Logger
 import javax.inject.Inject
 
-class BreedingHistoryViewModel @Inject constructor(
+class BreedingHistoryOfCattleViewModel @Inject constructor(
     loadBreedingHistoryByCattleIdUseCase: LoadBreedingHistoryByCattleIdUseCase,
     private val deleteBreedingUseCase: DeleteBreedingUseCase
-) : ViewModel(), BreedingHistoryActionListener {
+) : ViewModel(),
+    BreedingHistoryActionListener {
 
     val cattle = MutableLiveData<Cattle>()
 

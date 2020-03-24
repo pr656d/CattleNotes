@@ -144,9 +144,9 @@
 
     <fragment
         android:id="@+id/breedingHistoryScreen"
-        android:name="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryFragment"
+        android:name="com.pr656d.cattlenotes.ui.breeding.history.ofcattle.BreedingHistoryOfCattleFragment"
         android:label="@string/breeding_history"
-        tools:layout="@layout/fragment_breeding_history">
+        tools:layout="@layout/fragment_breeding_history_of_cattle">
 
         <!--  Pass Cattle as JSON  -->
         <argument

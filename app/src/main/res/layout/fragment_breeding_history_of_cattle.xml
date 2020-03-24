@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryViewModel" />
+            type="com.pr656d.cattlenotes.ui.breeding.history.ofcattle.BreedingHistoryOfCattleViewModel" />
 
     </data>
 
@@ -29,7 +29,8 @@
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/breeding_history"
-                app:subtitle="@{ String.valueOf(viewModel.cattle.tagNumber) }"/>
+                app:subtitle="@{ String.valueOf(viewModel.cattle.tagNumber) }"
+                tools:subtitle="532412413412"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -40,12 +41,12 @@
             android:paddingBottom="@dimen/padding_large"
             android:scrollbars="vertical"
             android:scrollbarStyle="insideOverlay"
-            app:breedingHistoryListItems="@{ viewModel.breedingList }"
-            app:breedingHistoryViewModel="@{viewModel}"
+            app:breedingHistoryOfCattleListItems="@{ viewModel.breedingList }"
+            app:breedingHistoryOfCattleViewModel="@{viewModel}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layoutManager="LinearLayoutManager"
             tools:itemCount="2"
-            tools:listitem="@layout/item_breeding_history"/>
+            tools:listitem="@layout/item_breeding_history_of_cattle"/>
 
         <TextView
             android:id="@+id/tvEmptyListMessage"

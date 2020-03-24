@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.breeding.history
+package com.pr656d.cattlenotes.ui.breeding.history.ofcattle
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,36 +11,33 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.databinding.FragmentBreedingHistoryBinding
+import com.pr656d.cattlenotes.databinding.FragmentBreedingHistoryOfCattleBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
-import com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryFragmentDirections.Companion.toAddEditBreeding
+import com.pr656d.cattlenotes.ui.breeding.history.ofcattle.BreedingHistoryOfCattleFragmentDirections.Companion.toAddEditBreeding
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
-class BreedingHistoryFragment : NavigationFragment() {
+class BreedingHistoryOfCattleFragment : NavigationFragment() {
 
     companion object {
         const val TAG = "BreedingHistoryFragment"
     }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val model by viewModels<BreedingHistoryViewModel> { viewModelFactory }
+    private val model by viewModels<BreedingHistoryOfCattleViewModel> { viewModelFactory }
 
+    private val args by navArgs<BreedingHistoryOfCattleFragmentArgs>()
 
-    private val args by navArgs<BreedingHistoryFragmentArgs>()
-
-
-    private lateinit var binding: FragmentBreedingHistoryBinding
+    private lateinit var binding: FragmentBreedingHistoryOfCattleBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentBreedingHistoryBinding.inflate(inflater, container, false)
+        binding = FragmentBreedingHistoryOfCattleBinding.inflate(inflater, container, false)
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = model

@@ -11,7 +11,7 @@
 
         <variable
             name="behaviour"
-            type="com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryListViewHolder.ItemBreedingUiBehaviour" />
+            type="com.pr656d.cattlenotes.ui.breeding.history.ofcattle.BreedingHistoryOfCattleListViewHolder.ItemBreedingUiBehaviour" />
 
         <variable
             name="listener"
