@@ -90,7 +90,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
 
         if (savedInstanceState == null) {
             // default showing cattle list
-            val initialNavId = intent.getIntExtra(EXTRA_NAVIGATION_ID, R.id.cattleListScreen)
+            val initialNavId = intent.getIntExtra(EXTRA_NAVIGATION_ID, R.id.cattle_graph)
             navigation.setCheckedItem(initialNavId) // doesn't trigger listener
             navigateTo(initialNavId)
         }
