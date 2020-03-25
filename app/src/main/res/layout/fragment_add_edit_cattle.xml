@@ -78,7 +78,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutTagNumber"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                    style="@style/Widget.CattleNOTES.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
@@ -94,7 +94,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextTagNumber"
-                        style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                        style="@style/Widget.CattleNOTES.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="numberSigned"
@@ -103,7 +103,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutName"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                    style="@style/Widget.CattleNOTES.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
@@ -114,7 +114,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextName"
-                        style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                        style="@style/Widget.CattleNOTES.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -210,7 +210,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutLactation"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_micro"
@@ -221,7 +221,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextLactation"
-                            style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                            style="@style/Widget.CattleNOTES.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
@@ -231,7 +231,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutDateOfBirth"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                    style="@style/Widget.CattleNOTES.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
@@ -243,7 +243,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextDateOfBirth"
-                        style="@style/Widget.CattleNOTES.AppTextInputDate"
+                        style="@style/Widget.CattleNOTES.TextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="@{ InputType.TYPE_NULL }"
@@ -254,7 +254,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutParent"
-                    style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                    style="@style/Widget.CattleNOTES.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
@@ -300,7 +300,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutPurchaseAmount"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_micro"
@@ -309,7 +309,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPurchaseAmount"
-                            style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                            style="@style/Widget.CattleNOTES.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="number"
@@ -319,7 +319,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutPurchaseDate"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_micro"
@@ -329,7 +329,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPurchaseDate"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="@{ InputType.TYPE_NULL }"

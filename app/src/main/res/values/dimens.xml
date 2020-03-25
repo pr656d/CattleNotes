@@ -13,8 +13,12 @@
     <dimen name="padding_large">32dp</dimen>
     <dimen name="padding_zero">0dp</dimen>
 
+    <!--  item_cattle & item_parent_cattle photo  -->
     <dimen name="photo_width_normal">50dp</dimen>
     <dimen name="photo_height_normal">50dp</dimen>
+
+    <!--  Iconography icon size  -->
+    <dimen name="iconography_icon_size">40dp</dimen>
 
     <dimen name="list_divider_height">0.5dp</dimen>
 

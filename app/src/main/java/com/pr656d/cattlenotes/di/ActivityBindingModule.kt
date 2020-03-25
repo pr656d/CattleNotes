@@ -10,6 +10,7 @@ import com.pr656d.cattlenotes.ui.cashflow.CashflowModule
 import com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleModule
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailModule
 import com.pr656d.cattlenotes.ui.cattle.list.CattleListBindingModule
+import com.pr656d.cattlenotes.ui.credits.CreditsModule
 import com.pr656d.cattlenotes.ui.launch.LaunchBindingModule
 import com.pr656d.cattlenotes.ui.launch.LauncherActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
@@ -58,7 +59,8 @@ abstract class ActivityBindingModule {
             MilkingModule::class,
             CashflowModule::class,
             SettingsModule::class,
-            AboutModule::class
+            AboutModule::class,
+            CreditsModule::class
         ]
     )
     internal abstract fun mainActivity(): MainActivity

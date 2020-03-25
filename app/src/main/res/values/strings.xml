@@ -146,4 +146,16 @@
     <string name="settings_theme_battery" translation_description="Theme option to use which is set by the device Battery Saver feature being enabled">Set by Battery Saver</string>
 
     <string name="built_with_material_components" translation_description="The app was built with Material Components.">Built with Material Components.</string>
+
+    <!--  About  -->
+    <string name="see_credits">See credits</string>
+    <string name="credits">Credits</string>
+    <string name="iconography">Iconography</string>
+
+    <!--  Credits  -->
+    <!--  Iconography credits  -->
+    <string name="ic_cattle_credit">\"Cattle\" icon in this app by Agniraj Chatterji, from thenounproject.com</string>
+    <string name="ic_timeline_credit">\"Task\" icon in this app by Vectors Market, from thenounproject.com</string>
+    <string name="ic_milking_credit">\"Milk Can\" icon in this app by Ealancheliyan s, from thenounproject.com</string>
+    <string name="ic_cashflow_credit">\"Financing\" icon in this app by Max Hancock, from thenounproject.com</string>
 </resources>

@@ -9,6 +9,24 @@
         android:id="@+id/aboutScreen"
         android:name="com.pr656d.cattlenotes.ui.about.AboutFragment"
         android:label="@string/about"
-        tools:layout="@layout/fragment_about" />
+        tools:layout="@layout/fragment_about">
+
+        <action
+            android:id="@+id/to_credits"
+            app:destination="@id/creditsScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/creditsScreen"
+        android:name="com.pr656d.cattlenotes.ui.credits.CreditsFragment"
+        android:label="@string/credits"
+        tools:layout="@layout/fragment_credits">
+
+    </fragment>
 
 </navigation>

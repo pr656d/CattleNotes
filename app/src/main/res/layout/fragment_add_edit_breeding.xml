@@ -180,7 +180,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutAiDate"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
@@ -188,7 +188,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextAiDate"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:dateText="@={ viewModel.aiDate }"
@@ -198,7 +198,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutAiDidBy"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
@@ -207,7 +207,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextAiDidBy"
-                            style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                            style="@style/Widget.CattleNOTES.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={ viewModel.didBy }"
@@ -218,7 +218,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutAiBullName"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
@@ -227,7 +227,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextAiBullName"
-                            style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                            style="@style/Widget.CattleNOTES.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={ viewModel.bullName }"
@@ -237,7 +237,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutStrawCode"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
@@ -246,7 +246,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextStrawCode"
-                            style="@style/Widget.CattleNOTES.AppTextInputEditText"
+                            style="@style/Widget.CattleNOTES.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@={ viewModel.strawCode }"
@@ -264,7 +264,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutRepeatHeatDateExpected"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
@@ -274,7 +274,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextRepeatHeatDateExpected"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             app:dateText="@{ viewModel.repeatHeatExpectedOn }"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -292,7 +292,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutRepeatHeatDateActual"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
@@ -303,7 +303,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextRepeatHeatDateActual"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:dateText="@={ viewModel.repeatHeatDoneOn }"
@@ -322,7 +322,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutPregnancyCheckDateExpected"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
@@ -332,7 +332,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPregnancyCheckDateExpected"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             app:dateText="@{ viewModel.pregnancyCheckExpectedOn }"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -350,7 +350,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutPregnancyCheckDateActual"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
@@ -362,7 +362,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextPregnancyCheckDateActual"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:dateText="@={ viewModel.pregnancyCheckDoneOn }"
@@ -381,7 +381,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutDryOffDateExpected"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
@@ -391,7 +391,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextDryOffDateExpected"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             app:dateText="@{ viewModel.dryOffExpectedOn }"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -410,7 +410,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutDryOffDateActual"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
@@ -422,7 +422,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextDryOffDateActual"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:dateText="@={ viewModel.dryOffDoneOn }"
@@ -442,7 +442,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutCalvingDateExpected"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_normal"
@@ -452,7 +452,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextCalvingDateExpected"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             app:dateText="@{ viewModel.calvingExpectedOn }"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" />
@@ -471,7 +471,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutCalvingDateActual"
-                        style="@style/Widget.CattleNOTES.AppTextInputLayout"
+                        style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin_small"
@@ -483,7 +483,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextCalvingDateActual"
-                            style="@style/Widget.CattleNOTES.AppTextInputDate"
+                            style="@style/Widget.CattleNOTES.TextInputDate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:dateText="@={ viewModel.calvingDoneOn }"

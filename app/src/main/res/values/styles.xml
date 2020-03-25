@@ -102,29 +102,29 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
-    <style name="Widget.CattleNOTES.AppTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="Widget.CattleNOTES.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
     </style>
 
-    <style name="Widget.CattleNOTES.AppTextInputDate" parent="Widget.CattleNOTES.AppTextInputEditText">
+    <style name="Widget.CattleNOTES.TextInputDate" parent="Widget.CattleNOTES.TextInputEditText">
         <item name="android:focusable">false</item>
         <item name="android:focusableInTouchMode">false</item>
         <item name="android:cursorVisible">false</item>
     </style>
 
-    <style name="Widget.CattleNOTES.AppTextInputEditText" parent="Theme.MaterialComponents.Light">
+    <style name="Widget.CattleNOTES.TextInputEditText" parent="Theme.MaterialComponents.Light">
         <item name="android:paddingStart">@dimen/box_padding</item>
         <item name="android:maxLines">1</item>
         <item name="android:textColor">@color/always_color_on_surface</item>
         <item name="android:textAppearance">@style/AppTheme.Body1</item>
     </style>
 
-    <style name="Widget.CattleNOTES.AppTextInputEditText.Disabled" parent="Widget.CattleNOTES.AppTextInputEditText">
+    <style name="Widget.CattleNOTES.TextInputEditText.Disabled" parent="Widget.CattleNOTES.TextInputEditText">
         <item name="android:editable">false</item>
         <item name="android:enabled">false</item>
     </style>
 
-    <style name="Widget.CattleNOTES.TextInputParent" parent="Widget.CattleNOTES.AppTextInputEditText">
+    <style name="Widget.CattleNOTES.TextInputParent" parent="Widget.CattleNOTES.TextInputEditText">
         <item name="android:focusable">false</item>
         <item name="android:focusableInTouchMode">false</item>
         <item name="android:cursorVisible">false</item>
@@ -179,6 +179,21 @@
     <style name="Widget.CattleNOTES.Settings" />
 
     <style name="Widget.CattleNOTES.Settings.Button">
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:minHeight">?listPreferredItemHeightSmall</item>
+        <item name="android:paddingBottom">@dimen/padding_normal</item>
+        <item name="android:paddingRight">?listPreferredItemPaddingEnd</item>
+        <item name="android:paddingStart">?listPreferredItemPaddingStart</item>
+        <item name="android:paddingTop">@dimen/padding_normal</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:textAppearance">?textAppearanceBody2</item>
+    </style>
+
+    <!-- Settings -->
+    <style name="Widget.CattleNOTES.About" />
+
+    <style name="Widget.CattleNOTES.About.Button">
         <item name="android:background">?selectableItemBackground</item>
         <item name="android:gravity">start|center_vertical</item>
         <item name="android:minHeight">?listPreferredItemHeightSmall</item>

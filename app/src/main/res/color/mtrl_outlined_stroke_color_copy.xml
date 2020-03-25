@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
         Copy of material-1.1.0/res/color/mtrl_outlined_stroke_color.xml
+
+        Mimic outline stroke color same as TextInputLayout. To reach exact same behaviour
+        removed state_enabled="false" state.
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:color="?attr/colorPrimary" android:state_focused="true"/>
     <item android:alpha="0.87" android:color="?attr/colorOnSurface" android:state_hovered="true"/>
-    <item android:alpha="0.12" android:color="?attr/colorOnSurface" android:state_enabled="false"/>
     <item android:alpha="0.38" android:color="?attr/colorOnSurface"/>
 </selector>

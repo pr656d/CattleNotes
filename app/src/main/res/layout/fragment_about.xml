@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <import type="com.pr656d.cattlenotes.BuildConfig" />
+
+        <variable
+            name="viewModel"
+            type="com.pr656d.cattlenotes.ui.about.AboutViewModel" />
 
     </data>
 
@@ -39,12 +44,28 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
-                android:id="@+id/layoutSettings"
+                android:id="@+id/layoutAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingTop="@dimen/padding_normal"
                 android:paddingBottom="@dimen/padding_normal">
+
+                <TextView
+                    android:id="@+id/see_credits"
+                    style="@style/Widget.CattleNOTES.About.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/see_credits"
+                    android:onClick="@{ () -> viewModel.openCredits() }"/>
+
+                <TextView
+                    android:id="@+id/open_source_license"
+                    style="@style/Widget.CattleNOTES.About.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/open_source_licences"
+                    android:onClick="@{ () -> viewModel.openOpenSourceLicense() }"/>
 
                 <TextView
                     android:id="@+id/version_build_number"
@@ -54,7 +75,8 @@
                     android:minHeight="48dp"
                     android:padding="@dimen/margin_normal"
                     android:textAppearance="?textAppearanceBody2"
-                    app:versionName="@{BuildConfig.VERSION_NAME}" />
+                    app:versionName="@{BuildConfig.VERSION_NAME}"
+                    tools:text="Version 1.0.0"/>
 
                 <TextView
                     android:layout_width="wrap_content"
