@@ -7,5 +7,5 @@
     <item name="milking_graph" type="id" />
     <item name="cashflow_graph" type="id" />
     <item name="settings_graph" type="id" />
-    <item name="about_app_graph" type="id" />
+    <item name="about_graph" type="id" />
 </resources>

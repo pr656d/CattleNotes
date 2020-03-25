@@ -39,8 +39,8 @@
             android:title="@string/settings" />
 
         <item
-            android:id="@id/about_app_graph"
+            android:id="@id/about_graph"
             android:icon="@drawable/ic_nav_about_app"
-            android:title="@string/about_app" />
+            android:title="@string/about" />
     </group>
 </menu>

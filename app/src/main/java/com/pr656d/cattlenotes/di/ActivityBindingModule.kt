@@ -2,7 +2,7 @@ package com.pr656d.cattlenotes.di
 
 import com.pr656d.cattlenotes.ui.MainActivity
 import com.pr656d.cattlenotes.ui.MainBindingModule
-import com.pr656d.cattlenotes.ui.aboutapp.AboutAppModule
+import com.pr656d.cattlenotes.ui.about.AboutModule
 import com.pr656d.cattlenotes.ui.breeding.active.ActiveBreedingModule
 import com.pr656d.cattlenotes.ui.breeding.addedit.AddEditBreedingModule
 import com.pr656d.cattlenotes.ui.breeding.history.ofcattle.BreedingHistoryOfCattleModule
@@ -58,7 +58,7 @@ abstract class ActivityBindingModule {
             MilkingModule::class,
             CashflowModule::class,
             SettingsModule::class,
-            AboutAppModule::class
+            AboutModule::class
         ]
     )
     internal abstract fun mainActivity(): MainActivity

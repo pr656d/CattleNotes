@@ -40,7 +40,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
             R.id.milkingScreen,
             R.id.cashflowScreen,
             R.id.settingsScreen,
-            R.id.aboutAppScreen
+            R.id.aboutScreen
         )
     }
 

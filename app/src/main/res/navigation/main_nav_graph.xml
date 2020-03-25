@@ -14,6 +14,6 @@
 
     <include app:graph="@navigation/settings_graph" />
 
-    <include app:graph="@navigation/about_app_graph" />
+    <include app:graph="@navigation/about_graph" />
 
 </navigation>
