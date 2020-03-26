@@ -56,10 +56,10 @@ class BreedingHistoryOfCattleFragment : NavigationFragment() {
         model.launchDeleteConfirmation.observe(viewLifecycleOwner, EventObserver {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.delete_breeding)
-                .setPositiveButton(R.string.yes) { _, _ ->
+                .setPositiveButton(R.string.delete) { _, _ ->
                     model.deleteBreeding(it, deleteConfirmation = true)
                 }
-                .setNegativeButton(R.string.no, null)
+                .setNegativeButton(R.string.cancel, null)
                 .create()
                 .show()
         })

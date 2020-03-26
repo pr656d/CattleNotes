@@ -13,6 +13,7 @@ import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.cattle.list.CattleListFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.cattle.list.CattleListFragmentDirections.Companion.toCattleDetail
 import com.pr656d.shared.domain.result.EventObserver
+import com.pr656d.shared.log.Logger
 import javax.inject.Inject
 
 class CattleListFragment : NavigationFragment() {
@@ -45,6 +46,7 @@ class CattleListFragment : NavigationFragment() {
         })
 
         model.launchCattleDetail.observe(viewLifecycleOwner, EventObserver {
+            Logger.d(TAG, "$it")
             findNavController().navigate(toCattleDetail(Gson().toJson(it)))
         })
     }

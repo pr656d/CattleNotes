@@ -75,10 +75,10 @@ class AddEditBreedingFragment : NavigationFragment() {
             MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.back_pressed_message)
                 .setMessage(R.string.changes_not_saved_message)
-                .setPositiveButton(R.string.yes) { _, _ ->
+                .setPositiveButton(R.string.go_back) { _, _ ->
                     model.onBackPressed(true)
                 }
-                .setNegativeButton(R.string.no, null)
+                .setNegativeButton(R.string.cancel, null)
                 .create()
                 .show()
         })

@@ -38,7 +38,7 @@
 -dontwarn androidx.cardview.widget.CardView
 
 # Gson throws Assertion Error on Enum types.
--keepclassmembers class com.pr656d.cattlenotes.data.model.** { <fields>; }
+-keepclassmembers class com.pr656d.model.** { <fields>; }
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule

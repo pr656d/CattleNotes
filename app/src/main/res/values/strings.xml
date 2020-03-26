@@ -7,7 +7,7 @@
     <string name="stay">Stay</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="back">Go Back</string>
+    <string name="go_back">Go Back</string>
     <string name="retry">Retry</string>
     <string name="edit">Edit</string>
     <string name="more">More</string>

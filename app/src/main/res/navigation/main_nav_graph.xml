@@ -164,6 +164,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/timelineScreen"
+        android:name="com.pr656d.cattlenotes.ui.timeline.TimelineFragment"
+        android:label="@string/timeline"
+        tools:layout="@layout/fragment_timeline" />
+
+    <fragment
         android:id="@+id/cashflowScreen"
         android:name="com.pr656d.cattlenotes.ui.cashflow.CashflowFragment"
         android:label="@string/cashflow"
