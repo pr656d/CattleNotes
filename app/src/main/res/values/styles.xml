@@ -178,6 +178,13 @@
     <!-- Settings -->
     <style name="Widget.CattleNOTES.Settings" />
 
+    <!-- Section headers -->
+    <style name="TextAppearance.CattleNOTES.Overline" parent="@style/AppTheme.Body2">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
     <style name="Widget.CattleNOTES.Settings.Button">
         <item name="android:background">?selectableItemBackground</item>
         <item name="android:gravity">start|center_vertical</item>
@@ -190,7 +197,6 @@
         <item name="android:textAppearance">?textAppearanceBody2</item>
     </style>
 
-    <!-- Settings -->
     <style name="Widget.CattleNOTES.About" />
 
     <style name="Widget.CattleNOTES.About.Button">

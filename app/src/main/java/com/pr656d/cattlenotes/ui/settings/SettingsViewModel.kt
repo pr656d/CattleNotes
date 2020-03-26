@@ -31,6 +31,14 @@ class SettingsViewModel @Inject constructor(
     val navigateToThemeSelector: LiveData<Event<Unit>>
         get() = _navigateToThemeSelector
 
+    private val _launchCredits = MutableLiveData<Event<Unit>>()
+    val launchCredits: LiveData<Event<Unit>>
+        get() = _launchCredits
+
+    private val _launchOpenSourceLicense = MutableLiveData<Event<Unit>>()
+    val launchOpenSourceLicense: LiveData<Event<Unit>>
+        get() = _launchOpenSourceLicense
+
     init {
         getThemeUseCase(Unit, themeResult)
         theme = themeResult.map {
@@ -49,5 +57,13 @@ class SettingsViewModel @Inject constructor(
 
     fun onThemeSettingClicked() {
         _navigateToThemeSelector.value = Event(Unit)
+    }
+
+    fun openCredits() {
+        _launchCredits.postValue(Event(Unit))
+    }
+
+    fun openOpenSourceLicense() {
+        _launchOpenSourceLicense.postValue(Event(Unit))
     }
 }

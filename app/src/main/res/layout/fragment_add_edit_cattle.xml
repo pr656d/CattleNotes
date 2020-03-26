@@ -41,7 +41,6 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_normal"
                 android:indeterminate="true"
                 app:goneUnless="@{viewModel.saving}"
                 app:layout_anchor="@id/appBarLayout"

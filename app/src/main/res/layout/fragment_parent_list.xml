@@ -49,7 +49,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
-                android:layout_marginHorizontal="@dimen/margin_normal"
                 app:goneUnless="@{viewModel.loadingParentList}" />
         </com.google.android.material.appbar.AppBarLayout>
 

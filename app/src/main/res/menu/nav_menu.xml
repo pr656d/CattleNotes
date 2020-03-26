@@ -5,26 +5,26 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@id/cattle_graph"
+            android:id="@id/cattleListScreen"
             android:checkable="true"
             android:icon="@drawable/ic_nav_cattle"
             android:title="@string/cattle"
             android:checked="true"/>
 
         <item
-            android:id="@id/timeline_graph"
+            android:id="@id/timelineScreen"
             android:checkable="true"
             android:icon="@drawable/ic_nav_timeline"
             android:title="@string/timeline" />
 
         <item
-            android:id="@id/milking_graph"
+            android:id="@id/milkingScreen"
             android:checkable="true"
             android:icon="@drawable/ic_nav_milking"
             android:title="@string/milking" />
 
         <item
-            android:id="@id/cashflow_graph"
+            android:id="@id/cashflowScreen"
             android:checkable="true"
             android:icon="@drawable/ic_nav_cashflow"
             android:title="@string/cashflow"/>
@@ -34,13 +34,9 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@id/settings_graph"
+            android:id="@id/settingsScreen"
             android:icon="@drawable/ic_nav_settings"
             android:title="@string/settings" />
 
-        <item
-            android:id="@id/about_graph"
-            android:icon="@drawable/ic_nav_about"
-            android:title="@string/about" />
     </group>
 </menu>
