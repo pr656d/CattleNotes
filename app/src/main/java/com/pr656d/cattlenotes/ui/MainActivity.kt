@@ -1,6 +1,5 @@
 package com.pr656d.cattlenotes.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
@@ -18,9 +17,7 @@ import com.google.android.material.navigation.NavigationView
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityMainBinding
 import com.pr656d.cattlenotes.databinding.NavHeaderBinding
-import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.utils.updateForTheme
-import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -39,7 +36,8 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
             R.id.timelineScreen,
             R.id.milkingScreen,
             R.id.cashflowScreen,
-            R.id.settingsScreen
+            R.id.settingsScreen,
+            R.id.profileScreen
         )
     }
 
@@ -54,6 +52,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
     private var currentNavId = NAV_ID_NONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // Switch to AppTheme
+        setTheme(R.style.AppTheme)
+
         super.onCreate(savedInstanceState)
 
         val model by viewModels<MainViewModel> { viewModelFactory }
@@ -95,11 +97,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
         }
 
         model.theme.observe(this, Observer(::updateForTheme))
-
-        model.redirectToLoginScreen.observe(this, EventObserver {
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-        })
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {

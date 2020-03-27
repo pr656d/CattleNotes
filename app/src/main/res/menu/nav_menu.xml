@@ -38,5 +38,10 @@
             android:icon="@drawable/ic_nav_settings"
             android:title="@string/settings" />
 
+        <item
+            android:id="@id/profileScreen"
+            android:icon="@drawable/ic_nav_profile"
+            android:title="@string/profile" />
+
     </group>
 </menu>

@@ -25,10 +25,16 @@ import javax.inject.Singleton
 class AppModule {
 
     @Provides
-    fun provideContext(application: CattleNotesApplication): Context = application.applicationContext
+    fun provideContext(application: CattleNotesApplication): Context =
+        application.applicationContext
 
+    @Singleton
     @Provides
     fun provideFirebaseAuthUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
+    @Singleton
+    @Provides
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Singleton
     @Provides

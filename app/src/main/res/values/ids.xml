@@ -7,4 +7,5 @@
     <item name="milkingScreen" type="id" />
     <item name="cashflowScreen" type="id" />
     <item name="settingsScreen" type="id" />
+    <item name="profileScreen" type="id" />
 </resources>

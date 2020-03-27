@@ -198,6 +198,30 @@
     </fragment>
 
     <fragment
+        android:id="@+id/profileScreen"
+        android:name="com.pr656d.cattlenotes.ui.profile.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile">
+
+        <action
+            android:id="@+id/to_login"
+            app:destination="@id/loginScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginScreen"
+        android:name="com.pr656d.cattlenotes.ui.login.LoginFragment"
+        android:label="@string/login_title"
+        tools:layout="@layout/fragment_login">
+
+    </fragment>
+
+    <fragment
         android:id="@+id/creditsScreen"
         android:name="com.pr656d.cattlenotes.ui.credits.CreditsFragment"
         android:label="@string/credits"

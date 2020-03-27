@@ -20,27 +20,22 @@
         tools:replace="android:allowBackup">
 
         <activity
-            android:name=".ui.launch.LauncherActivity"
-            android:noHistory="true"
-            android:theme="@style/LaunchTheme">
+            android:name=".ui.MainActivity"
+            android:theme="@style/LaunchTheme"
+            android:windowSoftInputMode="adjustPan">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <activity
-            android:name=".ui.login.LoginActivity"/>
-
-        <activity
-            android:name=".ui.MainActivity"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
     </application>
 
 </manifest>

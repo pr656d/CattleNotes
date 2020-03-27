@@ -18,6 +18,7 @@ import kotlin.reflect.KProperty
  */
 interface PreferenceStorage {
     var loginCompleted: Boolean
+    var observableLoginCompleted: LiveData<Boolean>
     var onboardingCompleted: Boolean
     var selectedTheme: String?
     var observableSelectedTheme: LiveData<String>
@@ -38,11 +39,14 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         }
     }
 
+    private val observableLoginCompletedResult = MutableLiveData<Boolean>()
+
     private val observableSelectedThemeResult = MutableLiveData<String>()
 
     private val changeListener = OnSharedPreferenceChangeListener { _, key ->
         when (key) {
             PREF_DARK_MODE_ENABLED -> observableSelectedThemeResult.value = selectedTheme
+            PREF_LOG_IN -> observableLoginCompletedResult.value = loginCompleted
         }
     }
 
@@ -51,6 +55,14 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         PREF_LOG_IN,
         false
     )
+
+    override var observableLoginCompleted: LiveData<Boolean>
+        get() {
+            observableLoginCompletedResult.value = loginCompleted
+            return observableLoginCompletedResult
+        }
+        set(_) = throw IllegalAccessException("This property can't be changed")
+
 
     override var onboardingCompleted by BooleanPreference(
         prefs,

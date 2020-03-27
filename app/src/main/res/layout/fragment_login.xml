@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        
+        <variable
+            name="viewModel"
+            type="com.pr656d.cattlenotes.ui.login.LoginViewModel" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            style="@style/Widget.CattleNOTES.AppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                app:layout_scrollFlags="noScroll"
+                app:navigationIcon="@drawable/ic_menu"
+                app:title="@string/login_title" />
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <ImageView
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                app:layout_constraintBottom_toTopOf="@+id/tvMessage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.27"
+                app:srcCompat="@drawable/logo"
+                tools:ignore="ContentDescription" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                style="@style/Widget.CattleNOTES.Button.Outlined"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:text="@string/login_button_text"
+                android:textColor="@color/black"
+                android:onClick="@{() -> viewModel.onLoginClick() }"
+                android:enabled="@{ !viewModel.logginIn }"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.90" />
+
+            <TextView
+                android:id="@+id/tvMessage"
+                style="@style/AppTheme.Body1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_normal"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:text="@{ viewModel.loginStatus }"
+                android:textAlignment="center"
+                android:textColor="?colorOnSurface"
+                app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

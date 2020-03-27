@@ -18,6 +18,6 @@ class MainViewModel @Inject constructor(
     val redirectToLoginScreen: LiveData<Event<Unit>> = _redirectToLoginScreen
 
     init {
-        if (firebaseUser == null) _redirectToLoginScreen.postValue(Event(Unit))
+//        if (firebaseUser == null) _redirectToLoginScreen.postValue(Event(Unit))
     }
 }
