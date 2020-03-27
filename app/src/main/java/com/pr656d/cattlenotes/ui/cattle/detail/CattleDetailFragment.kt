@@ -44,7 +44,7 @@ class CattleDetailFragment : NavigationFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requireActivity().onBackPressedDispatcher.addCallback {
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
             onBackPressed()
         }
     }
@@ -155,7 +155,7 @@ class CattleDetailFragment : NavigationFragment() {
             }
             true
         } else {
-            findNavController().navigateUp()
+            model.navigateUp()
             true
         }
     }
