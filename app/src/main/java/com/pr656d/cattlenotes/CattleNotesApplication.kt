@@ -1,13 +1,34 @@
 package com.pr656d.cattlenotes
 
+import android.os.StrictMode
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.pr656d.cattlenotes.di.DaggerAppComponent
+import com.pr656d.cattlenotes.utils.CrashlyticsTree
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
+import timber.log.Timber
 
 /**
  * Initialization of libraries.
  */
 class CattleNotesApplication : DaggerApplication() {
+
+    override fun onCreate() {
+        // ThreeTenBP for times and dates, called before super to be available for objects
+        AndroidThreeTen.init(this)
+
+        // Enable strict mode before Dagger creates graph
+        if (BuildConfig.DEBUG) {
+            enableStrictMode()
+        }
+        super.onCreate()
+
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        } else {
+            Timber.plant(CrashlyticsTree())
+        }
+    }
 
     /**
      * Tell Dagger which [AndroidInjector] to use - in our case
@@ -16,5 +37,16 @@ class CattleNotesApplication : DaggerApplication() {
      */
     override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
         return DaggerAppComponent.factory().create(this)
+    }
+
+    private fun enableStrictMode() {
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskWrites()
+                .detectNetwork()
+                .penaltyLog()
+                .build()
+        )
     }
 }
