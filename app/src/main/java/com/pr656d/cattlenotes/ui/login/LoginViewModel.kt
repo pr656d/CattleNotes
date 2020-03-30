@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.R
 import com.pr656d.shared.domain.launch.SetLoginCompletedUseCase
 import com.pr656d.shared.domain.result.Event
@@ -28,11 +29,6 @@ class LoginViewModel @Inject constructor(
     private val _navigateUp = MutableLiveData<Event<Unit>>()
     val navigateUp: LiveData<Event<Unit>> = _navigateUp
 
-    init {
-        // Start login immediately
-        onLoginClick()
-    }
-
     fun onLoginClick() {
         if (networkHelper.isNetworkConnected()) {
             _logginIn.postValue(true)
@@ -48,6 +44,16 @@ class LoginViewModel @Inject constructor(
         _loginStatus.postValue(R.string.please_wait_text)
         _logginIn.postValue(false)
         navigateUp()
+    }
+
+    private fun FirebaseUser.getString(): String {
+        return """
+            uid         :   $uid
+            displayName :   $displayName
+            phoneNumber :   $phoneNumber
+            email       :   $email
+            providerId  :   $providerId
+        """.trimIndent()
     }
 
     fun onLoginFail() {

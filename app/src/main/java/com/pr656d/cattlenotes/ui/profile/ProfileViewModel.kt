@@ -13,14 +13,14 @@ import com.pr656d.shared.domain.result.Result.Success
 import javax.inject.Inject
 
 class ProfileViewModel @Inject constructor(
-    val firebaseUser: FirebaseUser?,
-    private val firebaseAuth: FirebaseAuth,
     observableLoginUseCase: ObservableLoginUseCase,
     private val setLoginCompletedUseCase: SetLoginCompletedUseCase
 ) : ViewModel() {
     val loginCompleted: LiveData<Boolean> = observableLoginUseCase.observe().map {
         (it as? Success)?.data ?: false
     }
+
+    val firebaseUser = MutableLiveData<FirebaseUser?>(FirebaseAuth.getInstance().currentUser)
 
     private val _launchLoginScreen = MutableLiveData<Event<Unit>>()
     val launchLoginScreen: LiveData<Event<Unit>> = _launchLoginScreen
@@ -42,7 +42,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun logout() {
-        firebaseAuth.signOut()
+        FirebaseAuth.getInstance().signOut()
         setLoginCompletedUseCase(false)
         navigateUp()
     }

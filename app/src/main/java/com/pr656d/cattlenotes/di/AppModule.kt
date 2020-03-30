@@ -1,8 +1,6 @@
 package com.pr656d.cattlenotes.di
 
 import android.content.Context
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.shared.data.breeding.BreedingDataRepository
 import com.pr656d.shared.data.breeding.BreedingRepository
@@ -27,14 +25,6 @@ class AppModule {
     @Provides
     fun provideContext(application: CattleNotesApplication): Context =
         application.applicationContext
-
-    @Singleton
-    @Provides
-    fun provideFirebaseAuthUser(): FirebaseUser? = FirebaseAuth.getInstance().currentUser
-
-    @Singleton
-    @Provides
-    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
 
     @Singleton
     @Provides

@@ -18,6 +18,7 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityMainBinding
 import com.pr656d.cattlenotes.databinding.NavHeaderBinding
 import com.pr656d.cattlenotes.utils.updateForTheme
+import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
@@ -43,6 +44,8 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    val model by viewModels<MainViewModel> { viewModelFactory }
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var drawer: DrawerLayout
     private lateinit var navigation: NavigationView
@@ -57,8 +60,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
         setTheme(R.style.AppTheme)
 
         super.onCreate(savedInstanceState)
-
-        val model by viewModels<MainViewModel> { viewModelFactory }
 
         // Update for Dark Mode straight away
         updateForTheme(model.currentTheme)
@@ -96,6 +97,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
             navigateTo(initialNavId)
         }
 
+        model.redirectToLoginScreen.observe(this, EventObserver {
+            navigateTo(R.id.loginScreen)
+        })
+
         model.theme.observe(this, Observer(::updateForTheme))
     }
 
@@ -112,10 +117,20 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
     }
 
     override fun onBackPressed() {
-        if (drawer.isDrawerOpen(navigation)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+        when {
+            drawer.isDrawerOpen(navigation) -> {
+                drawer.closeDrawer(GravityCompat.START)
+            }
+            navController.currentDestination?.id == R.id.loginScreen -> {
+                /**
+                 * If back is pressed when user is at login screen then close the app as we need
+                 * login should be completed by the user.
+                 */
+                finish()
+            }
+            else -> {
+                super.onBackPressed()
+            }
         }
     }
 
