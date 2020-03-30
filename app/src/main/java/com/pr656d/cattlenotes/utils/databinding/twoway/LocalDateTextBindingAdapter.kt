@@ -88,7 +88,8 @@ fun setListeners(
                         view.isFocusableInTouchMode = false
                     },
                     onDateSet = { _, dd, mm, yyyy ->
-                        TimeUtils.toLocalDate(dd, mm, yyyy).let {
+                        // `Month + 1` as it's starting from 0 index and LocalDate index starts from 1.
+                        TimeUtils.toLocalDate(dd, mm + 1, yyyy).let {
                             view.setText(TimeUtils.dateString(it))
                             view.isFocusableInTouchMode = false
                             attrChange.onChange()
