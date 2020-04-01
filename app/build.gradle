@@ -89,6 +89,7 @@ dependencies {
     implementation "com.google.firebase:firebase-analytics:$rootProject.firebaseAnalyticsVersion"
     implementation "com.crashlytics.sdk.android:crashlytics:$firebaseCrashlyticsVersion"
     implementation "com.google.firebase:firebase-perf:$firebasePerformanceVersion"
+    implementation "com.google.firebase:firebase-firestore-ktx:$firebaseFirestoreVersion"
 
     // Multidex
     implementation "androidx.multidex:multidex:$rootProject.multidexVersion"

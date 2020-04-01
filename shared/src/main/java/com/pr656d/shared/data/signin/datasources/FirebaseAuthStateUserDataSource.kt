@@ -1,0 +1,71 @@
+package com.pr656d.shared.data.signin.datasources
+
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
+import com.pr656d.shared.data.signin.FirebaseUserInfo
+import com.pr656d.shared.data.signin.UserInfoBasic
+import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.fcm.FcmTokenUpdater
+import timber.log.Timber
+import javax.inject.Inject
+
+class FirebaseAuthStateUserDataSource @Inject constructor(
+    val firebase: FirebaseAuth,
+    private val tokenUpdater: FcmTokenUpdater
+) : AuthStateUserDataSource {
+
+    private val currentFirebaseUserObservable = MutableLiveData<Result<UserInfoBasic?>>()
+
+    private var isAlreadyListening = false
+
+    private var lastUid: String? = null
+
+    // Listener that saves the [FirebaseUser], fetches the ID token
+    // and updates the user ID observable.
+
+    private val authStateListener: ((FirebaseAuth) -> Unit) = { auth ->
+        DefaultScheduler.execute {
+            Timber.d("Received a FirebaseAuth update.")
+            // Post the current user for observers
+            currentFirebaseUserObservable.postValue(
+                Result.Success(
+                    FirebaseUserInfo(auth.currentUser)
+                )
+            )
+
+            auth.currentUser?.let { currentUser ->
+                // Save the FCM ID token in firestore
+                tokenUpdater.updateTokenForUser(currentUser.uid)
+            }
+        }
+
+        /*if (auth.currentUser == null) {
+            // Logout, cancel all alarms
+            // notificationAlarmUpdater.cancelAll()
+        }
+        auth.currentUser?.let {
+            if (lastUid != auth.uid) { // Prevent duplicates
+                notificationAlarmUpdater.updateAll(it.uid)
+            }
+        }*/
+        // Save the last UID to prevent setting too many alarms.
+        lastUid = auth.uid
+    }
+
+    override fun startListening() {
+        if (!isAlreadyListening) {
+            firebase.addAuthStateListener(authStateListener)
+            isAlreadyListening = true
+        }
+    }
+
+    override fun getBasicUserInfo(): LiveData<Result<UserInfoBasic?>> {
+        return currentFirebaseUserObservable
+    }
+
+    override fun clearListener() {
+        firebase.removeAuthStateListener(authStateListener)
+    }
+}

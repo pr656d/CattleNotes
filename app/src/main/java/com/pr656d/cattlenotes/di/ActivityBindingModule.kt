@@ -13,6 +13,7 @@ import com.pr656d.cattlenotes.ui.credits.CreditsModule
 import com.pr656d.cattlenotes.ui.login.LoginModule
 import com.pr656d.cattlenotes.ui.milking.MilkingModule
 import com.pr656d.cattlenotes.ui.profile.ProfileModule
+import com.pr656d.cattlenotes.ui.profile.addedit.AddEditProfileModule
 import com.pr656d.cattlenotes.ui.settings.SettingsModule
 import com.pr656d.cattlenotes.ui.timeline.TimelineModule
 import com.pr656d.shared.di.ActivityScoped
@@ -49,7 +50,8 @@ abstract class ActivityBindingModule {
             SettingsModule::class,
             CreditsModule::class,
             ProfileModule::class,
-            LoginModule::class
+            LoginModule::class,
+            AddEditProfileModule::class
         ]
     )
     internal abstract fun mainActivity(): MainActivity

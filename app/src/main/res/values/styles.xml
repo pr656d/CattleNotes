@@ -216,6 +216,11 @@
     <!--  Profile  -->
     <style name="Widget.CattleNOTES.Profile" />
 
+    <style name="Widget.CattleNOTES.Profile.Title" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/roboto_regular</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
     <style name="Widget.CattleNOTES.Profile.LogoutButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textColor">?attr/colorOnSurface</item>
     </style>

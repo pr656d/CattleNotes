@@ -50,14 +50,14 @@ class LoginFragment : NavigationFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         model.launchFirebaseAuthUI.observe(viewLifecycleOwner, EventObserver {
+            val providers = mutableListOf(
+                AuthUI.IdpConfig.PhoneBuilder().build(),
+                AuthUI.IdpConfig.GoogleBuilder().build()
+            )
+
             startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder()
-                    .setAvailableProviders(
-                        arrayListOf(
-                            AuthUI.IdpConfig.PhoneBuilder().build(),
-                            AuthUI.IdpConfig.GoogleBuilder().build()
-                        )
-                    )
+                    .setAvailableProviders(providers)
                     .setLogo(R.drawable.logo)
                     .setTheme(R.style.FirebaseTheme)
                     .build(),

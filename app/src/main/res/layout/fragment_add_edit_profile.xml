@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.pr656d.cattlenotes.ui.profile.ProfileViewModel" />
+            type="com.pr656d.cattlenotes.ui.profile.addedit.AddEditProfileViewModel" />
 
     </data>
 
@@ -27,11 +27,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
-                app:navigationIcon="@drawable/ic_menu"
-                app:title="@string/profile"
-                tools:title="Farm name" />
+                app:title="@string/profile">
+            </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
-
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -63,12 +61,11 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextFarmName"
-                        style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
+                        style="@style/Widget.CattleNOTES.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:singleLine="true"
-                        android:inputType="textCapSentences"
-                        android:text="@{ viewModel.currentUserInfo.farmName }"/>
+                        android:inputType="textCapSentences" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,11 +87,11 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextDairyCode"
-                            style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
+                            style="@style/Widget.CattleNOTES.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:singleLine="true"
-                            android:text="@{ viewModel.currentUserInfo.dairyCode }" />
+                            android:inputType="numberSigned" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,11 +107,11 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextCustomerId"
-                            style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
+                            style="@style/Widget.CattleNOTES.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:singleLine="true"
-                            android:text="@{ viewModel.currentUserInfo.dairyCustomerId }"/>
+                            android:inputType="numberSigned" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,11 +128,10 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextFarmAddress"
-                        style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
+                        style="@style/Widget.CattleNOTES.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:maxLines="5"
-                        android:text="@{ viewModel.currentUserInfo.farmAddress }"/>
+                        android:maxLines="5"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -165,12 +161,11 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextName"
-                        style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
+                        style="@style/Widget.CattleNOTES.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:inputType="textPersonName"
-                        android:singleLine="true"
-                        android:text="@{ viewModel.currentUserInfo.displayName }"/>
+                        android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -183,12 +178,11 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextEmail"
-                        style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
+                        style="@style/Widget.CattleNOTES.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:singleLine="true"
-                        android:inputType="textEmailAddress"
-                        android:text="@{ viewModel.currentUserInfo.email }"/>
+                        android:inputType="textEmailAddress" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -202,12 +196,11 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextPhoneNumber"
-                        style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
+                        style="@style/Widget.CattleNOTES.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:singleLine="true"
-                        android:inputType="phone"
-                        android:text="@{ viewModel.currentUserInfo.phoneNumber }"/>
+                        android:inputType="phone" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -238,15 +231,13 @@
                             style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/male"
-                            android:clickable="false"/>
+                            android:text="@string/male"/>
 
                         <com.google.android.material.button.MaterialButton
                             style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/female"
-                            android:clickable="false"/>
+                            android:text="@string/female" />
 
                     </com.google.android.material.button.MaterialButtonToggleGroup>
                 </LinearLayout>
@@ -259,9 +250,10 @@
                     android:layout_marginTop="@dimen/margin_normal">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
+                        style="@style/Widget.CattleNOTES.TextInputDate"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:inputType="none"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -276,7 +268,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/editTextUserAddress"
-                        style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
+                        style="@style/Widget.CattleNOTES.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:maxLines="5" />
@@ -291,13 +283,12 @@
         </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabButtonEditProfile"
+            android:id="@+id/fabButtonSaveProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit"
+            android:src="@drawable/ic_check"
             android:layout_gravity="bottom|center"
-            android:layout_margin="@dimen/margin_normal"
-            android:onClick="@{ () -> viewModel.editProfile() }"/>
+            android:layout_margin="@dimen/margin_normal"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

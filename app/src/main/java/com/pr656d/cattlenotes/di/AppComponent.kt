@@ -2,6 +2,7 @@ package com.pr656d.cattlenotes.di
 
 import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegateModule
+import com.pr656d.shared.di.SharedModule
 import com.pr656d.shared.di.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
@@ -20,9 +21,10 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AndroidSupportInjectionModule::class,
-        AppModule::class,
-        ActivityBindingModule::class,
         ViewModelModule::class,
+        AppModule::class,
+        SharedModule::class,
+        ActivityBindingModule::class,
         ThemedActivityDelegateModule::class
     ]
 )

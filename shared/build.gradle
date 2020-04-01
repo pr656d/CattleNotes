@@ -65,7 +65,12 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
 
     // Timber
-    implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+    api "com.jakewharton.timber:timber:$rootProject.timberVersion"
+
+    // Firebase
+    api "com.google.firebase:firebase-auth:$rootProject.firebaseAuthVersion"
+    api "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
+    api "com.google.firebase:firebase-firestore:$rootProject.firebaseFirestoreVersion"
 
     // Local Unit tests
     testImplementation "junit:junit:$rootProject.junitVersion"

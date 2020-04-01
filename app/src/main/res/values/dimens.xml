@@ -47,4 +47,7 @@
 
     <dimen name="item_breeding_history_card_stroke_width">1dp</dimen>
     <dimen name="item_breeding_history_card_elevation">0dp</dimen>
+
+    <!--  Profile  -->
+    <dimen name="profile_image_size">120dp</dimen>
 </resources>

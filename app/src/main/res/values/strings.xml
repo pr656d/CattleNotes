@@ -53,6 +53,7 @@
     <string name="cashflow">Cashflow</string>
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>
+    <string name="add_profile">Add Profile</string>
     <string name="about">About</string>
     <string name="open_source_licences">Open-source licences</string>
     <string name="notes">Notes</string>
@@ -132,6 +133,19 @@
     <string name="not_set">Not set</string>
 
     <!--  Profile  -->
+    <string name="farm_info">Farm info</string>
+    <string name="farm_name">Farm name</string>
+    <string name="dairy_code">Dairy code</string>
+    <string name="customer_id">Customer id</string>
+    <string name="customer_id_helper_text">Your customer id in dairy</string>
+    <string name="farm_address">Farm address</string>
+    <string name="personal_info">Personal info</string>
+    <string name="address">Address</string>
+    <string name="email">Email</string>
+    <string name="phone_number">Phone number</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
     <string name="hello_name">Hello, %s</string>
     <string name="logout">Logout</string>
     <string name="please_login_to_view_profile">Please login to view profile</string>

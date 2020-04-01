@@ -204,12 +204,20 @@
         tools:layout="@layout/fragment_profile">
 
         <action
-            android:id="@+id/to_login"
-            app:destination="@id/loginScreen"
+            android:id="@+id/to_add_edit_profile"
+            app:destination="@id/addEditProfileScreen"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/addEditProfileScreen"
+        android:name="com.pr656d.cattlenotes.ui.profile.addedit.AddEditProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_add_edit_profile">
 
     </fragment>
 
