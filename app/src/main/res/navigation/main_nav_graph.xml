@@ -222,14 +222,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/loginScreen"
-        android:name="com.pr656d.cattlenotes.ui.login.LoginFragment"
-        android:label="@string/login_title"
-        tools:layout="@layout/fragment_login">
-
-    </fragment>
-
-    <fragment
         android:id="@+id/creditsScreen"
         android:name="com.pr656d.cattlenotes.ui.credits.CreditsFragment"
         android:label="@string/credits"

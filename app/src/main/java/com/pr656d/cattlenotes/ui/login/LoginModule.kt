@@ -15,7 +15,6 @@ import dagger.multibindings.IntoMap
 @Module
 @Suppress("UNUSED")
 internal abstract class LoginModule {
-
     /**
      * Generates an [AndroidInjector] for the [LoginFragment].
      */
@@ -24,11 +23,18 @@ internal abstract class LoginModule {
     internal abstract fun contributeLoginFragment(): LoginFragment
 
     /**
+     * Generates an [AndroidInjector] for the [SetupProfileFragment].
+     */
+    @FragmentScoped
+    @ContributesAndroidInjector
+    internal abstract fun contributeSetupProfileFragment(): SetupProfileFragment
+
+    /**
      * The ViewModels are created by Dagger in a map. Via the @ViewModelKey, we define that we
      * want to get a [LoginViewModel] class.
      */
     @Binds
     @IntoMap
     @ViewModelKey(LoginViewModel::class)
-    internal abstract fun bindLoginViewModel(viewModel: LoginViewModel): ViewModel
+    abstract fun bindLoginViewModel(viewModel: LoginViewModel): ViewModel
 }

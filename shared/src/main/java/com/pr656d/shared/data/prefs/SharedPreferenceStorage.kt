@@ -18,10 +18,28 @@ import kotlin.reflect.KProperty
  */
 interface PreferenceStorage {
     var loginCompleted: Boolean
+
     var observableLoginCompleted: LiveData<Boolean>
+
+    var firstTimeProfileSetupCompleted: Boolean
+
+    /**
+     * Login and it's first steps after login are completed.
+     *
+     * First user experience.
+     */
+    val loginAndAllStepsCompleted: Boolean
+
     var onboardingCompleted: Boolean
+
     var selectedTheme: String?
+
     var observableSelectedTheme: LiveData<String>
+
+    /**
+     * Clear the shared preferences.
+     */
+    fun clear()
 }
 
 /**
@@ -83,9 +101,23 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         }
         set(_) = throw IllegalAccessException("This property can't be changed")
 
+    override var firstTimeProfileSetupCompleted by BooleanPreference(
+        prefs,
+        PREF_FIRST_TIME_PROFILE_SETUP,
+        false
+    )
+
+    override val loginAndAllStepsCompleted: Boolean
+        get() = loginCompleted && firstTimeProfileSetupCompleted
+
+    override fun clear() {
+        prefs.value.edit { clear() }
+    }
+
     companion object {
         const val PREFS_NAME = "cattlenotes"
         const val PREF_LOG_IN = "pref_logged_in"
+        const val PREF_FIRST_TIME_PROFILE_SETUP = "pref_first_time_profile_setup"
         const val PREF_ONBOARDING = "pref_onboarding"
         const val PREF_DARK_MODE_ENABLED = "pref_dark_mode"
     }

@@ -1,4 +1,4 @@
-package com.pr656d.shared.data.signin.datasources
+package com.pr656d.shared.data.user.info.datasources
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,16 +6,15 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
-import com.pr656d.shared.data.signin.FirestoreUserInfo
-import com.pr656d.shared.data.signin.UserInfoOnFirestore
+import com.pr656d.shared.data.user.info.FirestoreUserInfo
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.domain.result.Result
 import timber.log.Timber
 import javax.inject.Inject
 
-class FirestoreUserInfoDataSource @Inject constructor(
+class FirestoreObserveUserInfoDataSource @Inject constructor(
     private val firestore: FirebaseFirestore
-) : UserInfoDataSource {
+) : ObserveFirestoreUserInfoDataSource {
 
     companion object {
         private const val USERS_COLLECTION = "users"
@@ -24,7 +23,7 @@ class FirestoreUserInfoDataSource @Inject constructor(
     private var registeredChangedListenerSubscription: ListenerRegistration? = null
 
     // Result can contain a null value (not processed) or a null result (not available).
-    private val result = MutableLiveData<Result<UserInfoOnFirestore?>?>()
+    private val result = MutableLiveData<Result<FirestoreUserInfo?>?>()
 
     // Keeping the last observed user ID, to avoid unnecessary calls
     private var lastUserId: String? = null
@@ -52,8 +51,7 @@ class FirestoreUserInfoDataSource @Inject constructor(
                         return@execute
                     }
 
-                    val userInfo =
-                        FirestoreUserInfo(snapshot)
+                    val userInfo = getUserInfoOnFirestore(snapshot)
 
                     // Only emit a value if it's a new value or a value change.
                     if (result.value == null ||
@@ -71,7 +69,47 @@ class FirestoreUserInfoDataSource @Inject constructor(
         lastUserId = newUserId
     }
 
-    override fun observeResult(): LiveData<Result<UserInfoOnFirestore?>?> {
+    private fun getUserInfoOnFirestore(snapshot: DocumentSnapshot): FirestoreUserInfo {
+        return object : FirestoreUserInfo {
+            override fun getFarmName(): String? {
+                return snapshot[FARM_NAME_KEY] as? String
+            }
+
+            override fun getFarmAddress(): String? {
+                return snapshot[FARM_ADDRESS_KEY] as? String
+            }
+
+            override fun getGender(): String? {
+                return snapshot[GENDER_KEY] as? String
+            }
+
+            override fun getDateOfBirth(): String? {
+                return snapshot[DOB_KEY] as? String
+            }
+
+            override fun getAddress(): String? {
+                return snapshot[ADDRESS_KEY] as? String
+            }
+
+            override fun getDairyCode(): String? {
+                return snapshot[DAIRY_CODE] as? String
+            }
+
+            override fun getDairyCustomerId(): String? {
+                return snapshot[DAIRY_CUSTOMER_ID] as? String
+            }
+
+            val FARM_NAME_KEY = "farmName"
+            val FARM_ADDRESS_KEY = "farmAddress"
+            val GENDER_KEY = "gender"
+            val DOB_KEY = "dateOfBirth"
+            val ADDRESS_KEY = "address"
+            val DAIRY_CODE = "dairyCode"
+            val DAIRY_CUSTOMER_ID = "dairyCustomerId"
+        }
+    }
+
+    override fun observeFirestoreUserInfo(): LiveData<Result<FirestoreUserInfo?>?> {
         return result
     }
 

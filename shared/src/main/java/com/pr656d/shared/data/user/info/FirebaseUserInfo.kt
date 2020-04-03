@@ -1,4 +1,4 @@
-package com.pr656d.shared.data.signin
+package com.pr656d.shared.data.user.info
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
@@ -31,4 +31,5 @@ open class FirebaseUserInfo (
     override fun getLastSignInTimestamp(): Long? = firebaseUser?.metadata?.lastSignInTimestamp
 
     override fun getCreationTimestamp(): Long? = firebaseUser?.metadata?.creationTimestamp
+
 }

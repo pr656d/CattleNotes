@@ -1,8 +1,6 @@
 package com.pr656d.cattlenotes.di
 
 import android.content.Context
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.shared.data.breeding.BreedingDataRepository
 import com.pr656d.shared.data.breeding.BreedingRepository
@@ -11,11 +9,9 @@ import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.data.db.AppDatabase
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.prefs.SharedPreferenceStorage
-import com.pr656d.shared.data.signin.datasources.AuthStateUserDataSource
-import com.pr656d.shared.data.signin.datasources.FirebaseAuthStateUserDataSource
-import com.pr656d.shared.data.signin.datasources.FirestoreUserInfoDataSource
-import com.pr656d.shared.data.signin.datasources.UserInfoDataSource
-import com.pr656d.shared.fcm.FcmTokenUpdater
+import com.pr656d.shared.data.user.info.datasources.UpdateUserInfoDetailedDataSource
+import com.pr656d.shared.data.user.repository.UserInfoDataRepository
+import com.pr656d.shared.data.user.repository.UserInfoRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -44,32 +40,6 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseAuth(): FirebaseAuth {
-        return FirebaseAuth.getInstance()
-    }
-
-    @Singleton
-    @Provides
-    fun provideAuthStateUserDataSource(
-        firebase: FirebaseAuth,
-        firestore: FirebaseFirestore
-    ): AuthStateUserDataSource {
-        return FirebaseAuthStateUserDataSource(
-            firebase,
-            FcmTokenUpdater(firestore)
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun provideFirestoreUserInfoDataSource(firestore: FirebaseFirestore): UserInfoDataSource {
-        return FirestoreUserInfoDataSource(
-            firestore
-        )
-    }
-
-    @Singleton
-    @Provides
     fun provideCattleDataRepository(appDatabase: AppDatabase): CattleRepository {
         return CattleDataRepository(
             appDatabase
@@ -84,4 +54,13 @@ class AppModule {
         )
     }
 
+    @Singleton
+    @Provides
+    fun provideUserInfoRepository(
+        updateUserInfoDetailedDataSource: UpdateUserInfoDetailedDataSource
+    ) : UserInfoRepository {
+        return UserInfoDataRepository(
+            updateUserInfoDetailedDataSource
+        )
+    }
 }

@@ -1,4 +1,4 @@
-package com.pr656d.shared.data.signin
+package com.pr656d.shared.data.user.info
 
 import android.net.Uri
 import com.google.firebase.auth.UserInfo
@@ -8,7 +8,7 @@ import com.google.firebase.auth.UserInfo
  */
 class FirebaseUserInfoDetailed (
     private val basicUserInfo: UserInfoBasic?,
-    private val firestoreUserInfo: UserInfoOnFirestore?
+    private val firestoreUserInfo: FirestoreUserInfo?
 ) : UserInfoDetailed {
 
     override fun isSignedIn(): Boolean = basicUserInfo?.isSignedIn() == true

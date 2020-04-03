@@ -6,19 +6,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentLoginBinding
-import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.shared.domain.result.EventObserver
+import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class LoginFragment : NavigationFragment() {
+class LoginFragment : DaggerFragment() {
 
     companion object {
         const val TAG = "LoginFragment"
@@ -26,9 +25,10 @@ class LoginFragment : NavigationFragment() {
         const val CODE_SIGN_IN = 111
     }
 
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val model by viewModels<LoginViewModel> { viewModelFactory }
+    private val model by activityViewModels<LoginViewModel> { viewModelFactory }
 
     private lateinit var binding: FragmentLoginBinding
 
@@ -63,10 +63,6 @@ class LoginFragment : NavigationFragment() {
                     .build(),
                 CODE_SIGN_IN
             )
-        })
-
-        model.navigateUp.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigateUp()
         })
     }
 

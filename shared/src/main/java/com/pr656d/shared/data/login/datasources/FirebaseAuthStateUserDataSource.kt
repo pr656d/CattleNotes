@@ -1,10 +1,10 @@
-package com.pr656d.shared.data.signin.datasources
+package com.pr656d.shared.data.login.datasources
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
-import com.pr656d.shared.data.signin.FirebaseUserInfo
-import com.pr656d.shared.data.signin.UserInfoBasic
+import com.pr656d.shared.data.user.info.FirebaseUserInfo
+import com.pr656d.shared.data.user.info.UserInfoBasic
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.fcm.FcmTokenUpdater

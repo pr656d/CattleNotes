@@ -28,8 +28,24 @@
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_menu"
+                app:menu="@menu/profile_menu"
                 app:title="@string/profile"
                 tools:title="Farm name" />
+
+            <!--
+            ~ TODO : Use better progress indicator
+            ~ Material progress indicator is planned
+            ~ Reference : https://material.io/components/progress-indicators/
+            -->
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:goneUnless="@{ viewModel.loading }"
+                app:layout_anchor="@id/appBarLayout"
+                app:layout_anchorGravity="bottom"
+                tools:visibility="visible" />
         </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -68,7 +84,7 @@
                         android:layout_height="match_parent"
                         android:singleLine="true"
                         android:inputType="textCapSentences"
-                        android:text="@{ viewModel.currentUserInfo.farmName }"/>
+                        android:text="@{ viewModel.farmName }"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -94,7 +110,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:singleLine="true"
-                            android:text="@{ viewModel.currentUserInfo.dairyCode }" />
+                            android:text="@{ viewModel.dairyCode }" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,7 +130,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:singleLine="true"
-                            android:text="@{ viewModel.currentUserInfo.dairyCustomerId }"/>
+                            android:text="@{ viewModel.dairyCustomerId }"/>
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +151,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:maxLines="5"
-                        android:text="@{ viewModel.currentUserInfo.farmAddress }"/>
+                        android:text="@{ viewModel.farmAddress }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -151,7 +167,10 @@
                     android:layout_height="@dimen/profile_image_size"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_normal"
-                    app:srcCompat="@drawable/ic_nav_profile"
+                    app:clipToCircle="@{true}"
+                    app:imageUri="@{viewModel.imageUrl}"
+                    app:placeholder="@{@drawable/ic_nav_profile}"
+                    tools:srcCompat="@drawable/ic_nav_profile"
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -170,7 +189,7 @@
                         android:layout_height="match_parent"
                         android:inputType="textPersonName"
                         android:singleLine="true"
-                        android:text="@{ viewModel.currentUserInfo.displayName }"/>
+                        android:text="@{ viewModel.name }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -188,7 +207,7 @@
                         android:layout_height="match_parent"
                         android:singleLine="true"
                         android:inputType="textEmailAddress"
-                        android:text="@{ viewModel.currentUserInfo.email }"/>
+                        android:text="@{ viewModel.email }" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -207,49 +226,16 @@
                         android:layout_height="match_parent"
                         android:singleLine="true"
                         android:inputType="phone"
-                        android:text="@{ viewModel.currentUserInfo.phoneNumber }"/>
+                        android:text="@{ viewModel.phoneNumber }"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
+                <include
+                    android:id="@+id/includeSelectGenderLayout"
+                    layout="@layout/layout_select_gender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:background="@drawable/outline"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    android:padding="@dimen/padding_normal"
-                    android:baselineAligned="true">
-
-                    <TextView
-                        style="@style/AppTheme.Body1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/gender"
-                        android:layout_marginEnd="@dimen/margin_normal"
-                        android:layout_gravity="center_vertical"/>
-
-                    <com.google.android.material.button.MaterialButtonToggleGroup
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:singleSelection="true"
-                        android:gravity="center_horizontal">
-
-                        <com.google.android.material.button.MaterialButton
-                            style="?attr/materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/male"
-                            android:clickable="false"/>
-
-                        <com.google.android.material.button.MaterialButton
-                            style="?attr/materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/female"
-                            android:clickable="false"/>
-
-                    </com.google.android.material.button.MaterialButtonToggleGroup>
-                </LinearLayout>
+                    android:layout_marginTop="@dimen/margin_normal" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.CattleNOTES.TextInputLayout"
@@ -261,7 +247,10 @@
                     <com.google.android.material.textfield.TextInputEditText
                         style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        app:dateText="@{ viewModel.dob }"
+                        app:onClickShowDatePicker="@{ false }"
+                        app:onLongClickRemoveText="@{ false }"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -279,7 +268,8 @@
                         style="@style/Widget.CattleNOTES.TextInputEditText.Disabled"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:maxLines="5" />
+                        android:maxLines="5"
+                        android:text="@{ viewModel.address }"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Space

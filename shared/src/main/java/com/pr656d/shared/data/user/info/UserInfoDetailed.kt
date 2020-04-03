@@ -1,4 +1,4 @@
-package com.pr656d.shared.data.signin
+package com.pr656d.shared.data.user.info
 
 import android.net.Uri
 import com.google.firebase.auth.UserInfo
@@ -6,7 +6,8 @@ import com.google.firebase.auth.UserInfo
 /**
  *  Interface to decouple the user info from firebase.
  */
-interface UserInfoDetailed : UserInfoBasic, UserInfoOnFirestore
+interface UserInfoDetailed : UserInfoBasic,
+    FirestoreUserInfo
 
 interface UserInfoBasic {
 
@@ -36,7 +37,7 @@ interface UserInfoBasic {
 
 }
 
-interface UserInfoOnFirestore {
+interface FirestoreUserInfo {
     fun getFarmName(): String?
 
     fun getFarmAddress(): String?

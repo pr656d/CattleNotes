@@ -1,4 +1,4 @@
-package com.pr656d.shared.domain.launch
+package com.pr656d.shared.domain.login
 
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.domain.UseCase

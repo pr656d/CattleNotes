@@ -5,7 +5,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate
-import com.pr656d.shared.data.signin.UserInfoBasic
+import com.pr656d.shared.data.user.info.UserInfoBasic
 import com.pr656d.shared.domain.auth.ObserveUserAuthStateUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result.Success
@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(
         observeAuthStateUseCase.execute(Any())
 
         _redirectToLoginScreen.addSource(currentFirebaseUser) {
-            if (it == null) _redirectToLoginScreen.postValue(Event(Unit))
+            if (it?.isSignedIn() == false) _redirectToLoginScreen.postValue(Event(Unit))
         }
     }
 }

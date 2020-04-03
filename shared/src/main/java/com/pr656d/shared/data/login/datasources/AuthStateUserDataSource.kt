@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.pr656d.shared.data.signin.datasources
+package com.pr656d.shared.data.login.datasources
 
 import androidx.lifecycle.LiveData
-import com.pr656d.shared.data.signin.UserInfoBasic
+import com.pr656d.shared.data.user.info.UserInfoBasic
 import com.pr656d.shared.domain.result.Result
 
 /**

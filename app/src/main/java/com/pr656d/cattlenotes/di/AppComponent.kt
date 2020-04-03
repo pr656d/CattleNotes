@@ -22,9 +22,10 @@ import javax.inject.Singleton
     modules = [
         AndroidSupportInjectionModule::class,
         ViewModelModule::class,
+        ActivityBindingModule::class,
         AppModule::class,
         SharedModule::class,
-        ActivityBindingModule::class,
+        SignInModule::class,
         ThemedActivityDelegateModule::class
     ]
 )

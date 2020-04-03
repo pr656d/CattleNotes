@@ -1,20 +1,17 @@
 package com.pr656d.cattlenotes.ui.profile
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import com.pr656d.shared.data.signin.UserInfoDetailed
-import com.pr656d.shared.domain.profile.ObserveGetProfileInfoUseCase
 import com.pr656d.shared.domain.result.Event
-import com.pr656d.shared.domain.result.Result.Success
 import javax.inject.Inject
 
 class ProfileViewModel @Inject constructor(
-    observeGetProfileInfoUseCase: ObserveGetProfileInfoUseCase
-) : ViewModel() {
-
-    val currentUserInfo: LiveData<UserInfoDetailed?>
+    profileDelegate: ProfileDelegate
+) : ViewModel(),
+    ProfileDelegate by profileDelegate {
 
     private val _navigateUp = MutableLiveData<Event<Unit>>()
     val navigateUp: LiveData<Event<Unit>>
@@ -28,23 +25,40 @@ class ProfileViewModel @Inject constructor(
     val launchLogout: LiveData<Event<Unit>>
         get() = _launchLogout
 
-    init {
-        currentUserInfo = observeGetProfileInfoUseCase.observe().map { result ->
-            (result as? Success)?.data
-        }
+    private val _showLogoutConfirmation = MutableLiveData<Event<Unit>>()
+    val showLogoutConfirmation: LiveData<Event<Unit>>
+        get() = _showLogoutConfirmation
 
-        observeGetProfileInfoUseCase.execute(Unit)
+    private val _loading = MediatorLiveData<Boolean>().apply { value = true }
+    val loading: LiveData<Boolean>
+        get() = _loading
+
+    private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
+    val showMessage: LiveData<Event<Int>>
+        get() = _showMessage
+
+    init {
+        _loading.addSource(currentUserInfo) {
+            _loading.postValue(false)
+        }
     }
 
     fun navigateUp() {
         _navigateUp.postValue(Event(Unit))
     }
 
-    fun logout() {
-        _launchLogout.postValue(Event(Unit))
+    fun logout(logoutConfirmation: Boolean = false) {
+        if (logoutConfirmation)
+            _launchLogout.postValue(Event(Unit))
+        else
+            showLogoutConfirmation()
     }
 
     fun editProfile() {
         _launchEditProfile.postValue(Event(Unit))
+    }
+
+    private fun showLogoutConfirmation() {
+        _showLogoutConfirmation.postValue(Event(Unit))
     }
 }

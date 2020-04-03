@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.widget.Toolbar
@@ -17,6 +18,7 @@ import com.google.android.material.navigation.NavigationView
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityMainBinding
 import com.pr656d.cattlenotes.databinding.NavHeaderBinding
+import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.utils.updateForTheme
 import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
@@ -55,10 +57,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
     private var currentNavId = NAV_ID_NONE
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        // Switch to AppTheme
-        setTheme(R.style.AppTheme)
-
         super.onCreate(savedInstanceState)
 
         // Update for Dark Mode straight away
@@ -98,7 +96,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
         }
 
         model.redirectToLoginScreen.observe(this, EventObserver {
-            navigateTo(R.id.loginScreen)
+            startActivity(
+                Intent(this, LoginActivity::class.java)
+            )
+            finishAffinity()
         })
 
         model.theme.observe(this, Observer(::updateForTheme))
@@ -117,20 +118,10 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
     }
 
     override fun onBackPressed() {
-        when {
-            drawer.isDrawerOpen(navigation) -> {
-                drawer.closeDrawer(GravityCompat.START)
-            }
-            navController.currentDestination?.id == R.id.loginScreen -> {
-                /**
-                 * If back is pressed when user is at login screen then close the app as we need
-                 * login should be completed by the user.
-                 */
-                finish()
-            }
-            else -> {
-                super.onBackPressed()
-            }
+        if (drawer.isDrawerOpen(navigation)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 

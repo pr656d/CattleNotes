@@ -10,8 +10,12 @@ import com.pr656d.cattlenotes.ui.cattle.addedit.AddEditCattleModule
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailModule
 import com.pr656d.cattlenotes.ui.cattle.list.CattleListBindingModule
 import com.pr656d.cattlenotes.ui.credits.CreditsModule
+import com.pr656d.cattlenotes.ui.launch.LaunchBindingModule
+import com.pr656d.cattlenotes.ui.launch.LauncherActivity
+import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.login.LoginModule
 import com.pr656d.cattlenotes.ui.milking.MilkingModule
+import com.pr656d.cattlenotes.ui.profile.ProfileDelegateModule
 import com.pr656d.cattlenotes.ui.profile.ProfileModule
 import com.pr656d.cattlenotes.ui.profile.addedit.AddEditProfileModule
 import com.pr656d.cattlenotes.ui.settings.SettingsModule
@@ -33,6 +37,19 @@ import dagger.android.ContributesAndroidInjector
 @Suppress("UNUSED")
 abstract class ActivityBindingModule {
     @ActivityScoped
+    @ContributesAndroidInjector(modules = [LaunchBindingModule::class])
+    internal abstract fun launcherActivity(): LauncherActivity
+
+    @ActivityScoped
+    @ContributesAndroidInjector(
+        modules = [
+            LoginModule::class,
+            ProfileDelegateModule::class
+        ]
+    )
+    internal abstract fun loginActivity(): LoginActivity
+
+    @ActivityScoped
     @ContributesAndroidInjector(
         modules = [
             // activity
@@ -50,8 +67,9 @@ abstract class ActivityBindingModule {
             SettingsModule::class,
             CreditsModule::class,
             ProfileModule::class,
-            LoginModule::class,
-            AddEditProfileModule::class
+            AddEditProfileModule::class,
+            // Other
+            ProfileDelegateModule::class
         ]
     )
     internal abstract fun mainActivity(): MainActivity

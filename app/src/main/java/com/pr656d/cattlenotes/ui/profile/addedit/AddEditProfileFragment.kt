@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.pr656d.cattlenotes.databinding.FragmentAddEditProfileBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.shared.domain.result.EventObserver
@@ -18,6 +20,7 @@ class AddEditProfileFragment : NavigationFragment() {
     private val model by viewModels<AddEditProfileViewModel> { viewModelFactory }
 
     private lateinit var binding: FragmentAddEditProfileBinding
+    private lateinit var genderGroup: MaterialButtonToggleGroup
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,11 +32,22 @@ class AddEditProfileFragment : NavigationFragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = model
         }
+
+        genderGroup = binding.includeSelectGenderLayout.toggleGroupGender
+
+        genderGroup.addOnButtonCheckedListener { _, checkedId, _ ->
+            model.selectedGenderId.postValue(checkedId)
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        model.selectedGenderId.observe(viewLifecycleOwner, Observer {
+            genderGroup.check(it)
+        })
 
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigateUp()

@@ -1,9 +1,10 @@
 package com.pr656d.shared.domain.auth
 
-import com.pr656d.shared.data.signin.FirebaseUserInfoDetailed
-import com.pr656d.shared.data.signin.UserInfoDetailed
-import com.pr656d.shared.data.signin.datasources.AuthStateUserDataSource
-import com.pr656d.shared.data.signin.datasources.UserInfoDataSource
+import com.pr656d.shared.data.login.datasources.AuthStateUserDataSource
+import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.user.info.FirebaseUserInfoDetailed
+import com.pr656d.shared.data.user.info.UserInfoDetailed
+import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSource
 import com.pr656d.shared.domain.MediatorUseCase
 import com.pr656d.shared.domain.result.Result
 import timber.log.Timber
@@ -18,27 +19,30 @@ import javax.inject.Singleton
 @Singleton
 open class ObserveUserAuthStateUseCase @Inject constructor(
     private val authStateUserDataSource: AuthStateUserDataSource,
-    private val firestoreUserInfoDataSource: UserInfoDataSource
+    private val observeFirestoreUserInfoDataSource: ObserveFirestoreUserInfoDataSource,
+    preferenceStorage: PreferenceStorage
 ) : MediatorUseCase<Any, UserInfoDetailed?>() {
 
     private val currentFirebaseUserObservable =
         authStateUserDataSource.getBasicUserInfo()
 
     private val firestoreUserInfoObservable =
-        firestoreUserInfoDataSource.observeResult()
+        observeFirestoreUserInfoDataSource.observeFirestoreUserInfo()
 
     init {
-        // If the Firebase user changes, query firestore to figure out if they're registered.
+        // If the Firebase user changes, query firestore to fetch user info on firestore.
         result.addSource(currentFirebaseUserObservable) { userResult ->
-            // Start observing the user in firestore to fetch more user detail on firestore.
+            // Start observing the user in firestore to fetch more user info from firestore.
+            // Sign in
             (userResult as? Result.Success)?.data?.getUid()?.let {
-                firestoreUserInfoDataSource.listenToUserChanges(it)
+                observeFirestoreUserInfoDataSource.listenToUserChanges(it)
             }
 
             // Sign out
             if (userResult is Result.Success && userResult.data?.isSignedIn() == false) {
-                firestoreUserInfoDataSource.removeUser()
+                observeFirestoreUserInfoDataSource.removeUser()
                 updateUserObservable()
+                preferenceStorage.clear()
             }
 
             // Error
@@ -63,7 +67,7 @@ open class ObserveUserAuthStateUseCase @Inject constructor(
         val firestoreUserInfo = firestoreUserInfoObservable.value
 
         if (currentFirebaseUser is Result.Success) {
-            // If the firestoreUserInfo is an error, assign it false. Null means no info yet.
+            // If the firestoreUserInfo is an error, assign it null. Null means no info yet.
             val firestoreUserInfoValue = (firestoreUserInfo as? Result.Success)?.data
 
             result.postValue(
@@ -75,8 +79,8 @@ open class ObserveUserAuthStateUseCase @Inject constructor(
                 )
             )
         } else {
-            Timber.e("There was a registration error.")
-            result.postValue(Result.Error(Exception("Registration error")))
+            Timber.e("There was a user info on firebase error.")
+            result.postValue(Result.Error(Exception("User info on firebase error")))
         }
     }
 }
