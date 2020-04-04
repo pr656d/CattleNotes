@@ -53,7 +53,9 @@ class ProfileFragment : NavigationFragment() {
         genderGroup = binding.includeSelectGenderLayout.toggleGroupGender
 
         genderGroup.addOnButtonCheckedListener { _, checkedId, _ ->
-            model.selectedGenderId.postValue(checkedId)
+            val previousCheckedId = model.selectedGenderId.value
+            if (previousCheckedId != checkedId)
+                model.selectedGenderId.postValue(checkedId)
         }
 
         return binding.root

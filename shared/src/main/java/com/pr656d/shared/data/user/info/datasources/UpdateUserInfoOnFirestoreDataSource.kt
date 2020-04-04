@@ -32,11 +32,11 @@ class UpdateFirestoreUserInfoDataSourceImpl @Inject constructor(
             .collection(USERS_COLLECTION)
             .document(uId)
             .set(userInfo.asHashMap())
-            .addOnCompleteListener {
+            .addOnSuccessListener {
                 result.postValue(Result.Success(Unit))
             }
             .addOnFailureListener {
-                Timber.e("Exception on update of UserInfoOnFirestore")
+                Timber.d("Exception on update of UserInfoOnFirestore")
                 result.postValue(Result.Error(it))
             }
     }

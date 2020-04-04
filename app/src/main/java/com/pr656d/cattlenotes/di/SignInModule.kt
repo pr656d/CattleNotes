@@ -5,8 +5,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.login.datasources.AuthStateUserDataSource
 import com.pr656d.shared.data.login.datasources.FirebaseAuthStateUserDataSource
-import com.pr656d.shared.data.user.info.datasources.FirestoreObserveUserInfoDataSource
 import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSource
+import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSourceImpl
 import com.pr656d.shared.fcm.FcmTokenUpdater
 import dagger.Module
 import dagger.Provides
@@ -48,7 +48,7 @@ class SignInModule {
     fun provideObserveFirestoreUserInfoDataSource(
         firestore: FirebaseFirestore
     ): ObserveFirestoreUserInfoDataSource {
-        return FirestoreObserveUserInfoDataSource(
+        return ObserveFirestoreUserInfoDataSourceImpl(
             firestore
         )
     }

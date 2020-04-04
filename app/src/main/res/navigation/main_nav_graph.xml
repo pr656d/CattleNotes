@@ -216,7 +216,7 @@
     <fragment
         android:id="@+id/addEditProfileScreen"
         android:name="com.pr656d.cattlenotes.ui.profile.addedit.AddEditProfileFragment"
-        android:label="@string/profile"
+        android:label="@string/edit_profile"
         tools:layout="@layout/fragment_add_edit_profile">
 
     </fragment>

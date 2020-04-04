@@ -28,6 +28,9 @@ class UpdateUserInfoBasicDataSourceImpl @Inject constructor(
 
         val requestBuilder = UserProfileChangeRequest.Builder()
 
+        val oldUserName = currentUser.displayName
+        val newUserName = userInfo.getDisplayName()
+
         // For now we are handling update request of display name and photo url.
         if (currentUser.displayName != userInfo.getDisplayName())
             requestBuilder.setDisplayName(userInfo.getDisplayName())

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -26,8 +27,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
+                app:navigationIcon="@drawable/ic_arrow_back"
                 app:layout_scrollFlags="noScroll"
-                app:title="@string/profile"></androidx.appcompat.widget.Toolbar>
+                app:title="@string/edit_profile" />
 
             <!--
             ~ TODO : Use better progress indicator
@@ -233,7 +235,8 @@
                     layout="@layout/layout_select_gender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal" />
+                    android:layout_marginTop="@dimen/margin_normal"
+                    bind:clickable="@{ true }"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.CattleNOTES.TextInputLayout"

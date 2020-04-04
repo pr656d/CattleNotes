@@ -29,8 +29,7 @@
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_menu"
                 app:menu="@menu/profile_menu"
-                app:title="@string/profile"
-                tools:title="Farm name" />
+                app:title="@string/profile"/>
 
             <!--
             ~ TODO : Use better progress indicator
@@ -235,7 +234,7 @@
                     layout="@layout/layout_select_gender"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal" />
+                    android:layout_marginTop="@dimen/margin_normal"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.CattleNOTES.TextInputLayout"

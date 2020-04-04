@@ -4,7 +4,9 @@
 
     <data>
 
-
+        <variable
+            name="clickable"
+            type="Boolean" />
 
     </data>
 
@@ -36,20 +38,25 @@
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/male" />
+                android:clickable="@{ clickable, default=true }"
+                android:text="@string/male"
+                android:insetRight="@dimen/margin_micro"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggleButtonFemale"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/female" />
+                android:clickable="@{ clickable, default=true }"
+                android:text="@string/female"
+                android:insetRight="@dimen/margin_micro"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggleButtonOther"
                 style="?attr/materialButtonOutlinedStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="@{ clickable, default=true }"
                 android:text="@string/other" />
 
         </com.google.android.material.button.MaterialButtonToggleGroup>

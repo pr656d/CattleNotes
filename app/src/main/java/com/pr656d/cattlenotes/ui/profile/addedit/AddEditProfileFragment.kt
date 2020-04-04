@@ -36,7 +36,9 @@ class AddEditProfileFragment : NavigationFragment() {
         genderGroup = binding.includeSelectGenderLayout.toggleGroupGender
 
         genderGroup.addOnButtonCheckedListener { _, checkedId, _ ->
-            model.selectedGenderId.postValue(checkedId)
+            val previousCheckedId = model.selectedGenderId.value
+            if (previousCheckedId != checkedId)
+                model.selectedGenderId.postValue(checkedId)
         }
 
         return binding.root
@@ -45,8 +47,8 @@ class AddEditProfileFragment : NavigationFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.selectedGenderId.observe(viewLifecycleOwner, Observer {
-            genderGroup.check(it)
+        model.selectedGenderId.observe(viewLifecycleOwner, Observer { id ->
+            genderGroup.check(id)
         })
 
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {

@@ -111,7 +111,7 @@ class ProfileDelegateImp @Inject constructor(
         }
 
     override val selectedGenderId: MediatorLiveData<Int> =
-        MediatorLiveData<Int>().apply { postValue(R.id.toggleButtonMale) }
+        MediatorLiveData<Int>()
 
     override val dob: MediatorLiveData<LocalDate?> = MediatorLiveData()
 
@@ -147,17 +147,17 @@ class ProfileDelegateImp @Inject constructor(
         }
 
         selectedGenderId.addSource(currentUserInfo) { user ->
-            user?.getGender()?.getGenderId()?.let { id ->
-                selectedGenderId.postValue(id)
-            }
+            selectedGenderId.postValue(
+                user?.getGender().getGenderId()
+            )
         }
 
         dob.addSource(currentUserInfo) { user ->
-            user?.getDateOfBirth()?.toLongOrNull()?.let { millis ->
-                TimeUtils.toLocalDate(millis).let { localDate ->
-                    dob.postValue(localDate)
+            dob.postValue(
+                user?.getDateOfBirth()?.toLongOrNull()?.let {
+                    TimeUtils.toLocalDate(it)
                 }
-            }
+            )
         }
 
         address.addSource(currentUserInfo) { user ->
@@ -177,9 +177,24 @@ class ProfileDelegateImp @Inject constructor(
     override fun saveProfile() {
         firebaseAuth.currentUser?.let { user ->
             updateUserInfoDetailedUseCase.execute(
-                FirebaseUserInfoDetailed(FirebaseUserInfo(user), getUserInfoOnFirestore())
+                FirebaseUserInfoDetailed(
+                    getFirebaseUserInfo(),
+                    getUserInfoOnFirestore()
+                )
             )
             savingProfile.postValue(true)
+        }
+    }
+
+    private fun getFirebaseUserInfo(): FirebaseUserInfo {
+        return object : FirebaseUserInfo(firebaseAuth.currentUser) {
+            override fun getDisplayName(): String? {
+                return name.value
+            }
+
+            override fun getPhotoUrl(): Uri? {
+                return imageUrl.value
+            }
         }
     }
 
