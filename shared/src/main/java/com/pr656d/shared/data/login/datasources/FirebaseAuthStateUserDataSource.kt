@@ -22,10 +22,15 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
 
     private var lastUid: String? = null
 
+    private lateinit var auth: FirebaseAuth
+
     // Listener that saves the [FirebaseUser], fetches the ID token
     // and updates the user ID observable.
 
-    private val authStateListener: ((FirebaseAuth) -> Unit) = { auth ->
+    private val authStateListener: ((FirebaseAuth) -> Unit) = {
+        // Initialize auth as global
+        auth = it
+
         DefaultScheduler.execute {
             Timber.d("Received a FirebaseAuth update.")
             // Post the current user for observers
@@ -67,5 +72,21 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
 
     override fun clearListener() {
         firebase.removeAuthStateListener(authStateListener)
+    }
+
+    override fun reload() {
+        auth.currentUser
+            ?.reload()
+            ?.addOnSuccessListener {
+                val userName = auth.currentUser?.displayName
+                currentFirebaseUserObservable.postValue(
+                    Result.Success(
+                        FirebaseUserInfo(auth.currentUser)
+                    )
+                )
+            }
+            ?.addOnFailureListener {
+                Timber.d("Firebase reload failed")
+            }
     }
 }

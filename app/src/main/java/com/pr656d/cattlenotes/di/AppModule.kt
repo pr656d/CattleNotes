@@ -9,9 +9,6 @@ import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.data.db.AppDatabase
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.prefs.SharedPreferenceStorage
-import com.pr656d.shared.data.user.info.datasources.UpdateUserInfoDetailedDataSource
-import com.pr656d.shared.data.user.repository.UserInfoDataRepository
-import com.pr656d.shared.data.user.repository.UserInfoRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -51,16 +48,6 @@ class AppModule {
     fun provideBreedingRepository(appDatabase: AppDatabase): BreedingRepository {
         return BreedingDataRepository(
             appDatabase
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun provideUserInfoRepository(
-        updateUserInfoDetailedDataSource: UpdateUserInfoDetailedDataSource
-    ) : UserInfoRepository {
-        return UserInfoDataRepository(
-            updateUserInfoDetailedDataSource
         )
     }
 }

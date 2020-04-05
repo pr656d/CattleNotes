@@ -3,16 +3,18 @@ package com.pr656d.cattlenotes.ui.profile
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.pr656d.cattlenotes.R
 import com.pr656d.shared.data.user.info.FirebaseUserInfo
 import com.pr656d.shared.data.user.info.FirebaseUserInfoDetailed
 import com.pr656d.shared.data.user.info.FirestoreUserInfo
 import com.pr656d.shared.data.user.info.UserInfoDetailed
 import com.pr656d.shared.domain.result.Result
-import com.pr656d.shared.domain.user.ObserveUserInfoDetailed
-import com.pr656d.shared.domain.user.UpdateUserInfoDetailedUseCase
+import com.pr656d.shared.domain.user.info.ObserveUserInfoDetailed
+import com.pr656d.shared.domain.user.info.UpdateUserInfoDetailedUseCase
 import com.pr656d.shared.utils.TimeUtils
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
@@ -66,7 +68,8 @@ interface ProfileDelegate {
 
     val address: MediatorLiveData<String>
 
-    val updateUserInfoDetailedResult: LiveData<Result<Unit>>
+    // When result is handled by observer then reset it by null.
+    val updateUserInfoDetailedResult: MutableLiveData<Result<Pair<Result<Unit>, Result<Unit>>>?>
 
     /**
      * Convenience member holds saving state.
@@ -117,7 +120,7 @@ class ProfileDelegateImp @Inject constructor(
 
     override val address: MediatorLiveData<String> = MediatorLiveData()
 
-    override val updateUserInfoDetailedResult: LiveData<Result<Unit>> =
+    override val updateUserInfoDetailedResult: MutableLiveData<Result<Pair<Result<Unit>, Result<Unit>>>?> =
         updateUserInfoDetailedUseCase.observe()
 
     override val savingProfile =
@@ -175,10 +178,10 @@ class ProfileDelegateImp @Inject constructor(
     }
 
     override fun saveProfile() {
-        firebaseAuth.currentUser?.let { user ->
+        firebaseAuth.currentUser?.let {
             updateUserInfoDetailedUseCase.execute(
                 FirebaseUserInfoDetailed(
-                    getFirebaseUserInfo(),
+                    getFirebaseUserInfo(it),
                     getUserInfoOnFirestore()
                 )
             )
@@ -186,8 +189,8 @@ class ProfileDelegateImp @Inject constructor(
         }
     }
 
-    private fun getFirebaseUserInfo(): FirebaseUserInfo {
-        return object : FirebaseUserInfo(firebaseAuth.currentUser) {
+    private fun getFirebaseUserInfo(currentUser: FirebaseUser): FirebaseUserInfo {
+        return object : FirebaseUserInfo(currentUser) {
             override fun getDisplayName(): String? {
                 return name.value
             }
@@ -237,7 +240,7 @@ class ProfileDelegateImp @Inject constructor(
         else -> throw IllegalArgumentException("Invalid selection of gender")
     }
 
-    private fun String?.getGenderId(): Int? = when(val string = this) {
+    private fun String?.getGenderId(): Int? = when (val string = this) {
         null -> null    // If null comes don't do anything.
         "Male" -> R.id.toggleButtonMale
         "Female" -> R.id.toggleButtonFemale

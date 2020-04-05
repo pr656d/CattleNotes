@@ -15,7 +15,7 @@ interface UserInfoRepository {
 
     fun updateUserInfo(userInfo: UserInfoDetailed)
 
-    fun observeUpdateResult(): LiveData<Result<Unit>>
+    fun observeUpdateResult(): LiveData<Result<Pair<Result<Unit>, Result<Unit>>>>
 }
 
 @Singleton
@@ -27,7 +27,7 @@ open class UserInfoDataRepository @Inject constructor(
         updateUserInfoDetailedDataSource.updateUserInfo(userInfo)
     }
 
-    override fun observeUpdateResult(): LiveData<Result<Unit>> {
+    override fun observeUpdateResult(): LiveData<Result<Pair<Result<Unit>, Result<Unit>>>> {
         return updateUserInfoDetailedDataSource.observeUpdateResult()
     }
 }

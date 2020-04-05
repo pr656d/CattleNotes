@@ -1,4 +1,4 @@
-package com.pr656d.shared.domain.user
+package com.pr656d.shared.domain.user.info
 
 import com.pr656d.shared.domain.auth.ObserveUserAuthStateUseCase
 

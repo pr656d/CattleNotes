@@ -52,20 +52,6 @@ class LoginViewModel @Inject constructor(
     val loading: LiveData<Boolean>
         get() = _loading
 
-    /**
-     * updateResultInfoDetailedResult Sends two result back
-     *      1. For update on Firebase
-     *      2. For update on Firestore
-     *
-     * Problem: Even activity gets finished on first result,
-     *          for second result this runs and opens MainActivity again.
-     *
-     * TODO("Temporary fix : Provide more accurate result info of each update")
-     *
-     * To overcome this remember if already starting.
-     */
-    private val alreadyLaunchingMainActivity = MutableLiveData<Boolean>(false)
-
     init {
         getFirstTimeProfileSetupCompletedUseCase(Unit, getFirstTimeProfileSetupCompletedResult)
 
@@ -89,14 +75,16 @@ class LoginViewModel @Inject constructor(
         }
 
         _launchMainScreen.addSource(updateUserInfoDetailedResult) { result ->
-            (result as? Result.Success)?.let {
-                setFirstTimeProfileSetupCompletedUseCase(true)
+            if (result == null)
+                return@addSource // Break the loop
 
-                if (alreadyLaunchingMainActivity.value == false) {
-                    alreadyLaunchingMainActivity.postValue(true)
-                    _launchMainScreen.postValue(Event(Unit))
-                }
+            (result as? Result.Success)?.data?.let {
+                setFirstTimeProfileSetupCompletedUseCase(true)
+                _launchMainScreen.postValue(Event(Unit))
             }
+
+            // Reset result
+            updateUserInfoDetailedResult.postValue(null)
         }
 
         _loading.addSource(currentUserInfo) {

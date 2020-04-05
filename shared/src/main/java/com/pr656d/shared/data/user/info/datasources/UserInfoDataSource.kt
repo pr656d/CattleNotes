@@ -43,9 +43,10 @@ interface UpdateUserInfoDetailedDataSource {
     fun updateUserInfo(userInfo: UserInfoDetailed)
 
     /**
-     * Observe result of update.
+     * Returns holder of the result of update user info. It does updates to two different sources.
+     * Holder their result with pair.
      */
-    fun observeUpdateResult(): LiveData<Result<Unit>>
+    fun observeUpdateResult(): LiveData<Result<Pair<Result<Unit>, Result<Unit>>>>
 
 }
 

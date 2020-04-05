@@ -2,7 +2,6 @@ package com.pr656d.cattlenotes.ui.profile.addedit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.ui.profile.ProfileDelegate
 import com.pr656d.shared.domain.result.Event
@@ -21,28 +20,23 @@ class AddEditProfileViewModel @Inject constructor(
     val loading: LiveData<Boolean>
         get() = _loading
 
-    /**
-     * updateResultInfoDetailedResult Sends two result back
-     *      1. For update on Firebase
-     *      2. For update on Firestore
-     *
-     * Problem: Even activity gets finished on first result,
-     *          for second result this runs and opens MainActivity again.
-     *
-     * TODO("Temporary fix : Provide more accurate result info of each update")
-     *
-     * To overcome this remember if already starting.
-     */
-    private val alreadyNavigatingUp = MutableLiveData<Boolean>(false)
-
     init {
         _navigateUp.addSource(updateUserInfoDetailedResult) { result ->
+            /**
+             * [ProfileViewModel] and [AddEditProfileViewModel] uses same [ProfileDelegate] implementation.
+             * So when user go back to profile after editing and goes to edit again.
+             * Observers of [updateUserInfoDetailedResult] gets executed. So reset it after execution.
+             */
+            if (result == null)
+                return@addSource    // Break the loop
+
             (result as? Result.Success)?.data?.let {
-                if (alreadyNavigatingUp.value == false) {
-                    alreadyNavigatingUp.postValue(true)
+                if (it.first is Result.Success && it.second is Result.Success)
                     navigateUp()
-                }
             }
+
+            // Reset it.
+            updateUserInfoDetailedResult.postValue(null)
         }
 
         _loading.addSource(currentUserInfo) {

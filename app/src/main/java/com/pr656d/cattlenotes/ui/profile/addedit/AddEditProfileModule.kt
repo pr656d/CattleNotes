@@ -17,7 +17,7 @@ import dagger.multibindings.IntoMap
 internal abstract class AddEditProfileModule {
 
     /**
-     * Generates an [AndroidInjector] for the [ProfileFragment].
+     * Generates an [AndroidInjector] for the [AddEditProfileFragment].
      */
     @FragmentScoped
     @ContributesAndroidInjector

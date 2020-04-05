@@ -4,13 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.pr656d.shared.data.login.datasources.ReloadFirebaseUserInfo
 import com.pr656d.shared.data.user.info.UserInfoBasic
 import com.pr656d.shared.domain.result.Result
 import timber.log.Timber
 import javax.inject.Inject
 
 class UpdateUserInfoBasicDataSourceImpl @Inject constructor(
-    private val firebaseAuth: FirebaseAuth
+    private val firebaseAuth: FirebaseAuth,
+    private val reloadFirebaseUserInfo: ReloadFirebaseUserInfo
 ) : UpdateUserInfoBasicDataSource {
 
     private val result = MutableLiveData<Result<Unit>>()
@@ -28,9 +30,6 @@ class UpdateUserInfoBasicDataSourceImpl @Inject constructor(
 
         val requestBuilder = UserProfileChangeRequest.Builder()
 
-        val oldUserName = currentUser.displayName
-        val newUserName = userInfo.getDisplayName()
-
         // For now we are handling update request of display name and photo url.
         if (currentUser.displayName != userInfo.getDisplayName())
             requestBuilder.setDisplayName(userInfo.getDisplayName())
@@ -42,6 +41,11 @@ class UpdateUserInfoBasicDataSourceImpl @Inject constructor(
             .updateProfile(requestBuilder.build())
             .addOnSuccessListener {
                 result.postValue(Result.Success(Unit))
+                /**
+                 * Firebase user info is not supporting realtime updates.
+                 * We have to tell it about by reload call.
+                 */
+                reloadFirebaseUserInfo.reload()
             }
             .addOnFailureListener {
                 Timber.d("Exception on update of UserInfoBasic")

@@ -15,7 +15,6 @@ import com.pr656d.cattlenotes.ui.launch.LauncherActivity
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.ui.login.LoginModule
 import com.pr656d.cattlenotes.ui.milking.MilkingModule
-import com.pr656d.cattlenotes.ui.profile.ProfileDelegateModule
 import com.pr656d.cattlenotes.ui.profile.ProfileModule
 import com.pr656d.cattlenotes.ui.profile.addedit.AddEditProfileModule
 import com.pr656d.cattlenotes.ui.settings.SettingsModule
@@ -43,8 +42,7 @@ abstract class ActivityBindingModule {
     @ActivityScoped
     @ContributesAndroidInjector(
         modules = [
-            LoginModule::class,
-            ProfileDelegateModule::class
+            LoginModule::class
         ]
     )
     internal abstract fun loginActivity(): LoginActivity
@@ -67,9 +65,7 @@ abstract class ActivityBindingModule {
             SettingsModule::class,
             CreditsModule::class,
             ProfileModule::class,
-            AddEditProfileModule::class,
-            // Other
-            ProfileDelegateModule::class
+            AddEditProfileModule::class
         ]
     )
     internal abstract fun mainActivity(): MainActivity

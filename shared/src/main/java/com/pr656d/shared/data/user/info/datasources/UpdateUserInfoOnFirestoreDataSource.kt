@@ -3,15 +3,18 @@ package com.pr656d.shared.data.user.info.datasources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.user.info.FirestoreUserInfo
 import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.utils.NetworkHelper
 import timber.log.Timber
 import javax.inject.Inject
 
 class UpdateFirestoreUserInfoDataSourceImpl @Inject constructor(
     private val authIdDataSource: AuthIdDataSource,
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val networkHelper: NetworkHelper
 ) : UpdateFirestoreUserInfoDataSource {
 
     private val result = MutableLiveData<Result<Unit>>()
@@ -28,21 +31,27 @@ class UpdateFirestoreUserInfoDataSourceImpl @Inject constructor(
             return
         }
 
-        firestore
+        val task = firestore
             .collection(USERS_COLLECTION)
             .document(uId)
-            .set(userInfo.asHashMap())
-            .addOnSuccessListener {
-                result.postValue(Result.Success(Unit))
-            }
-            .addOnFailureListener {
-                Timber.d("Exception on update of UserInfoOnFirestore")
-                result.postValue(Result.Error(it))
-            }
+            .set(userInfo.asHashMap(), SetOptions.merge())
+
+        if (networkHelper.isNetworkConnected()) {
+            task
+                .addOnSuccessListener {
+                    result.postValue(Result.Success(Unit))
+                }
+                .addOnFailureListener {
+                    Timber.d("Exception on update of UserInfoOnFirestore")
+                    result.postValue(Result.Error(it))
+                }
+        } else {
+            result.postValue(null)
+        }
     }
 
-    private fun FirestoreUserInfo.asHashMap(): HashMap<String, String?> =
-        hashMapOf<String, String?>().apply {
+    private fun FirestoreUserInfo.asHashMap(): HashMap<String, Any?> =
+        hashMapOf<String, Any?>().apply {
             put(KEY_FARM_NAME, getFarmName())
             put(KEY_DAIRY_CODE, getDairyCode())
             put(KEY_DAIRY_CUSTOMER_ID, getDairyCustomerId())

@@ -22,10 +22,8 @@ import com.pr656d.shared.domain.result.Result
 
 /**
  * Listens to an Authentication state data source that emits updates on the current user.
- *
- * @see FirebaseAuthStateUserDataSource
  */
-interface AuthStateUserDataSource {
+interface AuthStateUserDataSource : ReloadFirebaseUserInfo {
     /**
      * Listens to changes in the authentication-related user info.
      */
@@ -40,4 +38,14 @@ interface AuthStateUserDataSource {
      * Call this method to clear listeners to avoid leaks.
      */
     fun clearListener()
+}
+
+/**
+ * Force to reload firebase user info.
+ */
+interface ReloadFirebaseUserInfo {
+    /**
+     * Reloads the firebase user info.
+     */
+    fun reload()
 }

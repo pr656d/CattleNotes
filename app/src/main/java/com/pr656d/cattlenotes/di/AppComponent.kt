@@ -1,6 +1,7 @@
 package com.pr656d.cattlenotes.di
 
 import com.pr656d.cattlenotes.CattleNotesApplication
+import com.pr656d.cattlenotes.ui.profile.ProfileDelegateModule
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegateModule
 import com.pr656d.shared.di.SharedModule
 import com.pr656d.shared.di.ViewModelModule
@@ -26,7 +27,8 @@ import javax.inject.Singleton
         AppModule::class,
         SharedModule::class,
         SignInModule::class,
-        ThemedActivityDelegateModule::class
+        ThemedActivityDelegateModule::class,
+        ProfileDelegateModule::class
     ]
 )
 interface AppComponent : AndroidInjector<CattleNotesApplication> {
