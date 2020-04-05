@@ -8,6 +8,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.databinding.FragmentSetupProfileBinding
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -33,11 +34,22 @@ class SetupProfileFragment : DaggerFragment() {
         genderGroup = binding.includeSelectGenderLayout.toggleGroupGender
 
         genderGroup.addOnButtonCheckedListener { _, checkedId, _ ->
-            model.selectedGenderId.postValue(checkedId)
+            val previousCheckedId = model.selectedGenderId.value
+            if (previousCheckedId != checkedId)
+                model.selectedGenderId.postValue(checkedId)
         }
 
         model.selectedGenderId.observe(viewLifecycleOwner, Observer {
-            genderGroup.check(it)
+            if (it == null)
+                genderGroup.clearChecked()
+            else
+                genderGroup.check(it)
+        })
+
+        model.updateErrorMessage.observe(viewLifecycleOwner, Observer {
+            Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG)
+                .setAnchorView(binding.fabButtonSaveProfile)
+                .show()
         })
 
         return binding.root

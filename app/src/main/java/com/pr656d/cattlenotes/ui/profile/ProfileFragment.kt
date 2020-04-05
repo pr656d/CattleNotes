@@ -65,7 +65,10 @@ class ProfileFragment : NavigationFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         model.selectedGenderId.observe(viewLifecycleOwner, Observer {
-            genderGroup.check(it)
+            if (it == null)
+                genderGroup.clearChecked()
+            else
+                genderGroup.check(it)
         })
 
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {

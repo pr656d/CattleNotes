@@ -47,7 +47,6 @@ class LoginViewModel @Inject constructor(
     private val _launchMainScreen = MediatorLiveData<Event<Unit>>()
     val launchMainScreen: LiveData<Event<Unit>> = _launchMainScreen
 
-
     private val _loading = MediatorLiveData<Boolean>().apply { value = true }
     val loading: LiveData<Boolean>
         get() = _loading
@@ -79,8 +78,10 @@ class LoginViewModel @Inject constructor(
                 return@addSource // Break the loop
 
             (result as? Result.Success)?.data?.let {
-                setFirstTimeProfileSetupCompletedUseCase(true)
-                _launchMainScreen.postValue(Event(Unit))
+                if (it.first is Result.Success && it.second is Result.Success) {
+                    setFirstTimeProfileSetupCompletedUseCase(true)
+                    _launchMainScreen.postValue(Event(Unit))
+                }
             }
 
             // Reset result

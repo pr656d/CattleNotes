@@ -153,6 +153,8 @@
     <string name="logout">Logout</string>
     <string name="please_login_to_view_profile">Please login to view profile</string>
     <string name="menu_item_logout">Logout</string>
+    <string name="error_profile_change_incomplete">Could not save all changes</string>
+    <string name="error_profile_change_not_saved">Could not save profile, Please try again</string>
 
     <!--  Settings  -->
     <string name="theme_title">Choose theme</string>

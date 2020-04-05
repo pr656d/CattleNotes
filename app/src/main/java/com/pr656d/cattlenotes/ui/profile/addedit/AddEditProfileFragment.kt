@@ -47,8 +47,11 @@ class AddEditProfileFragment : NavigationFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.selectedGenderId.observe(viewLifecycleOwner, Observer { id ->
-            genderGroup.check(id)
+        model.selectedGenderId.observe(viewLifecycleOwner, Observer {
+            if (it == null)
+                genderGroup.clearChecked()
+            else
+                genderGroup.check(it)
         })
 
         model.navigateUp.observe(viewLifecycleOwner, EventObserver {

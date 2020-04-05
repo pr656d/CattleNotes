@@ -1,6 +1,7 @@
 package com.pr656d.cattlenotes.ui.profile
 
 import android.net.Uri
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +16,7 @@ import com.pr656d.shared.data.user.info.UserInfoDetailed
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.user.info.ObserveUserInfoDetailed
 import com.pr656d.shared.domain.user.info.UpdateUserInfoDetailedUseCase
+import com.pr656d.shared.utils.NetworkHelper
 import com.pr656d.shared.utils.TimeUtils
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
@@ -62,7 +64,7 @@ interface ProfileDelegate {
      * For two way data binding for selection of gender.
      * Holds button id of selected button from group.
      */
-    val selectedGenderId: MediatorLiveData<Int>
+    val selectedGenderId: MediatorLiveData<Int?>
 
     val dob: MediatorLiveData<LocalDate?>
 
@@ -70,6 +72,8 @@ interface ProfileDelegate {
 
     // When result is handled by observer then reset it by null.
     val updateUserInfoDetailedResult: MutableLiveData<Result<Pair<Result<Unit>, Result<Unit>>>?>
+
+    val updateErrorMessage: LiveData<Int>
 
     /**
      * Convenience member holds saving state.
@@ -82,7 +86,8 @@ interface ProfileDelegate {
 class ProfileDelegateImp @Inject constructor(
     observeUserInfoDetailed: ObserveUserInfoDetailed,
     private val firebaseAuth: FirebaseAuth,
-    private val updateUserInfoDetailedUseCase: UpdateUserInfoDetailedUseCase
+    private val updateUserInfoDetailedUseCase: UpdateUserInfoDetailedUseCase,
+    private val networkHelper: NetworkHelper
 ) : ProfileDelegate {
 
     private val currentUserInfoResult = observeUserInfoDetailed.observe()
@@ -113,8 +118,7 @@ class ProfileDelegateImp @Inject constructor(
             it?.getPhoneNumber()
         }
 
-    override val selectedGenderId: MediatorLiveData<Int> =
-        MediatorLiveData<Int>()
+    override val selectedGenderId: MediatorLiveData<Int?> = MediatorLiveData<Int?>()
 
     override val dob: MediatorLiveData<LocalDate?> = MediatorLiveData()
 
@@ -125,6 +129,10 @@ class ProfileDelegateImp @Inject constructor(
 
     override val savingProfile =
         MediatorLiveData<Boolean>().apply { postValue(false) }
+
+    private val _updateErrorMessage = MediatorLiveData<@StringRes Int>()
+    override val updateErrorMessage: LiveData<Int>
+        get() = _updateErrorMessage
 
     init {
         observeUserInfoDetailed.execute(Any())
@@ -175,17 +183,35 @@ class ProfileDelegateImp @Inject constructor(
             if (it is Result.Success || it is Result.Error)
                 savingProfile.postValue(false)
         }
+
+        _updateErrorMessage.addSource(updateUserInfoDetailedResult) { result ->
+            (result as? Result.Success)?.data?.let {
+                if (it.first is Result.Error && it.second is Result.Error)
+                    _updateErrorMessage.postValue(R.string.error_profile_change_not_saved)
+                else if (it.first is Result.Error)
+                    _updateErrorMessage.postValue(R.string.error_profile_change_incomplete)
+                else if (it.second is Result.Error)
+                    _updateErrorMessage.postValue(R.string.error_profile_change_incomplete)
+            }
+            (result as? Result.Error)?.exception?.let {
+                _updateErrorMessage.postValue(R.string.error_unknown)
+            }
+        }
     }
 
     override fun saveProfile() {
         firebaseAuth.currentUser?.let {
-            updateUserInfoDetailedUseCase.execute(
-                FirebaseUserInfoDetailed(
-                    getFirebaseUserInfo(it),
-                    getUserInfoOnFirestore()
+            if (networkHelper.isNetworkConnected()) {
+                updateUserInfoDetailedUseCase.execute(
+                    FirebaseUserInfoDetailed(
+                        getFirebaseUserInfo(it),
+                        getUserInfoOnFirestore()
+                    )
                 )
-            )
-            savingProfile.postValue(true)
+                savingProfile.postValue(true)
+            } else {
+                _updateErrorMessage.postValue(R.string.network_not_available)
+            }
         }
     }
 

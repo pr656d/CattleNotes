@@ -46,12 +46,14 @@ class ProfileDelegateModule {
     fun provideProfileDelegate(
         observeUserInfoDetailed: ObserveUserInfoDetailed,
         firebaseAuth: FirebaseAuth,
-        updateUserInfoDetailedUseCase: UpdateUserInfoDetailedUseCase
+        updateUserInfoDetailedUseCase: UpdateUserInfoDetailedUseCase,
+        networkHelper: NetworkHelper
     ) : ProfileDelegate {
         return ProfileDelegateImp (
             observeUserInfoDetailed,
             firebaseAuth,
-            updateUserInfoDetailedUseCase
+            updateUserInfoDetailedUseCase,
+            networkHelper
         )
     }
 

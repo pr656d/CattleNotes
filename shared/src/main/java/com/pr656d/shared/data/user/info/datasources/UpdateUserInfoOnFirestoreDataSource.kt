@@ -46,7 +46,8 @@ class UpdateFirestoreUserInfoDataSourceImpl @Inject constructor(
                     result.postValue(Result.Error(it))
                 }
         } else {
-            result.postValue(null)
+            // Firebase offline persistence will reflect changes.
+            result.postValue(Result.Success(Unit))
         }
     }
 
