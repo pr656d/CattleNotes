@@ -22,10 +22,13 @@ android {
     buildTypes {
         debug {
             versionNameSuffix = '-debug'
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"false"]
+            ext.enableCrashlytics = false
 //            minifyEnabled true  // To enable proguard
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
+            manifestPlaceholders = [crashlyticsCollectionEnabled:"true"]
             minifyEnabled true  // To enable proguard
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
