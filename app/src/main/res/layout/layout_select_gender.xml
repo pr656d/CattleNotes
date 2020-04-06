@@ -40,7 +40,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="@{ clickable, default=true }"
                 android:text="@string/male"
-                android:insetRight="@dimen/margin_micro"/>
+                android:insetLeft="0dp"
+                android:insetRight="0dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggleButtonFemale"
@@ -49,7 +50,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="@{ clickable, default=true }"
                 android:text="@string/female"
-                android:insetRight="@dimen/margin_micro"/>
+                android:insetLeft="0dp"
+                android:insetRight="0dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/toggleButtonOther"
@@ -57,7 +59,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="@{ clickable, default=true }"
-                android:text="@string/other" />
+                android:text="@string/other"
+                android:insetLeft="0dp"
+                android:insetRight="0dp" />
 
         </com.google.android.material.button.MaterialButtonToggleGroup>
     </LinearLayout>
