@@ -4,14 +4,18 @@ import android.os.StrictMode
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.pr656d.cattlenotes.di.DaggerAppComponent
 import com.pr656d.cattlenotes.utils.CrashlyticsTree
+import com.pr656d.shared.analytics.AnalyticsHelper
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import timber.log.Timber
+import javax.inject.Inject
 
 /**
  * Initialization of libraries.
  */
 class CattleNotesApplication : DaggerApplication() {
+    // Needs to be initialized at application startup.
+    @Inject lateinit var analyticsHelper: AnalyticsHelper
 
     override fun onCreate() {
         // ThreeTenBP for times and dates, called before super to be available for objects

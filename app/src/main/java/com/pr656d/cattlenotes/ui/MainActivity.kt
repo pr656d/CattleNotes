@@ -20,11 +20,14 @@ import com.pr656d.cattlenotes.databinding.ActivityMainBinding
 import com.pr656d.cattlenotes.databinding.NavHeaderBinding
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.cattlenotes.utils.updateForTheme
+import com.pr656d.shared.analytics.AnalyticsHelper
 import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity(), NavigationHost {
+
+    @Inject lateinit var analyticsHelper: AnalyticsHelper
 
     companion object {
         const val TAG = "MainActivity"
@@ -78,7 +81,14 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
         navigation.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            // Set current nav id
             currentNavId = destination.id
+
+            // Send screen view to analytics
+            val destinationLabel = destination.label.toString()
+            analyticsHelper.setScreenView(destinationLabel, this)
+
+            // Handle Drawer lock mode
             val isTopLevelDestination = TOP_LEVEL_DESTINATIONS.contains(destination.id)
             val lockMode = if (isTopLevelDestination) {
                 DrawerLayout.LOCK_MODE_UNLOCKED

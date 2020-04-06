@@ -13,11 +13,14 @@ import com.pr656d.cattlenotes.databinding.ActivityLoginBinding
 import com.pr656d.cattlenotes.ui.MainActivity
 import com.pr656d.cattlenotes.ui.login.LoginFragmentDirections.Companion.toSetupProfile
 import com.pr656d.cattlenotes.utils.updateForTheme
+import com.pr656d.shared.analytics.AnalyticsHelper
 import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
 class LoginActivity : DaggerAppCompatActivity() {
+
+    @Inject lateinit var analyticsHelper: AnalyticsHelper
 
     companion object {
 
@@ -44,10 +47,16 @@ class LoginActivity : DaggerAppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this
+
         navController = findNavController(R.id.nav_host_login)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
+            // Set current nav id
             currentNavId = destination.id
+
+            // Send screen view to analytics
+            val destinationLabel = destination.label.toString()
+            analyticsHelper.setScreenView(destinationLabel, this)
         }
 
         model.theme.observe(this, Observer(::updateForTheme))

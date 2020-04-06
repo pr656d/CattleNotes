@@ -2,6 +2,7 @@ package com.pr656d.cattlenotes.di
 
 import android.content.Context
 import com.pr656d.cattlenotes.CattleNotesApplication
+import com.pr656d.shared.analytics.AnalyticsHelper
 import com.pr656d.shared.data.breeding.BreedingDataRepository
 import com.pr656d.shared.data.breeding.BreedingRepository
 import com.pr656d.shared.data.cattle.CattleDataRepository
@@ -9,6 +10,7 @@ import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.data.db.AppDatabase
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.prefs.SharedPreferenceStorage
+import com.pr656d.shared.utils.FirebaseAnalyticsHelper
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -30,6 +32,12 @@ class AppModule {
     @Provides
     fun providesPreferenceStorage(context: Context): PreferenceStorage =
         SharedPreferenceStorage(context)
+
+    @Singleton
+    @Provides
+    fun provideFirebaseAnalyticsHelper(
+        context: Context
+    ): AnalyticsHelper = FirebaseAnalyticsHelper(context)
 
     @Singleton
     @Provides
