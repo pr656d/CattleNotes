@@ -68,9 +68,13 @@ dependencies {
     api "com.jakewharton.timber:timber:$rootProject.timberVersion"
 
     // Firebase
-    api "com.google.firebase:firebase-auth:$rootProject.firebaseAuthVersion"
     api "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
+    api "com.google.firebase:firebase-auth:$firebaseAuthVersion"
+    api "com.google.firebase:firebase-common-ktx:$rootProject.firebaseCommonKtxVersion"
+    api "com.google.firebase:firebase-analytics:$rootProject.firebaseAnalyticsVersion"
+    api "com.google.firebase:firebase-perf:$firebasePerformanceVersion"
     api "com.google.firebase:firebase-firestore:$rootProject.firebaseFirestoreVersion"
+    api "com.google.firebase:firebase-firestore-ktx:$firebaseFirestoreVersion"
 
     // Local Unit tests
     testImplementation "junit:junit:$rootProject.junitVersion"
