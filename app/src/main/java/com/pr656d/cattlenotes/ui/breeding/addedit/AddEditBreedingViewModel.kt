@@ -115,7 +115,6 @@ class AddEditBreedingViewModel @Inject constructor(
     private fun getBreedingCycle(cattle: Cattle): Breeding =
         Breeding(
             cattle.id,
-            active.value ?: false,
             aiDate.value?.let {
                 ArtificialInseminationInfo(
                     it,

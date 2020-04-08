@@ -2,6 +2,8 @@ package com.pr656d.cattlenotes.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.pr656d.shared.data.db.AppDatabaseDao
+import com.pr656d.shared.data.db.updater.DbUpdater
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.login.datasources.AuthStateUserDataSource
 import com.pr656d.shared.data.login.datasources.FirebaseAuthStateUserDataSource
@@ -35,10 +37,14 @@ class SignInModule {
     @Provides
     fun provideAuthStateUserDataSource(
         firebase: FirebaseAuth,
+        appDatabaseDao: AppDatabaseDao,
+        dbUpdater: DbUpdater,
         firestore: FirebaseFirestore
     ): AuthStateUserDataSource {
         return FirebaseAuthStateUserDataSource(
             firebase,
+            appDatabaseDao,
+            dbUpdater,
             FcmTokenUpdater(firestore)
         )
     }

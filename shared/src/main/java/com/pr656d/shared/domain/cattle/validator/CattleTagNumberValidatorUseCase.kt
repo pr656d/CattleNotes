@@ -53,6 +53,6 @@ class CattleTagNumberValidatorUseCase @Inject constructor(
             return
         }
 
-        isCattleExistWithTagNumberUseCase(tagNumber.toLong(), isCattleExistResult)
+        isCattleExistWithTagNumberUseCase(tagNumber, isCattleExistResult)
     }
 }

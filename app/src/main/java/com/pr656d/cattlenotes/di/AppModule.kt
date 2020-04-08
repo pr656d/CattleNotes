@@ -7,7 +7,12 @@ import com.pr656d.shared.data.breeding.BreedingDataRepository
 import com.pr656d.shared.data.breeding.BreedingRepository
 import com.pr656d.shared.data.cattle.CattleDataRepository
 import com.pr656d.shared.data.cattle.CattleRepository
+import com.pr656d.shared.data.cattle.datasources.CattleDataSource
+import com.pr656d.shared.data.cattle.datasources.CattleUpdater
 import com.pr656d.shared.data.db.AppDatabase
+import com.pr656d.shared.data.db.AppDatabaseDao
+import com.pr656d.shared.data.db.updater.DatabaseUpdater
+import com.pr656d.shared.data.db.updater.DbUpdater
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.prefs.SharedPreferenceStorage
 import com.pr656d.shared.utils.FirebaseAnalyticsHelper
@@ -45,9 +50,23 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideCattleDataRepository(appDatabase: AppDatabase): CattleRepository {
+    fun provideAppDatabaseDao(appDatabase: AppDatabase) : AppDatabaseDao {
+        return object : AppDatabaseDao {
+            override fun clearDatabase() {
+                appDatabase.clearAllTables()
+            }
+        }
+    }
+
+    @Singleton
+    @Provides
+    fun provideCattleRepository(
+        appDatabase: AppDatabase,
+        cattleDataSource: CattleDataSource
+    ): CattleRepository {
         return CattleDataRepository(
-            appDatabase
+            appDatabase,
+            cattleDataSource
         )
     }
 
@@ -57,5 +76,13 @@ class AppModule {
         return BreedingDataRepository(
             appDatabase
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideDbUpdater(
+        cattleUpdater: CattleUpdater
+    ) : DbUpdater {
+        return DatabaseUpdater(cattleUpdater)
     }
 }

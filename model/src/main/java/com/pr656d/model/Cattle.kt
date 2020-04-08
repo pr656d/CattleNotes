@@ -7,10 +7,10 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import org.threeten.bp.LocalDate
 
-@Entity(tableName = "cattle")
+@Entity(tableName = "cattleList")
 data class Cattle(
-    @SerializedName("tag_number")
-    @ColumnInfo(name = "tag_number", index = true)
+    @SerializedName("tagNumber")
+    @ColumnInfo(name = "tagNumber", index = true)
     val tagNumber: Long,
 
     @SerializedName("name")
@@ -35,32 +35,32 @@ data class Cattle(
 
     @SerializedName("lactation")
     @ColumnInfo(name = "lactation")
-    val lactation: Int,
+    val lactation: Long,
 
-    @SerializedName("home_birth")
-    @ColumnInfo(name = "home_birth")
+    @SerializedName("homeBorn")
+    @ColumnInfo(name = "homeBorn")
     val homeBorn: Boolean = false,
 
-    @SerializedName("purchase_amount")
-    @ColumnInfo(name = "purchase_amount")
+    @SerializedName("purchaseAmount")
+    @ColumnInfo(name = "purchaseAmount")
     val purchaseAmount: Long? = null,
 
-    @SerializedName("purchased_on")
-    @ColumnInfo(name = "purchased_on")
+    @SerializedName("purchasedOn")
+    @ColumnInfo(name = "purchasedOn")
     val purchaseDate: LocalDate? = null,
 
-    @SerializedName("date_of_birth")
-    @ColumnInfo(name = "date_of_birth")
+    @SerializedName("dateOfBirth")
+    @ColumnInfo(name = "dateOfBirth")
     val dateOfBirth: LocalDate? = null,
 
-    @SerializedName("parent")
-    @ColumnInfo(name = "parent")
-    val parent: Long? = null
+    @SerializedName("parentId")
+    @ColumnInfo(name = "parentId")
+    val parent: String? = null
 ) {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @SerializedName("id")
-    var id: Long = 0
+    var id: String = ""
 
     enum class Group(val displayName: String) {
         HEIFER("Heifer"),
@@ -77,12 +77,12 @@ data class Cattle(
     }
 
     data class Image(
-        @SerializedName("local_path")
-        @ColumnInfo(name = "local_path")
+        @SerializedName("localPath")
+        @ColumnInfo(name = "localPath")
         val localPath: String? = null,
 
-        @SerializedName("remote_path")
-        @ColumnInfo(name = "remote_path")
+        @SerializedName("remotePath")
+        @ColumnInfo(name = "remotePath")
         val remotePath: String? = null
     )
 }

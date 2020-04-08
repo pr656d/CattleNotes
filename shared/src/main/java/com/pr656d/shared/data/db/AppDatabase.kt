@@ -27,6 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         private const val databaseName = "cattlenotes-db"
 
+        // https://medium.com/androiddevelopers/understanding-migrations-with-room-f01e04b07929
         fun buildDatabase(context: Context): AppDatabase =
             Room.databaseBuilder(context, AppDatabase::class.java, databaseName)
                 .build()

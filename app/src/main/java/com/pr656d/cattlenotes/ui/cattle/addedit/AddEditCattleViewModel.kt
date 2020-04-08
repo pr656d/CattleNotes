@@ -4,9 +4,6 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentActionListener
-import com.pr656d.cattlenotes.utils.toBreed
-import com.pr656d.cattlenotes.utils.toGroup
-import com.pr656d.cattlenotes.utils.toType
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.cattle.addedit.AddCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.UpdateCattleUseCase
@@ -18,6 +15,9 @@ import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Error
 import com.pr656d.shared.domain.result.Result.Success
+import com.pr656d.shared.utils.toBreed
+import com.pr656d.shared.utils.toGroup
+import com.pr656d.shared.utils.toType
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
@@ -200,12 +200,12 @@ class AddEditCattleViewModel @Inject constructor(
             type.value!!.toType(),
             breed.value!!.toBreed(),
             group.value!!.toGroup(),
-            lactation.value?.toInt() ?: 0,
+            lactation.value?.toLongOrNull() ?: 0,
             homeBorn.value ?: false,
             purchaseAmount.value?.toLongOrNull(),
             purchaseDate.value,
             dob.value,
-            parent.value?.toLongOrNull()
+            parent.value
         ).apply {
             oldCattle?.id?.let { id = it }
         }

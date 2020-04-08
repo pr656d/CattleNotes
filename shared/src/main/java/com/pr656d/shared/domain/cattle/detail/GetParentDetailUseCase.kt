@@ -7,9 +7,9 @@ import javax.inject.Inject
 
 open class GetParentDetailUseCase @Inject constructor(
     private val cattleRepository: CattleRepository
-) : UseCase<Long, Cattle>() {
+) : UseCase<String, Cattle>() {
 
-    override fun execute(parameters: Long): Cattle {
+    override fun execute(parameters: String): Cattle {
         return cattleRepository.getCattleByTagNumber(parameters)
             ?: throw Exception("Cattle not found with tag number $parameters")
     }

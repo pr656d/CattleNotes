@@ -19,7 +19,7 @@ interface BreedingRepository {
 
     fun getAllBreedingWithCattle(): List<BreedingWithCattle>
 
-    fun getAllBreedingByCattleId(cattleId: Long): List<Breeding>
+    fun getAllBreedingByCattleId(cattleId: String): List<Breeding>
 
     fun deleteBreeding(breeding: Breeding)
 
@@ -42,7 +42,7 @@ open class BreedingDataRepository @Inject constructor(
     override fun getAllBreedingWithCattle(): List<BreedingWithCattle> =
         appDatabase.breedingDao().getAllBreedingCycleWithCattle()
 
-    override fun getAllBreedingByCattleId(cattleId: Long): List<Breeding> =
+    override fun getAllBreedingByCattleId(cattleId: String): List<Breeding> =
         appDatabase.breedingDao().getAllByCattleId(cattleId)
 
     override fun deleteBreeding(breeding: Breeding) =

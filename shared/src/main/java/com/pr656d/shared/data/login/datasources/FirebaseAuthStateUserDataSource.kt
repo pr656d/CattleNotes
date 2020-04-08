@@ -3,6 +3,8 @@ package com.pr656d.shared.data.login.datasources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
+import com.pr656d.shared.data.db.AppDatabaseDao
+import com.pr656d.shared.data.db.updater.DbUpdater
 import com.pr656d.shared.data.user.info.FirebaseUserInfo
 import com.pr656d.shared.data.user.info.UserInfoBasic
 import com.pr656d.shared.domain.internal.DefaultScheduler
@@ -13,6 +15,8 @@ import javax.inject.Inject
 
 class FirebaseAuthStateUserDataSource @Inject constructor(
     val firebase: FirebaseAuth,
+    private val appDatabaseDao: AppDatabaseDao,
+    private val dbUpdater: DbUpdater,
     private val tokenUpdater: FcmTokenUpdater
 ) : AuthStateUserDataSource {
 
@@ -26,7 +30,6 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
 
     // Listener that saves the [FirebaseUser], fetches the ID token
     // and updates the user ID observable.
-
     private val authStateListener: ((FirebaseAuth) -> Unit) = {
         // Initialize auth as global
         auth = it
@@ -46,15 +49,22 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
             }
         }
 
-        /*if (auth.currentUser == null) {
-            // Logout, cancel all alarms
+        // Log out
+        if (auth.currentUser == null) {
+            dbUpdater.stop()
+            DefaultScheduler.execute {
+                appDatabaseDao.clearDatabase()
+            }
             // notificationAlarmUpdater.cancelAll()
         }
+
+        // Log in
         auth.currentUser?.let {
             if (lastUid != auth.uid) { // Prevent duplicates
-                notificationAlarmUpdater.updateAll(it.uid)
+                dbUpdater.initialize()
+                // notificationAlarmUpdater.updateAll(it.uid)
             }
-        }*/
+        }
         // Save the last UID to prevent setting too many alarms.
         lastUid = auth.uid
     }
@@ -78,7 +88,6 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
         auth.currentUser
             ?.reload()
             ?.addOnSuccessListener {
-                val userName = auth.currentUser?.displayName
                 currentFirebaseUserObservable.postValue(
                     Result.Success(
                         FirebaseUserInfo(auth.currentUser)

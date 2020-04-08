@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.pr656d.shared.data.user.info.UserInfoDetailed
 import com.pr656d.shared.domain.result.Result
-import timber.log.Timber
 import javax.inject.Inject
 
 class UpdateUserInfoDetailedDataSourceImpl @Inject constructor(
@@ -53,13 +52,6 @@ class UpdateUserInfoDetailedDataSourceImpl @Inject constructor(
                             userInfoOnFirestoreResult.value!!
                         )
                     )
-                )
-                reset()
-            }
-            if (it > 2) {
-                Timber.d("Get more than 2 result at UpdateUserInfoDetailedDataSource")
-                Result.Error(
-                    throw IllegalStateException("Get more than 2 result")
                 )
                 reset()
             }

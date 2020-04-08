@@ -15,10 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
-import com.pr656d.model.Animal
-import com.pr656d.model.Cattle
 import com.pr656d.model.Theme
-import com.pr656d.shared.data.db.Converters
 import java.util.*
 
 // region TextInputEditText
@@ -79,16 +76,6 @@ inline fun <T : ViewDataBinding> T.executeAfter(block: T.() -> Unit) {
     block()
     executePendingBindings()
 }
-
-// region converters
-
-fun String.toType(): Animal.Type = Converters().fromStringToType(this)
-
-fun String.toBreed(): Cattle.Breed = Converters().fromStringToBreed(this)
-
-fun String.toGroup(): Cattle.Group = Converters().fromStringToGroup(this)
-
-// end region
 
 // region viewmodel
 

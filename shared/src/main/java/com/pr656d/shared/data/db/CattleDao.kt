@@ -13,24 +13,21 @@ interface CattleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(cattle: Cattle)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(cattle: List<Cattle>)
-
     /**
      * Internally Room will handle it on background thread.
      * If any change happens observer will be called by Room.
      */
-    @Query("SELECT * FROM cattle ORDER BY tag_number")
+    @Query("SELECT * FROM cattleList ORDER BY tagNumber")
     fun getObservableAll(): LiveData<List<Cattle>>
 
-    @Query("SELECT * FROM cattle WHERE id == :id")
-    fun getById(id: Long): Cattle?
+    @Query("SELECT * FROM cattleList WHERE id == :id")
+    fun getById(id: String): Cattle?
 
-    @Query("SELECT * FROM cattle WHERE tag_number == :tagNumber")
-    fun getByTagNumber(tagNumber: Long): Cattle?
+    @Query("SELECT * FROM cattleList WHERE tagNumber == :tagNumber")
+    fun getByTagNumber(tagNumber: String): Cattle?
 
     @Update
-    fun update(cattle: Cattle): Int
+    fun update(cattle: Cattle)
 
     @Delete
     fun delete(vararg cattle: Cattle)

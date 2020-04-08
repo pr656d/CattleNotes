@@ -5,30 +5,26 @@ import com.google.gson.annotations.SerializedName
 import org.threeten.bp.LocalDate
 
 @Entity(
-    tableName = "breeding",
+    tableName = "breedingList",
     foreignKeys = [
         ForeignKey(
             entity = Cattle::class,
             parentColumns = ["id"],
-            childColumns = ["cattle_id"],
+            childColumns = ["cattleId"],
             onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class Breeding(
-    @SerializedName("cattle_id")
-    @ColumnInfo(name = "cattle_id", index = true)
-    val cattleId: Long,
-
-    @SerializedName("is_active")
-    @ColumnInfo(name = "is_active")
-    val isActive: Boolean = false,
+    @SerializedName("cattleId")
+    @ColumnInfo(name = "cattleId", index = true)
+    val cattleId: String,
 
     /**
      * Artificial Insemination date as String.
      */
-    @SerializedName("ai_")
-    @Embedded(prefix = "ai_")
+    @SerializedName("ai")
+    @Embedded(prefix = "ai")
     val artificialInsemination: ArtificialInseminationInfo? = null,
 
     /**
@@ -59,38 +55,38 @@ data class Breeding(
 
     @SerializedName("id")
     @ColumnInfo(name = "id")
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
+    @PrimaryKey
+    var id: String = ""
 
     data class ArtificialInseminationInfo(
-        @SerializedName("date")
-        @ColumnInfo(name = "date")
+        @SerializedName("Date")
+        @ColumnInfo(name = "Date")
         val date: LocalDate,
 
-        @SerializedName("did_by")
-        @ColumnInfo(name = "did_by")
+        @SerializedName("DidBy")
+        @ColumnInfo(name = "DidBy")
         val didBy: String?,
 
-        @SerializedName("bull_name")
-        @ColumnInfo(name = "bull_name")
+        @SerializedName("BullName")
+        @ColumnInfo(name = "BullName")
         val bullName: String?,
 
-        @SerializedName("straw_code")
-        @ColumnInfo(name = "straw_code")
+        @SerializedName("StrawCode")
+        @ColumnInfo(name = "StrawCode")
         val strawCode: String?
     )
 
     data class BreedingEvent(
-        @SerializedName("expected_on")
-        @ColumnInfo(name = "expected_on")
+        @SerializedName("ExpectedOn")
+        @ColumnInfo(name = "ExpectedOn")
         val expectedOn: LocalDate,
 
-        @SerializedName("status")
-        @ColumnInfo(name = "status")
+        @SerializedName("Status")
+        @ColumnInfo(name = "Status")
         val status: Boolean? = null,
 
-        @SerializedName("done_on")
-        @ColumnInfo(name = "done_on")
+        @SerializedName("DoneOn")
+        @ColumnInfo(name = "DoneOn")
         val doneOn: LocalDate? = null
     ) {
         @Ignore

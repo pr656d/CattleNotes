@@ -7,8 +7,8 @@ import javax.inject.Inject
 
 open class LoadBreedingHistoryByCattleIdUseCase @Inject constructor(
     private val breedingRepository: BreedingRepository
-): UseCase<Long, List<Breeding>>() {
-    override fun execute(parameters: Long): List<Breeding> {
+): UseCase<String, List<Breeding>>() {
+    override fun execute(parameters: String): List<Breeding> {
         return breedingRepository.getAllBreedingByCattleId(parameters)
     }
 }

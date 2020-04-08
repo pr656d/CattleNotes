@@ -2,7 +2,10 @@ package com.pr656d.shared.data.user.info.datasources
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.ListenerRegistration
 import com.pr656d.shared.data.user.info.FirestoreUserInfo
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.domain.result.Result
@@ -32,9 +35,6 @@ class ObserveFirestoreUserInfoDataSourceImpl @Inject constructor(
     // Keeping the last observed user ID, to avoid unnecessary calls
     private var lastUserId: String? = null
 
-    // Holds reference of the snapshot
-    private var documentReference: DocumentReference? = null
-
     override fun listenToUserChanges(userId: String) {
         val newUserId = if (lastUserId != userId) {
             userId
@@ -50,9 +50,6 @@ class ObserveFirestoreUserInfoDataSourceImpl @Inject constructor(
 
         val userInfoChangedListener =
             { snapshot: DocumentSnapshot?, _: FirebaseFirestoreException? ->
-                // Update user info snapshot reference
-                documentReference = snapshot?.reference
-
                 DefaultScheduler.execute {
                     if (snapshot == null || !snapshot.exists()) {
                         // When the account signs in for the first time the document doesn't exist.

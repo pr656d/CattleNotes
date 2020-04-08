@@ -8,7 +8,7 @@ import androidx.room.Relation
  */
 data class BreedingWithCattle(
     @Relation(
-        parentColumn = "cattle_id",
+        parentColumn = "cattleId",
         entityColumn = "id"
     )
     val cattle: Cattle,
