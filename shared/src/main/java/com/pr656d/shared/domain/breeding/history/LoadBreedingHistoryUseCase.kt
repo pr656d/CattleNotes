@@ -1,14 +1,14 @@
 package com.pr656d.shared.domain.breeding.history
 
-import com.pr656d.model.BreedingWithCattle
+import androidx.lifecycle.LiveData
+import com.pr656d.model.Breeding
 import com.pr656d.shared.data.breeding.BreedingRepository
-import com.pr656d.shared.domain.UseCase
 import javax.inject.Inject
 
 open class LoadBreedingHistoryUseCase @Inject constructor(
     private val breedingRepository: BreedingRepository
-): UseCase<Unit, List<BreedingWithCattle>>() {
-    override fun execute(parameters: Unit): List<BreedingWithCattle> {
-        return breedingRepository.getAllBreedingWithCattle()
+) {
+    operator fun invoke(): LiveData<List<Breeding>> {
+        return breedingRepository.getAllBreeding()
     }
 }

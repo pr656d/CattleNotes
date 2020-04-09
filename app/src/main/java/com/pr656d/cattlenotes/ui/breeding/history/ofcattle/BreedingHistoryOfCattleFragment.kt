@@ -32,6 +32,14 @@ class BreedingHistoryOfCattleFragment : NavigationFragment() {
 
     private lateinit var binding: FragmentBreedingHistoryOfCattleBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        model.setCattle(
+            Gson().fromJson(args.cattle, Cattle::class.java)
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,10 +50,6 @@ class BreedingHistoryOfCattleFragment : NavigationFragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = model
         }
-
-        model.setCattle(
-            Gson().fromJson(args.cattle, Cattle::class.java)
-        )
 
         return binding.root
     }

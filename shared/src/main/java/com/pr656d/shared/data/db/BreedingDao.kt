@@ -19,14 +19,14 @@ interface BreedingDao {
      * If any change happens observer will be called by Room.
      */
     @Query("SELECT * FROM breedingList ORDER BY cattleId")
-    fun getObservableAll(): LiveData<List<Breeding>>
+    fun getAll(): LiveData<List<Breeding>>
 
     @Transaction
     @Query("SELECT * FROM breedingList")
-    fun getAllBreedingCycleWithCattle(): List<BreedingWithCattle>
+    fun getAllBreedingCycleWithCattle(): LiveData<List<BreedingWithCattle>>
 
     @Query("SELECT * FROM breedingList WHERE cattleId == :cattleId")
-    fun getAllByCattleId(cattleId: String): List<Breeding>
+    fun getAllByCattleId(cattleId: String): LiveData<List<Breeding>>
 
     @Update
     fun update(breeding: Breeding): Int

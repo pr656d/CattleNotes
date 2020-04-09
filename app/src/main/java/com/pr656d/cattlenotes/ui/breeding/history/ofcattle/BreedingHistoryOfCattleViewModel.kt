@@ -8,20 +8,16 @@ import com.pr656d.shared.domain.breeding.addedit.DeleteBreedingUseCase
 import com.pr656d.shared.domain.breeding.history.LoadBreedingHistoryByCattleIdUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
-import com.pr656d.shared.domain.result.Result.Error
-import com.pr656d.shared.domain.result.Result.Success
-import com.pr656d.shared.log.Logger
 import javax.inject.Inject
 
 class BreedingHistoryOfCattleViewModel @Inject constructor(
-    loadBreedingHistoryByCattleIdUseCase: LoadBreedingHistoryByCattleIdUseCase,
+    private val loadBreedingHistoryByCattleIdUseCase: LoadBreedingHistoryByCattleIdUseCase,
     private val deleteBreedingUseCase: DeleteBreedingUseCase
 ) : ViewModel(),
     BreedingHistoryActionListener {
 
     val cattle = MutableLiveData<Cattle>()
 
-    private val breedingListResult = MutableLiveData<Result<List<Breeding>>>()
     private val deleteBreedingResult = MutableLiveData<Result<Unit>>()
 
     val breedingList = MediatorLiveData<List<Breeding>>()
@@ -46,36 +42,17 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
         get() = _launchEditBreeding
 
     init {
-        breedingList.addSource(cattle) {
-            loadBreedingHistoryByCattleIdUseCase(it.id, breedingListResult)
-        }
-
-        breedingList.addSource(breedingListResult) { result ->
-            (result as? Success)?.let {
-                breedingList.value = it.data
-            }
-        }
-
-        _showMessage.addSource(breedingListResult) { result ->
-            (result as? Error)?.exception?.let {
-                _showMessage.value = Event(it.localizedMessage)
-                Logger.e("BreedingListResult", "${it.printStackTrace()}")
-            }
-        }
-
-        _loading.addSource(breedingListResult) {
+        _loading.addSource(breedingList) {
             _loading.value = false
-        }
-
-        breedingList.addSource(deleteBreedingResult) {
-            (it as? Success)?.let {
-                loadBreedingHistoryByCattleIdUseCase(cattle.value!!.id, breedingListResult)
-            }
         }
     }
 
     fun setCattle(cattle: Cattle) {
         this.cattle.value = cattle
+
+        breedingList.addSource(loadBreedingHistoryByCattleIdUseCase(cattle.id)) {
+            breedingList.postValue(it)
+        }
     }
 
     override fun editBreeding(breeding: Breeding) {

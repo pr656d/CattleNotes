@@ -15,11 +15,11 @@ interface BreedingRepository {
     /** @param [saveToLocal] use when this function is called by data source */
     fun addBreeding(breeding: Breeding, saveToLocal: Boolean = false)
 
-    fun getObservableAllBreeding(): LiveData<List<Breeding>>
+    fun getAllBreeding(): LiveData<List<Breeding>>
 
-    fun getAllBreedingWithCattle(): List<BreedingWithCattle>
+    fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>>
 
-    fun getAllBreedingByCattleId(cattleId: String): List<Breeding>
+    fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>>
 
     /** @param [saveToLocal] use when this function is called by data source */
     fun deleteBreeding(breeding: Breeding, saveToLocal: Boolean = false)
@@ -40,14 +40,17 @@ open class BreedingDataRepository @Inject constructor(
             breedingDataSource.addBreeding(breeding)
     }
 
-    override fun getObservableAllBreeding(): LiveData<List<Breeding>> =
-        appDatabase.breedingDao().getObservableAll()
+    override fun getAllBreeding(): LiveData<List<Breeding>> {
+        return appDatabase.breedingDao().getAll()
+    }
 
-    override fun getAllBreedingWithCattle(): List<BreedingWithCattle> =
-        appDatabase.breedingDao().getAllBreedingCycleWithCattle()
+    override fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>> {
+        return appDatabase.breedingDao().getAllBreedingCycleWithCattle()
+    }
 
-    override fun getAllBreedingByCattleId(cattleId: String): List<Breeding> =
-        appDatabase.breedingDao().getAllByCattleId(cattleId)
+    override fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>> {
+        return appDatabase.breedingDao().getAllByCattleId(cattleId)
+    }
 
     override fun deleteBreeding(breeding: Breeding, saveToLocal: Boolean) {
         if (saveToLocal)
