@@ -4,13 +4,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.pr656d.model.Cattle
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
+import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.utils.TimeUtils
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Remote data source for cattle.
+ * Remote data source for [Cattle].
  */
 interface CattleDataSource {
     fun addCattle(cattle: Cattle)
@@ -31,39 +32,48 @@ class FirestoreCattleDataSource @Inject constructor(
     }
 
     override fun addCattle(cattle: Cattle) {
-        firestore
-            .collection(USERS_COLLECTION)
-            .document(userId)
-            .collection(CATTLE_COLLECTION)
-            .document()
-            .set(cattle.asHashMap())
-            .addOnFailureListener {
-                Timber.e("addCattle() failed : ${it.localizedMessage}")
-            }
+        // All Firestore operations start from the main thread to avoid concurrency issues.
+        DefaultScheduler.postToMainThread {
+            firestore
+                .collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(CATTLE_COLLECTION)
+                .document()
+                .set(cattle.asHashMap())
+                .addOnFailureListener {
+                    Timber.e("addCattle() failed : ${it.localizedMessage}")
+                }
+        }
     }
 
     override fun deleteCattle(cattle: Cattle) {
-        firestore
-            .collection(USERS_COLLECTION)
-            .document(userId)
-            .collection(CATTLE_COLLECTION)
-            .document(cattle.id)
-            .delete()
-            .addOnFailureListener {
-                Timber.e("deleteCattle() failed : ${it.localizedMessage}")
-            }
+        // All Firestore operations start from the main thread to avoid concurrency issues.
+        DefaultScheduler.postToMainThread {
+            firestore
+                .collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(CATTLE_COLLECTION)
+                .document(cattle.id)
+                .delete()
+                .addOnFailureListener {
+                    Timber.e("deleteCattle() failed : ${it.localizedMessage}")
+                }
+        }
     }
 
     override fun updateCattle(cattle: Cattle) {
-        firestore
-            .collection(USERS_COLLECTION)
-            .document(userId)
-            .collection(CATTLE_COLLECTION)
-            .document(cattle.id)
-            .set(cattle.asHashMap(), SetOptions.merge())
-            .addOnFailureListener {
-                Timber.e("updateCattle() failed : ${it.localizedMessage}")
-            }
+        // All Firestore operations start from the main thread to avoid concurrency issues.
+        DefaultScheduler.postToMainThread {
+            firestore
+                .collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(CATTLE_COLLECTION)
+                .document(cattle.id)
+                .set(cattle.asHashMap(), SetOptions.merge())
+                .addOnFailureListener {
+                    Timber.e("updateCattle() failed : ${it.localizedMessage}")
+                }
+        }
     }
 
     private fun Cattle.asHashMap(): HashMap<String, Any?> = hashMapOf<String, Any?>().apply {
@@ -82,19 +92,19 @@ class FirestoreCattleDataSource @Inject constructor(
     }
 
     companion object {
-        const val USERS_COLLECTION = "users"
-        const val CATTLE_COLLECTION = "cattleList"
-        const val KEY_TAG_NUMBER = "tagNumber"
-        const val KEY_NAME = "name"
-        const val KEY_IMAGE_URL = "imageUrl"
-        const val KEY_TYPE = "type"
-        const val KEY_BREED = "breed"
-        const val KEY_GROUP = "group"
-        const val KEY_LACTATION = "lactation"
-        const val KEY_HOME_BORN = "homeBorn"
-        const val KEY_PURCHASE_AMOUNT = "purchaseAmount"
-        const val KEY_PURCHASE_Date = "purchaseDate"
-        const val KEY_DOB = "dateOfBirth"
-        const val KEY_PARENT = "parentId"
+        private const val USERS_COLLECTION = "users"
+        private const val CATTLE_COLLECTION = "cattleList"
+        private const val KEY_TAG_NUMBER = "tagNumber"
+        private const val KEY_NAME = "name"
+        private const val KEY_IMAGE_URL = "imageUrl"
+        private const val KEY_TYPE = "type"
+        private const val KEY_BREED = "breed"
+        private const val KEY_GROUP = "group"
+        private const val KEY_LACTATION = "lactation"
+        private const val KEY_HOME_BORN = "homeBorn"
+        private const val KEY_PURCHASE_AMOUNT = "purchaseAmount"
+        private const val KEY_PURCHASE_Date = "purchaseDate"
+        private const val KEY_DOB = "dateOfBirth"
+        private const val KEY_PARENT = "parentId"
     }
 }

@@ -1,8 +1,7 @@
-package com.pr656d.shared.data.cattle.datasources
+package com.pr656d.shared.data.cattle
 
 import com.google.firebase.firestore.*
 import com.pr656d.model.Cattle
-import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.utils.TimeUtils
@@ -99,19 +98,19 @@ class FirestoreCattleUpdater @Inject constructor(
     }
 
     companion object {
-        const val USERS_COLLECTION = "users"
-        const val CATTLE_COLLECTION = "cattleList"
-        const val KEY_TAG_NUMBER = "tagNumber"
-        const val KEY_NAME = "name"
-        const val KEY_IMAGE_URL = "imageUrl"
-        const val KEY_TYPE = "type"
-        const val KEY_BREED = "breed"
-        const val KEY_GROUP = "group"
-        const val KEY_LACTATION = "lactation"
-        const val KEY_HOME_BORN = "homeBorn"
-        const val KEY_PURCHASE_AMOUNT = "purchaseAmount"
-        const val KEY_PURCHASE_Date = "purchaseDate"
-        const val KEY_DOB = "dateOfBirth"
-        const val KEY_PARENT = "parentId"
+        private const val USERS_COLLECTION = "users"
+        private const val CATTLE_COLLECTION = "cattleList"
+        private const val KEY_TAG_NUMBER = "tagNumber"
+        private const val KEY_NAME = "name"
+        private const val KEY_IMAGE_URL = "imageUrl"
+        private const val KEY_TYPE = "type"
+        private const val KEY_BREED = "breed"
+        private const val KEY_GROUP = "group"
+        private const val KEY_LACTATION = "lactation"
+        private const val KEY_HOME_BORN = "homeBorn"
+        private const val KEY_PURCHASE_AMOUNT = "purchaseAmount"
+        private const val KEY_PURCHASE_Date = "purchaseDate"
+        private const val KEY_DOB = "dateOfBirth"
+        private const val KEY_PARENT = "parentId"
     }
 }

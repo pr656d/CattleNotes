@@ -2,11 +2,16 @@ package com.pr656d.shared.di
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.pr656d.shared.data.breeding.BreedingRepository
+import com.pr656d.shared.data.breeding.BreedingUpdater
+import com.pr656d.shared.data.breeding.FirestoreBreedingUpdater
+import com.pr656d.shared.data.breeding.datasources.BreedingDataSource
+import com.pr656d.shared.data.breeding.datasources.FirestoreBreedingDataSource
 import com.pr656d.shared.data.cattle.CattleRepository
+import com.pr656d.shared.data.cattle.CattleUpdater
+import com.pr656d.shared.data.cattle.FirestoreCattleUpdater
 import com.pr656d.shared.data.cattle.datasources.CattleDataSource
-import com.pr656d.shared.data.cattle.datasources.CattleUpdater
 import com.pr656d.shared.data.cattle.datasources.FirestoreCattleDataSource
-import com.pr656d.shared.data.cattle.datasources.FirestoreCattleUpdater
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import dagger.Module
 import dagger.Provides
@@ -47,6 +52,29 @@ class SharedModule {
     ) : CattleUpdater {
         return FirestoreCattleUpdater(
             firestore, authIdDataSource, cattleRepository
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideBreedingDataSource(
+        authIdDataSource: AuthIdDataSource,
+        firestore: FirebaseFirestore
+    ) : BreedingDataSource {
+        return FirestoreBreedingDataSource(
+            authIdDataSource, firestore
+        )
+    }
+
+    @Singleton
+    @Provides
+    fun provideBreedingUpdater(
+        firestore: FirebaseFirestore,
+        authIdDataSource: AuthIdDataSource,
+        breedingRepository: BreedingRepository
+    ) : BreedingUpdater {
+        return FirestoreBreedingUpdater(
+            firestore, authIdDataSource, breedingRepository
         )
     }
 }

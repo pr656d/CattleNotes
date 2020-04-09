@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.user.info.FirestoreUserInfo
+import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.utils.NetworkHelper
 import timber.log.Timber
@@ -31,24 +32,28 @@ class UpdateFirestoreUserInfoDataSourceImpl @Inject constructor(
             return
         }
 
-        val task = firestore
-            .collection(USERS_COLLECTION)
-            .document(uId)
-            .set(userInfo.asHashMap(), SetOptions.merge())
+        // All Firestore operations start from the main thread to avoid concurrency issues.
+        DefaultScheduler.postToMainThread {
+            val task = firestore
+                .collection(USERS_COLLECTION)
+                .document(uId)
+                .set(userInfo.asHashMap(), SetOptions.merge())
 
-        if (networkHelper.isNetworkConnected()) {
-            task
-                .addOnSuccessListener {
-                    result.postValue(Result.Success(Unit))
-                }
-                .addOnFailureListener {
-                    Timber.d("Exception on update of UserInfoOnFirestore")
-                    result.postValue(Result.Error(it))
-                }
-        } else {
-            // Firebase offline persistence will reflect changes.
-            result.postValue(Result.Success(Unit))
+            if (networkHelper.isNetworkConnected()) {
+                task
+                    .addOnSuccessListener {
+                        result.postValue(Result.Success(Unit))
+                    }
+                    .addOnFailureListener {
+                        Timber.d("Exception on update of UserInfoOnFirestore")
+                        result.postValue(Result.Error(it))
+                    }
+            } else {
+                // Firebase offline persistence will reflect changes.
+                result.postValue(Result.Success(Unit))
+            }
         }
+
     }
 
     private fun FirestoreUserInfo.asHashMap(): HashMap<String, Any?> =

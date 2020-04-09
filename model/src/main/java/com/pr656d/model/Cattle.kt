@@ -18,7 +18,7 @@ data class Cattle(
     val name: String? = null,
 
     @SerializedName("image")
-    @Embedded(prefix = "image_")
+    @Embedded(prefix = "image")
     val image: Image? = null,
 
     @SerializedName("type")
@@ -78,11 +78,11 @@ data class Cattle(
 
     data class Image(
         @SerializedName("localPath")
-        @ColumnInfo(name = "localPath")
+        @ColumnInfo(name = "LocalPath")
         val localPath: String? = null,
 
         @SerializedName("remotePath")
-        @ColumnInfo(name = "remotePath")
+        @ColumnInfo(name = "RemotePath")
         val remotePath: String? = null
     )
 }

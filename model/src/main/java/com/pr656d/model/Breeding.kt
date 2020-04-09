@@ -23,33 +23,33 @@ data class Breeding(
     /**
      * Artificial Insemination date as String.
      */
-    @SerializedName("ai")
-    @Embedded(prefix = "ai")
+    @SerializedName("artificialInsemination")
+    @Embedded(prefix = "artificialInsemination")
     val artificialInsemination: ArtificialInseminationInfo? = null,
 
     /**
      * Depends on AI date.
      */
-    @SerializedName("repeat_heat")
-    @Embedded(prefix = "repeat_heat_")
+    @SerializedName("repeatHeat")
+    @Embedded(prefix = "repeatHeat")
     val repeatHeat: BreedingEvent? = null,
 
     /**
      * Depends on repeat heat status.
      */
-    @SerializedName("pregnancy_check")
-    @Embedded(prefix = "pregnancy_check_")
+    @SerializedName("pregnancyCheck")
+    @Embedded(prefix = "pregnancyCheck")
     val pregnancyCheck: BreedingEvent? = null,
 
     /**
      * Depends on pregnancy check status.
      */
-    @SerializedName("dry_off")
-    @Embedded(prefix = "dry_off_")
+    @SerializedName("dryOff")
+    @Embedded(prefix = "dryOff")
     val dryOff: BreedingEvent? = null,
 
     @SerializedName("calving")
-    @Embedded(prefix = "calving_")
+    @Embedded(prefix = "calving")
     val calving: BreedingEvent? = null
 ) {
 
@@ -59,33 +59,33 @@ data class Breeding(
     var id: String = ""
 
     data class ArtificialInseminationInfo(
-        @SerializedName("Date")
+        @SerializedName("date")
         @ColumnInfo(name = "Date")
         val date: LocalDate,
 
-        @SerializedName("DidBy")
+        @SerializedName("didBy")
         @ColumnInfo(name = "DidBy")
         val didBy: String?,
 
-        @SerializedName("BullName")
+        @SerializedName("bullName")
         @ColumnInfo(name = "BullName")
         val bullName: String?,
 
-        @SerializedName("StrawCode")
+        @SerializedName("strawCode")
         @ColumnInfo(name = "StrawCode")
         val strawCode: String?
     )
 
     data class BreedingEvent(
-        @SerializedName("ExpectedOn")
+        @SerializedName("expectedOn")
         @ColumnInfo(name = "ExpectedOn")
         val expectedOn: LocalDate,
 
-        @SerializedName("Status")
+        @SerializedName("status")
         @ColumnInfo(name = "Status")
         val status: Boolean? = null,
 
-        @SerializedName("DoneOn")
+        @SerializedName("doneOn")
         @ColumnInfo(name = "DoneOn")
         val doneOn: LocalDate? = null
     ) {

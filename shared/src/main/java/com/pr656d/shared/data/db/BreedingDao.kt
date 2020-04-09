@@ -14,9 +14,6 @@ interface BreedingDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(breeding: Breeding)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(breeding: List<Breeding>)
-
     /**
      * Internally Room will handle it on background thread.
      * If any change happens observer will be called by Room.
