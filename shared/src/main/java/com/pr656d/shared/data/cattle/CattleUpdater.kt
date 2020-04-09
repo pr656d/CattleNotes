@@ -69,11 +69,14 @@ class FirestoreCattleUpdater @Inject constructor(
                 }
             }
 
-        registration = firestore
-            .collection(USERS_COLLECTION)
-            .document(userId)
-            .collection(CATTLE_COLLECTION)
-            .addSnapshotListener(cattleListListener)
+        // All Firestore operations start from the main thread to avoid concurrency issues.
+        DefaultScheduler.postToMainThread {
+            registration = firestore
+                .collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(CATTLE_COLLECTION)
+                .addSnapshotListener(cattleListListener)
+        }
     }
 
     override fun stop() {

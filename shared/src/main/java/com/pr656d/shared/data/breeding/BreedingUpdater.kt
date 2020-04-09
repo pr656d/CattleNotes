@@ -68,11 +68,16 @@ class FirestoreBreedingUpdater @Inject constructor(
                 }
             }
 
-        registration = firestore
-            .collection(USERS_COLLECTION)
-            .document(userId)
-            .collection(BREEDING_COLLECTION)
-            .addSnapshotListener(breedingListListener)
+        // All Firestore operations start from the main thread to avoid concurrency issues.
+        // To ignore Foreign key concurrency issue use 1s delay. Let cattle fetched first.
+        // TODO("Temporary Fix") : Use more promise able way to handling concurrency.
+        DefaultScheduler.postDelayedToMainThread(1000) {
+            registration = firestore
+                .collection(USERS_COLLECTION)
+                .document(userId)
+                .collection(BREEDING_COLLECTION)
+                .addSnapshotListener(breedingListListener)
+        }
     }
 
     override fun stop() {
