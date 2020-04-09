@@ -233,7 +233,7 @@ class AddEditCattleViewModel @Inject constructor(
     }
 
     override fun parentSelected(cattle: Cattle) {
-        parent.postValue(cattle.tagNumber.toString())
+        parent.postValue(cattle.id)
         _selectingParent.postValue(false)
     }
 
@@ -252,7 +252,7 @@ class AddEditCattleViewModel @Inject constructor(
         }
     }
 
-    fun onBackPressed(backConfirmation : Boolean = false) {
+    fun onBackPressed(backConfirmation: Boolean = false) {
         when {
             isAllFieldsEmpty() -> navigateUp()
             backConfirmation -> navigateUp()

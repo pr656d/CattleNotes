@@ -13,7 +13,7 @@ import com.pr656d.shared.domain.cattle.addedit.AddCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.IsCattleExistWithTagNumberUseCase
 import com.pr656d.shared.domain.cattle.addedit.UpdateCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.parent.GetParentListUseCase
-import com.pr656d.shared.domain.cattle.list.LoadObservableCattleListUseCase
+import com.pr656d.shared.domain.cattle.list.LoadCattleListUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleTagNumberValidatorUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleValidator.VALID_FIELD
 import com.pr656d.test.TestData
@@ -59,7 +59,7 @@ class AddEditCattleViewModelTest {
         cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase =
             CattleTagNumberValidatorUseCase(IsCattleExistWithTagNumberUseCase(repository)),
         getParentListUseCase: GetParentListUseCase =
-            GetParentListUseCase(LoadObservableCattleListUseCase(repository))
+            GetParentListUseCase(LoadCattleListUseCase(repository))
     ): AddEditCattleViewModel {
         return AddEditCattleViewModel(
             addCattleUseCase,

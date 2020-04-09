@@ -6,8 +6,8 @@ import javax.inject.Inject
 
 class IsCattleExistWithTagNumberUseCase @Inject constructor(
     private val cattleRepository: CattleRepository
-) : UseCase<String, Boolean>() {
-    override fun execute(parameters: String): Boolean {
-        return cattleRepository.getCattleByTagNumber(parameters) != null
+) : UseCase<Long, Boolean>() {
+    override fun execute(parameters: Long): Boolean {
+        return cattleRepository.isCattleExistByTagNumber(parameters)
     }
 }

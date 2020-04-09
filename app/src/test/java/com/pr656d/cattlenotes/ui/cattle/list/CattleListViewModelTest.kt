@@ -7,7 +7,7 @@ import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
 import com.pr656d.model.Cattle
-import com.pr656d.shared.domain.cattle.list.LoadObservableCattleListUseCase
+import com.pr656d.shared.domain.cattle.list.LoadCattleListUseCase
 import com.pr656d.test.TestData
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertFalse
@@ -38,7 +38,7 @@ class CattleListViewModelTest {
             }
         }
 
-        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+        val loadObservableCattleListUseCase = LoadCattleListUseCase(fakeCattleRepository)
 
         val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
 
@@ -56,7 +56,7 @@ class CattleListViewModelTest {
             }
         }
 
-        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+        val loadObservableCattleListUseCase = LoadCattleListUseCase(fakeCattleRepository)
 
         val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
 
@@ -74,7 +74,7 @@ class CattleListViewModelTest {
     fun addCattleIsCalled_launchAddCattle() {
         val fakeCattleRepository = FakeCattleRepository()
 
-        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+        val loadObservableCattleListUseCase = LoadCattleListUseCase(fakeCattleRepository)
 
         val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
 
@@ -93,7 +93,7 @@ class CattleListViewModelTest {
             }
         }
 
-        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+        val loadObservableCattleListUseCase = LoadCattleListUseCase(fakeCattleRepository)
 
         val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
 
@@ -111,7 +111,7 @@ class CattleListViewModelTest {
             }
         }
 
-        val loadObservableCattleListUseCase = LoadObservableCattleListUseCase(fakeCattleRepository)
+        val loadObservableCattleListUseCase = LoadCattleListUseCase(fakeCattleRepository)
 
         val viewModel = CattleListViewModel(loadObservableCattleListUseCase)
 

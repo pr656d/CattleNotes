@@ -9,7 +9,7 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.cattle.addedit.DeleteCattleUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
-import com.pr656d.shared.domain.cattle.detail.GetParentDetailUseCase
+import com.pr656d.shared.domain.cattle.detail.GetParentCattleUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Error
@@ -18,20 +18,18 @@ import javax.inject.Inject
 
 class CattleDetailViewModel @Inject constructor(
     private val getCattleUseCase: GetCattleByIdUseCase,
-    private val getParentDetailUseCase: GetParentDetailUseCase,
+    private val getParentCattleUseCase: GetParentCattleUseCase,
     private val deleteCattleUseCase: DeleteCattleUseCase
 ) : ViewModel() {
 
-    private val cattleResult = MutableLiveData<Result<Cattle>>()
-    private val parentResult = MediatorLiveData<Result<Cattle>>()
     private val deleteCattleResult = MutableLiveData<Result<Unit>>()
 
-    private val _cattle = MediatorLiveData<Cattle>()
-    val cattle: LiveData<Cattle>
+    private val _cattle = MediatorLiveData<Cattle?>()
+    val cattle: LiveData<Cattle?>
         get() = _cattle
 
-    private val _parentCattle = MediatorLiveData<Cattle>()
-    val parentCattle: LiveData<Cattle>
+    private val _parentCattle = MediatorLiveData<Cattle?>()
+    val parentCattle: LiveData<Cattle?>
         get() = _parentCattle
 
     private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
@@ -71,29 +69,11 @@ class CattleDetailViewModel @Inject constructor(
         get() = _loadingParent
 
     init {
-        _cattle.addSource(cattleResult) { result ->
-            (result as? Success)?.let {
-                val newCattle = result.data
-                // Update cattle if there are any changes
-                if (cattle.value != newCattle) {
-                    _cattle.value = newCattle
-                }
-            }
+        _showMessage.addSource(cattle) {
+            if (it == null) showMessage(R.string.error_cattle_not_found)
         }
 
-        _showMessage.addSource(cattleResult) { result ->
-            (result as? Error)?.let {
-                showMessage()
-            }
-        }
-
-        _navigateUp.addSource(cattleResult) { result ->
-            (result as? Error)?.let {
-                navigateUp()
-            }
-        }
-
-        _loading.addSource(cattleResult) {
+        _loading.addSource(cattle) {
             _loading.value = false
         }
 
@@ -113,19 +93,18 @@ class CattleDetailViewModel @Inject constructor(
             }
         }
 
-        parentResult.addSource(cattle) { cattle ->
-            cattle.parent?.let {
-                getParentDetailUseCase(it, parentResult)
+        // Trigger when cattle is available.
+        _parentCattle.addSource(cattle) { cattle ->
+            // If cattle has parent
+            cattle?.parent?.let { parentId ->
+                // Fetch parent details as LiveData
+                _parentCattle.addSource(getParentCattleUseCase(parentId)) { parentCattle ->
+                    _parentCattle.postValue(parentCattle)
+                }
             }
         }
 
-        _parentCattle.addSource(parentResult) { result ->
-            (result as? Success)?.let {
-                _parentCattle.value = it.data
-            }
-        }
-
-        _loadingParent.addSource(parentResult) {
+        _loadingParent.addSource(parentCattle) {
             _loadingParent.value = false
         }
     }
@@ -134,7 +113,12 @@ class CattleDetailViewModel @Inject constructor(
         // Set cattle
         _cattle.value = cattle
         // Fetch cattle from database to update if there are any changes
-        getCattleUseCase(cattle.id, cattleResult)
+        _cattle.addSource(getCattleUseCase(cattle.id)) { newCattle ->
+            // Update cattle if there are any changes
+            if (this.cattle.value != newCattle) {
+                _cattle.value = newCattle
+            }
+        }
     }
 
     fun showAllBreeding() {
@@ -161,7 +145,7 @@ class CattleDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteCattle(deleteConfirmation : Boolean = false) {
+    fun deleteCattle(deleteConfirmation: Boolean = false) {
         if (deleteConfirmation)
             deleteCattleUseCase(cattle.value!!, deleteCattleResult)
         else

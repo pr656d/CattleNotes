@@ -5,10 +5,10 @@ import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.CattleRepository
 import javax.inject.Inject
 
-open class LoadObservableCattleListUseCase @Inject constructor(
+open class LoadCattleListUseCase @Inject constructor(
     private val cattleRepository: CattleRepository
 ) {
     operator fun invoke(): LiveData<List<Cattle>> {
-        return cattleRepository.getObservableAllCattle()
+        return cattleRepository.getAllCattle()
     }
 }

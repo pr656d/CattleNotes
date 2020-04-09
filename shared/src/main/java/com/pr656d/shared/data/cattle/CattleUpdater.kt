@@ -67,7 +67,7 @@ class FirestoreCattleUpdater @Inject constructor(
                         }
                     }
                 }
-        }
+            }
 
         registration = firestore
             .collection(USERS_COLLECTION)
@@ -81,20 +81,24 @@ class FirestoreCattleUpdater @Inject constructor(
     }
 
     private fun getCattle(document: QueryDocumentSnapshot): Cattle {
-        return Cattle(
-            tagNumber = document.data[KEY_TAG_NUMBER] as Long,
-            name = document.data[KEY_NAME] as? String,
-            image = (document.data[KEY_IMAGE_URL] as? String)?.let { Cattle.Image(null, it) },
-            type = (document.data[KEY_TYPE] as String).toType(),
-            breed = (document.data[KEY_BREED] as String).toBreed(),
-            group = (document.data[KEY_GROUP] as String).toGroup(),
-            lactation = document.data[KEY_LACTATION] as Long,
-            homeBorn = document.data[KEY_HOME_BORN] as Boolean,
-            purchaseAmount = document.data[KEY_PURCHASE_AMOUNT] as? Long,
-            purchaseDate = (document.data[KEY_PURCHASE_Date] as? Long)?.let { TimeUtils.toLocalDate(it) },
-            dateOfBirth = (document.data[KEY_DOB] as? Long)?.let { TimeUtils.toLocalDate(it) },
-            parent = document.data[KEY_PARENT] as? String
-        ).apply { id = document.id }
+        return document.data.run {
+            Cattle(
+                tagNumber = get(KEY_TAG_NUMBER) as Long,
+                name = get(KEY_NAME) as? String,
+                image = (get(KEY_IMAGE_URL) as? String)?.let { Cattle.Image(null, it) },
+                type = (get(KEY_TYPE) as String).toType(),
+                breed = (get(KEY_BREED) as String).toBreed(),
+                group = (get(KEY_GROUP) as String).toGroup(),
+                lactation = get(KEY_LACTATION) as Long,
+                homeBorn = get(KEY_HOME_BORN) as Boolean,
+                purchaseAmount = get(KEY_PURCHASE_AMOUNT) as? Long,
+                purchaseDate = (get(KEY_PURCHASE_Date) as? Long)?.let {
+                    TimeUtils.toLocalDate(it)
+                },
+                dateOfBirth = (get(KEY_DOB) as? Long)?.let { TimeUtils.toLocalDate(it) },
+                parent = get(KEY_PARENT) as? String
+            ).apply { id = document.id }
+        }
     }
 
     companion object {

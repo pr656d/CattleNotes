@@ -29,7 +29,7 @@ interface BreedingDao {
     fun getAllByCattleId(cattleId: String): LiveData<List<Breeding>>
 
     @Update
-    fun update(breeding: Breeding): Int
+    fun update(breeding: Breeding)
 
     @Delete
     fun delete(vararg breeding: Breeding)

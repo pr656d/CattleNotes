@@ -5,10 +5,10 @@ import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.CattleRepository
 import javax.inject.Inject
 
-open class GetCattleByTagNumberUseCase @Inject constructor(
+open class GetParentCattleUseCase @Inject constructor(
     private val cattleRepository: CattleRepository
 ) {
-    operator fun invoke(tagNumber: Long): LiveData<Cattle?> {
-        return cattleRepository.getCattleByTagNumber(tagNumber)
+    operator fun invoke(cattleId: String): LiveData<Cattle?> {
+        return cattleRepository.getCattleById(cattleId)
     }
 }

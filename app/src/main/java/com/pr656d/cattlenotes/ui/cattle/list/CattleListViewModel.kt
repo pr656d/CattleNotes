@@ -2,15 +2,15 @@ package com.pr656d.cattlenotes.ui.cattle.list
 
 import androidx.lifecycle.*
 import com.pr656d.model.Cattle
-import com.pr656d.shared.domain.cattle.list.LoadObservableCattleListUseCase
+import com.pr656d.shared.domain.cattle.list.LoadCattleListUseCase
 import com.pr656d.shared.domain.result.Event
 import javax.inject.Inject
 
 class CattleListViewModel @Inject constructor(
-    loadObservableCattleListUseCase: LoadObservableCattleListUseCase
+    loadCattleListUseCase: LoadCattleListUseCase
 ) : ViewModel(), CattleActionListener {
 
-    val cattleList: LiveData<List<Cattle>> = loadObservableCattleListUseCase()
+    val cattleList: LiveData<List<Cattle>> = loadCattleListUseCase()
 
     private val _launchAddCattleScreen = MutableLiveData<Event<Unit>>()
     val launchAddCattleScreen: LiveData<Event<Unit>> = _launchAddCattleScreen

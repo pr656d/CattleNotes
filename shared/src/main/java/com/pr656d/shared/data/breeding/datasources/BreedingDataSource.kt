@@ -44,6 +44,7 @@ class FirestoreBreedingDataSource @Inject constructor(
                     Timber.d("addBreeding() failed : ${it.localizedMessage}")
                 }
         }
+
     }
 
     override fun deleteBreeding(breeding: Breeding) {

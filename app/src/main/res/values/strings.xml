@@ -111,6 +111,7 @@
     <string name="parent_helper_text">Press and hold to remove</string>
     <string name="show_active_breeding">Show active breeding</string>
     <string name="parent_detail">Parent detail</string>
+    <string name="error_cattle_not_found">Cattle not found</string>
 
     <!--  AddEditCattle  -->
     <string name="add_cattle">Add new cattle</string>

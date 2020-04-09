@@ -86,7 +86,7 @@ class FirestoreCattleDataSource @Inject constructor(
         put(KEY_LACTATION, lactation)
         put(KEY_HOME_BORN, homeBorn)
         put(KEY_PURCHASE_AMOUNT, purchaseAmount)
-        put(KEY_PURCHASE_Date, purchaseDate?.let { TimeUtils.toEpochMillis(it) } )
+        put(KEY_PURCHASE_Date, purchaseDate?.let { TimeUtils.toEpochMillis(it) })
         put(KEY_DOB, dateOfBirth?.let { TimeUtils.toEpochMillis(it) })
         put(KEY_PARENT, parent)
     }

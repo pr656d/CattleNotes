@@ -31,7 +31,8 @@ class CattleDetailFragment : NavigationFragment() {
         const val TAG = "CattleDetailsFragment"
     }
 
-    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val model by viewModels<CattleDetailViewModel> { viewModelFactory }
 
@@ -43,6 +44,9 @@ class CattleDetailFragment : NavigationFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val cattle = Gson().fromJson(args.cattle, Cattle::class.java)
+        model.fetchCattle(cattle)
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             onBackPressed()
@@ -60,11 +64,8 @@ class CattleDetailFragment : NavigationFragment() {
             viewModel = model
         }
 
-        val cattle = Gson().fromJson(args.cattle, Cattle::class.java)
-        model.fetchCattle(cattle)
-
         binding.bottomAppBarCattleDetail.setOnMenuItemClickListener {
-             when (it.itemId) {
+            when (it.itemId) {
                 R.id.menu_item_delete -> {
                     model.deleteCattle()
                     true
@@ -79,14 +80,16 @@ class CattleDetailFragment : NavigationFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.parent_detail_sheet) as View)
+        bottomSheetBehavior =
+            BottomSheetBehavior.from(view.findViewById(R.id.parent_detail_sheet) as View)
 
         bottomSheetBehavior.state = if (bottomSheetBehavior.skipCollapsed)
             STATE_HIDDEN
         else
             STATE_COLLAPSED
 
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 // On drag it can be collapsed, hide if it is.
                 if (newState == STATE_COLLAPSED && bottomSheetBehavior.skipCollapsed)
@@ -141,7 +144,10 @@ class CattleDetailFragment : NavigationFragment() {
         })
 
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(requireView(), it, Snackbar.LENGTH_LONG).show()
+            Snackbar
+                .make(requireView(), it, Snackbar.LENGTH_LONG)
+                .setAnchorView(binding.fabButtonEditCattle)
+                .show()
         })
     }
 

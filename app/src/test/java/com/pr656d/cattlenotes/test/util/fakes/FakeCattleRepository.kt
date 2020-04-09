@@ -27,7 +27,7 @@ open class FakeCattleRepository(
     }
 
     override fun getObservableAllCattle(): LiveData<List<Cattle>> {
-        return fakeAppDatabase.cattleDao().getObservableAll()
+        return fakeAppDatabase.cattleDao().getAll()
     }
 
     override fun getCattleById(id: Long): Cattle? {

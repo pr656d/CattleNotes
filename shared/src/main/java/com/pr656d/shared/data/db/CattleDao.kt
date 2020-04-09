@@ -18,13 +18,28 @@ interface CattleDao {
      * If any change happens observer will be called by Room.
      */
     @Query("SELECT * FROM cattleList ORDER BY tagNumber")
-    fun getObservableAll(): LiveData<List<Cattle>>
+    fun getAll(): LiveData<List<Cattle>>
 
+    /**
+     * Internally Room will handle it on background thread.
+     * If any change happens observer will be called by Room.
+     */
     @Query("SELECT * FROM cattleList WHERE id == :id")
-    fun getById(id: String): Cattle?
+    fun getById(id: String): LiveData<Cattle?>
 
+    /**
+     * Internally Room will handle it on background thread.
+     * If any change happens observer will be called by Room.
+     */
     @Query("SELECT * FROM cattleList WHERE tagNumber == :tagNumber")
-    fun getByTagNumber(tagNumber: String): Cattle?
+    fun getByTagNumber(tagNumber: Long): LiveData<Cattle?>
+
+    /**
+     * Returns number of rows matches with tag number.
+     * Useful when we want to check row exists or not. If count is more than 0 it exists.
+     */
+    @Query("SELECT COUNT(id) FROM cattleList WHERE tagNumber == :tagNumber")
+    fun getRowCountWithMatchingTagNumber(tagNumber: Long): Int
 
     @Update
     fun update(cattle: Cattle)

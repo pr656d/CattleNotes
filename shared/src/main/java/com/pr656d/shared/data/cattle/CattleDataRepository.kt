@@ -14,17 +14,20 @@ interface CattleRepository {
     /** @param [saveToLocal] use when this function is called by data source */
     fun addCattle(cattle: Cattle, saveToLocal: Boolean = false)
 
-    fun getObservableAllCattle(): LiveData<List<Cattle>>
+    fun getAllCattle(): LiveData<List<Cattle>>
 
-    fun getCattleById(id: String): Cattle?
+    fun getCattleById(id: String): LiveData<Cattle?>
 
-    fun getCattleByTagNumber(tagNumber: String): Cattle?
+    fun getCattleByTagNumber(tagNumber: Long): LiveData<Cattle?>
 
     /** @param [saveToLocal] use when this function is called by data source */
     fun deleteCattle(cattle: Cattle, saveToLocal: Boolean = false)
 
     /** @param [saveToLocal] use when this function is called by data source */
     fun updateCattle(cattle: Cattle, saveToLocal: Boolean = false)
+
+    /** Returns cattle with matching tag number exist or not */
+    fun isCattleExistByTagNumber(tagNumber: Long): Boolean
 }
 
 @Singleton
@@ -40,13 +43,17 @@ open class CattleDataRepository @Inject constructor(
             cattleDataSource.addCattle(cattle)
     }
 
-    override fun getObservableAllCattle(): LiveData<List<Cattle>> =
-        appDatabase.cattleDao().getObservableAll()
+    override fun getAllCattle(): LiveData<List<Cattle>> {
+        return appDatabase.cattleDao().getAll()
+    }
 
-    override fun getCattleById(id: String): Cattle? = appDatabase.cattleDao().getById(id)
+    override fun getCattleById(id: String): LiveData<Cattle?> {
+        return appDatabase.cattleDao().getById(id)
+    }
 
-    override fun getCattleByTagNumber(tagNumber: String): Cattle? =
-        appDatabase.cattleDao().getByTagNumber(tagNumber)
+    override fun getCattleByTagNumber(tagNumber: Long): LiveData<Cattle?> {
+        return appDatabase.cattleDao().getByTagNumber(tagNumber)
+    }
 
     override fun deleteCattle(cattle: Cattle, saveToLocal: Boolean) {
         if (saveToLocal)
@@ -60,5 +67,10 @@ open class CattleDataRepository @Inject constructor(
             appDatabase.cattleDao().update(cattle)
         else
             cattleDataSource.updateCattle(cattle)
+    }
+
+    override fun isCattleExistByTagNumber(tagNumber: Long): Boolean {
+        // If count is more than 0 than it exists.
+        return appDatabase.cattleDao().getRowCountWithMatchingTagNumber(tagNumber) > 0
     }
 }

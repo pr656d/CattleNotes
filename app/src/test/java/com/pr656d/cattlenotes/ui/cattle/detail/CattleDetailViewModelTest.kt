@@ -10,7 +10,7 @@ import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.domain.cattle.addedit.DeleteCattleUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
-import com.pr656d.shared.domain.cattle.detail.GetParentDetailUseCase
+import com.pr656d.shared.domain.cattle.detail.GetParentCattleUseCase
 import com.pr656d.test.TestData
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertNotNull
@@ -43,12 +43,12 @@ class CattleDetailViewModelTest {
     private fun createCattleDetailViewModel(
         repository: CattleRepository = cattleRepository,
         getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(repository),
-        getParentDetailUseCase: GetParentDetailUseCase = GetParentDetailUseCase(repository),
+        getParentCattleUseCase: GetParentCattleUseCase = GetParentCattleUseCase(repository),
         deleteCattleUseCase: DeleteCattleUseCase = DeleteCattleUseCase(repository)
     ): CattleDetailViewModel {
         return CattleDetailViewModel(
             getCattleByIdUseCase,
-            getParentDetailUseCase,
+            getParentCattleUseCase,
             deleteCattleUseCase
         )
     }

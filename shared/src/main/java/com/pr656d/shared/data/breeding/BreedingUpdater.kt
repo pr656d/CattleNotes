@@ -66,7 +66,7 @@ class FirestoreBreedingUpdater @Inject constructor(
                         }
                     }
                 }
-        }
+            }
 
         registration = firestore
             .collection(USERS_COLLECTION)
@@ -82,8 +82,8 @@ class FirestoreBreedingUpdater @Inject constructor(
     private fun getBreeding(document: QueryDocumentSnapshot): Breeding {
         return document.data.run {
             Breeding(
-                get(KEY_CATTLE_ID) as String,
-                (get(KEY_ARTIFICIAL_INSEMINATION) as? HashMap<*, *>)?.let { ai ->
+                cattleId = get(KEY_CATTLE_ID) as String,
+                artificialInsemination = (get(KEY_ARTIFICIAL_INSEMINATION) as? HashMap<*, *>)?.let { ai ->
                     ArtificialInseminationInfo(
                         (ai[KEY_AI_DATE] as Long).let { TimeUtils.toLocalDate(it) },
                         didBy = ai[KEY_AI_DID_BY] as? String,
@@ -91,16 +91,16 @@ class FirestoreBreedingUpdater @Inject constructor(
                         strawCode = ai[KEY_AI_STRAW_CODE] as? String
                     )
                 },
-                (get(KEY_REPEAT_HEAT) as? HashMap<*, *>)?.let { repeatHeat ->
+                repeatHeat = (get(KEY_REPEAT_HEAT) as? HashMap<*, *>)?.let { repeatHeat ->
                     parseBreedingEvent(repeatHeat)
                 },
-                (get(KEY_PREGNANCY_CHECK) as? HashMap<*, *>)?.let { pregnancyCheck ->
+                pregnancyCheck = (get(KEY_PREGNANCY_CHECK) as? HashMap<*, *>)?.let { pregnancyCheck ->
                     parseBreedingEvent(pregnancyCheck)
                 },
-                (get(KEY_DRY_OFF) as? HashMap<*, *>)?.let { dryOff ->
+                dryOff = (get(KEY_DRY_OFF) as? HashMap<*, *>)?.let { dryOff ->
                     parseBreedingEvent(dryOff)
                 },
-                (get(KEY_CALVING) as? HashMap<*, *>)?.let { calving ->
+                calving = (get(KEY_CALVING) as? HashMap<*, *>)?.let { calving ->
                     parseBreedingEvent(calving)
                 }
             ).apply { id = document.id }

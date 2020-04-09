@@ -36,8 +36,6 @@ class AddEditBreedingViewModel @Inject constructor(
 
     private val addUpdateBreedingResult = MutableLiveData<Result<Unit>>()
 
-    private val getCattleResult = MutableLiveData<Result<Cattle>>()
-
     private val _saving = MediatorLiveData<Boolean>().apply { value = false }
     val saving: LiveData<Boolean> = _saving
 
@@ -54,13 +52,6 @@ class AddEditBreedingViewModel @Inject constructor(
         get() = _navigateUp
 
     init {
-        cattle.addSource(getCattleResult) { result ->
-            (result as? Success)?.data?.let {
-                if (it != cattle.value)
-                    cattle.value = it
-            }
-        }
-
         _saving.addSource(addUpdateBreedingResult) {
             _saving.value = false
         }
@@ -80,14 +71,16 @@ class AddEditBreedingViewModel @Inject constructor(
 
     fun setBreeding(breeding: Breeding) {
         _editing.value = true
-        oldBreeding = breeding
-        getCattleByIdUseCase(breeding.cattleId, getCattleResult)
+        // Trigger cattle to be fetched and get Live updates
+        fetchCattle(breeding.cattleId)
         breeding.bindData()
+        oldBreeding = breeding
     }
 
     fun setCattle(c: Cattle) {
         cattle.value = c
-        getCattleByIdUseCase(c.id, getCattleResult)
+        // Trigger cattle to be fetched and get Live updates
+        fetchCattle(c.id)
     }
 
     fun save() {
@@ -109,6 +102,13 @@ class AddEditBreedingViewModel @Inject constructor(
             }
         } else {
             _showMessage.value = Event(R.string.provide_ai_date)
+        }
+    }
+
+    private fun fetchCattle(cattleId: String) {
+        cattle.addSource(getCattleByIdUseCase(cattleId)) { newCattle ->
+            if (cattle.value != newCattle)
+                cattle.value = newCattle
         }
     }
 
