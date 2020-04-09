@@ -69,10 +69,12 @@ class ObserveFirestoreUserInfoDataSourceImpl @Inject constructor(
                     }
                 }
             }
-        userInfoChangedListenerSubscription = firestore
-            .collection(USERS_COLLECTION)
-            .document(newUserId)
-            .addSnapshotListener(userInfoChangedListener)
+        DefaultScheduler.postToMainThread {
+            userInfoChangedListenerSubscription = firestore
+                .collection(USERS_COLLECTION)
+                .document(newUserId)
+                .addSnapshotListener(userInfoChangedListener)
+        }
         lastUserId = newUserId
     }
 

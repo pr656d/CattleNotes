@@ -70,7 +70,7 @@ class FirestoreBreedingUpdater @Inject constructor(
 
         // All Firestore operations start from the main thread to avoid concurrency issues.
         // To ignore Foreign key concurrency issue use 1s delay. Let cattle fetched first.
-        // TODO("Temporary Fix") : Use more promise able way to handling concurrency.
+        // TODO("Temporary Fix") : Use more promise able way to handle concurrency.
         DefaultScheduler.postDelayedToMainThread(1000) {
             registration = firestore
                 .collection(USERS_COLLECTION)
