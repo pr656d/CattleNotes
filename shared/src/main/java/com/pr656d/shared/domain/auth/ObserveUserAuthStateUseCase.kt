@@ -1,7 +1,6 @@
 package com.pr656d.shared.domain.auth
 
 import com.pr656d.shared.data.login.datasources.AuthStateUserDataSource
-import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.user.info.FirebaseUserInfoDetailed
 import com.pr656d.shared.data.user.info.UserInfoDetailed
 import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSource
@@ -12,15 +11,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * [AuthStateUserDataSource] provides general user information, like user IDs.
- *
- * In future we can fetch from other data sources as well.
+ * [AuthStateUserDataSource] provides general user information,
+ * like user ID, Name, Farm name, dairy code, etc.
  */
 @Singleton
 open class ObserveUserAuthStateUseCase @Inject constructor(
     private val authStateUserDataSource: AuthStateUserDataSource,
-    private val observeFirestoreUserInfoDataSource: ObserveFirestoreUserInfoDataSource,
-    preferenceStorage: PreferenceStorage
+    private val observeFirestoreUserInfoDataSource: ObserveFirestoreUserInfoDataSource
 ) : MediatorUseCase<Any, UserInfoDetailed?>() {
 
     private val currentFirebaseUserObservable =
@@ -42,7 +39,6 @@ open class ObserveUserAuthStateUseCase @Inject constructor(
             if (userResult is Result.Success && userResult.data?.isSignedIn() == false) {
                 observeFirestoreUserInfoDataSource.removeUser()
                 updateUserObservable()
-                preferenceStorage.clear()
             }
 
             // Error

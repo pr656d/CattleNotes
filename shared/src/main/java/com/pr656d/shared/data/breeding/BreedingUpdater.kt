@@ -32,6 +32,8 @@ class FirestoreBreedingUpdater @Inject constructor(
     private var registration: ListenerRegistration? = null
 
     override fun initialize() {
+        Timber.d("Initializing BreedingUpdater")
+
         // Remove previous subscriptions if exists
         registration?.remove()
 
@@ -43,6 +45,8 @@ class FirestoreBreedingUpdater @Inject constructor(
                         return@execute
                     }
 
+                    Timber.d("Executing BreedingUpdater listener")
+
                     for (doc in snapshots!!.documentChanges) {
                         when (doc.type) {
                             DocumentChange.Type.ADDED -> {
@@ -50,18 +54,24 @@ class FirestoreBreedingUpdater @Inject constructor(
                                     breeding = getBreeding(doc.document),
                                     saveToLocal = true
                                 )
+
+                                Timber.d("adding breeding...")
                             }
                             DocumentChange.Type.MODIFIED -> {
                                 breedingRepository.updateBreeding(
                                     breeding = getBreeding(doc.document),
                                     saveToLocal = true
                                 )
+
+                                Timber.d("updating breeding...")
                             }
                             DocumentChange.Type.REMOVED -> {
                                 breedingRepository.deleteBreeding(
                                     breeding = getBreeding(doc.document),
                                     saveToLocal = true
                                 )
+
+                                Timber.d("deleting breeding...")
                             }
                         }
                     }
@@ -78,10 +88,13 @@ class FirestoreBreedingUpdater @Inject constructor(
                 .collection(BREEDING_COLLECTION)
                 .addSnapshotListener(breedingListListener)
         }
+
+        Timber.d("Initialized BreedingUpdater")
     }
 
     override fun stop() {
         registration?.remove()
+        Timber.d("Removed snapshot listener registration for BreedingUpdater")
     }
 
     private fun getBreeding(document: QueryDocumentSnapshot): Breeding {

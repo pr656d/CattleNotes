@@ -7,6 +7,7 @@ import com.pr656d.shared.data.db.updater.DbUpdater
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.login.datasources.AuthStateUserDataSource
 import com.pr656d.shared.data.login.datasources.FirebaseAuthStateUserDataSource
+import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSource
 import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSourceImpl
 import com.pr656d.shared.fcm.FcmTokenUpdater
@@ -39,13 +40,15 @@ class SignInModule {
         firebase: FirebaseAuth,
         appDatabaseDao: AppDatabaseDao,
         dbUpdater: DbUpdater,
-        firestore: FirebaseFirestore
+        firestore: FirebaseFirestore,
+        preferenceStorage: PreferenceStorage
     ): AuthStateUserDataSource {
         return FirebaseAuthStateUserDataSource(
             firebase,
             appDatabaseDao,
             dbUpdater,
-            FcmTokenUpdater(firestore)
+            FcmTokenUpdater(firestore),
+            preferenceStorage
         )
     }
 

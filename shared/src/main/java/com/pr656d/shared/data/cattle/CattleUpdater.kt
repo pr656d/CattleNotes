@@ -33,6 +33,8 @@ class FirestoreCattleUpdater @Inject constructor(
     private var registration: ListenerRegistration? = null
 
     override fun initialize() {
+        Timber.d("Initializing CattleUpdater")
+
         // Remove previous subscriptions if exists
         registration?.remove()
 
@@ -44,6 +46,8 @@ class FirestoreCattleUpdater @Inject constructor(
                         return@execute
                     }
 
+                    Timber.d("Executing CattleUpdater listener")
+
                     for (doc in snapshots!!.documentChanges) {
                         when (doc.type) {
                             DocumentChange.Type.ADDED -> {
@@ -51,18 +55,25 @@ class FirestoreCattleUpdater @Inject constructor(
                                     cattle = getCattle(doc.document),
                                     saveToLocal = true
                                 )
+
+                                Timber.d("adding cattle...")
                             }
                             DocumentChange.Type.MODIFIED -> {
                                 cattleRepository.updateCattle(
                                     cattle = getCattle(doc.document),
                                     saveToLocal = true
                                 )
+
+                                Timber.d("updating cattle...")
                             }
                             DocumentChange.Type.REMOVED -> {
                                 cattleRepository.deleteCattle(
                                     cattle = getCattle(doc.document),
                                     saveToLocal = true
                                 )
+
+
+                                Timber.d("deleting cattle...")
                             }
                         }
                     }
@@ -77,10 +88,13 @@ class FirestoreCattleUpdater @Inject constructor(
                 .collection(CATTLE_COLLECTION)
                 .addSnapshotListener(cattleListListener)
         }
+
+        Timber.d("Initialized CattleUpdater")
     }
 
     override fun stop() {
         registration?.remove()
+        Timber.d("Removed snapshot listener registration for CattleUpdater")
     }
 
     private fun getCattle(document: QueryDocumentSnapshot): Cattle {
