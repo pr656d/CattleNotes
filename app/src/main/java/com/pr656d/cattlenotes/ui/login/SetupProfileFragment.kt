@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.databinding.FragmentSetupProfileBinding
 import dagger.android.support.DaggerFragment
@@ -20,7 +19,6 @@ class SetupProfileFragment : DaggerFragment() {
     private val model by activityViewModels<LoginViewModel> { viewModelFactory }
 
     private lateinit var binding: FragmentSetupProfileBinding
-    private lateinit var genderGroup: MaterialButtonToggleGroup
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +29,7 @@ class SetupProfileFragment : DaggerFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = model
 
-        genderGroup = binding.includeSelectGenderLayout.toggleGroupGender
+        val genderGroup = binding.includeSelectGenderLayout.toggleGroupGender
 
         genderGroup.addOnButtonCheckedListener { _, checkedId, _ ->
             val previousCheckedId = model.selectedGenderId.value

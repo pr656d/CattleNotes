@@ -13,8 +13,8 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -28,8 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 app:layout_scrollFlags="noScroll"
-                app:title="@string/setup_profile">
-            </androidx.appcompat.widget.Toolbar>
+                app:title="@string/setup_profile"></androidx.appcompat.widget.Toolbar>
 
             <!--
             ~ TODO : Use better progress indicator
@@ -57,8 +56,8 @@
                 android:id="@+id/layout_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/margin_normal">
+                android:layout_marginTop="@dimen/margin_normal"
+                android:orientation="vertical">
 
                 <TextView
                     style="@style/Widget.CattleNOTES.Profile.Title"
@@ -80,26 +79,26 @@
                         style="@style/Widget.CattleNOTES.TextInputEditText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:singleLine="true"
                         android:inputType="textCapSentences"
-                        android:text="@={ viewModel.farmName }"/>
+                        android:singleLine="true"
+                        android:text="@={ viewModel.farmName }" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/margin_normal"
                     android:baselineAligned="true"
-                    android:layout_marginTop="@dimen/margin_normal">
+                    android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutDairyCode"
                         style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginEnd="@dimen/margin_small"
+                        android:layout_weight="1"
                         android:hint="@string/dairy_code">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -107,9 +106,9 @@
                             style="@style/Widget.CattleNOTES.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:singleLine="true"
                             android:inputType="numberSigned"
-                            android:text="@={ viewModel.dairyCode }"/>
+                            android:singleLine="true"
+                            android:text="@={ viewModel.dairyCode }" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,8 +117,8 @@
                         style="@style/Widget.CattleNOTES.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginStart="@dimen/margin_small"
+                        android:layout_weight="1"
                         android:hint="@string/customer_id"
                         app:helperText="@string/customer_id_helper_text">
 
@@ -128,9 +127,9 @@
                             style="@style/Widget.CattleNOTES.TextInputEditText"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:singleLine="true"
                             android:inputType="numberSigned"
-                            android:text="@={ viewModel.dairyCustomerId }"/>
+                            android:singleLine="true"
+                            android:text="@={ viewModel.dairyCustomerId }" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,7 +150,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:maxLines="5"
-                        android:text="@={ viewModel.farmAddress }"/>
+                        android:text="@={ viewModel.farmAddress }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -159,19 +158,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="@string/personal_info"
-                    android:layout_marginTop="@dimen/margin_large"/>
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/personal_info" />
 
                 <ImageView
                     android:layout_width="@dimen/profile_image_size"
                     android:layout_height="@dimen/profile_image_size"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/margin_normal"
+                    app:clipToCircle="@{true}"
                     app:imageUri="@{ viewModel.imageUrl }"
                     app:placeholder="@{ @drawable/ic_nav_profile }"
-                    app:clipToCircle="@{true}"
-                    tools:srcCompat="@drawable/ic_nav_profile"
-                    tools:ignore="ContentDescription" />
+                    tools:ignore="ContentDescription"
+                    tools:srcCompat="@drawable/ic_nav_profile" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutName"
@@ -189,7 +188,7 @@
                         android:layout_height="match_parent"
                         android:inputType="textPersonName"
                         android:singleLine="true"
-                        android:text="@={ viewModel.name }"/>
+                        android:text="@={ viewModel.name }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <include
@@ -198,14 +197,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
-                    bind:clickable="@{true}"/>
+                    bind:clickable="@{true}" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.CattleNOTES.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/date_of_birth"
-                    android:layout_marginTop="@dimen/margin_normal">
+                    android:layout_marginTop="@dimen/margin_normal"
+                    android:hint="@string/date_of_birth">
 
                     <com.google.android.material.textfield.TextInputEditText
                         style="@style/Widget.CattleNOTES.TextInputDate"
@@ -233,7 +232,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:maxLines="5"
-                        android:text="@={ viewModel.address }"/>
+                        android:text="@={ viewModel.address }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Space
@@ -248,9 +247,10 @@
             android:id="@+id/fabButtonSaveProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_check"
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/margin_normal"
-            android:onClick="@{ () -> viewModel.saveProfile() }"/>
+            android:clickable="@{ !viewModel.savingProfile }"
+            android:onClick="@{ () -> viewModel.saveProfile() }"
+            app:srcCompat="@drawable/ic_check" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
