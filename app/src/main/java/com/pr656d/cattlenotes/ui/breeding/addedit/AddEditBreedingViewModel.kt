@@ -89,7 +89,7 @@ class AddEditBreedingViewModel @Inject constructor(
 
     fun save() = save(breedingCompletedConfirmation = false)
 
-    fun save(breedingCompletedConfirmation: Boolean = false) {
+    fun save(breedingCompletedConfirmation: Boolean) {
         val cattle = cattle.value ?: return
 
         if (aiDate.value != null) {
@@ -100,7 +100,7 @@ class AddEditBreedingViewModel @Inject constructor(
                 return
             }
 
-            if (oldBreeding != newBreedingCycle && breedingCompletedConfirmation) {
+            if (oldBreeding != newBreedingCycle) {
                 _saving.value = true
 
                 if (oldBreeding == null)
