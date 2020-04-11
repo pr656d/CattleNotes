@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.pr656d.shared.data.user.info.FirestoreUserInfo
 import com.pr656d.shared.data.user.info.UserInfoBasic
 import com.pr656d.shared.data.user.info.UserInfoDetailed
+import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 
 /**
@@ -44,9 +45,10 @@ interface UpdateUserInfoDetailedDataSource {
 
     /**
      * Returns holder of the result of update user info. It does updates to two different sources.
-     * Holder their result with pair.
+     * Holds their result with pair. Return result as Event. Handle it once only as data sources are
+     * provided as singleton.
      */
-    fun observeUpdateResult(): LiveData<Result<Pair<Result<Unit>, Result<Unit>>>>
+    fun observeUpdateResult(): LiveData<Event<Pair<Result<Unit>, Result<Unit>>>>
 
 }
 

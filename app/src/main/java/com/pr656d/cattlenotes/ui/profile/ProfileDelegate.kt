@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -13,6 +12,7 @@ import com.pr656d.shared.data.user.info.FirebaseUserInfo
 import com.pr656d.shared.data.user.info.FirebaseUserInfoDetailed
 import com.pr656d.shared.data.user.info.FirestoreUserInfo
 import com.pr656d.shared.data.user.info.UserInfoDetailed
+import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.user.info.ObserveUserInfoDetailed
 import com.pr656d.shared.domain.user.info.UpdateUserInfoDetailedUseCase
@@ -70,8 +70,7 @@ interface ProfileDelegate {
 
     val address: MediatorLiveData<String>
 
-    // When result is handled by observer then reset it by null.
-    val updateUserInfoDetailedResult: MutableLiveData<Result<Pair<Result<Unit>, Result<Unit>>>?>
+    val updateUserInfoDetailedResult: LiveData<Result<Event<Pair<Result<Unit>, Result<Unit>>>>>
 
     val updateErrorMessage: LiveData<Int>
 
@@ -124,7 +123,7 @@ class ProfileDelegateImp @Inject constructor(
 
     override val address: MediatorLiveData<String> = MediatorLiveData()
 
-    override val updateUserInfoDetailedResult: MutableLiveData<Result<Pair<Result<Unit>, Result<Unit>>>?> =
+    override val updateUserInfoDetailedResult: LiveData<Result<Event<Pair<Result<Unit>, Result<Unit>>>>> =
         updateUserInfoDetailedUseCase.observe()
 
     override val savingProfile =
@@ -185,7 +184,7 @@ class ProfileDelegateImp @Inject constructor(
         }
 
         _updateErrorMessage.addSource(updateUserInfoDetailedResult) { result ->
-            (result as? Result.Success)?.data?.let {
+            (result as? Result.Success)?.data?.peekContent()?.let {
                 if (it.first is Result.Error && it.second is Result.Error)
                     _updateErrorMessage.postValue(R.string.error_profile_change_not_saved)
                 else if (it.first is Result.Error)

@@ -74,10 +74,9 @@ class LoginViewModel @Inject constructor(
         }
 
         _launchMainScreen.addSource(updateUserInfoDetailedResult) { result ->
-            if (result == null)
-                return@addSource // Break the loop
+            _loading.postValue(true)
 
-            (result as? Result.Success)?.data?.let {
+            (result as? Result.Success)?.data?.getContentIfNotHandled()?.let {
                 if (it.first is Result.Success && it.second is Result.Success) {
                     setFirstTimeProfileSetupCompletedUseCase(true)
                     _launchMainScreen.postValue(Event(Unit))
@@ -85,9 +84,6 @@ class LoginViewModel @Inject constructor(
                     _loading.postValue(false)
                 }
             }
-
-            // Reset result
-            updateUserInfoDetailedResult.postValue(null)
         }
 
         _loading.addSource(currentUserInfo) {
@@ -95,18 +91,6 @@ class LoginViewModel @Inject constructor(
         }
 
         _loading.addSource(savingProfile) {
-            /**
-             * As this view model is shared between [LoginFragment] and [SetupProfileFragment]
-             * [savingProfile] is triggered at [SetupProfileFragment] to save user info.
-             * On [updateUserInfoDetailedResult] as Result.Success navigating to the [MainActivity]
-             * is the only option to continue.
-             * Keep progress bar till [MainActivity] is launched on Success.
-             *
-             * This gives user feedback that something in progress.
-             */
-            if (it == false)
-                return@addSource
-
             _loading.postValue(it)
         }
     }

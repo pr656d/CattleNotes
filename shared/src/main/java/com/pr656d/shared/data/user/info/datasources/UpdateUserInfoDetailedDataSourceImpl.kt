@@ -3,6 +3,7 @@ package com.pr656d.shared.data.user.info.datasources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.pr656d.shared.data.user.info.UserInfoDetailed
+import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import javax.inject.Inject
 
@@ -11,13 +12,13 @@ class UpdateUserInfoDetailedDataSourceImpl @Inject constructor(
     private val updateFirestoreUserInfoDataSource: UpdateFirestoreUserInfoDataSource
 ) : UpdateUserInfoDetailedDataSource {
 
-    private val result = MediatorLiveData<Result<Pair<Result<Unit>, Result<Unit>>>>()
+    private val result = MediatorLiveData<Event<Pair<Result<Unit>, Result<Unit>>>>()
     private val resultCounter = MediatorLiveData<Int>().apply { value = 0 }
 
     /**
      * According to documentation of [LiveData.postValue] :
-     *      If you called this method multiple times before a main thread executed a posted task, only
-     *      the last value would be dispatched.
+     *      If you called this method multiple times before a main thread executed a posted task,
+     *      only the last value would be dispatched.
      *
      * Our data sources updates the data on [LiveData] using this method as
      * we'r working on a background thread.
@@ -46,12 +47,7 @@ class UpdateUserInfoDetailedDataSourceImpl @Inject constructor(
             // Wait until both result get completed.
             if (it == 2) {
                 result.postValue(
-                    Result.Success(
-                        Pair(
-                            userInfoBasicResult.value!!,
-                            userInfoOnFirestoreResult.value!!
-                        )
-                    )
+                    Event(Pair(userInfoBasicResult.value!!, userInfoOnFirestoreResult.value!!))
                 )
                 reset()
             }
@@ -64,7 +60,7 @@ class UpdateUserInfoDetailedDataSourceImpl @Inject constructor(
         updateUserInfoBasicDataSource.updateUserInfo(userInfo)
     }
 
-    override fun observeUpdateResult(): LiveData<Result<Pair<Result<Unit>, Result<Unit>>>> {
+    override fun observeUpdateResult(): LiveData<Event<Pair<Result<Unit>, Result<Unit>>>> {
         return result
     }
 

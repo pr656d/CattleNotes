@@ -3,6 +3,7 @@ package com.pr656d.shared.data.user.repository
 import androidx.lifecycle.LiveData
 import com.pr656d.shared.data.user.info.UserInfoDetailed
 import com.pr656d.shared.data.user.info.datasources.UpdateUserInfoDetailedDataSource
+import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,7 +16,7 @@ interface UserInfoRepository {
 
     fun updateUserInfo(userInfo: UserInfoDetailed)
 
-    fun observeUpdateResult(): LiveData<Result<Pair<Result<Unit>, Result<Unit>>>>
+    fun observeUpdateResult(): LiveData<Event<Pair<Result<Unit>, Result<Unit>>>>
 }
 
 @Singleton
@@ -27,7 +28,7 @@ open class UserInfoDataRepository @Inject constructor(
         updateUserInfoDetailedDataSource.updateUserInfo(userInfo)
     }
 
-    override fun observeUpdateResult(): LiveData<Result<Pair<Result<Unit>, Result<Unit>>>> {
+    override fun observeUpdateResult(): LiveData<Event<Pair<Result<Unit>, Result<Unit>>>> {
         return updateUserInfoDetailedDataSource.observeUpdateResult()
     }
 }

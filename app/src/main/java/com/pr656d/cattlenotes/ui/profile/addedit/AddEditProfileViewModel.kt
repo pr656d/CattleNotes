@@ -22,21 +22,10 @@ class AddEditProfileViewModel @Inject constructor(
 
     init {
         _navigateUp.addSource(updateUserInfoDetailedResult) { result ->
-            /**
-             * [ProfileViewModel] and [AddEditProfileViewModel] uses same [ProfileDelegate] implementation.
-             * So when user go back to profile after editing and goes to edit again.
-             * Observers of [updateUserInfoDetailedResult] gets executed. So reset it after execution.
-             */
-            if (result == null)
-                return@addSource    // Break the loop
-
-            (result as? Result.Success)?.data?.let {
+            (result as? Result.Success)?.data?.getContentIfNotHandled()?.let {
                 if (it.first is Result.Success && it.second is Result.Success)
                     navigateUp()
             }
-
-            // Reset it.
-            updateUserInfoDetailedResult.postValue(null)
         }
 
         _loading.addSource(currentUserInfo) {
