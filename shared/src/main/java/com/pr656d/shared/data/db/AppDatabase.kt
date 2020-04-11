@@ -15,7 +15,7 @@ import com.pr656d.model.Cattle
     Cattle::class,
     Breeding::class
 ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -30,6 +30,7 @@ abstract class AppDatabase : RoomDatabase() {
         // https://medium.com/androiddevelopers/understanding-migrations-with-room-f01e04b07929
         fun buildDatabase(context: Context): AppDatabase =
             Room.databaseBuilder(context, AppDatabase::class.java, databaseName)
+                .fallbackToDestructiveMigration()
                 .build()
     }
 }

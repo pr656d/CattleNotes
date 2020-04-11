@@ -7,6 +7,7 @@
     <string name="stay">Stay</string>
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
+    <string name="save">Save</string>
     <string name="go_back">Go Back</string>
     <string name="retry">Retry</string>
     <string name="edit">Edit</string>
@@ -134,6 +135,8 @@
     <string name="empty_breeding">No breeding available</string>
     <string name="delete_breeding">Delete breeding?</string>
     <string name="not_set">Not set</string>
+    <string name="breeding_cycle_complete">Breeding cycle completed</string>
+    <string name="breeding_cycle_complete_message">Once breeding cycle is complete you can not modify this breeding later.</string>
 
     <!--  Profile  -->
     <string name="farm_info">Farm info</string>

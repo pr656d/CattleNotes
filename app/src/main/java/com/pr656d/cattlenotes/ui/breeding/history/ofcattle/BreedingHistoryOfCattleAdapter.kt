@@ -80,45 +80,45 @@ class BreedingHistoryOfCattleListViewHolder(
         var expanded = false
 
         val aiDidByVisibility: Boolean
-            get() = breeding.artificialInsemination?.didBy.isNullOrEmpty().not()
+            get() = breeding.artificialInsemination.didBy.isNullOrEmpty().not()
 
         val aiBullNameVisibility: Boolean
-            get() = breeding.artificialInsemination?.bullName.isNullOrEmpty().not()
+            get() = breeding.artificialInsemination.bullName.isNullOrEmpty().not()
 
         val aiStrawCodeVisibility: Boolean
-            get() = breeding.artificialInsemination?.strawCode.isNullOrEmpty().not()
+            get() = breeding.artificialInsemination.strawCode.isNullOrEmpty().not()
 
         val repeatHeatVisibility: Boolean
-            get() = expanded && breeding.artificialInsemination?.date != null
+            get() = expanded
 
         val repeatHeatDoneOnVisibility: Boolean
             get() = expanded &&
-                    breeding.repeatHeat?.status == true &&
-                    breeding.repeatHeat?.doneOn != null
+                    breeding.repeatHeat.status == true &&
+                    breeding.repeatHeat.doneOn != null
 
         val pregnancyCheckVisibility: Boolean
-            get() = expanded && breeding.repeatHeat?.status == false
+            get() = expanded && breeding.repeatHeat.status == false
 
         val pregnancyCheckDoneOnVisibility: Boolean
             get() = expanded &&
-                    breeding.pregnancyCheck?.status != null &&
-                    breeding.pregnancyCheck?.doneOn != null
+                    breeding.pregnancyCheck.status != null &&
+                    breeding.pregnancyCheck.doneOn != null
 
         val dryOffVisibility: Boolean
-            get() = expanded && breeding.pregnancyCheck?.status == true
+            get() = expanded && breeding.pregnancyCheck.status == true
 
         val dryOffDoneOnVisibility: Boolean
             get() = expanded &&
-                    breeding.dryOff?.status == true &&
-                    breeding.dryOff?.doneOn != null
+                    breeding.dryOff.status == true &&
+                    breeding.dryOff.doneOn != null
 
         val calvingVisibility: Boolean
-            get() = expanded && breeding.dryOff?.status == true
+            get() = expanded && breeding.dryOff.status == true
 
         val calvingDoneOnVisibility: Boolean
             get() = expanded &&
-                    breeding.calving?.status == true &&
-                    breeding.calving?.doneOn != null
+                    breeding.calving.status == true &&
+                    breeding.calving.doneOn != null
     }
 }
 

@@ -87,6 +87,18 @@ class AddEditBreedingFragment : NavigationFragment() {
             findNavController().navigateUp()
         })
 
+        model.showBreedingCompletedDialog.observe(viewLifecycleOwner, EventObserver {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.breeding_cycle_complete)
+                .setMessage(R.string.breeding_cycle_complete_message)
+                .setPositiveButton(R.string.save) { _, _ ->
+                    model.save(breedingCompletedConfirmation = true)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .create()
+                .show()
+        })
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             model.onBackPressed()
         }

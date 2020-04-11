@@ -2,6 +2,7 @@ package com.pr656d.model
 
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
+import com.pr656d.model.Breeding.BreedingEvent
 import org.threeten.bp.LocalDate
 
 @Entity(
@@ -21,42 +22,59 @@ data class Breeding(
     val cattleId: String,
 
     /**
-     * Artificial Insemination date as String.
+     * Artificial Insemination date.
      */
     @SerializedName("artificialInsemination")
     @Embedded(prefix = "artificialInsemination")
-    val artificialInsemination: ArtificialInseminationInfo? = null,
+    val artificialInsemination: ArtificialInseminationInfo,
 
     /**
-     * Depends on AI date.
+     * Holds repeat heat data as [BreedingEvent].
      */
     @SerializedName("repeatHeat")
     @Embedded(prefix = "repeatHeat")
-    val repeatHeat: BreedingEvent? = null,
+    val repeatHeat: BreedingEvent,
 
     /**
-     * Depends on repeat heat status.
+     * Holds pregnancy check data as [BreedingEvent].
      */
     @SerializedName("pregnancyCheck")
     @Embedded(prefix = "pregnancyCheck")
-    val pregnancyCheck: BreedingEvent? = null,
+    val pregnancyCheck: BreedingEvent,
 
     /**
-     * Depends on pregnancy check status.
+     * Holds dry off data as [BreedingEvent].
      */
     @SerializedName("dryOff")
     @Embedded(prefix = "dryOff")
-    val dryOff: BreedingEvent? = null,
+    val dryOff: BreedingEvent,
 
+    /**
+     * Holds calving data as [BreedingEvent].
+     */
     @SerializedName("calving")
     @Embedded(prefix = "calving")
-    val calving: BreedingEvent? = null
+    val calving: BreedingEvent
 ) {
 
     @SerializedName("id")
     @ColumnInfo(name = "id")
     @PrimaryKey
     var id: String = ""
+
+    /**
+     * When
+     *
+     * 1. repeat heat status is 'Positive' or
+     * 2. pregnancy check status is 'Negative'
+     * 3. calving status is 'Positive'
+     *
+     * then breeding cycle is completed.
+     */
+    @Ignore
+    @SerializedName("breedingCompleted")
+    val breedingCompleted: Boolean =
+        repeatHeat.status == true || pregnancyCheck.status == false || calving.status == true
 
     data class ArtificialInseminationInfo(
         @SerializedName("date")
@@ -90,7 +108,7 @@ data class Breeding(
         val doneOn: LocalDate? = null
     ) {
         @Ignore
-        val statusString = when (status) {
+        val statusString: String = when (status) {
             null -> "None"
             true -> "Positive"
             false -> "Negative"

@@ -101,7 +101,7 @@ class FirestoreBreedingUpdater @Inject constructor(
         return document.data.run {
             Breeding(
                 cattleId = get(KEY_CATTLE_ID) as String,
-                artificialInsemination = (get(KEY_ARTIFICIAL_INSEMINATION) as? HashMap<*, *>)?.let { ai ->
+                artificialInsemination = (get(KEY_ARTIFICIAL_INSEMINATION) as HashMap<*, *>).let { ai ->
                     ArtificialInseminationInfo(
                         (ai[KEY_AI_DATE] as Long).let { TimeUtils.toLocalDate(it) },
                         didBy = ai[KEY_AI_DID_BY] as? String,
@@ -109,18 +109,10 @@ class FirestoreBreedingUpdater @Inject constructor(
                         strawCode = ai[KEY_AI_STRAW_CODE] as? String
                     )
                 },
-                repeatHeat = (get(KEY_REPEAT_HEAT) as? HashMap<*, *>)?.let { repeatHeat ->
-                    parseBreedingEvent(repeatHeat)
-                },
-                pregnancyCheck = (get(KEY_PREGNANCY_CHECK) as? HashMap<*, *>)?.let { pregnancyCheck ->
-                    parseBreedingEvent(pregnancyCheck)
-                },
-                dryOff = (get(KEY_DRY_OFF) as? HashMap<*, *>)?.let { dryOff ->
-                    parseBreedingEvent(dryOff)
-                },
-                calving = (get(KEY_CALVING) as? HashMap<*, *>)?.let { calving ->
-                    parseBreedingEvent(calving)
-                }
+                repeatHeat = parseBreedingEvent(get(KEY_REPEAT_HEAT) as HashMap<*, *>),
+                pregnancyCheck = parseBreedingEvent(get(KEY_PREGNANCY_CHECK) as HashMap<*, *>),
+                dryOff = parseBreedingEvent(get(KEY_DRY_OFF) as HashMap<*, *>),
+                calving = parseBreedingEvent(get(KEY_CALVING) as HashMap<*, *>)
             ).apply { id = document.id }
         }
     }

@@ -82,22 +82,22 @@ class FirestoreBreedingDataSource @Inject constructor(
         put(
             KEY_ARTIFICIAL_INSEMINATION,
             hashMapOf<String, Any?>().apply {
-                put(KEY_AI_DATE, artificialInsemination?.date?.let {
+                put(KEY_AI_DATE, artificialInsemination.date.let {
                     TimeUtils.toEpochMillis(it)
                 })
-                put(KEY_AI_DID_BY, artificialInsemination?.didBy)
-                put(KEY_AI_BULL_NAME, artificialInsemination?.bullName)
-                put(KEY_AI_STRAW_CODE, artificialInsemination?.strawCode)
+                put(KEY_AI_DID_BY, artificialInsemination.didBy)
+                put(KEY_AI_BULL_NAME, artificialInsemination.bullName)
+                put(KEY_AI_STRAW_CODE, artificialInsemination.strawCode)
             }
         )
         put(
             KEY_REPEAT_HEAT,
             hashMapOf<String, Any?>().apply {
-                put(KEY_BREEDING_EVENT_EXPECTED_ON, repeatHeat?.expectedOn?.let {
+                put(KEY_BREEDING_EVENT_EXPECTED_ON, repeatHeat.expectedOn.let {
                     TimeUtils.toEpochMillis(it)
                 })
-                put(KEY_BREEDING_EVENT_STATUS, repeatHeat?.status)
-                put(KEY_BREEDING_EVENT_DONE_ON, repeatHeat?.doneOn?.let {
+                put(KEY_BREEDING_EVENT_STATUS, repeatHeat.status)
+                put(KEY_BREEDING_EVENT_DONE_ON, repeatHeat.doneOn?.let {
                     TimeUtils.toEpochMillis(it)
                 })
             }
@@ -105,11 +105,11 @@ class FirestoreBreedingDataSource @Inject constructor(
         put(
             KEY_PREGNANCY_CHECK,
             hashMapOf<String, Any?>().apply {
-                put(KEY_BREEDING_EVENT_EXPECTED_ON, pregnancyCheck?.expectedOn?.let {
+                put(KEY_BREEDING_EVENT_EXPECTED_ON, pregnancyCheck.expectedOn.let {
                     TimeUtils.toEpochMillis(it)
                 })
-                put(KEY_BREEDING_EVENT_STATUS, pregnancyCheck?.status)
-                put(KEY_BREEDING_EVENT_DONE_ON, pregnancyCheck?.doneOn?.let {
+                put(KEY_BREEDING_EVENT_STATUS, pregnancyCheck.status)
+                put(KEY_BREEDING_EVENT_DONE_ON, pregnancyCheck.doneOn?.let {
                     TimeUtils.toEpochMillis(it)
                 })
             }
@@ -117,11 +117,11 @@ class FirestoreBreedingDataSource @Inject constructor(
         put(
             KEY_DRY_OFF,
             hashMapOf<String, Any?>().apply {
-                put(KEY_BREEDING_EVENT_EXPECTED_ON, dryOff?.expectedOn?.let {
+                put(KEY_BREEDING_EVENT_EXPECTED_ON, dryOff.expectedOn.let {
                     TimeUtils.toEpochMillis(it)
                 })
-                put(KEY_BREEDING_EVENT_STATUS, dryOff?.status)
-                put(KEY_BREEDING_EVENT_DONE_ON, dryOff?.doneOn?.let {
+                put(KEY_BREEDING_EVENT_STATUS, dryOff.status)
+                put(KEY_BREEDING_EVENT_DONE_ON, dryOff.doneOn?.let {
                     TimeUtils.toEpochMillis(it)
                 })
             }
@@ -129,15 +129,16 @@ class FirestoreBreedingDataSource @Inject constructor(
         put(
             KEY_CALVING,
             hashMapOf<String, Any?>().apply {
-                put(KEY_BREEDING_EVENT_EXPECTED_ON, calving?.expectedOn?.let {
+                put(KEY_BREEDING_EVENT_EXPECTED_ON, calving.expectedOn.let {
                     TimeUtils.toEpochMillis(it)
                 })
-                put(KEY_BREEDING_EVENT_STATUS, calving?.status)
-                put(KEY_BREEDING_EVENT_DONE_ON, calving?.doneOn?.let {
+                put(KEY_BREEDING_EVENT_STATUS, calving.status)
+                put(KEY_BREEDING_EVENT_DONE_ON, calving.doneOn?.let {
                     TimeUtils.toEpochMillis(it)
                 })
             }
         )
+        put(KEY_BREEDING_COMPLETED, breedingCompleted)
     }
 
     companion object {
@@ -156,5 +157,6 @@ class FirestoreBreedingDataSource @Inject constructor(
         private const val KEY_BREEDING_EVENT_EXPECTED_ON = "expectedOn"
         private const val KEY_BREEDING_EVENT_STATUS = "status"
         private const val KEY_BREEDING_EVENT_DONE_ON = "doneOn"
+        private const val KEY_BREEDING_COMPLETED = "breedingCompleted"
     }
 }

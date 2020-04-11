@@ -51,6 +51,10 @@ class AddEditBreedingViewModel @Inject constructor(
     val navigateUp: LiveData<Event<Unit>>
         get() = _navigateUp
 
+    private val _showBreedingCompletedDialog = MutableLiveData<Event<Unit>>()
+    val showBreedingCompletedDialog: LiveData<Event<Unit>>
+        get() = _showBreedingCompletedDialog
+
     init {
         _saving.addSource(addUpdateBreedingResult) {
             _saving.value = false
@@ -83,13 +87,20 @@ class AddEditBreedingViewModel @Inject constructor(
         fetchCattle(c.id)
     }
 
-    fun save() {
+    fun save() = save(breedingCompletedConfirmation = false)
+
+    fun save(breedingCompletedConfirmation: Boolean = false) {
         val cattle = cattle.value ?: return
 
         if (aiDate.value != null) {
             val newBreedingCycle = getBreedingCycle(cattle)
 
-            if (oldBreeding != newBreedingCycle) {
+            if (newBreedingCycle.breedingCompleted && !breedingCompletedConfirmation) {
+                _showBreedingCompletedDialog.postValue(Event(Unit))
+                return
+            }
+
+            if (oldBreeding != newBreedingCycle && breedingCompletedConfirmation) {
                 _saving.value = true
 
                 if (oldBreeding == null)
@@ -115,48 +126,46 @@ class AddEditBreedingViewModel @Inject constructor(
     private fun getBreedingCycle(cattle: Cattle): Breeding =
         Breeding(
             cattle.id,
-            aiDate.value?.let {
-                ArtificialInseminationInfo(
-                    it,
-                    didBy.value,
-                    bullName.value,
-                    strawCode.value
-                )
-            },
-            repeatHeatExpectedOn.value?.let {
-                BreedingEvent(it, repeatHeatStatus.value, repeatHeatDoneOn.value)
-            },
-            pregnancyCheckExpectedOn.value?.let {
-                BreedingEvent(it, pregnancyCheckStatus.value, pregnancyCheckDoneOn.value)
-            },
-            dryOffExpectedOn.value?.let {
-                BreedingEvent(it, dryOffStatus.value, dryOffDoneOn.value)
-            },
-            calvingExpectedOn.value?.let {
-                BreedingEvent(it, calvingStatus.value, calvingDoneOn.value)
-            }
+            ArtificialInseminationInfo(
+                aiDate.value!!,
+                didBy.value,
+                bullName.value,
+                strawCode.value
+            ),
+            BreedingEvent(
+                repeatHeatExpectedOn.value!!,
+                repeatHeatStatus.value,
+                repeatHeatDoneOn.value
+            ),
+            BreedingEvent(
+                pregnancyCheckExpectedOn.value!!,
+                pregnancyCheckStatus.value,
+                pregnancyCheckDoneOn.value
+            ),
+            BreedingEvent(dryOffExpectedOn.value!!, dryOffStatus.value, dryOffDoneOn.value),
+            BreedingEvent(calvingExpectedOn.value!!, calvingStatus.value, calvingDoneOn.value)
         ).apply {
             oldBreeding?.id?.let { id = it }
         }
 
     private fun Breeding.bindData() {
         // AI
-        aiDate.value = artificialInsemination?.date
-        didBy.value = artificialInsemination?.didBy
-        bullName.value = artificialInsemination?.bullName
-        strawCode.value = artificialInsemination?.strawCode
+        aiDate.value = artificialInsemination.date
+        didBy.value = artificialInsemination.didBy
+        bullName.value = artificialInsemination.bullName
+        strawCode.value = artificialInsemination.strawCode
         // Repeat Heat
-        repeatHeatStatus.value = repeatHeat?.status
-        repeatHeatDoneOn.value = repeatHeat?.doneOn
+        repeatHeatStatus.value = repeatHeat.status
+        repeatHeatDoneOn.value = repeatHeat.doneOn
         // Pregnancy Check
-        pregnancyCheckStatus.value = pregnancyCheck?.status
-        pregnancyCheckDoneOn.value = pregnancyCheck?.doneOn
+        pregnancyCheckStatus.value = pregnancyCheck.status
+        pregnancyCheckDoneOn.value = pregnancyCheck.doneOn
         // Dry Off
-        dryOffStatus.value = dryOff?.status
-        dryOffDoneOn.value = dryOff?.doneOn
+        dryOffStatus.value = dryOff.status
+        dryOffDoneOn.value = dryOff.doneOn
         // Calving
-        calvingStatus.value = calving?.status
-        calvingDoneOn.value = calving?.doneOn
+        calvingStatus.value = calving.status
+        calvingDoneOn.value = calving.doneOn
     }
 
     fun onBackPressed(backConfirmation: Boolean = false) {
