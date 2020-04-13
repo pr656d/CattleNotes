@@ -46,6 +46,7 @@
     <string name="login_title">Login</string>
     <string name="logging_in">Logging in</string>
     <string name="login_message">Please login to continue</string>
+    <string name="login_complete">Login complete</string>
 
     <!--  Texts  -->
     <string name="cattle">Cattle</string>

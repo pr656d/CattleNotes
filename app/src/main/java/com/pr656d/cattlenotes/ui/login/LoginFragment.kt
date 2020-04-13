@@ -1,7 +1,5 @@
 package com.pr656d.cattlenotes.ui.login
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
-import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentLoginBinding
 import com.pr656d.shared.domain.result.EventObserver
@@ -55,7 +51,7 @@ class LoginFragment : DaggerFragment() {
                 AuthUI.IdpConfig.GoogleBuilder().build()
             )
 
-            startActivityForResult(
+            activity?.startActivityForResult(
                 AuthUI.getInstance().createSignInIntentBuilder()
                     .setAvailableProviders(providers)
                     .setLogo(R.drawable.logo)
@@ -64,27 +60,5 @@ class LoginFragment : DaggerFragment() {
                 CODE_SIGN_IN
             )
         })
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        when (requestCode) {
-            CODE_SIGN_IN -> {
-                val response = IdpResponse.fromResultIntent(data)
-                if (resultCode == Activity.RESULT_OK) {
-                    model.onLoginSuccess()
-                } else {
-                    response?.error?.message?.let {
-                        showMessage(it)
-                    }
-                    model.onLoginFail()
-                }
-            }
-        }
-    }
-
-    private fun showMessage(message: String) {
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show()
     }
 }

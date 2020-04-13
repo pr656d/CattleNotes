@@ -54,6 +54,13 @@ class LoginViewModel @Inject constructor(
     init {
         getFirstTimeProfileSetupCompletedUseCase(Unit, getFirstTimeProfileSetupCompletedResult)
 
+        /**
+         * User will be here for two reasons.
+         *      1. If not logged in.
+         *      2. If new user and not completed setup profile.
+         *
+         * Setup profile screen will be launched with 2nd scenario.
+         */
         _launchSetupProfileScreen.addSource(getFirstTimeProfileSetupCompletedResult) { result ->
             (result as? Result.Success)?.data?.let { isProfileSetupCompleted ->
                 val isUserSignedIn = currentUserInfo.value?.isSignedIn() ?: false
@@ -63,16 +70,25 @@ class LoginViewModel @Inject constructor(
             }
         }
 
-        _launchSetupProfileScreen.addSource(currentUserInfo) { user ->
-            if (user?.isSignedIn() == true)
-                _launchSetupProfileScreen.postValue(Event(Unit))
-        }
-
+        /**
+         * User will be here for two reasons.
+         *      1. If not logged in.
+         *      2. If new user and not completed setup profile.
+         *
+         * Login screen will be launched with 1st scenario.
+         */
         _launchLoginScreen.addSource(currentUserInfo) { user ->
             if (user?.isSignedIn() == false)
                 _launchLoginScreen.postValue(Event(Unit))
         }
 
+        /**
+         * User will be here for two reasons.
+         *      1. If not logged in.
+         *      2. If new user and not completed setup profile.
+         *
+         * After profile is updated, launch main screen. There is nothing to do anymore for login.
+         */
         _launchMainScreen.addSource(updateUserInfoDetailedResult) { result ->
             _loading.postValue(true)
 
@@ -105,10 +121,19 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun onLoginSuccess() {
+    fun onLoginSuccess(isNewUser: Boolean) {
         setLoginCompletedUseCase(true)
-        _loginStatus.postValue(R.string.please_wait_text)
-        _launchSetupProfileScreen.postValue(Event(Unit))
+        _loginStatus.postValue(R.string.login_complete)
+
+        // Launch setup profile screen if new user.
+        if (isNewUser) {
+            _launchSetupProfileScreen.postValue(Event(Unit))
+            return
+        }
+
+        // If existing user.
+        setFirstTimeProfileSetupCompletedUseCase(true)
+        _launchMainScreen.postValue(Event(Unit))
     }
 
     fun onLoginFail() {

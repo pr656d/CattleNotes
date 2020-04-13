@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.ui.login
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -7,7 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
+import com.firebase.ui.auth.IdpResponse
+import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ActivityLoginBinding
 import com.pr656d.cattlenotes.ui.MainActivity
@@ -62,8 +66,7 @@ class LoginActivity : DaggerAppCompatActivity() {
         model.theme.observe(this, Observer(::updateForTheme))
 
         model.launchSetupProfileScreen.observe(this, EventObserver {
-            if (navController.currentDestination?.id != R.id.setupProfileScreen)
-                navController.navigate(toSetupProfile())
+            navigateTo(toSetupProfile())
         })
 
         model.launchLoginScreen.observe(this, EventObserver {
@@ -89,6 +92,35 @@ class LoginActivity : DaggerAppCompatActivity() {
             return // No need to navigate, already on the screen.
         }
         navController.navigate(navId)
+    }
+
+    private fun navigateTo(navDirections: NavDirections) {
+        if (navDirections.actionId == currentNavId) {
+            return // No need to navigate, already on the screen.
+        }
+        navController.navigate(navDirections)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            LoginFragment.CODE_SIGN_IN -> {
+                val response = IdpResponse.fromResultIntent(data)
+                if (resultCode == Activity.RESULT_OK) {
+                    model.onLoginSuccess(response?.isNewUser ?: false)
+                } else {
+                    response?.error?.message?.let {
+                        showMessage(it)
+                    }
+                    model.onLoginFail()
+                }
+            }
+        }
+    }
+
+    private fun showMessage(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onBackPressed() {
