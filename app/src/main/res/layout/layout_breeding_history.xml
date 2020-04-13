@@ -542,6 +542,18 @@
                     app:goneUnless="@{ behaviour.calvingDoneOnVisibility }"
                     tools:visibility="gone" />
 
+                <TextView
+                    android:id="@+id/textViewBreedingCompleted"
+                    style="@style/Widget.CattleNOTES.BreedingTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:text="@string/breeding_cycle_complete"
+                    app:goneUnless="@{ breeding.breedingCompleted }"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textViewCalvingDoneOnTitle" />
+
                 <ImageView
                     android:id="@+id/expand_icon"
                     android:layout_width="wrap_content"
@@ -579,6 +591,7 @@
                     android:onClick="@{ () -> listener.editBreeding(breeding) }"
                     android:text="@string/edit"
                     android:textAlignment="textStart"
+                    app:goneUnless="@{ !breeding.breedingCompleted }"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
