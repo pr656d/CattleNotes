@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.pr656d.shared.data.db.AppDatabaseDao
-import com.pr656d.shared.data.db.updater.DbUpdater
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.user.info.FirebaseUserInfo
 import com.pr656d.shared.data.user.info.UserInfoBasic
@@ -17,7 +16,6 @@ import javax.inject.Inject
 class FirebaseAuthStateUserDataSource @Inject constructor(
     private val firebase: FirebaseAuth,
     appDatabaseDao: AppDatabaseDao,
-    dbUpdater: DbUpdater,
     tokenUpdater: FcmTokenUpdater,
     preferenceStorage: PreferenceStorage
 ) : AuthStateUserDataSource {
@@ -53,10 +51,9 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
 
         // Log out
         if (auth.currentUser == null) {
-            dbUpdater.stop()
             DefaultScheduler.execute {
                 preferenceStorage.clear()
-                appDatabaseDao.clearDatabase()
+                appDatabaseDao.clear()
             }
             // notificationAlarmUpdater.cancelAll()
         }
@@ -64,7 +61,6 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
         // Log in
         auth.currentUser?.let {
             if (lastUid != auth.uid) { // Prevent duplicates
-                dbUpdater.initialize()
                 // notificationAlarmUpdater.updateAll(it.uid)
             }
         }

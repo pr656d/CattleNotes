@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.profile.ProfileDelegate
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate
+import com.pr656d.shared.domain.data.LoadDataUseCase
+import com.pr656d.shared.domain.invoke
 import com.pr656d.shared.domain.login.GetFirstTimeProfileSetupCompletedUseCase
 import com.pr656d.shared.domain.login.SetFirstTimeProfileSetupCompletedUseCase
 import com.pr656d.shared.domain.login.SetLoginCompletedUseCase
@@ -22,7 +24,8 @@ class LoginViewModel @Inject constructor(
     getFirstTimeProfileSetupCompletedUseCase: GetFirstTimeProfileSetupCompletedUseCase,
     private val setFirstTimeProfileSetupCompletedUseCase: SetFirstTimeProfileSetupCompletedUseCase,
     private val networkHelper: NetworkHelper,
-    private val setLoginCompletedUseCase: SetLoginCompletedUseCase
+    private val setLoginCompletedUseCase: SetLoginCompletedUseCase,
+    private val loadDataUseCase: LoadDataUseCase
 ) : ViewModel(),
     ProfileDelegate by profileDelegate,
     ThemedActivityDelegate by themedActivityDelegate {
@@ -124,6 +127,9 @@ class LoginViewModel @Inject constructor(
     fun onLoginSuccess(isNewUser: Boolean) {
         setLoginCompletedUseCase(true)
         _loginStatus.postValue(R.string.login_complete)
+
+        // Start fetching data available on cloud.
+        loadDataUseCase.invoke()
 
         // Launch setup profile screen if new user.
         if (isNewUser) {

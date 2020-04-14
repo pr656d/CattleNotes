@@ -3,7 +3,6 @@ package com.pr656d.cattlenotes.di
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pr656d.shared.data.db.AppDatabaseDao
-import com.pr656d.shared.data.db.updater.DbUpdater
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.login.datasources.AuthStateUserDataSource
 import com.pr656d.shared.data.login.datasources.FirebaseAuthStateUserDataSource
@@ -16,7 +15,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class SignInModule {
+class LogInModule {
 
     @Singleton
     @Provides
@@ -39,14 +38,12 @@ class SignInModule {
     fun provideAuthStateUserDataSource(
         firebase: FirebaseAuth,
         appDatabaseDao: AppDatabaseDao,
-        dbUpdater: DbUpdater,
         firestore: FirebaseFirestore,
         preferenceStorage: PreferenceStorage
     ): AuthStateUserDataSource {
         return FirebaseAuthStateUserDataSource(
             firebase,
             appDatabaseDao,
-            dbUpdater,
             FcmTokenUpdater(firestore),
             preferenceStorage
         )
@@ -57,8 +54,6 @@ class SignInModule {
     fun provideObserveFirestoreUserInfoDataSource(
         firestore: FirebaseFirestore
     ): ObserveFirestoreUserInfoDataSource {
-        return ObserveFirestoreUserInfoDataSourceImpl(
-            firestore
-        )
+        return ObserveFirestoreUserInfoDataSourceImpl(firestore)
     }
 }

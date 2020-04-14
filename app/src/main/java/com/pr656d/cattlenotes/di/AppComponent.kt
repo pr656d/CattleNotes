@@ -26,7 +26,7 @@ import javax.inject.Singleton
         ActivityBindingModule::class,
         AppModule::class,
         SharedModule::class,
-        SignInModule::class,
+        LogInModule::class,
         ThemedActivityDelegateModule::class,
         ProfileDelegateModule::class
     ]

@@ -9,10 +9,12 @@ import javax.inject.Singleton
 
 /**
  * Single point of access for [Cattle] data for the presentation layer.
+ *
+ * Info: Data will be loaded by data source. CRUD operations will be done on
+ * Local DB as well as at data source to optimise operation count.
  */
 interface CattleRepository {
-    /** @param [saveToLocal] use when this function is called by data source */
-    fun addCattle(cattle: Cattle, saveToLocal: Boolean = false)
+    fun addCattle(cattle: Cattle)
 
     fun getAllCattle(): LiveData<List<Cattle>>
 
@@ -20,11 +22,9 @@ interface CattleRepository {
 
     fun getCattleByTagNumber(tagNumber: Long): LiveData<Cattle?>
 
-    /** @param [saveToLocal] use when this function is called by data source */
-    fun deleteCattle(cattle: Cattle, saveToLocal: Boolean = false)
+    fun deleteCattle(cattle: Cattle)
 
-    /** @param [saveToLocal] use when this function is called by data source */
-    fun updateCattle(cattle: Cattle, saveToLocal: Boolean = false)
+    fun updateCattle(cattle: Cattle)
 
     /** Returns cattle with matching tag number exist or not */
     fun isCattleExistByTagNumber(tagNumber: Long): Boolean
@@ -36,11 +36,12 @@ open class CattleDataRepository @Inject constructor(
     private val cattleDataSource: CattleDataSource
 ) : CattleRepository {
 
-    override fun addCattle(cattle: Cattle, saveToLocal: Boolean) {
-        if (saveToLocal)
-            appDatabase.cattleDao().insert(cattle)
-        else
-            cattleDataSource.addCattle(cattle)
+    /**
+     * Add cattle at Local DB and at data source also. To optimise CRUD operations count.
+     */
+    override fun addCattle(cattle: Cattle) {
+        appDatabase.cattleDao().insert(cattle)
+        cattleDataSource.addCattle(cattle)
     }
 
     override fun getAllCattle(): LiveData<List<Cattle>> {
@@ -55,18 +56,20 @@ open class CattleDataRepository @Inject constructor(
         return appDatabase.cattleDao().getByTagNumber(tagNumber)
     }
 
-    override fun deleteCattle(cattle: Cattle, saveToLocal: Boolean) {
-        if (saveToLocal)
-            appDatabase.cattleDao().delete(cattle)
-        else
-            cattleDataSource.deleteCattle(cattle)
+    /**
+     * Delete cattle at Local DB and at data source also. To optimise CRUD operations count.
+     */
+    override fun deleteCattle(cattle: Cattle) {
+        appDatabase.cattleDao().delete(cattle)
+        cattleDataSource.deleteCattle(cattle)
     }
 
-    override fun updateCattle(cattle: Cattle, saveToLocal: Boolean) {
-        if (saveToLocal)
-            appDatabase.cattleDao().update(cattle)
-        else
-            cattleDataSource.updateCattle(cattle)
+    /**
+     * Update cattle at Local DB and at data source also. To optimise CRUD operations count.
+     */
+    override fun updateCattle(cattle: Cattle) {
+        appDatabase.cattleDao().update(cattle)
+        cattleDataSource.updateCattle(cattle)
     }
 
     override fun isCattleExistByTagNumber(tagNumber: Long): Boolean {

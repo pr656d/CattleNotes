@@ -9,5 +9,5 @@ interface AppDatabaseDao {
     /**
      * Clear all the table entries from the database.
      */
-    fun clearDatabase()
+    fun clear()
 }

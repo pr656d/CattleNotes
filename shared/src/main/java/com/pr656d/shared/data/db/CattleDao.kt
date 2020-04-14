@@ -13,6 +13,9 @@ interface CattleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(cattle: Cattle)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(cattle: List<Cattle>): List<Long>
+
     /**
      * Internally Room will handle it on background thread.
      * If any change happens observer will be called by Room.

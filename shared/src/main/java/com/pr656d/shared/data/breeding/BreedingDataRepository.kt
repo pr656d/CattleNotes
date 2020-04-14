@@ -10,10 +10,12 @@ import javax.inject.Singleton
 
 /**
  * Single point of access for [Breeding] data for the presentation layer.
+ *
+ * Info: Data will be loaded by data source. CRUD operations will be done on
+ * Local DB as well as at data source to optimise operation count.
  */
 interface BreedingRepository {
-    /** @param [saveToLocal] use when this function is called by data source */
-    fun addBreeding(breeding: Breeding, saveToLocal: Boolean = false)
+    fun addBreeding(breeding: Breeding)
 
     fun getAllBreeding(): LiveData<List<Breeding>>
 
@@ -21,11 +23,9 @@ interface BreedingRepository {
 
     fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>>
 
-    /** @param [saveToLocal] use when this function is called by data source */
-    fun deleteBreeding(breeding: Breeding, saveToLocal: Boolean = false)
+    fun deleteBreeding(breeding: Breeding)
 
-    /** @param [saveToLocal] use when this function is called by data source */
-    fun updateBreeding(breeding: Breeding, saveToLocal: Boolean = false)
+    fun updateBreeding(breeding: Breeding)
 }
 
 @Singleton
@@ -33,11 +33,13 @@ open class BreedingDataRepository @Inject constructor(
     private val appDatabase: AppDatabase,
     private val breedingDataSource: BreedingDataSource
 ) : BreedingRepository {
-    override fun addBreeding(breeding: Breeding, saveToLocal: Boolean) {
-        if (saveToLocal)
-            appDatabase.breedingDao().insert(breeding)
-        else
-            breedingDataSource.addBreeding(breeding)
+
+    /**
+     * Add breeding at Local DB and at data source also. To optimise CRUD operations count.
+     */
+    override fun addBreeding(breeding: Breeding) {
+        appDatabase.breedingDao().insert(breeding)
+        breedingDataSource.addBreeding(breeding)
     }
 
     override fun getAllBreeding(): LiveData<List<Breeding>> {
@@ -52,17 +54,19 @@ open class BreedingDataRepository @Inject constructor(
         return appDatabase.breedingDao().getAllByCattleId(cattleId)
     }
 
-    override fun deleteBreeding(breeding: Breeding, saveToLocal: Boolean) {
-        if (saveToLocal)
-            appDatabase.breedingDao().delete(breeding)
-        else
-            breedingDataSource.deleteBreeding(breeding)
+    /**
+     * Delete breeding at Local DB and at data source also. To optimise CRUD operations count.
+     */
+    override fun deleteBreeding(breeding: Breeding) {
+        appDatabase.breedingDao().delete(breeding)
+        breedingDataSource.deleteBreeding(breeding)
     }
 
-    override fun updateBreeding(breeding: Breeding, saveToLocal: Boolean) {
-        if (saveToLocal)
-            appDatabase.breedingDao().update(breeding)
-        else
-            breedingDataSource.updateBreeding(breeding)
+    /**
+     * Update breeding at Local DB and at data source also. To optimise CRUD operations count.
+     */
+    override fun updateBreeding(breeding: Breeding) {
+        appDatabase.breedingDao().update(breeding)
+        breedingDataSource.updateBreeding(breeding)
     }
 }

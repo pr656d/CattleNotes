@@ -2,16 +2,12 @@ package com.pr656d.shared.di
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.pr656d.shared.data.breeding.BreedingRepository
-import com.pr656d.shared.data.breeding.BreedingUpdater
-import com.pr656d.shared.data.breeding.FirestoreBreedingUpdater
 import com.pr656d.shared.data.breeding.datasources.BreedingDataSource
 import com.pr656d.shared.data.breeding.datasources.FirestoreBreedingDataSource
-import com.pr656d.shared.data.cattle.CattleRepository
-import com.pr656d.shared.data.cattle.CattleUpdater
-import com.pr656d.shared.data.cattle.FirestoreCattleUpdater
 import com.pr656d.shared.data.cattle.datasources.CattleDataSource
 import com.pr656d.shared.data.cattle.datasources.FirestoreCattleDataSource
+import com.pr656d.shared.data.db.BreedingDao
+import com.pr656d.shared.data.db.CattleDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import dagger.Module
 import dagger.Provides
@@ -38,43 +34,19 @@ class SharedModule {
     @Provides
     fun provideCattleDataSource(
         authIdDataSource: AuthIdDataSource,
-        firestore: FirebaseFirestore
-    ): CattleDataSource {
-        return FirestoreCattleDataSource(authIdDataSource, firestore)
-    }
-
-    @Singleton
-    @Provides
-    fun provideCattleUpdater(
         firestore: FirebaseFirestore,
-        authIdDataSource: AuthIdDataSource,
-        cattleRepository: CattleRepository
-    ) : CattleUpdater {
-        return FirestoreCattleUpdater(
-            firestore, authIdDataSource, cattleRepository
-        )
+        cattleDao: CattleDao
+    ): CattleDataSource {
+        return FirestoreCattleDataSource(authIdDataSource, firestore, cattleDao)
     }
 
     @Singleton
     @Provides
     fun provideBreedingDataSource(
         authIdDataSource: AuthIdDataSource,
-        firestore: FirebaseFirestore
-    ) : BreedingDataSource {
-        return FirestoreBreedingDataSource(
-            authIdDataSource, firestore
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun provideBreedingUpdater(
         firestore: FirebaseFirestore,
-        authIdDataSource: AuthIdDataSource,
-        breedingRepository: BreedingRepository
-    ) : BreedingUpdater {
-        return FirestoreBreedingUpdater(
-            firestore, authIdDataSource, breedingRepository
-        )
+        breedingDao: BreedingDao
+    ) : BreedingDataSource {
+        return FirestoreBreedingDataSource(authIdDataSource, firestore, breedingDao)
     }
 }

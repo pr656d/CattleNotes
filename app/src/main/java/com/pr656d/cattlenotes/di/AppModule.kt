@@ -5,16 +5,16 @@ import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.shared.analytics.AnalyticsHelper
 import com.pr656d.shared.data.breeding.BreedingDataRepository
 import com.pr656d.shared.data.breeding.BreedingRepository
-import com.pr656d.shared.data.breeding.BreedingUpdater
 import com.pr656d.shared.data.breeding.datasources.BreedingDataSource
 import com.pr656d.shared.data.cattle.CattleDataRepository
 import com.pr656d.shared.data.cattle.CattleRepository
-import com.pr656d.shared.data.cattle.CattleUpdater
 import com.pr656d.shared.data.cattle.datasources.CattleDataSource
 import com.pr656d.shared.data.db.AppDatabase
 import com.pr656d.shared.data.db.AppDatabaseDao
-import com.pr656d.shared.data.db.updater.DatabaseUpdater
-import com.pr656d.shared.data.db.updater.DbUpdater
+import com.pr656d.shared.data.db.BreedingDao
+import com.pr656d.shared.data.db.CattleDao
+import com.pr656d.shared.data.db.updater.DatabaseLoader
+import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.prefs.SharedPreferenceStorage
 import com.pr656d.shared.utils.FirebaseAnalyticsHelper
@@ -52,9 +52,17 @@ class AppModule {
 
     @Singleton
     @Provides
+    fun provideCattleDao(appDatabase: AppDatabase): CattleDao = appDatabase.cattleDao()
+
+    @Singleton
+    @Provides
+    fun provideBreedingDao(appDatabase: AppDatabase): BreedingDao = appDatabase.breedingDao()
+
+    @Singleton
+    @Provides
     fun provideAppDatabaseDao(appDatabase: AppDatabase) : AppDatabaseDao {
         return object : AppDatabaseDao {
-            override fun clearDatabase() {
+            override fun clear() {
                 appDatabase.clearAllTables()
             }
         }
@@ -87,9 +95,9 @@ class AppModule {
     @Singleton
     @Provides
     fun provideDbUpdater(
-        cattleUpdater: CattleUpdater,
-        breedingUpdater: BreedingUpdater
-    ) : DbUpdater {
-        return DatabaseUpdater(cattleUpdater, breedingUpdater)
+        cattleDataSource: CattleDataSource,
+        breedingDataSource: BreedingDataSource
+    ) : DbLoader {
+        return DatabaseLoader(cattleDataSource, breedingDataSource)
     }
 }
