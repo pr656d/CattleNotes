@@ -15,7 +15,7 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class LogInModule {
+class LoginModule {
 
     @Singleton
     @Provides

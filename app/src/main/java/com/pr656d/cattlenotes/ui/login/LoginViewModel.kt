@@ -128,16 +128,15 @@ class LoginViewModel @Inject constructor(
         setLoginCompletedUseCase(true)
         _loginStatus.postValue(R.string.login_complete)
 
-        // Start fetching data available on cloud.
-        loadDataUseCase.invoke()
-
-        // Launch setup profile screen if new user.
+        // New user
         if (isNewUser) {
+            // Launch setup profile screen.
             _launchSetupProfileScreen.postValue(Event(Unit))
             return
         }
 
-        // If existing user.
+        // Existing user.
+        loadDataUseCase.invoke()    // Start fetching data.
         setFirstTimeProfileSetupCompletedUseCase(true)
         _launchMainScreen.postValue(Event(Unit))
     }
