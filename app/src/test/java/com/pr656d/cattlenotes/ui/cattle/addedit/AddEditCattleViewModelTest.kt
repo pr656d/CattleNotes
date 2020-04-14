@@ -37,18 +37,20 @@ class AddEditCattleViewModelTest {
     var syncTaskExecutorRule = SyncTaskExecutorRule()
 
     private val cattleRepository = object : FakeCattleRepository() {
-        override fun updateCattle(cattle: Cattle): Int {
-            return 1
-        }
-
-        override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+        override fun getAllCattle(): LiveData<List<Cattle>> {
             val result = MutableLiveData<List<Cattle>>()
             result.postValue(TestData.cattleList)
             return result
         }
 
-        override fun getCattleByTagNumber(tagNumber: Long): Cattle? {
-            return TestData.cattleList.firstOrNull { it.tagNumber == tagNumber }
+        override fun getCattleById(id: String): LiveData<Cattle?> {
+            return MutableLiveData<Cattle?>().apply {
+                value = TestData.cattleList.firstOrNull { it.id == id }
+            }
+        }
+
+        override fun isCattleExistByTagNumber(tagNumber: Long): Boolean {
+            return TestData.cattleList.find { it.tagNumber == tagNumber } != null
         }
     }
 
@@ -224,11 +226,13 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun tagNumberIsInValidCattleAlreadyExist_setTagNumberErrorMessage() {
+    fun tagNumberIsNotValidCattleAlreadyExist_setTagNumberErrorMessage() {
         val viewModel = createAddEditCattleViewModel()
 
+        val alreadyExistTagNumber = TestData.cattle1.tagNumber
+
         // Invalid tag number. This cattle already exist.
-        viewModel.tagNumber.postValue("1")
+        viewModel.tagNumber.postValue(alreadyExistTagNumber.toString())
 
         val tagNumberErrorMessage = LiveDataTestUtil.getValue(viewModel.tagNumberErrorMessage)
         assertNotEquals(VALID_FIELD, tagNumberErrorMessage)
@@ -356,7 +360,7 @@ class AddEditCattleViewModelTest {
         viewModel.parentSelected(parentCattle)
 
         val parent = LiveDataTestUtil.getValue(viewModel.parent)
-        assertThat(parentCattle.tagNumber.toString(), isEqualTo(parent))
+        assertThat(parentCattle.id, isEqualTo(parent))
     }
 
     @Test
@@ -443,7 +447,7 @@ class AddEditCattleViewModelTest {
     fun pickParentCalled_parentListIsEmpty() {
         val viewModel = createAddEditCattleViewModel(
             object : FakeCattleRepository() {
-                override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+                override fun getAllCattle(): LiveData<List<Cattle>> {
                     return MutableLiveData(emptyList())
                 }
             }
@@ -459,7 +463,7 @@ class AddEditCattleViewModelTest {
     fun parentListIsEmpty_isEmptyParentListIsTrue() {
         val viewModel = createAddEditCattleViewModel(
             object : FakeCattleRepository() {
-                override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+                override fun getAllCattle(): LiveData<List<Cattle>> {
                     return MutableLiveData(emptyList())
                 }
             }

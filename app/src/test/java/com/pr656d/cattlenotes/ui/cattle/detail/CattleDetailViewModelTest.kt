@@ -1,6 +1,9 @@
 package com.pr656d.cattlenotes.ui.cattle.detail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.pr656d.androidtest.util.LiveDataTestUtil
@@ -31,12 +34,16 @@ class CattleDetailViewModelTest {
     var syncTaskExecutorRule = SyncTaskExecutorRule()
 
     private val cattleRepository = object : FakeCattleRepository() {
-        override fun getCattleById(id: Long): Cattle? {
-            return TestData.cattleList.firstOrNull { it.id == id }
+        override fun getCattleById(id: String): LiveData<Cattle?> {
+            return MutableLiveData<Cattle?>().apply {
+                value = TestData.cattleList.firstOrNull { it.id == id }
+            }
         }
 
-        override fun getCattleByTagNumber(tagNumber: Long): Cattle? {
-            return TestData.cattleList.firstOrNull { it.tagNumber == tagNumber }
+        override fun getCattleByTagNumber(tagNumber: Long): LiveData<Cattle?> {
+            return MutableLiveData<Cattle?>().apply {
+                value = TestData.cattleList.firstOrNull { it.tagNumber == tagNumber }
+            }
         }
     }
 
@@ -78,7 +85,7 @@ class CattleDetailViewModelTest {
         val viewModel = createCattleDetailViewModel(cattleRepository)
 
         // Return cattle which will be modified later
-        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(oldCattle)
+        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(MutableLiveData(oldCattle))
 
         // First call for the method
         viewModel.fetchCattle(oldCattle)
@@ -98,7 +105,7 @@ class CattleDetailViewModelTest {
         ).apply { id = oldCattle.id }
 
         // Returns new updated cattle
-        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(newCattle)
+        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(MutableLiveData(newCattle))
 
         /**
          * Second call for the method
@@ -232,43 +239,21 @@ class CattleDetailViewModelTest {
         assertNotNull(showMessage?.getContentIfNotHandled())
     }
 
-    /**
-     * Use case that always returns an error when executed.
-     */
-    object FailingGetCattleUseCase : GetCattleByIdUseCase(cattleRepository = FakeCattleRepository()) {
-        override fun execute(parameters: Long): Cattle {
-            throw Exception("Error!")
-        }
-    }
-
     @Test
-    fun fetchCattleIsCalled_showMessageOnError() {
-        val viewModel = createCattleDetailViewModel(
-            getCattleByIdUseCase = FailingGetCattleUseCase
-        )
-
+    fun fetchCattleIsCalled_cattleNotFound_showMessageOnError() {
         val cattle = TestData.cattle1
+
+        val viewModel = createCattleDetailViewModel(
+            repository = mock {
+                on { getCattleById(cattle.id) }.doReturn(MutableLiveData<Cattle?>(null))
+            }
+        )
 
         // Fetch cattle first
         viewModel.fetchCattle(cattle)
 
         val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
         assertNotNull(showMessage?.getContentIfNotHandled())
-    }
-
-    @Test
-    fun fetchCattleIsCalled_navigateUpOnError() {
-        val viewModel = createCattleDetailViewModel(
-            getCattleByIdUseCase = FailingGetCattleUseCase
-        )
-
-        val cattle = TestData.cattle1
-
-        // Fetch cattle first
-        viewModel.fetchCattle(cattle)
-
-        val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
-        assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
     }
 
     @Test

@@ -11,8 +11,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * [AuthStateUserDataSource] provides general user information,
- * like user ID, Name, Farm name, dairy code, etc.
+ * A [MediatorUseCase] that observes two data sources to generate an [UserInfoDetailed]
+ * that includes general user information, like user ID, Name, Farm name, dairy code, etc.
  */
 @Singleton
 open class ObserveUserAuthStateUseCase @Inject constructor(

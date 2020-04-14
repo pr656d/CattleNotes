@@ -1,16 +1,19 @@
 package com.pr656d.cattlenotes.ui
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.google.firebase.auth.FirebaseUser
+import com.nhaarman.mockito_kotlin.doReturn
+import com.nhaarman.mockito_kotlin.mock
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
+import com.pr656d.cattlenotes.test.util.fakes.FakeObserveUserAuthStateUseCase
 import com.pr656d.cattlenotes.test.util.fakes.FakeThemedActivityDelegate
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate
+import com.pr656d.shared.domain.auth.ObserveUserAuthStateUseCase
+import com.pr656d.shared.domain.result.Result
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThat
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito.mock
 import org.hamcrest.Matchers.equalTo as isEqualTo
 
 /**
@@ -27,35 +30,37 @@ class MainViewModelTest {
     var syncTaskExecutorRule = SyncTaskExecutorRule()
 
     private fun createMainViewModel(
-        firebaseUser: FirebaseUser?,
-        themedActivityDelegate: ThemedActivityDelegate = FakeThemedActivityDelegate()
+        themedActivityDelegate: ThemedActivityDelegate = FakeThemedActivityDelegate(),
+        observeUserAuthStateUseCase: ObserveUserAuthStateUseCase
     ): MainViewModel {
-        return MainViewModel(
-            firebaseUser = firebaseUser,
-            themedActivityDelegate = themedActivityDelegate
-        )
+        return MainViewModel(themedActivityDelegate, observeUserAuthStateUseCase)
     }
 
     @Test
-    fun firebaseUserIsNull_redirectToLoginActivity() {
-        // If we get firebaseUser as null
-        val firebaseUser: FirebaseUser? = null
-        // Given that firebase user is *null*.
-        val viewModel = createMainViewModel(firebaseUser)
+    fun userNotSignedIn_redirectToLoginActivity() {
+        // Given that is not signed in.
+        val viewModel = createMainViewModel(
+            observeUserAuthStateUseCase = FakeObserveUserAuthStateUseCase(
+                Result.Success(mock { on { isSignedIn() }.doReturn(false) }),
+                Result.Success(mock {})
+            )
+        )
 
         val redirectToLoginActivity = LiveDataTestUtil.getValue(viewModel.redirectToLoginScreen)
-
         assertThat(Unit, isEqualTo(redirectToLoginActivity?.getContentIfNotHandled()))
     }
 
     @Test
-    fun firebaseUserIsNotNull_stayOnMainActivity() {
-        val firebaseUser: FirebaseUser = mock(FirebaseUser::class.java)
-        // Given that firebase user is *null*.
-        val viewModel = createMainViewModel(firebaseUser)
+    fun firebaseUserIsSignedIn_stayOnMainActivity() {
+        // Given that firebase user is signed in.
+        val viewModel = createMainViewModel(
+            observeUserAuthStateUseCase = FakeObserveUserAuthStateUseCase(
+                Result.Success(mock { on { isSignedIn() }.doReturn(true) }),
+                Result.Success(mock {})
+            )
+        )
 
         val redirectToLoginActivity = LiveDataTestUtil.getValue(viewModel.redirectToLoginScreen)
         assertNull(redirectToLoginActivity?.getContentIfNotHandled())
     }
-
 }

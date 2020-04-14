@@ -1,6 +1,8 @@
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeBreedingRepository
@@ -33,20 +35,18 @@ class AddEditBreedingViewModelTest {
     private fun getBreedingBehaviour(): BreedingBehaviour =
         BreedingBehaviourImpl(BreedingUiImplDelegate() as BreedingUiDelegate)
 
-    private val breedingRepository: FakeBreedingRepository = object : FakeBreedingRepository() {
-
-    }
-
     private val cattleRepository = object : FakeCattleRepository() {
-        override fun getCattleById(id: Long): Cattle? {
-            return TestData.cattleList.firstOrNull { it.id == id }
+        override fun getCattleById(id: String): LiveData<Cattle?> {
+            return MutableLiveData<Cattle?>().apply {
+                value = TestData.cattleList.firstOrNull { it.id == id }
+            }
         }
     }
 
     private fun createAddEditBreedingViewModel(
         breedingBehaviour: BreedingBehaviour = getBreedingBehaviour(),
-        addBreedingUseCase: AddBreedingUseCase = AddBreedingUseCase(breedingRepository),
-        updateBreedingUseCase: UpdateBreedingUseCase = UpdateBreedingUseCase(breedingRepository),
+        addBreedingUseCase: AddBreedingUseCase = AddBreedingUseCase(FakeBreedingRepository()),
+        updateBreedingUseCase: UpdateBreedingUseCase = UpdateBreedingUseCase(FakeBreedingRepository()),
         getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(cattleRepository)
     ): AddEditBreedingViewModel {
         return AddEditBreedingViewModel(
@@ -63,7 +63,16 @@ class AddEditBreedingViewModelTest {
             pregnancyCheckStatus.value = null
             dryOffStatus.value = null
             calvingStatus.value = null
+
+            observeUnobserved()
         }
+    }
+
+    private fun AddEditBreedingViewModel.observeUnobserved() {
+        repeatHeatExpectedOn.observeForever {}
+        pregnancyCheckExpectedOn.observeForever {}
+        dryOffExpectedOn.observeForever {}
+        calvingExpectedOn.observeForever {}
     }
 
     @Test
@@ -72,6 +81,9 @@ class AddEditBreedingViewModelTest {
 
         val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
         assertFalse(hasAiDate)
+
+        // Call save
+        viewModel.save()
     }
 
     @Test
@@ -83,6 +95,9 @@ class AddEditBreedingViewModelTest {
 
         val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
         assertTrue(hasAiDate)
+
+        // Call save
+        viewModel.save()
     }
 
     @Test
@@ -226,50 +241,50 @@ class AddEditBreedingViewModelTest {
 
         // AI
         val aiDate = LiveDataTestUtil.getValue(viewModel.aiDate)
-        assertThat(actualOldBreedingCycle.artificialInsemination?.date, isEqualTo(aiDate))
+        assertThat(actualOldBreedingCycle.artificialInsemination.date, isEqualTo(aiDate))
 
         // Repeat Heat
         val repeatHeatExpectedOn = LiveDataTestUtil.getValue(viewModel.repeatHeatExpectedOn)
-        assertThat(actualOldBreedingCycle.repeatHeat?.expectedOn, isEqualTo(repeatHeatExpectedOn))
+        assertThat(actualOldBreedingCycle.repeatHeat.expectedOn, isEqualTo(repeatHeatExpectedOn))
 
         val repeatHeatStatus = LiveDataTestUtil.getValue(viewModel.repeatHeatStatus)
-        assertThat(actualOldBreedingCycle.repeatHeat?.status, isEqualTo(repeatHeatStatus))
+        assertThat(actualOldBreedingCycle.repeatHeat.status, isEqualTo(repeatHeatStatus))
 
         val repeatHeatDoneOn = LiveDataTestUtil.getValue(viewModel.repeatHeatDoneOn)
-        assertThat(actualOldBreedingCycle.repeatHeat?.doneOn, isEqualTo(repeatHeatDoneOn))
+        assertThat(actualOldBreedingCycle.repeatHeat.doneOn, isEqualTo(repeatHeatDoneOn))
 
         // Pregnancy check
         val pregnancyCheckExpectedOn = LiveDataTestUtil.getValue(viewModel.pregnancyCheckExpectedOn)
         assertThat(
-            actualOldBreedingCycle.pregnancyCheck?.expectedOn,
+            actualOldBreedingCycle.pregnancyCheck.expectedOn,
             isEqualTo(pregnancyCheckExpectedOn)
         )
 
         val pregnancyCheckStatus = LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatus)
-        assertThat(actualOldBreedingCycle.pregnancyCheck?.status, isEqualTo(pregnancyCheckStatus))
+        assertThat(actualOldBreedingCycle.pregnancyCheck.status, isEqualTo(pregnancyCheckStatus))
 
         val pregnancyCheckDoneOn = LiveDataTestUtil.getValue(viewModel.pregnancyCheckDoneOn)
-        assertThat(actualOldBreedingCycle.pregnancyCheck?.doneOn, isEqualTo(pregnancyCheckDoneOn))
+        assertThat(actualOldBreedingCycle.pregnancyCheck.doneOn, isEqualTo(pregnancyCheckDoneOn))
 
         // Dry off
         val dryOffExpectedOn = LiveDataTestUtil.getValue(viewModel.dryOffExpectedOn)
-        assertThat(actualOldBreedingCycle.dryOff?.expectedOn, isEqualTo(dryOffExpectedOn))
+        assertThat(actualOldBreedingCycle.dryOff.expectedOn, isEqualTo(dryOffExpectedOn))
 
         val dryOffStatus = LiveDataTestUtil.getValue(viewModel.dryOffStatus)
-        assertThat(actualOldBreedingCycle.dryOff?.status, isEqualTo(dryOffStatus))
+        assertThat(actualOldBreedingCycle.dryOff.status, isEqualTo(dryOffStatus))
 
         val dryOffDoneOn = LiveDataTestUtil.getValue(viewModel.dryOffDoneOn)
-        assertThat(actualOldBreedingCycle.dryOff?.doneOn, isEqualTo(dryOffDoneOn))
+        assertThat(actualOldBreedingCycle.dryOff.doneOn, isEqualTo(dryOffDoneOn))
 
         // Calving
         val calvingExpectedOn = LiveDataTestUtil.getValue(viewModel.calvingExpectedOn)
-        assertThat(actualOldBreedingCycle.calving?.expectedOn, isEqualTo(calvingExpectedOn))
+        assertThat(actualOldBreedingCycle.calving.expectedOn, isEqualTo(calvingExpectedOn))
 
         val calvingStatus = LiveDataTestUtil.getValue(viewModel.calvingStatus)
-        assertThat(actualOldBreedingCycle.calving?.status, isEqualTo(calvingStatus))
+        assertThat(actualOldBreedingCycle.calving.status, isEqualTo(calvingStatus))
 
         val calvingDoneOn = LiveDataTestUtil.getValue(viewModel.calvingDoneOn)
-        assertThat(actualOldBreedingCycle.calving?.doneOn, isEqualTo(calvingDoneOn))
+        assertThat(actualOldBreedingCycle.calving.doneOn, isEqualTo(calvingDoneOn))
     }
 
     /**
@@ -702,6 +717,122 @@ class AddEditBreedingViewModelTest {
         val calvingDateActualVisibility =
             LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
         assertFalse(calvingDateActualVisibility)
+    }
+
+    /**
+     *  When repeat heat status is positive and save called, show breeding completed dialog.
+     */
+    @Test
+    fun saveCalledAndRepeatHeatStatusPositive_showBreedingCompletedDialog() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set cattle
+        viewModel.setCattle(TestData.cattle1)
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Make sure we have aiDate.
+        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+        assertTrue(hasAiDate)
+
+        // Set repeat heat status positive
+        viewModel.repeatHeatStatus.value = true
+
+        // Call save
+        viewModel.save()
+
+        val showBreedingCompletedDialog = LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
+        assertThat(Unit, isEqualTo(showBreedingCompletedDialog?.getContentIfNotHandled()))
+    }
+
+    /**
+     *  When repeat heat status is negative, pregnancy check status is negative
+     *  and save called, show breeding completed dialog.
+     */
+    @Test
+    fun saveCalledAndPregnancyCheckStatusNegative_showBreedingCompletedDialog() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set cattle
+        viewModel.setCattle(TestData.cattle1)
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Make sure we have aiDate.
+        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+        assertTrue(hasAiDate)
+
+        // Set repeat heat status positive
+        viewModel.repeatHeatStatus.value = false
+
+        // Set pregnancy check status negative
+        viewModel.pregnancyCheckStatus.value = false
+
+        // Call save
+        viewModel.save()
+
+        val showBreedingCompletedDialog = LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
+        assertThat(Unit, isEqualTo(showBreedingCompletedDialog?.getContentIfNotHandled()))
+    }
+
+    /**
+     *  When repeat heat status is negative, pregnancy check status is positive, calving status is positive
+     *  and save called, show breeding completed dialog.
+     */
+    @Test
+    fun saveCalledAndCalvingStatusPositive_showBreedingCompletedDialog() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set cattle
+        viewModel.setCattle(TestData.cattle1)
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Make sure we have aiDate.
+        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+        assertTrue(hasAiDate)
+
+        // Set repeat heat status positive
+        viewModel.repeatHeatStatus.value = false
+
+        // Set pregnancy check status negative
+        viewModel.pregnancyCheckStatus.value = true
+
+        // Set calving check status positive
+        viewModel.calvingStatus.value = true
+
+        // Call save
+        viewModel.save()
+
+        val showBreedingCompletedDialog = LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
+        assertThat(Unit, isEqualTo(showBreedingCompletedDialog?.getContentIfNotHandled()))
+    }
+
+    @Test
+    fun saveCalledAndBreedingCompletedConfirmationIsTrue_navigateUpOnSuccess() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set cattle
+        viewModel.setCattle(TestData.cattle1)
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Set repeat heat status positive
+        viewModel.repeatHeatStatus.value = true
+
+        // Make sure we have aiDate.
+        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+        assertTrue(hasAiDate)
+
+        // Call save with breeding confirmation is true
+        viewModel.save(breedingCompletedConfirmation = true)
+
+        val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
+        assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
     }
 
     /**
@@ -2114,7 +2245,6 @@ class AddEditBreedingViewModelTest {
 
         // Set dry off status as None
         viewModel.dryOffStatus.value = null
-
 
         val resetDryOffDateActual =
             LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!

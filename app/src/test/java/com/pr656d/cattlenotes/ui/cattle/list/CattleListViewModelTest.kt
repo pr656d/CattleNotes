@@ -31,7 +31,7 @@ class CattleListViewModelTest {
     @Test
     fun cattleListIsLoaded() {
         val fakeCattleRepository = object : FakeCattleRepository() {
-            override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+            override fun getAllCattle(): LiveData<List<Cattle>> {
                 val result = MutableLiveData<List<Cattle>>()
                 result.postValue(TestData.cattleList)
                 return result
@@ -49,7 +49,7 @@ class CattleListViewModelTest {
     @Test
     fun openCattleIsCalled_launchCattleDetail() {
         val fakeCattleRepository = object : FakeCattleRepository() {
-            override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+            override fun getAllCattle(): LiveData<List<Cattle>> {
                 val result = MutableLiveData<List<Cattle>>()
                 result.postValue(TestData.cattleList)
                 return result
@@ -88,8 +88,8 @@ class CattleListViewModelTest {
     @Test
     fun cattleListIsEmpty_isEmptyShouldBeTrue() {
         val fakeCattleRepository = object : FakeCattleRepository() {
-            override fun getObservableAllCattle(): LiveData<List<Cattle>> {
-                return MutableLiveData<List<Cattle>>(emptyList())
+            override fun getAllCattle(): LiveData<List<Cattle>> {
+                return MutableLiveData(emptyList())
             }
         }
 
@@ -104,7 +104,7 @@ class CattleListViewModelTest {
     @Test
     fun cattleListIsAvailable_isEmptyShouldBeFalse() {
         val fakeCattleRepository = object : FakeCattleRepository() {
-            override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+            override fun getAllCattle(): LiveData<List<Cattle>> {
                 val result = MutableLiveData<List<Cattle>>()
                 result.postValue(TestData.cattleList)
                 return result

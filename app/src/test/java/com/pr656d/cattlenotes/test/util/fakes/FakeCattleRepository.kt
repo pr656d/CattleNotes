@@ -22,27 +22,27 @@ open class FakeCattleRepository(
         fakeAppDatabase.cattleDao().insert(cattle)
     }
 
-    override fun addAllCattle(cattleList: List<Cattle>) {
-        fakeAppDatabase.cattleDao().insertAll(cattleList)
-    }
-
-    override fun getObservableAllCattle(): LiveData<List<Cattle>> {
+    override fun getAllCattle(): LiveData<List<Cattle>> {
         return fakeAppDatabase.cattleDao().getAll()
     }
 
-    override fun getCattleById(id: Long): Cattle? {
+    override fun getCattleById(id: String): LiveData<Cattle?> {
         return fakeAppDatabase.cattleDao().getById(id)
     }
 
-    override fun getCattleByTagNumber(tagNumber: Long): Cattle? {
+    override fun getCattleByTagNumber(tagNumber: Long): LiveData<Cattle?> {
         return fakeAppDatabase.cattleDao().getByTagNumber(tagNumber)
     }
 
     override fun deleteCattle(cattle: Cattle) {
-        fakeAppDatabase.cattleDao().delete(cattle)
+        return fakeAppDatabase.cattleDao().delete(cattle)
     }
 
-    override fun updateCattle(cattle: Cattle): Int {
+    override fun updateCattle(cattle: Cattle) {
         return fakeAppDatabase.cattleDao().update(cattle)
+    }
+
+    override fun isCattleExistByTagNumber(tagNumber: Long): Boolean {
+        return fakeAppDatabase.cattleDao().getRowCountWithMatchingTagNumber(tagNumber) > 0
     }
 }
