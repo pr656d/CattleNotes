@@ -61,6 +61,7 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
         // Log in
         auth.currentUser?.let {
             if (lastUid != auth.uid) { // Prevent duplicates
+                Timber.d("Something")
                 // notificationAlarmUpdater.updateAll(it.uid)
             }
         }

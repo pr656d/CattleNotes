@@ -96,8 +96,9 @@ class AppModule {
     @Provides
     fun provideDbUpdater(
         cattleDataSource: CattleDataSource,
-        breedingDataSource: BreedingDataSource
+        breedingDataSource: BreedingDataSource,
+        context: Context
     ) : DbLoader {
-        return DatabaseLoader(cattleDataSource, breedingDataSource)
+        return DatabaseLoader(cattleDataSource, breedingDataSource, context)
     }
 }
