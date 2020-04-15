@@ -1,5 +1,6 @@
 package com.pr656d.shared.data.cattle.datasources
 
+import androidx.annotation.MainThread
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -102,6 +103,10 @@ class FirestoreCattleDataSource @Inject constructor(
                 .collection(CATTLE_COLLECTION)
                 .document(cattle.id)
                 .delete()
+                .addOnSuccessListener {
+                    Timber.d("Cattle : ${cattle.id} deleted successfully")
+                    deleteBreedingOfCattle(cattle)
+                }
                 .addOnFailureListener {
                     Timber.d("deleteCattle() failed : ${it.localizedMessage}")
                 }
@@ -121,6 +126,37 @@ class FirestoreCattleDataSource @Inject constructor(
                     Timber.d("updateCattle() failed : ${it.localizedMessage}")
                 }
         }
+    }
+
+    @MainThread
+    private fun deleteBreedingOfCattle(cattle: Cattle) {
+        /**
+         * There is not straight forward way to delete collection documents with where query.
+         *
+         * https://stackoverflow.com/a/50457901/8146210
+         */
+        firestore
+            .collection(USERS_COLLECTION)
+            .document(userId)
+            .collection(BREEDING_COLLECTION)
+            .whereEqualTo(KEY_BREEDING_CATTLE_ID, cattle.id)
+            .get()
+            .addOnSuccessListener { result ->
+                Timber.d("Deleting breeding data for cattle : ${cattle.id}")
+
+                val writeBatch = firestore.batch()
+
+                result.forEach { writeBatch.delete(it.reference) }
+
+                writeBatch
+                    .commit()
+                    .addOnSuccessListener {
+                        Timber.d("Deleted breeding data for cattle : ${cattle.id}")
+                    }
+                    .addOnFailureListener {
+                        Timber.e("Failed to delete breeding data for cattle : ${cattle.id}")
+                    }
+            }
     }
 
     private fun getCattle(doc: DocumentSnapshot): Cattle {
@@ -162,6 +198,8 @@ class FirestoreCattleDataSource @Inject constructor(
     companion object {
         private const val USERS_COLLECTION = "users"
         private const val CATTLE_COLLECTION = "cattleList"
+        private const val BREEDING_COLLECTION = "breedingList"
+        private const val KEY_BREEDING_CATTLE_ID = "cattleId"
         private const val KEY_TAG_NUMBER = "tagNumber"
         private const val KEY_NAME = "name"
         private const val KEY_IMAGE_URL = "imageUrl"

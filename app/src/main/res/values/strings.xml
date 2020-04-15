@@ -121,7 +121,8 @@
     <string name="edit_cattle_details">Edit cattle details</string>
     <string name="menu_item_edit">Edit</string>
     <string name="menu_item_delete">Delete</string>
-    <string name="delete_cattle">Delete cattle?</string>
+    <string name="delete_cattle_title">Delete cattle?</string>
+    <string name="delete_cattle_message">Deleting this cattle will also delete breeding data associated with this cattle. This operation can not be undone.</string>
 
     <!-- Breeding  -->
     <string name="mark_as_active">Mark as active</string>

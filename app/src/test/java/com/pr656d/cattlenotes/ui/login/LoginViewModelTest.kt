@@ -6,30 +6,23 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeObserveUserAuthStateUseCase
+import com.pr656d.cattlenotes.test.util.fakes.FakeProfileDelegate
 import com.pr656d.cattlenotes.test.util.fakes.FakeThemedActivityDelegate
 import com.pr656d.cattlenotes.test.util.fakes.FakeUserInfoRepository
-import com.pr656d.cattlenotes.ui.profile.ProfileDelegate
-import com.pr656d.cattlenotes.ui.profile.ProfileDelegateImp
 import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.data.prefs.PreferenceStorage
-import com.pr656d.shared.data.user.info.FirestoreUserInfo
-import com.pr656d.shared.data.user.info.UserInfoBasic
-import com.pr656d.shared.data.user.info.UserInfoDetailed
 import com.pr656d.shared.data.user.repository.UserInfoRepository
 import com.pr656d.shared.domain.data.LoadDataUseCase
 import com.pr656d.shared.domain.login.GetFirstTimeProfileSetupCompletedUseCase
 import com.pr656d.shared.domain.login.SetFirstTimeProfileSetupCompletedUseCase
 import com.pr656d.shared.domain.login.SetLoginCompletedUseCase
 import com.pr656d.shared.domain.result.Result
-import com.pr656d.shared.domain.user.info.UpdateUserInfoDetailedUseCase
 import com.pr656d.shared.utils.NetworkHelper
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
-import java.util.*
 import org.hamcrest.Matchers.equalTo as isEqualTo
 
 /**
@@ -45,64 +38,24 @@ class LoginViewModelTest {
     @get:Rule
     var syncTaskExecutorRule = SyncTaskExecutorRule()
 
-    private val mockUserInfoDetailed: UserInfoDetailed = mock {
-        on { isSignedIn() }.doReturn(true)
-        on { getDisplayName() }.doReturn("Prem Patel")
-        on { getEmail() }.doReturn("someone@something.com")
-        on { getUid() }.doReturn(UUID.randomUUID().toString())
-        on { getGender() }.doReturn("Male")
-        on { getFarmName() }.doReturn("Some Name")
-        on { getDairyCode() }.doReturn("1231")
-        on { getDairyCustomerId() }.doReturn("9628276")
-    }
-
-    private val mockUserInfoBasic: UserInfoBasic = mockUserInfoDetailed
-
-    private val mockFirestoreUserInfo: FirestoreUserInfo = mockUserInfoDetailed
-
-    private val mockPreferenceStorage: PreferenceStorage = mock {
-        on { loginCompleted }.doReturn(false)
-        on { firstTimeProfileSetupCompleted }.doReturn(false)
-    }
-
-    private val mockNetworkHelper: NetworkHelper = mock {
-        on { isNetworkConnected() }.doReturn(true)
-    }
-
     private val mockDbLoader: DbLoader = mock {}
 
-    private fun createProfileDelegate(
-        userInfoBasic: UserInfoBasic?,
-        firestoreUserInfo: FirestoreUserInfo?,
-        userInfoRepository: UserInfoRepository,
-        networkHelper: NetworkHelper
-    ): ProfileDelegate {
-        return ProfileDelegateImp(
-            FakeObserveUserAuthStateUseCase(
-                Result.Success(userInfoBasic),
-                Result.Success(firestoreUserInfo)
-            ),
-            UpdateUserInfoDetailedUseCase(userInfoRepository),
-            networkHelper
-        )
-    }
-
     private fun createLoginViewModel(
-        userInfoBasic: UserInfoBasic? = mockUserInfoBasic,
-        firestoreUserInfo: FirestoreUserInfo? = mockFirestoreUserInfo,
-        preferenceStorage: PreferenceStorage = mockPreferenceStorage,
+        preferenceStorage: PreferenceStorage = mock {
+            on { loginCompleted }.doReturn(false)
+            on { firstTimeProfileSetupCompleted }.doReturn(false)
+        },
         userInfoRepository: UserInfoRepository = FakeUserInfoRepository(),
-        networkHelper: NetworkHelper = mockNetworkHelper,
-        profileDelegate: ProfileDelegate = createProfileDelegate(
-            userInfoBasic = userInfoBasic,
-            firestoreUserInfo = firestoreUserInfo,
-            userInfoRepository = userInfoRepository,
-            networkHelper = networkHelper
-        ),
+        networkHelper: NetworkHelper = mock {
+            on { isNetworkConnected() }.doReturn(true)
+        },
         dbLoader: DbLoader = mockDbLoader
     ): LoginViewModel {
         return LoginViewModel(
-            profileDelegate,
+            FakeProfileDelegate(
+                userInfoRepository = userInfoRepository,
+                networkHelper = networkHelper
+            ),
             FakeThemedActivityDelegate(),
             GetFirstTimeProfileSetupCompletedUseCase(preferenceStorage),
             SetFirstTimeProfileSetupCompletedUseCase(preferenceStorage),
@@ -114,20 +67,20 @@ class LoginViewModelTest {
 
     private fun LoginViewModel.observeUnobserved() {
         // Profile Delegate
-        currentUserInfo.observeForever {  }
-        farmName.observeForever {  }
-        dairyCode.observeForever {  }
-        dairyCustomerId.observeForever {  }
-        farmAddress.observeForever {  }
-        imageUrl.observeForever {  }
-        name.observeForever {  }
-        email.observeForever {  }
-        phoneNumber.observeForever {  }
-        dob.observeForever {  }
-        address.observeForever {  }
+        currentUserInfo.observeForever { }
+        farmName.observeForever { }
+        dairyCode.observeForever { }
+        dairyCustomerId.observeForever { }
+        farmAddress.observeForever { }
+        imageUrl.observeForever { }
+        name.observeForever { }
+        email.observeForever { }
+        phoneNumber.observeForever { }
+        dob.observeForever { }
+        address.observeForever { }
         // LoginViewModel
-        loginStatus.observeForever {  }
-        logginIn.observeForever {  }
+        loginStatus.observeForever { }
+        logginIn.observeForever { }
     }
 
     @Test

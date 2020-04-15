@@ -125,7 +125,8 @@ class CattleDetailFragment : NavigationFragment() {
 
         model.launchDeleteConfirmation.observe(viewLifecycleOwner, EventObserver {
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.delete_cattle)
+                .setTitle(R.string.delete_cattle_title)
+                .setMessage(R.string.delete_cattle_message)
                 .setPositiveButton(R.string.delete) { _, _ ->
                     model.deleteCattle(deleteConfirmation = true)
                 }
