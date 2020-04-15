@@ -1,8 +1,6 @@
 package com.pr656d.cattlenotes.ui.login
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
@@ -10,6 +8,7 @@ import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeObserveUserAuthStateUseCase
 import com.pr656d.cattlenotes.test.util.fakes.FakeThemedActivityDelegate
+import com.pr656d.cattlenotes.test.util.fakes.FakeUserInfoRepository
 import com.pr656d.cattlenotes.ui.profile.ProfileDelegate
 import com.pr656d.cattlenotes.ui.profile.ProfileDelegateImp
 import com.pr656d.shared.data.db.updater.DbLoader
@@ -22,11 +21,11 @@ import com.pr656d.shared.domain.data.LoadDataUseCase
 import com.pr656d.shared.domain.login.GetFirstTimeProfileSetupCompletedUseCase
 import com.pr656d.shared.domain.login.SetFirstTimeProfileSetupCompletedUseCase
 import com.pr656d.shared.domain.login.SetLoginCompletedUseCase
-import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.user.info.UpdateUserInfoDetailedUseCase
 import com.pr656d.shared.utils.NetworkHelper
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -70,15 +69,7 @@ class LoginViewModelTest {
         on { isNetworkConnected() }.doReturn(true)
     }
 
-    private val mockDbLoader: DbLoader = mock {  }
-
-    private val userRepository: UserInfoRepository = object : UserInfoRepository {
-        override fun updateUserInfo(userInfo: UserInfoDetailed) {}
-
-        override fun observeUpdateResult(): LiveData<Event<Pair<Result<Unit>, Result<Unit>>>> {
-            return MutableLiveData()
-        }
-    }
+    private val mockDbLoader: DbLoader = mock {}
 
     private fun createProfileDelegate(
         userInfoBasic: UserInfoBasic?,
@@ -100,7 +91,7 @@ class LoginViewModelTest {
         userInfoBasic: UserInfoBasic? = mockUserInfoBasic,
         firestoreUserInfo: FirestoreUserInfo? = mockFirestoreUserInfo,
         preferenceStorage: PreferenceStorage = mockPreferenceStorage,
-        userInfoRepository: UserInfoRepository = userRepository,
+        userInfoRepository: UserInfoRepository = FakeUserInfoRepository(),
         networkHelper: NetworkHelper = mockNetworkHelper,
         profileDelegate: ProfileDelegate = createProfileDelegate(
             userInfoBasic = userInfoBasic,
@@ -205,5 +196,74 @@ class LoginViewModelTest {
 
         // Verify load is called.
         verify(mockDbLoader).load()
+    }
+
+    @Test
+    fun saveProfileCalled_navigateToMainScreenOnSuccess() {
+        val viewModel = createLoginViewModel()
+
+        // Call save profile
+        viewModel.saveProfile()
+
+        val launchMainScreen = LiveDataTestUtil.getValue(viewModel.launchMainScreen)
+        assertThat(Unit, isEqualTo(launchMainScreen?.getContentIfNotHandled()))
+    }
+
+    @Test
+    fun saveProfileCalledButNetworkNotAvailable_showUpdateErrorMessage() {
+        val viewModel = createLoginViewModel(
+            networkHelper = mock { on { isNetworkConnected() }.doReturn(false) }
+        )
+
+        // Call save profile
+        viewModel.saveProfile()
+
+        val updateErrorMessage = LiveDataTestUtil.getValue(viewModel.updateErrorMessage)
+        assertNotNull(updateErrorMessage)
+    }
+
+    @Test
+    fun updateResultBothError_showUpdateErrorMessage() {
+        val viewModel = createLoginViewModel(
+            userInfoRepository = FakeUserInfoRepository(
+                Pair(Result.Error(Exception("Error!")), Result.Error(Exception("Error!")))
+            )
+        )
+
+        // Call save profile
+        viewModel.saveProfile()
+
+        val updateErrorMessage = LiveDataTestUtil.getValue(viewModel.updateErrorMessage)
+        assertNotNull(updateErrorMessage)
+    }
+
+    @Test
+    fun updateResultFirstIsError_showUpdateErrorMessage() {
+        val viewModel = createLoginViewModel(
+            userInfoRepository = FakeUserInfoRepository(
+                Pair(Result.Error(Exception("Error!")), Result.Success(Unit))
+            )
+        )
+
+        // Call save profile
+        viewModel.saveProfile()
+
+        val updateErrorMessage = LiveDataTestUtil.getValue(viewModel.updateErrorMessage)
+        assertNotNull(updateErrorMessage)
+    }
+
+    @Test
+    fun updateResultSecondIsError_showUpdateErrorMessage() {
+        val viewModel = createLoginViewModel(
+            userInfoRepository = FakeUserInfoRepository(
+                Pair(Result.Success(Unit), Result.Error(Exception("Error!")))
+            )
+        )
+
+        // Call save profile
+        viewModel.saveProfile()
+
+        val updateErrorMessage = LiveDataTestUtil.getValue(viewModel.updateErrorMessage)
+        assertNotNull(updateErrorMessage)
     }
 }
