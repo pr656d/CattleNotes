@@ -180,23 +180,6 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun showActiveBreedingIsCalled_launchActiveBreeding() {
-        // Returns any random cattle from the list
-        val cattle = TestData.cattleList.random()
-
-        val viewModel = createCattleDetailViewModel()
-
-        // Fetch cattle first
-        viewModel.fetchCattle(cattle)
-
-        // Call method
-        viewModel.showActiveBreeding()
-
-        val launchActiveBreeding = LiveDataTestUtil.getValue(viewModel.launchActiveBreeding)
-        assertThat(cattle, isEqualTo(launchActiveBreeding?.getContentIfNotHandled()))
-    }
-
-    @Test
     fun editCattleIsCalled_launchEditCattle() {
         // Returns any random cattle from the list
         val cattle = TestData.cattleList.random()

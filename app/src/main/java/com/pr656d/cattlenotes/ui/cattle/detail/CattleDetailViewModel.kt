@@ -44,10 +44,6 @@ class CattleDetailViewModel @Inject constructor(
     val launchAddBreeding: LiveData<Event<Cattle>>
         get() = _launchAddBreeding
 
-    private val _launchActiveBreeding = MutableLiveData<Event<Cattle>>()
-    val launchActiveBreeding: LiveData<Event<Cattle>>
-        get() = _launchActiveBreeding
-
     private val _launchEditCattle = MutableLiveData<Event<Cattle>>()
     val launchEditCattle: LiveData<Event<Cattle>>
         get() = _launchEditCattle
@@ -130,12 +126,6 @@ class CattleDetailViewModel @Inject constructor(
     fun addNewBreeding() {
         cattle.value?.let {
             _launchAddBreeding.postValue(Event(it))
-        }
-    }
-
-    fun showActiveBreeding() {
-        cattle.value?.let {
-            _launchActiveBreeding.postValue(Event(it))
         }
     }
 

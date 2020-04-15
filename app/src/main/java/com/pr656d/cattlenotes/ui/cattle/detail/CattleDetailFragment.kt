@@ -17,7 +17,6 @@ import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentCattleDetailBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
-import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toActiveBreeding
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddBreeding
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toBreedingHistory
@@ -111,10 +110,6 @@ class CattleDetailFragment : NavigationFragment() {
             if (model.parentCattle.value != null)
                 bottomSheetBehavior.state = STATE_EXPANDED
         }
-
-        model.launchActiveBreeding.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toActiveBreeding(Gson().toJson(it)))
-        })
 
         model.launchAllBreeding.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(toBreedingHistory(Gson().toJson(it)))

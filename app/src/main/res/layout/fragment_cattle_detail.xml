@@ -75,16 +75,6 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnShowActiveBreeding"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:drawableEnd="@drawable/ic_arrow_right"
-                        android:onClick="@{ () -> viewModel.showActiveBreeding() }"
-                        android:text="@string/show_active_breeding"
-                        android:textAllCaps="false" />
-
-                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAddNewBreeding"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

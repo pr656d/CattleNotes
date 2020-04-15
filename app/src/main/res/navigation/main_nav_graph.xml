@@ -48,14 +48,6 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/to_active_breeding"
-            app:destination="@id/activeBreedingScreen"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-
-        <action
             android:id="@+id/to_add_breeding"
             app:destination="@id/addEditBreedingScreen"
             app:enterAnim="@anim/slide_in_right"
@@ -84,14 +76,6 @@
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
-
-        <action
-            android:id="@+id/to_active_breeding"
-            app:destination="@id/activeBreedingScreen"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
 
         <action
             android:id="@+id/to_add_breeding"
@@ -129,18 +113,6 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
 
-    </fragment>
-
-    <fragment
-        android:id="@+id/activeBreedingScreen"
-        android:name="com.pr656d.cattlenotes.ui.breeding.active.ActiveBreedingFragment"
-        android:label="@string/active_breeding"
-        tools:layout="@layout/fragment_active_breeding">
-
-        <!--  Pass Cattle as JSON  -->
-        <argument
-            android:name="cattle"
-            app:argType="string" />
     </fragment>
 
     <fragment
