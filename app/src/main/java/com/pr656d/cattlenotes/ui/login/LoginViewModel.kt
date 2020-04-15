@@ -30,8 +30,6 @@ class LoginViewModel @Inject constructor(
     ProfileDelegate by profileDelegate,
     ThemedActivityDelegate by themedActivityDelegate {
 
-    private val getFirstTimeProfileSetupCompletedResult = MutableLiveData<Result<Boolean>>()
-
     private val _launchFirebaseLoginUI = MediatorLiveData<Event<Unit>>()
     val launchFirebaseAuthUI: LiveData<Event<Unit>> = _launchFirebaseLoginUI
 
@@ -51,12 +49,9 @@ class LoginViewModel @Inject constructor(
     val launchMainScreen: LiveData<Event<Unit>> = _launchMainScreen
 
     private val _loading = MediatorLiveData<Boolean>().apply { value = true }
-    val loading: LiveData<Boolean>
-        get() = _loading
+    val loading: LiveData<Boolean> = _loading
 
     init {
-        getFirstTimeProfileSetupCompletedUseCase(Unit, getFirstTimeProfileSetupCompletedResult)
-
         /**
          * User will be here for two reasons.
          *      1. If not logged in.
@@ -64,7 +59,7 @@ class LoginViewModel @Inject constructor(
          *
          * Setup profile screen will be launched with 2nd scenario.
          */
-        _launchSetupProfileScreen.addSource(getFirstTimeProfileSetupCompletedResult) { result ->
+        _launchSetupProfileScreen.addSource(getFirstTimeProfileSetupCompletedUseCase.invoke()) { result ->
             (result as? Result.Success)?.data?.let { isProfileSetupCompleted ->
                 val isUserSignedIn = currentUserInfo.value?.isSignedIn() ?: false
 

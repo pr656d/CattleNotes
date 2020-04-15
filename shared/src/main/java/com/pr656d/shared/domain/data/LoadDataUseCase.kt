@@ -4,7 +4,7 @@ import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.domain.UseCase
 import javax.inject.Inject
 
-class LoadDataUseCase @Inject constructor(
+open class LoadDataUseCase @Inject constructor(
     private val dbLoader: DbLoader
 ) : UseCase<Unit, Unit>() {
     override fun execute(parameters: Unit) {

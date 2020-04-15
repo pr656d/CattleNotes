@@ -18,6 +18,8 @@ import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.prefs.SharedPreferenceStorage
 import com.pr656d.shared.utils.FirebaseAnalyticsHelper
+import com.pr656d.shared.utils.NetworkHelper
+import com.pr656d.shared.utils.NetworkHelperImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -60,7 +62,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideAppDatabaseDao(appDatabase: AppDatabase) : AppDatabaseDao {
+    fun provideAppDatabaseDao(appDatabase: AppDatabase): AppDatabaseDao {
         return object : AppDatabaseDao {
             override fun clear() {
                 appDatabase.clearAllTables()
@@ -98,7 +100,15 @@ class AppModule {
         cattleDataSource: CattleDataSource,
         breedingDataSource: BreedingDataSource,
         context: Context
-    ) : DbLoader {
+    ): DbLoader {
         return DatabaseLoader(cattleDataSource, breedingDataSource, context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideNetworkHelper(
+        context: Context
+    ): NetworkHelper {
+        return NetworkHelperImpl(context)
     }
 }

@@ -5,14 +5,18 @@ import android.net.ConnectivityManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
+interface NetworkHelper {
+
+    /**
+     * Returns network status.
+     */
+    fun isNetworkConnected(): Boolean
+
+}
+
 @Singleton
-class NetworkHelper @Inject constructor(private val context: Context) {
-
-    companion object {
-        private const val TAG = "NetworkHelper"
-    }
-
-    fun isNetworkConnected(): Boolean {
+class NetworkHelperImpl @Inject constructor(private val context: Context): NetworkHelper {
+    override fun isNetworkConnected(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = cm.activeNetworkInfo
         return activeNetwork?.isConnected ?: false

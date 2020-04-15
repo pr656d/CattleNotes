@@ -5,12 +5,11 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.map
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserInfo
 import com.pr656d.cattlenotes.R
-import com.pr656d.shared.data.user.info.FirebaseUserInfo
 import com.pr656d.shared.data.user.info.FirebaseUserInfoDetailed
 import com.pr656d.shared.data.user.info.FirestoreUserInfo
+import com.pr656d.shared.data.user.info.UserInfoBasic
 import com.pr656d.shared.data.user.info.UserInfoDetailed
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
@@ -37,8 +36,7 @@ import javax.inject.Inject
 interface ProfileDelegate {
 
     /**
-     * Convenience user info holder because whoever implements this interface
-     * whoever needs user info. So that they can user right after implementation.
+     * Provide current user info.
      */
     val currentUserInfo: LiveData<UserInfoDetailed?>
 
@@ -84,7 +82,6 @@ interface ProfileDelegate {
 
 class ProfileDelegateImp @Inject constructor(
     observeUserInfoDetailed: ObserveUserInfoDetailed,
-    private val firebaseAuth: FirebaseAuth,
     private val updateUserInfoDetailedUseCase: UpdateUserInfoDetailedUseCase,
     private val networkHelper: NetworkHelper
 ) : ProfileDelegate {
@@ -199,29 +196,69 @@ class ProfileDelegateImp @Inject constructor(
     }
 
     override fun saveProfile() {
-        firebaseAuth.currentUser?.let {
-            if (networkHelper.isNetworkConnected()) {
-                updateUserInfoDetailedUseCase.execute(
-                    FirebaseUserInfoDetailed(
-                        getFirebaseUserInfo(it),
-                        getUserInfoOnFirestore()
-                    )
+        if (networkHelper.isNetworkConnected()) {
+            updateUserInfoDetailedUseCase.execute(
+                FirebaseUserInfoDetailed(
+                    getFirebaseUserInfo(),
+                    getUserInfoOnFirestore()
                 )
-                savingProfile.postValue(true)
-            } else {
-                _updateErrorMessage.postValue(R.string.network_not_available)
-            }
+            )
+            savingProfile.postValue(true)
+        } else {
+            _updateErrorMessage.postValue(R.string.network_not_available)
         }
     }
 
-    private fun getFirebaseUserInfo(currentUser: FirebaseUser): FirebaseUserInfo {
-        return object : FirebaseUserInfo(currentUser) {
-            override fun getDisplayName(): String? {
-                return name.value
-            }
+    private fun getFirebaseUserInfo(): UserInfoBasic {
+        return currentUserInfo.value!!.run {
+            object : UserInfoBasic {
+                override fun isSignedIn(): Boolean {
+                    return isSignedIn()
+                }
 
-            override fun getPhotoUrl(): Uri? {
-                return imageUrl.value
+                override fun getEmail(): String? {
+                    return getEmail()
+                }
+
+                override fun getProviderData(): MutableList<out UserInfo>? {
+                    return getProviderData()
+                }
+
+                override fun getLastSignInTimestamp(): Long? {
+                    return getLastSignInTimestamp()
+                }
+
+                override fun getCreationTimestamp(): Long? {
+                    return getCreationTimestamp()
+                }
+
+                override fun isAnonymous(): Boolean? {
+                    return isAnonymous()
+                }
+
+                override fun getPhoneNumber(): String? {
+                    return getPhoneNumber()
+                }
+
+                override fun getUid(): String? {
+                    return getUid()
+                }
+
+                override fun isEmailVerified(): Boolean? {
+                    return isEmailVerified()
+                }
+
+                override fun getDisplayName(): String? {
+                    return name.value
+                }
+
+                override fun getPhotoUrl(): Uri? {
+                    return imageUrl.value
+                }
+
+                override fun getProviderId(): String? {
+                    return getProviderId()
+                }
             }
         }
     }
