@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Cattle NOTES</string>
 
-    <!-- Loading -->
+    <!-- Notifications -->
     <string name="progress_notifications">Progress notifications</string>
     <string name="progress_notifications_title">Loading your data</string>
+    <string name="restoring_data_notifications">Restoring data progress notifications</string>
+    <string name="restoring_data_notifications_title">Restoring your data</string>
 
     <!--  Cattle details  -->
     <string name="error_save">Could not save cattle. Try again.</string>

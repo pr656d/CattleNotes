@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.pr656d.shared.data.db.AppDatabaseDao
+import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.user.info.FirebaseUserInfo
 import com.pr656d.shared.data.user.info.UserInfoBasic
@@ -17,7 +18,8 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
     private val firebase: FirebaseAuth,
     appDatabaseDao: AppDatabaseDao,
     tokenUpdater: FcmTokenUpdater,
-    preferenceStorage: PreferenceStorage
+    preferenceStorage: PreferenceStorage,
+    dbLoader: DbLoader
 ) : AuthStateUserDataSource {
 
     private val currentFirebaseUserObservable = MutableLiveData<Result<UserInfoBasic?>>()
@@ -54,6 +56,7 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
             DefaultScheduler.execute {
                 preferenceStorage.clear()
                 appDatabaseDao.clear()
+                dbLoader.stop()
             }
             // notificationAlarmUpdater.cancelAll()
         }
@@ -61,7 +64,7 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
         // Log in
         auth.currentUser?.let {
             if (lastUid != auth.uid) { // Prevent duplicates
-                Timber.d("Something")
+                dbLoader.initialize()
                 // notificationAlarmUpdater.updateAll(it.uid)
             }
         }

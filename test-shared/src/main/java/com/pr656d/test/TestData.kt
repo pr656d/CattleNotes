@@ -4,6 +4,7 @@ import com.pr656d.model.Animal
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInseminationInfo
 import com.pr656d.model.Breeding.BreedingEvent
+import com.pr656d.model.Breeding.BreedingEvent.Type.*
 import com.pr656d.model.Cattle
 import com.pr656d.test.utils.BreedingUtil.getExpectedCalvingDate
 import com.pr656d.test.utils.BreedingUtil.getExpectedDryOffDate
@@ -64,10 +65,10 @@ object TestData {
             bullName = null,
             strawCode = null
         ),
-        repeatHeat = BreedingEvent(getExpectedRepeatHeatDate(LocalDate.now())),
-        pregnancyCheck = BreedingEvent(getExpectedPregnancyCheckDate(LocalDate.now())),
-        dryOff = BreedingEvent(getExpectedDryOffDate(LocalDate.now())),
-        calving = BreedingEvent(getExpectedCalvingDate(LocalDate.now()))
+        repeatHeat = BreedingEvent(type = REPEAT_HEAT, expectedOn = getExpectedRepeatHeatDate(LocalDate.now())),
+        pregnancyCheck = BreedingEvent(type = PREGNANCY_CHECK, expectedOn = getExpectedPregnancyCheckDate(LocalDate.now())),
+        dryOff = BreedingEvent(type = DRY_OFF, expectedOn = getExpectedDryOffDate(LocalDate.now())),
+        calving = BreedingEvent(type = CALVING, expectedOn = getExpectedCalvingDate(LocalDate.now()))
     )
 
     val breedingList = listOf(breedingCycle1)

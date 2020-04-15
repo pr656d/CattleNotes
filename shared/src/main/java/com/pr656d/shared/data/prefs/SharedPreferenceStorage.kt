@@ -37,6 +37,13 @@ interface PreferenceStorage {
     var observableSelectedTheme: LiveData<String>
 
     /**
+     * If true, reload user data from data source.
+     */
+    var reloadData: Boolean
+
+    var observeReloadData: LiveData<Boolean>
+
+    /**
      * Clear the shared preferences.
      */
     fun clear()
@@ -61,10 +68,13 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
 
     private val observableSelectedThemeResult = MutableLiveData<String>()
 
+    private val observeReloadDataResult = MutableLiveData<Boolean>()
+
     private val changeListener = OnSharedPreferenceChangeListener { _, key ->
         when (key) {
             PREF_DARK_MODE_ENABLED -> observableSelectedThemeResult.value = selectedTheme
             PREF_LOG_IN -> observableLoginCompletedResult.value = loginCompleted
+            PREF_RELOAD_DATA -> observeReloadDataResult.value = reloadData
         }
     }
 
@@ -110,6 +120,19 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
     override val loginAndAllStepsCompleted: Boolean
         get() = loginCompleted && firstTimeProfileSetupCompleted
 
+    override var reloadData by BooleanPreference(
+        prefs,
+        PREF_RELOAD_DATA,
+        false
+    )
+
+    override var observeReloadData: LiveData<Boolean>
+        get() {
+            observeReloadDataResult.value = reloadData
+            return observeReloadDataResult
+        }
+        set(_) = throw IllegalAccessException("This property can't be changed")
+
     override fun clear() {
         prefs.value.edit { clear() }
     }
@@ -120,6 +143,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         const val PREF_FIRST_TIME_PROFILE_SETUP = "pref_first_time_profile_setup"
         const val PREF_ONBOARDING = "pref_onboarding"
         const val PREF_DARK_MODE_ENABLED = "pref_dark_mode"
+        const val PREF_RELOAD_DATA = "reload_data"
     }
 }
 

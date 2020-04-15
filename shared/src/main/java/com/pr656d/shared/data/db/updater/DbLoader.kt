@@ -16,6 +16,7 @@ import androidx.lifecycle.Observer
 import com.pr656d.shared.R
 import com.pr656d.shared.data.breeding.datasources.BreedingDataSource
 import com.pr656d.shared.data.cattle.datasources.CattleDataSource
+import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import timber.log.Timber
 import javax.inject.Inject
@@ -25,25 +26,62 @@ import javax.inject.Inject
  */
 interface DbLoader {
     /**
+     * Initialize db loader.
+     */
+    fun initialize()
+
+    /**
      * Load data.
      */
-    fun load()
+    fun load(onComplete: () -> Unit = {})
 
     /**
      * Name convenience wrapper over load.
      */
-    fun reload()
+    fun reload(onComplete: () -> Unit = {})
+
+    /**
+     * Stop db loader.
+     */
+    fun stop()
 }
 
 class DatabaseLoader @Inject constructor(
     private val cattleDataSource: CattleDataSource,
     private val breedingDataSource: BreedingDataSource,
-    private val context: Context
+    private val context: Context,
+    private val preferenceStorage: PreferenceStorage
 ) : DbLoader {
 
-    private var tasksCompletedCounter = MutableLiveData<Int>(0)
+    private var tasksCompletedCounter: MutableLiveData<Int>? = null
 
-    override fun load() {
+    private var isAlreadyInitialized = false
+
+    private val reloadObserver = Observer<Boolean> {
+        if (it == true) {
+            reload(onComplete = {
+                DefaultScheduler.execute {
+                    preferenceStorage.reloadData = false
+                }
+            })
+        }
+    }
+
+    override fun initialize() {
+        if (!isAlreadyInitialized) {
+            Timber.d("Initializing DbLoader")
+
+            tasksCompletedCounter = MutableLiveData(0)
+            DefaultScheduler.postToMainThread {
+                preferenceStorage.observeReloadData.observeForever(reloadObserver)
+            }
+            isAlreadyInitialized = true
+
+            Timber.d("Initialized DbLoader")
+        }
+    }
+
+    override fun load(onComplete: () -> Unit) {
         DefaultScheduler.postToMainThread {
             observeTaskCompletedCounter()
         }
@@ -67,13 +105,27 @@ class DatabaseLoader @Inject constructor(
         })
     }
 
-    override fun reload() {
-        load()
+    override fun reload(onComplete: () -> Unit) {
+        Timber.d("Executing DbLoader.reload()")
+
+        load(onComplete)
+    }
+
+    override fun stop() {
+        Timber.d("Stopping DbLoader")
+
+        tasksCompletedCounter = null
+        DefaultScheduler.postToMainThread {
+            preferenceStorage.observeReloadData.removeObserver(reloadObserver)
+        }
+        isAlreadyInitialized = false
+
+        Timber.d("Stopped DbLoader")
     }
 
     @MainThread
     private fun observeTaskCompletedCounter() {
-        tasksCompletedCounter.observeForever(
+        tasksCompletedCounter?.observeForever(
             object : Observer<Int> {
                 override fun onChanged(count: Int?) {
                     Timber.d("DbLoader tasks completed : $count")
@@ -87,7 +139,7 @@ class DatabaseLoader @Inject constructor(
                         // Reset counter
                         resetTaskCompleteCounter()
                         // Remove observer
-                        tasksCompletedCounter.removeObserver(this)
+                        tasksCompletedCounter?.removeObserver(this)
                     }
                 }
             }
@@ -95,7 +147,7 @@ class DatabaseLoader @Inject constructor(
     }
 
     private fun notifyTaskCompleted() {
-        tasksCompletedCounter.postValue(tasksCompletedCounter.value!!.plus(1))
+        tasksCompletedCounter?.postValue(tasksCompletedCounter?.value?.plus(1))
     }
 
     @WorkerThread
@@ -109,8 +161,8 @@ class DatabaseLoader @Inject constructor(
             makeNotificationChannelForProgress(context, notificationManager)
         }
 
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID_PROGRESS)
-            .setContentTitle(context.getString(R.string.progress_notifications_title))
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID_RESTORING_DATA_PROGRESS)
+            .setContentTitle(context.getString(R.string.restoring_data_notifications_title))
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setSmallIcon(R.drawable.logo)  // TODO ("Logo") : Put better logo
             .setProgress(0, 0, true)
@@ -136,20 +188,28 @@ class DatabaseLoader @Inject constructor(
         notificationManager: NotificationManager
     ) {
         notificationManager.createNotificationChannel(
+            // Create channel
             NotificationChannel(
-                CHANNEL_ID_PROGRESS,
-                context.getString(R.string.progress_notifications),
-                NotificationManager.IMPORTANCE_LOW
-            ).apply { lockscreenVisibility = Notification.VISIBILITY_PUBLIC }
+                CHANNEL_ID_RESTORING_DATA_PROGRESS,
+                context.getString(R.string.restoring_data_notifications),
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                // Notification posted to this channel shown on lock screen.
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                // Notification posted to this channel would not display light.
+                enableLights(false)
+                // Notification posted to this channel would not vibrate.
+                enableVibration(false)
+            }
         )
     }
 
     private fun resetTaskCompleteCounter() {
-        tasksCompletedCounter.postValue(0)
+        tasksCompletedCounter?.postValue(0)
     }
 
     companion object {
-        private const val CHANNEL_ID_PROGRESS = "progress_channel_id"
+        private const val CHANNEL_ID_RESTORING_DATA_PROGRESS = "restoring_data_progress_channel_id"
         private const val PROGRESS_NOTIFICATION_ID = 2
 
         /**

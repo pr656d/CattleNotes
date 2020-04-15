@@ -99,9 +99,10 @@ class AppModule {
     fun provideDbUpdater(
         cattleDataSource: CattleDataSource,
         breedingDataSource: BreedingDataSource,
-        context: Context
+        context: Context,
+        preferenceStorage: PreferenceStorage
     ): DbLoader {
-        return DatabaseLoader(cattleDataSource, breedingDataSource, context)
+        return DatabaseLoader(cattleDataSource, breedingDataSource, context, preferenceStorage)
     }
 
     @Singleton

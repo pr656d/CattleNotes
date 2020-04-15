@@ -7,6 +7,7 @@ import com.google.firebase.firestore.SetOptions
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInseminationInfo
 import com.pr656d.model.Breeding.BreedingEvent
+import com.pr656d.model.Breeding.BreedingEvent.Type.*
 import com.pr656d.shared.data.db.BreedingDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.domain.internal.DefaultScheduler
@@ -134,23 +135,36 @@ class FirestoreBreedingDataSource @Inject constructor(
                         strawCode = ai[KEY_AI_STRAW_CODE] as? String
                     )
                 },
-                repeatHeat = parseBreedingEvent(get(KEY_REPEAT_HEAT) as HashMap<*, *>),
-                pregnancyCheck = parseBreedingEvent(get(KEY_PREGNANCY_CHECK) as HashMap<*, *>),
-                dryOff = parseBreedingEvent(get(KEY_DRY_OFF) as HashMap<*, *>),
-                calving = parseBreedingEvent(get(KEY_CALVING) as HashMap<*, *>)
+                repeatHeat = parseBreedingEvent(
+                    REPEAT_HEAT,
+                    get(KEY_REPEAT_HEAT) as HashMap<*, *>
+                ),
+                pregnancyCheck = parseBreedingEvent(
+                    PREGNANCY_CHECK,
+                    get(KEY_PREGNANCY_CHECK) as HashMap<*, *>
+                ),
+                dryOff = parseBreedingEvent(
+                    DRY_OFF,
+                    get(KEY_DRY_OFF) as HashMap<*, *>
+                ),
+                calving = parseBreedingEvent(
+                    CALVING,
+                    get(KEY_CALVING) as HashMap<*, *>
+                )
             ).apply { id = document.id }
         }
     }
 
-    private fun parseBreedingEvent(data: HashMap<*, *>): BreedingEvent {
+    private fun parseBreedingEvent(breedingType: BreedingEvent.Type, data: HashMap<*, *>): BreedingEvent {
         return BreedingEvent(
-            (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).let {
+            expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).let {
                 TimeUtils.toLocalDate(it)
             },
-            data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
-            (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.let {
+            status = data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
+            doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.let {
                 TimeUtils.toLocalDate(it)
-            }
+            },
+            type = breedingType
         )
     }
 

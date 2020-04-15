@@ -95,6 +95,9 @@ data class Breeding(
     )
 
     data class BreedingEvent(
+        @Ignore
+        val type: Type?,
+
         @SerializedName("expectedOn")
         @ColumnInfo(name = "ExpectedOn")
         val expectedOn: LocalDate,
@@ -107,11 +110,29 @@ data class Breeding(
         @ColumnInfo(name = "DoneOn")
         val doneOn: LocalDate? = null
     ) {
+
+        /**
+         * Eliminate Room error : Entities and POJOs must have a usable public constructor.
+         * https://github.com/android/architecture-components-samples/issues/421#issuecomment-533217060
+         */
+        constructor(
+            expectedOn: LocalDate,
+            status: Boolean? = null,
+            doneOn: LocalDate? = null
+        ) : this(null, expectedOn, status, doneOn)
+
         @Ignore
         val statusString: String = when (status) {
             null -> "None"
             true -> "Positive"
             false -> "Negative"
+        }
+
+        enum class Type(val displayName: String) {
+            REPEAT_HEAT("Repeat heat"),
+            PREGNANCY_CHECK("Pregnancy check"),
+            DRY_OFF("Dry off"),
+            CALVING("Calving")
         }
     }
 }

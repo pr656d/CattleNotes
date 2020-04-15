@@ -9,6 +9,7 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInseminationInfo
 import com.pr656d.model.Breeding.BreedingEvent
+import com.pr656d.model.Breeding.BreedingEvent.Type.*
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
@@ -133,17 +134,29 @@ class AddEditBreedingViewModel @Inject constructor(
                 strawCode.value
             ),
             BreedingEvent(
-                repeatHeatExpectedOn.value!!,
-                repeatHeatStatus.value,
-                repeatHeatDoneOn.value
+                type = REPEAT_HEAT,
+                expectedOn = repeatHeatExpectedOn.value!!,
+                status = repeatHeatStatus.value,
+                doneOn = repeatHeatDoneOn.value
             ),
             BreedingEvent(
-                pregnancyCheckExpectedOn.value!!,
-                pregnancyCheckStatus.value,
-                pregnancyCheckDoneOn.value
+                type = PREGNANCY_CHECK,
+                expectedOn = pregnancyCheckExpectedOn.value!!,
+                status = pregnancyCheckStatus.value,
+                doneOn = pregnancyCheckDoneOn.value
             ),
-            BreedingEvent(dryOffExpectedOn.value!!, dryOffStatus.value, dryOffDoneOn.value),
-            BreedingEvent(calvingExpectedOn.value!!, calvingStatus.value, calvingDoneOn.value)
+            BreedingEvent(
+                type = DRY_OFF,
+                expectedOn = dryOffExpectedOn.value!!,
+                status = dryOffStatus.value,
+                doneOn = dryOffDoneOn.value
+            ),
+            BreedingEvent(
+                expectedOn = calvingExpectedOn.value!!,
+                status = calvingStatus.value,
+                doneOn = calvingDoneOn.value,
+                type = CALVING
+            )
         ).apply {
             oldBreeding?.id?.let { id = it }
         }

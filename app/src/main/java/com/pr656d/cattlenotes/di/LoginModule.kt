@@ -3,6 +3,7 @@ package com.pr656d.cattlenotes.di
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pr656d.shared.data.db.AppDatabaseDao
+import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.login.datasources.AuthStateUserDataSource
 import com.pr656d.shared.data.login.datasources.FirebaseAuthStateUserDataSource
@@ -39,13 +40,15 @@ class LoginModule {
         firebase: FirebaseAuth,
         appDatabaseDao: AppDatabaseDao,
         firestore: FirebaseFirestore,
-        preferenceStorage: PreferenceStorage
+        preferenceStorage: PreferenceStorage,
+        dbLoader: DbLoader
     ): AuthStateUserDataSource {
         return FirebaseAuthStateUserDataSource(
             firebase,
             appDatabaseDao,
             FcmTokenUpdater(firestore),
-            preferenceStorage
+            preferenceStorage,
+            dbLoader
         )
     }
 

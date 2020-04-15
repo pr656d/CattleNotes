@@ -2,6 +2,7 @@ package com.pr656d.shared.data.db
 
 import androidx.room.TypeConverter
 import com.pr656d.model.Animal
+import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.Cattle
 import com.pr656d.shared.utils.TimeUtils
 import org.threeten.bp.LocalDate
@@ -14,7 +15,7 @@ class Converters {
     fun fromDateToMillis(localDate: LocalDate?): Long? = localDate?.let { TimeUtils.toEpochMillis(it) }
 
     @TypeConverter
-    fun fromStringToType(value: String): Animal.Type = when(value) {
+    fun fromStringToAnimalType(value: String): Animal.Type = when(value) {
         Animal.Type.COW.displayName -> Animal.Type.COW
         Animal.Type.BUFFALO.displayName -> Animal.Type.BUFFALO
         Animal.Type.BULL.displayName -> Animal.Type.BULL
@@ -22,7 +23,7 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromTypeToString(value: Animal.Type): String = value.displayName
+    fun fromAnimalTypeToString(value: Animal.Type): String = value.displayName
 
     @TypeConverter
     fun fromStringToBreed(value: String): Cattle.Breed = when (value) {
@@ -47,6 +48,18 @@ class Converters {
         Cattle.Group.HEIFER.displayName -> Cattle.Group.HEIFER
         else -> throw Exception("Invalid String: Can not convert $value to Cattle.Group")
     }
+
+    @TypeConverter
+    fun fromStringToBreedingEventType(value: String): BreedingEvent.Type = when (value) {
+        BreedingEvent.Type.REPEAT_HEAT.displayName -> BreedingEvent.Type.REPEAT_HEAT
+        BreedingEvent.Type.PREGNANCY_CHECK.displayName -> BreedingEvent.Type.PREGNANCY_CHECK
+        BreedingEvent.Type.DRY_OFF.displayName -> BreedingEvent.Type.DRY_OFF
+        BreedingEvent.Type.CALVING.displayName -> BreedingEvent.Type.CALVING
+        else -> throw Exception("Invalid String: Can not convert $value to BreedingEvent.Type")
+    }
+
+    @TypeConverter
+    fun fromBreedingEventTypeToString(value: BreedingEvent.Type) = value.displayName
 
     @TypeConverter
     fun fromImageToString(value: Cattle.Image?): String? = value?.let{
