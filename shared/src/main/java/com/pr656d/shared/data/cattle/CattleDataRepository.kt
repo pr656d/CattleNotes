@@ -5,7 +5,6 @@ import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.datasources.CattleDataSource
 import com.pr656d.shared.data.db.AppDatabase
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Single point of access for [Cattle] data for the presentation layer.
@@ -30,7 +29,6 @@ interface CattleRepository {
     fun isCattleExistByTagNumber(tagNumber: Long): Boolean
 }
 
-@Singleton
 open class CattleDataRepository @Inject constructor(
     private val appDatabase: AppDatabase,
     private val cattleDataSource: CattleDataSource
