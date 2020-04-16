@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentActionListener
+import com.pr656d.cattlenotes.utils.FirestoreUtil
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.cattle.addedit.AddCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.UpdateCattleUseCase
@@ -24,8 +25,8 @@ import javax.inject.Inject
 class AddEditCattleViewModel @Inject constructor(
     private val addCattleUseCase: AddCattleUseCase,
     private val updateCattleUseCase: UpdateCattleUseCase,
-    cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase,
-    private val getParentListUseCase: GetParentListUseCase
+    private val getParentListUseCase: GetParentListUseCase,
+    cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase
 ) : ViewModel(), ParentActionListener {
     private var oldCattle: Cattle? = null
 
@@ -207,7 +208,7 @@ class AddEditCattleViewModel @Inject constructor(
             dob.value,
             parent.value
         ).apply {
-            oldCattle?.id?.let { id = it }
+            id = oldCattle?.id ?: FirestoreUtil.autoId()
         }
 
     private fun isAllFieldsValid(): Boolean {

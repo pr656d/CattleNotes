@@ -86,7 +86,7 @@ class FirestoreCattleDataSource @Inject constructor(
                 .collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(CATTLE_COLLECTION)
-                .document()
+                .document(cattle.id)
                 .set(cattle.asHashMap())
                 .addOnFailureListener {
                     Timber.d("addCattle() failed : ${it.localizedMessage}")

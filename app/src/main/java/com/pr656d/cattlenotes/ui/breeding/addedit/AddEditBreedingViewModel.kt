@@ -6,6 +6,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.utils.FirestoreUtil
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInseminationInfo
 import com.pr656d.model.Breeding.BreedingEvent
@@ -158,7 +159,7 @@ class AddEditBreedingViewModel @Inject constructor(
                 type = CALVING
             )
         ).apply {
-            oldBreeding?.id?.let { id = it }
+            id = oldBreeding?.id ?: FirestoreUtil.autoId()
         }
 
     private fun Breeding.bindData() {

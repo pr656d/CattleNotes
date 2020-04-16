@@ -85,7 +85,7 @@ class FirestoreBreedingDataSource @Inject constructor(
                 .collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(BREEDING_COLLECTION)
-                .document()
+                .document(breeding.id)
                 .set(breeding.asHashMap())
                 .addOnFailureListener {
                     Timber.d("addBreeding() failed : ${it.localizedMessage}")
