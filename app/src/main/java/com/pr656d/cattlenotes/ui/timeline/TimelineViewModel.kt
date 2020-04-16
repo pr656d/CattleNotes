@@ -5,6 +5,4 @@ import javax.inject.Inject
 
 class TimelineViewModel @Inject constructor(
 
-) : ViewModel() {
-
-}
+) : ViewModel()

@@ -76,6 +76,19 @@ data class Breeding(
     val breedingCompleted: Boolean =
         repeatHeat.status == true || pregnancyCheck.status == false || calving.status == true
 
+    /**
+     * Provides next breeding event.
+     */
+    fun getNextBreedingEvent(): BreedingEvent? =
+        when {
+            breedingCompleted -> null
+            repeatHeat.status == null -> repeatHeat
+            pregnancyCheck.status == null -> pregnancyCheck
+            dryOff.status == null -> dryOff
+            calving.status == null -> calving
+            else -> throw IllegalStateException("Can not generate next breeding event: Breeding data is $this")
+        }
+
     data class ArtificialInseminationInfo(
         @SerializedName("date")
         @ColumnInfo(name = "Date")

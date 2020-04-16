@@ -173,17 +173,17 @@ class BreedingBehaviourImpl @Inject constructor(
         }
 
         /**
-         * Reset pregnancy check status when repeat heat status is null.
+         * Reset pregnancy check status when repeat heat status is null or positive.
          */
         pregnancyCheckStatus.addSource(repeatHeatStatus) {
-            if (it == null) pregnancyCheckStatus.value = null
+            if (it == null || it == true) pregnancyCheckStatus.value = null
         }
 
         /**
-         * Reset dry off status when pregnancy check status is null.
+         * Reset dry off status when pregnancy check status is null or negative.
          */
         dryOffStatus.addSource(pregnancyCheckStatus) {
-            if (it == null) dryOffStatus.value = null
+            if (it == null || it == false) dryOffStatus.value = null
         }
 
         /**

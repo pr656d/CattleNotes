@@ -2286,4 +2286,239 @@ class AddEditBreedingViewModelTest {
             LiveDataTestUtil.getValue(viewModel.resetCalvingDateActual)!!
         assertTrue(resetCalvingDateActual)
     }
+
+    /**
+     * When we reached to calving and repeat heat status gets positive then
+     * reset pregnancy check, dry off and calving status data (status, actual date).
+     * Visibility of pregnancy check, dry off and calving should be false.
+     */
+    @Test
+    fun reachedToCalvingIsPositive_repeatHeatChangedToPositive() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Set repeat heat status as Positive
+        viewModel.repeatHeatStatus.value = false
+
+        // Set repeat heat date done on
+        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+
+        // Set pregnancy check status as Positive
+        viewModel.pregnancyCheckStatus.value = true
+
+        // Set dry off status as Positive
+        viewModel.dryOffStatus.value = true
+
+        // Set dry off date done on
+        viewModel.dryOffDoneOn.value = LocalDate.now()
+
+        // Set calving status as Positive
+        viewModel.calvingStatus.value = true
+
+        // Set calving date done on
+        viewModel.calvingDoneOn.value = LocalDate.now()
+
+        // Set repeat heat positive
+        viewModel.repeatHeatStatus.value = true
+
+        /**
+         * Start checking.
+         */
+
+        // Repeat heat
+        val repeatHeatStatus = LiveDataTestUtil.getValue(viewModel.repeatHeatStatus)!!
+        assertTrue(repeatHeatStatus)    // Verify repeat heat status is positive
+
+        val repeatHeatDateExpectedVisibility =
+            LiveDataTestUtil.getValue(viewModel.repeatHeatDateExpectedVisibility)!!
+        assertTrue(repeatHeatDateExpectedVisibility)
+
+        val repeatHeatStatusVisibility =
+            LiveDataTestUtil.getValue(viewModel.repeatHeatStatusVisibility)!!
+        assertTrue(repeatHeatStatusVisibility)
+
+        val repeatHeatDateActualVisibility =
+            LiveDataTestUtil.getValue(viewModel.repeatHeatDateActualVisibility)!!
+        assertTrue(repeatHeatDateActualVisibility)
+
+        // Pregnancy check
+        val pregnancyCheckStatus = LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatus)
+        assertNull(pregnancyCheckStatus)    // Verify pregnancy check status status is null
+
+        val resetPregnancyCheckDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
+        assertTrue(resetPregnancyCheckDateActual)
+
+        val pregnancyCheckDateExpectedVisibility =
+            LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateExpectedVisibility)!!
+        assertFalse(pregnancyCheckDateExpectedVisibility)
+
+        val pregnancyCheckStatusVisibility =
+            LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatusVisibility)!!
+        assertFalse(pregnancyCheckStatusVisibility)
+
+        val pregnancyCheckDateActualVisibility =
+            LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateActualVisibility)!!
+        assertFalse(pregnancyCheckDateActualVisibility)
+
+        // Dry Off
+        val dryOffStatus = LiveDataTestUtil.getValue(viewModel.dryOffStatus)
+        assertNull(dryOffStatus)    // Verify dry off status status is null
+
+        val resetDryOffDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!
+        assertTrue(resetDryOffDateActual)
+
+        val dryOffDateExpectedVisibility =
+            LiveDataTestUtil.getValue(viewModel.dryOffDateExpectedVisibility)!!
+        assertFalse(dryOffDateExpectedVisibility)
+
+        val dryOffStatusVisibility =
+            LiveDataTestUtil.getValue(viewModel.dryOffStatusVisibility)!!
+        assertFalse(dryOffStatusVisibility)
+
+        val dryOffDateActualVisibility =
+            LiveDataTestUtil.getValue(viewModel.dryOffDateActualVisibility)!!
+        assertFalse(dryOffDateActualVisibility)
+
+        // Calving
+        val calvingStatus = LiveDataTestUtil.getValue(viewModel.calvingStatus)
+        assertNull(calvingStatus)    // Verify calving status status is null
+
+        val resetCalvingDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetCalvingDateActual)!!
+        assertTrue(resetCalvingDateActual)
+
+        val calvingDateExpectedVisibility =
+            LiveDataTestUtil.getValue(viewModel.calvingDateExpectedVisibility)!!
+        assertFalse(calvingDateExpectedVisibility)
+
+        val calvingStatusVisibility =
+            LiveDataTestUtil.getValue(viewModel.calvingStatusVisibility)!!
+        assertFalse(calvingStatusVisibility)
+
+        val calvingDateActualVisibility =
+            LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
+        assertFalse(calvingDateActualVisibility)
+    }
+
+
+    /**
+     * When we reached to calving and pregnancy check status gets negative then
+     * reset dry off and calving status data (status, actual date).
+     * Visibility of dry off and calving should be false.
+     */
+    @Test
+    fun reachedToCalvingIsPositive_pregnancyCheckChangedToNegative() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Set repeat heat status as Positive
+        viewModel.repeatHeatStatus.value = false
+
+        // Set repeat heat date done on
+        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+
+        // Set pregnancy check status as Positive
+        viewModel.pregnancyCheckStatus.value = true
+
+        // Set dry off status as Positive
+        viewModel.dryOffStatus.value = true
+
+        // Set dry off date done on
+        viewModel.dryOffDoneOn.value = LocalDate.now()
+
+        // Set calving status as Positive
+        viewModel.calvingStatus.value = true
+
+        // Set calving date done on
+        viewModel.calvingDoneOn.value = LocalDate.now()
+
+        // Set pregnancy check negative
+        viewModel.pregnancyCheckStatus.value = false
+
+        /**
+         * Start checking.
+         */
+
+        // Repeat heat
+        val repeatHeatStatus = LiveDataTestUtil.getValue(viewModel.repeatHeatStatus)!!
+        assertFalse(repeatHeatStatus)    // Verify repeat heat status is negative
+
+        val repeatHeatDateExpectedVisibility =
+            LiveDataTestUtil.getValue(viewModel.repeatHeatDateExpectedVisibility)!!
+        assertTrue(repeatHeatDateExpectedVisibility)
+
+        val repeatHeatStatusVisibility =
+            LiveDataTestUtil.getValue(viewModel.repeatHeatStatusVisibility)!!
+        assertTrue(repeatHeatStatusVisibility)
+
+        val repeatHeatDateActualVisibility =
+            LiveDataTestUtil.getValue(viewModel.repeatHeatDateActualVisibility)!!
+        assertFalse(repeatHeatDateActualVisibility)
+
+        // Pregnancy check
+        val pregnancyCheckStatus = LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatus)!!
+        assertFalse(pregnancyCheckStatus)    // Verify pregnancy check status status is negative
+
+        val resetPregnancyCheckDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
+        assertFalse(resetPregnancyCheckDateActual)
+
+        val pregnancyCheckDateExpectedVisibility =
+            LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateExpectedVisibility)!!
+        assertTrue(pregnancyCheckDateExpectedVisibility)
+
+        val pregnancyCheckStatusVisibility =
+            LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatusVisibility)!!
+        assertTrue(pregnancyCheckStatusVisibility)
+
+        val pregnancyCheckDateActualVisibility =
+            LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateActualVisibility)!!
+        assertTrue(pregnancyCheckDateActualVisibility)
+
+        // Dry Off
+        val dryOffStatus = LiveDataTestUtil.getValue(viewModel.dryOffStatus)
+        assertNull(dryOffStatus)    // Verify dry off status status is null
+
+        val resetDryOffDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!
+        assertTrue(resetDryOffDateActual)
+
+        val dryOffDateExpectedVisibility =
+            LiveDataTestUtil.getValue(viewModel.dryOffDateExpectedVisibility)!!
+        assertFalse(dryOffDateExpectedVisibility)
+
+        val dryOffStatusVisibility =
+            LiveDataTestUtil.getValue(viewModel.dryOffStatusVisibility)!!
+        assertFalse(dryOffStatusVisibility)
+
+        val dryOffDateActualVisibility =
+            LiveDataTestUtil.getValue(viewModel.dryOffDateActualVisibility)!!
+        assertFalse(dryOffDateActualVisibility)
+
+        // Calving
+        val calvingStatus = LiveDataTestUtil.getValue(viewModel.calvingStatus)
+        assertNull(calvingStatus)    // Verify calving status status is null
+
+        val resetCalvingDateActual =
+            LiveDataTestUtil.getValue(viewModel.resetCalvingDateActual)!!
+        assertTrue(resetCalvingDateActual)
+
+        val calvingDateExpectedVisibility =
+            LiveDataTestUtil.getValue(viewModel.calvingDateExpectedVisibility)!!
+        assertFalse(calvingDateExpectedVisibility)
+
+        val calvingStatusVisibility =
+            LiveDataTestUtil.getValue(viewModel.calvingStatusVisibility)!!
+        assertFalse(calvingStatusVisibility)
+
+        val calvingDateActualVisibility =
+            LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
+        assertFalse(calvingDateActualVisibility)
+    }
 }
