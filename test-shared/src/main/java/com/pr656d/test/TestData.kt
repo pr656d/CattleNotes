@@ -4,7 +4,7 @@ import com.pr656d.model.Animal
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInseminationInfo
 import com.pr656d.model.Breeding.BreedingEvent
-import com.pr656d.model.Breeding.BreedingEvent.Type.*
+import com.pr656d.model.BreedingWithCattle
 import com.pr656d.model.Cattle
 import com.pr656d.test.utils.BreedingUtil.getExpectedCalvingDate
 import com.pr656d.test.utils.BreedingUtil.getExpectedDryOffDate
@@ -55,9 +55,10 @@ object TestData {
     val cattleList = listOf(cattle1, cattle2, cattle3, cattle4, cattle5)
 
 
-    /* Breeding Cycle */
+    /** Breeding Cycle */
 
-    val breedingCycle1 = Breeding(
+    // Initial breeding
+    val breedingInitial = Breeding(
         cattleId = cattle1.id,
         artificialInsemination = ArtificialInseminationInfo(
             date = LocalDate.now(),
@@ -65,11 +66,203 @@ object TestData {
             bullName = null,
             strawCode = null
         ),
-        repeatHeat = BreedingEvent(type = REPEAT_HEAT, expectedOn = getExpectedRepeatHeatDate(LocalDate.now())),
-        pregnancyCheck = BreedingEvent(type = PREGNANCY_CHECK, expectedOn = getExpectedPregnancyCheckDate(LocalDate.now())),
-        dryOff = BreedingEvent(type = DRY_OFF, expectedOn = getExpectedDryOffDate(LocalDate.now())),
-        calving = BreedingEvent(type = CALVING, expectedOn = getExpectedCalvingDate(LocalDate.now()))
+        repeat_heat = BreedingEvent(
+            expectedOn = getExpectedRepeatHeatDate(LocalDate.now())
+        ),
+        pregnancy_check = BreedingEvent(
+            expectedOn = getExpectedPregnancyCheckDate(LocalDate.now())
+        ),
+        dry_off = BreedingEvent(
+            expectedOn = getExpectedDryOffDate(LocalDate.now())
+        ),
+        calving_ = BreedingEvent(
+            expectedOn = getExpectedCalvingDate(LocalDate.now())
+        )
     )
 
-    val breedingList = listOf(breedingCycle1)
+    // Repeat heat status negative
+    val breedingRepeatHeatNegative = Breeding(
+        cattleId = cattle2.id,
+        artificialInsemination = ArtificialInseminationInfo(
+            date = LocalDate.now(),
+            didBy = null,
+            bullName = null,
+            strawCode = null
+        ),
+        repeat_heat = BreedingEvent(
+            expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
+            status = false
+        ),
+        pregnancy_check = BreedingEvent(
+            expectedOn = getExpectedPregnancyCheckDate(LocalDate.now())
+        ),
+        dry_off = BreedingEvent(
+            expectedOn = getExpectedDryOffDate(LocalDate.now())
+        ),
+        calving_ = BreedingEvent(
+            expectedOn = getExpectedCalvingDate(LocalDate.now())
+        )
+    )
+
+    // Repeat heat status positive
+    val breedingRepeatHeatPositive = Breeding(
+        cattleId = cattle2.id,
+        artificialInsemination = ArtificialInseminationInfo(
+            date = LocalDate.now(),
+            didBy = null,
+            bullName = null,
+            strawCode = null
+        ),
+        repeat_heat = BreedingEvent(
+            expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
+            status = true
+        ),
+        pregnancy_check = BreedingEvent(
+            expectedOn = getExpectedPregnancyCheckDate(LocalDate.now())
+        ),
+        dry_off = BreedingEvent(
+            expectedOn = getExpectedDryOffDate(LocalDate.now())
+        ),
+        calving_ = BreedingEvent(
+            expectedOn = getExpectedCalvingDate(LocalDate.now())
+        )
+    )
+
+    // Repeat heat status negative, pregnancy check status positive
+    val breedingRHNegativePregnancyCheckPositive = Breeding(
+        cattleId = cattle3.id,
+        artificialInsemination = ArtificialInseminationInfo(
+            date = LocalDate.now(),
+            didBy = null,
+            bullName = null,
+            strawCode = null
+        ),
+        repeat_heat = BreedingEvent(
+            expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
+            status = false
+        ),
+        pregnancy_check = BreedingEvent(
+            expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
+            status = true
+        ),
+        dry_off = BreedingEvent(
+            expectedOn = getExpectedDryOffDate(LocalDate.now())
+        ),
+        calving_ = BreedingEvent(
+            expectedOn = getExpectedCalvingDate(LocalDate.now())
+        )
+    )
+
+    // Repeat heat status negative, pregnancy check status negative
+    val breedingRHNegativePregnancyCheckNegative = Breeding(
+        cattleId = cattle3.id,
+        artificialInsemination = ArtificialInseminationInfo(
+            date = LocalDate.now(),
+            didBy = null,
+            bullName = null,
+            strawCode = null
+        ),
+        repeat_heat = BreedingEvent(
+            expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
+            status = false
+        ),
+        pregnancy_check = BreedingEvent(
+            expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
+            status = false
+        ),
+        dry_off = BreedingEvent(
+            expectedOn = getExpectedDryOffDate(LocalDate.now())
+        ),
+        calving_ = BreedingEvent(
+            expectedOn = getExpectedCalvingDate(LocalDate.now())
+        )
+    )
+
+    // Repeat heat status negative, pregnancy check status positive, dry off status positive
+    val breedingRHNegativePCPositiveDryOffPositive = Breeding(
+        cattleId = cattle4.id,
+        artificialInsemination = ArtificialInseminationInfo(
+            date = LocalDate.now(),
+            didBy = null,
+            bullName = null,
+            strawCode = null
+        ),
+        repeat_heat = BreedingEvent(
+            expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
+            status = false
+        ),
+        pregnancy_check = BreedingEvent(
+            expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
+            status = true
+        ),
+        dry_off = BreedingEvent(
+            expectedOn = getExpectedDryOffDate(LocalDate.now()),
+            status = true
+        ),
+        calving_ = BreedingEvent(
+            expectedOn = getExpectedCalvingDate(LocalDate.now())
+        )
+    )
+
+    // Repeat heat status negative, pregnancy check status positive, dry off status positive
+    // Calving status positive
+    val breedingRHNegativePCPositiveDOPositiveCalvingPositive = Breeding(
+        cattleId = cattle4.id,
+        artificialInsemination = ArtificialInseminationInfo(
+            date = LocalDate.now(),
+            didBy = null,
+            bullName = null,
+            strawCode = null
+        ),
+        repeat_heat = BreedingEvent(
+            expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
+            status = false
+        ),
+        pregnancy_check = BreedingEvent(
+            expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
+            status = true
+        ),
+        dry_off = BreedingEvent(
+            expectedOn = getExpectedDryOffDate(LocalDate.now()),
+            status = true
+        ),
+        calving_ = BreedingEvent(
+            expectedOn = getExpectedCalvingDate(LocalDate.now()),
+            status = true
+        )
+    )
+
+    val breedingList = listOf(breedingInitial, breedingRepeatHeatNegative, breedingRepeatHeatPositive)
+
+    /** Breeding with Cattle */
+
+    val breedingWithCattle1 = BreedingWithCattle(cattle1, breedingInitial)
+
+    val breedingWithCattle2 = BreedingWithCattle(cattle2, breedingRepeatHeatNegative)
+
+    val breedingWithCattle3 = BreedingWithCattle(cattle2, breedingRepeatHeatPositive)
+
+    val breedingWithCattle4 = BreedingWithCattle(cattle3, breedingRHNegativePregnancyCheckPositive)
+
+    val breedingWithCattle5 = BreedingWithCattle(cattle3, breedingRHNegativePregnancyCheckNegative)
+
+    val breedingWithCattle6 = BreedingWithCattle(cattle4, breedingRHNegativePCPositiveDryOffPositive)
+
+    val breedingWithCattle7 = BreedingWithCattle(cattle4, breedingRHNegativePCPositiveDOPositiveCalvingPositive)
+
+    val breedingWithCattleList = listOf(
+        breedingWithCattle1, breedingWithCattle2, breedingWithCattle3, breedingWithCattle4,
+        breedingWithCattle5, breedingWithCattle6, breedingWithCattle7
+    )
+
+    val completedBreedingWithCattleList = listOf(
+        breedingWithCattle3, breedingWithCattle5, breedingWithCattle7
+    )
+
+    val validTimelineList = listOf(
+        breedingWithCattle1, breedingWithCattle2,  breedingWithCattle4,
+        breedingWithCattle6
+    )
+
+    val invalidTimelineList = completedBreedingWithCattleList
 }

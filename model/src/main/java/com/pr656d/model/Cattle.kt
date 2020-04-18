@@ -61,6 +61,11 @@ data class Cattle(
     @PrimaryKey
     @SerializedName("id")
     var id: String = ""
+        set(value) = if (!value.isBlank()) {
+            field = value
+        } else {
+            throw IllegalArgumentException("Cattle id is blank")
+        }
 
     enum class Group(val displayName: String) {
         HEIFER("Heifer"),

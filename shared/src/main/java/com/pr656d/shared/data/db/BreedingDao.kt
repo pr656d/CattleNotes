@@ -26,7 +26,7 @@ interface BreedingDao {
 
     @Transaction
     @Query("SELECT * FROM breedingList")
-    fun getAllBreedingCycleWithCattle(): LiveData<List<BreedingWithCattle>>
+    fun getAllWithCattle(): LiveData<List<BreedingWithCattle>>
 
     @Query("SELECT * FROM breedingList WHERE cattleId == :cattleId")
     fun getAllByCattleId(cattleId: String): LiveData<List<Breeding>>

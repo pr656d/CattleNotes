@@ -4,6 +4,10 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.os.Build
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextPaint
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
@@ -102,3 +106,35 @@ fun AppCompatActivity.updateForTheme(theme: Theme) = when (theme) {
     Theme.BATTERY_SAVER -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 }
 // end region
+
+/**
+ * Calculated the widest line in a [StaticLayout].
+ */
+fun StaticLayout.textWidth(): Int {
+    var width = 0f
+    for (i in 0 until lineCount) {
+        width = width.coerceAtLeast(getLineWidth(i))
+    }
+    return width.toInt()
+}
+
+fun newStaticLayout(
+    source: CharSequence,
+    paint: TextPaint,
+    width: Int,
+    alignment: Layout.Alignment,
+    spacingmult: Float,
+    spacingadd: Float,
+    includepad: Boolean
+): StaticLayout {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        StaticLayout.Builder.obtain(source, 0, source.length, paint, width).apply {
+            setAlignment(alignment)
+            setLineSpacing(spacingadd, spacingmult)
+            setIncludePad(includepad)
+        }.build()
+    } else {
+        @Suppress("DEPRECATION")
+        (StaticLayout(source, paint, width, alignment, spacingmult, spacingadd, includepad))
+    }
+}

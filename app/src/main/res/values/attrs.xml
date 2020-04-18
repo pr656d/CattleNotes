@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="verticalBias" format="float" />
+
+    <declare-styleable name="DateHeader">
+        <attr name="android:width" />
+        <attr name="android:height" />
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="android:fontFamily" />
+        <attr name="verticalBias"/>
+    </declare-styleable>
+
+</resources>

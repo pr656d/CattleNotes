@@ -6,6 +6,7 @@ import com.pr656d.shared.R
 import com.pr656d.shared.domain.MediatorUseCase
 import com.pr656d.shared.domain.cattle.addedit.IsCattleExistWithTagNumberUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleValidator.VALID_FIELD
+import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.domain.result.Result
 import javax.inject.Inject
 
@@ -30,29 +31,26 @@ class CattleTagNumberValidatorUseCase @Inject constructor(
     }
 
     override fun execute(parameters: Pair<String?, Long?>) {
-        val tagNumber = parameters.first
-        val oldTagNumber = parameters.second
+        DefaultScheduler.execute {
+            val (tagNumber, oldTagNumber) = parameters
 
-        if (tagNumber.isNullOrEmpty()) {
-            result.postValue(Result.Success(R.string.error_empty_field))
-            return
+            when {
+                tagNumber.isNullOrEmpty() -> {
+                    result.postValue(Result.Success(R.string.error_empty_field))
+                }
+                tagNumber.count() > 19 -> {
+                    result.postValue(Result.Success(R.string.error_length_exceed))
+                }
+                tagNumber.toLongOrNull() == null -> {
+                    result.postValue(Result.Success(R.string.error_contain_digits_only))
+                }
+                tagNumber.toLongOrNull() == oldTagNumber -> {
+                    result.postValue(Result.Success(VALID_FIELD))
+                }
+                else -> {
+                    isCattleExistWithTagNumberUseCase(tagNumber.toLong(), isCattleExistResult)
+                }
+            }
         }
-
-        if (tagNumber.count() > 19) {
-            result.postValue(Result.Success(R.string.error_length_exceed))
-            return
-        }
-
-        if (tagNumber.toLongOrNull() == null) {
-            result.postValue(Result.Success(R.string.error_contain_digits_only))
-            return
-        }
-
-        if (tagNumber.toLongOrNull() == oldTagNumber) {
-            result.postValue(Result.Success(VALID_FIELD))
-            return
-        }
-
-        isCattleExistWithTagNumberUseCase(tagNumber.toLong(), isCattleExistResult)
     }
 }

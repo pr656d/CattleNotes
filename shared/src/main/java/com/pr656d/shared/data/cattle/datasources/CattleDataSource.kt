@@ -146,6 +146,8 @@ class FirestoreCattleDataSource @Inject constructor(
 
                 val writeBatch = firestore.batch()
 
+                // TODO("do multiple batch writes") : Batch write is limited to 500 writes only.
+                // Practically no cattle has 500 or more breeding.
                 result.forEach { writeBatch.delete(it.reference) }
 
                 writeBatch

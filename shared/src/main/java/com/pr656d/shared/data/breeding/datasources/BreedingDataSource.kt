@@ -7,7 +7,6 @@ import com.google.firebase.firestore.SetOptions
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInseminationInfo
 import com.pr656d.model.Breeding.BreedingEvent
-import com.pr656d.model.Breeding.BreedingEvent.Type.*
 import com.pr656d.shared.data.db.BreedingDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.domain.internal.DefaultScheduler
@@ -135,27 +134,15 @@ class FirestoreBreedingDataSource @Inject constructor(
                         strawCode = ai[KEY_AI_STRAW_CODE] as? String
                     )
                 },
-                repeatHeat = parseBreedingEvent(
-                    REPEAT_HEAT,
-                    get(KEY_REPEAT_HEAT) as HashMap<*, *>
-                ),
-                pregnancyCheck = parseBreedingEvent(
-                    PREGNANCY_CHECK,
-                    get(KEY_PREGNANCY_CHECK) as HashMap<*, *>
-                ),
-                dryOff = parseBreedingEvent(
-                    DRY_OFF,
-                    get(KEY_DRY_OFF) as HashMap<*, *>
-                ),
-                calving = parseBreedingEvent(
-                    CALVING,
-                    get(KEY_CALVING) as HashMap<*, *>
-                )
+                repeat_heat = parseBreedingEvent(get(KEY_REPEAT_HEAT) as HashMap<*, *>),
+                pregnancy_check = parseBreedingEvent(get(KEY_PREGNANCY_CHECK) as HashMap<*, *>),
+                dry_off = parseBreedingEvent(get(KEY_DRY_OFF) as HashMap<*, *>),
+                calving_ = parseBreedingEvent(get(KEY_CALVING) as HashMap<*, *>)
             ).apply { id = document.id }
         }
     }
 
-    private fun parseBreedingEvent(breedingType: BreedingEvent.Type, data: HashMap<*, *>): BreedingEvent {
+    private fun parseBreedingEvent(data: HashMap<*, *>): BreedingEvent {
         return BreedingEvent(
             expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).let {
                 TimeUtils.toLocalDate(it)
@@ -163,8 +150,7 @@ class FirestoreBreedingDataSource @Inject constructor(
             status = data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
             doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.let {
                 TimeUtils.toLocalDate(it)
-            },
-            type = breedingType
+            }
         )
     }
 

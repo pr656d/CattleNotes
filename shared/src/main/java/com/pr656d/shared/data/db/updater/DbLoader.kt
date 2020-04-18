@@ -55,8 +55,6 @@ class DatabaseLoader @Inject constructor(
 
     private var tasksCompletedCounter: MutableLiveData<Int>? = null
 
-    private var isAlreadyInitialized = false
-
     private val reloadObserver = Observer<Boolean> {
         if (it == true) {
             reload(onComplete = {
@@ -68,22 +66,20 @@ class DatabaseLoader @Inject constructor(
     }
 
     override fun initialize() {
-        if (!isAlreadyInitialized) {
-            Timber.d("Initializing DbLoader")
+        Timber.d("Initializing DbLoader")
 
-            tasksCompletedCounter = MutableLiveData(0)
-            DefaultScheduler.postToMainThread {
-                preferenceStorage.observeReloadData.observeForever(reloadObserver)
-            }
-            isAlreadyInitialized = true
-
-            Timber.d("Initialized DbLoader")
+        tasksCompletedCounter = MutableLiveData(0)
+        DefaultScheduler.postToMainThread {
+            preferenceStorage.observeReloadData.observeForever(reloadObserver)
         }
+
+        Timber.d("Initialized DbLoader")
+
     }
 
     override fun load(onComplete: () -> Unit) {
         DefaultScheduler.postToMainThread {
-            observeTaskCompletedCounter()
+            initializeTaskCompletedTracker(onComplete)
         }
 
         DefaultScheduler.execute {
@@ -118,13 +114,12 @@ class DatabaseLoader @Inject constructor(
         DefaultScheduler.postToMainThread {
             preferenceStorage.observeReloadData.removeObserver(reloadObserver)
         }
-        isAlreadyInitialized = false
 
         Timber.d("Stopped DbLoader")
     }
 
     @MainThread
-    private fun observeTaskCompletedCounter() {
+    private fun initializeTaskCompletedTracker(onComplete: () -> Unit) {
         tasksCompletedCounter?.observeForever(
             object : Observer<Int> {
                 override fun onChanged(count: Int?) {
@@ -133,6 +128,8 @@ class DatabaseLoader @Inject constructor(
                     /** When task count reaches to [TOTAL_TASKS] all tasks are completed. */
                     if (count ?: 0 == TOTAL_TASKS) {
                         DefaultScheduler.execute {
+                            // Execute on complete tasks.
+                            onComplete()
                             // Cancel progress notification.
                             cancelProgressNotification(context)
                         }

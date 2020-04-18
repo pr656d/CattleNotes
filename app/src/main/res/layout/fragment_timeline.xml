@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-
+        <variable
+            name="viewModel"
+            type="com.pr656d.cattlenotes.ui.timeline.TimelineViewModel" />
 
     </data>
 
@@ -26,16 +29,50 @@
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/timeline" />
+
+            <!--
+            ~ TODO : Use better progress indicator
+            ~ Material progress indicator is planned
+            ~ Reference : https://material.io/components/progress-indicators/
+            -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:layout_anchorGravity="bottom"
+                app:layout_anchor="@id/appBarLayout"
+                app:goneUnless="@{viewModel.loading}"/>
         </com.google.android.material.appbar.AppBarLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTimelineList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/padding_normal"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="insideOverlay"
+            app:timelineItems="@{ viewModel.timelineList }"
+            app:timelineViewModel="@{viewModel}"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:itemCount="20"
+            tools:listitem="@layout/item_timeline" />
+
         <TextView
-            style="@style/AppTheme.Headline3"
+            android:id="@+id/tvEmptyListMessage"
+            style="@style/AppTheme.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Timeline\nComing soon"
+            android:layout_margin="@dimen/margin_large"
+            android:text="@string/timeline_empty"
+            android:textAlignment="center"
+            android:textColor="?android:textColorHint"
             android:layout_gravity="center"
-            android:textAlignment="center"/>
-
+            app:goneUnless="@{ viewModel.isEmpty }" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
 

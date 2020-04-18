@@ -225,12 +225,32 @@
         <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
-    <!--  Item breeding history  -->
+    <style name="Widget.CattleNOTES.Timeline.MaterialCardViewOutlined" parent="Widget.MaterialComponents.CardView">
+        <item name="strokeWidth">@dimen/default_outlined_card_stroke_width</item>
+        <item name="strokeColor">@color/stroke_color</item>
+        <item name="cardElevation">@dimen/default_outlined_card_elevation</item>
+    </style>
+
+    <!--  Breeding history  -->
     <style name="Widget.CattleNOTES.BreedingHistory" />
 
-    <style name="Widget.CattleNOTES.BreedingHistory.ItemBreedingHistoryMaterialCardView" parent="Widget.MaterialComponents.CardView">
-        <item name="strokeWidth">@dimen/item_breeding_history_card_stroke_width</item>
-        <item name="strokeColor">@color/stroke_color</item>
-        <item name="cardElevation">@dimen/item_breeding_history_card_elevation</item>
+    <style name="Widget.CattleNOTES.BreedingHistory.ItemBreedingHistoryMaterialCardView" parent="Widget.CattleNOTES.Timeline.MaterialCardViewOutlined" />
+
+    <!--  Timeline  -->
+    <style name="Widget.CattleNOTES.Timeline" />
+
+    <style name="Widget.CattleNOTES.Timeline.ItemTimelineMaterialCardView" parent="Widget.CattleNOTES.Timeline.MaterialCardViewOutlined">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <!-- Agenda -->
+    <style name="Widget.CattleNOTES.DateHeaders">
+        <item name="android:width">@dimen/day_header_decor_width</item>
+        <item name="android:height">@dimen/day_header_decor_height</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textSize">@dimen/day_header_text_size</item>
+        <item name="verticalBias">0.67</item>
     </style>
 </resources>

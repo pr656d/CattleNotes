@@ -47,7 +47,7 @@ open class BreedingDataRepository @Inject constructor(
     }
 
     override fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>> {
-        return appDatabase.breedingDao().getAllBreedingCycleWithCattle()
+        return appDatabase.breedingDao().getAllWithCattle()
     }
 
     override fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>> {

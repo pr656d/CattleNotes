@@ -28,7 +28,7 @@ open class FakeBreedingRepository(
     }
 
     override fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>> {
-        return fakeAppDatabase.breedingDao().getAllBreedingCycleWithCattle()
+        return fakeAppDatabase.breedingDao().getAllWithCattle()
     }
 
     override fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>> {

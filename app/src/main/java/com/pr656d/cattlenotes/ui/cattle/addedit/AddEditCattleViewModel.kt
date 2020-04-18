@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentActionListener
-import com.pr656d.cattlenotes.utils.FirestoreUtil
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.cattle.addedit.AddCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.UpdateCattleUseCase
@@ -16,6 +15,7 @@ import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Error
 import com.pr656d.shared.domain.result.Result.Success
+import com.pr656d.shared.utils.FirestoreUtil
 import com.pr656d.shared.utils.toBreed
 import com.pr656d.shared.utils.toGroup
 import com.pr656d.shared.utils.toType
@@ -187,7 +187,7 @@ class AddEditCattleViewModel @Inject constructor(
         group.value = cattle.group.displayName
         lactation.value = cattle.lactation.toString()
         dob.value = cattle.dateOfBirth
-        parent.value = cattle.parent?.toString()
+        parent.value = cattle.parent
         homeBorn.value = cattle.homeBorn
         purchaseAmount.value = cattle.purchaseAmount?.toString()
         purchaseDate.value = cattle.purchaseDate

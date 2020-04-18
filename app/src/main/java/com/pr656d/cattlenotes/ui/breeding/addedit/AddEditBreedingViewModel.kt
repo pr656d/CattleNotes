@@ -6,11 +6,9 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.utils.FirestoreUtil
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInseminationInfo
 import com.pr656d.model.Breeding.BreedingEvent
-import com.pr656d.model.Breeding.BreedingEvent.Type.*
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
@@ -19,6 +17,7 @@ import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Error
 import com.pr656d.shared.domain.result.Result.Success
+import com.pr656d.shared.utils.FirestoreUtil
 import javax.inject.Inject
 
 class AddEditBreedingViewModel @Inject constructor(
@@ -135,19 +134,16 @@ class AddEditBreedingViewModel @Inject constructor(
                 strawCode.value
             ),
             BreedingEvent(
-                type = REPEAT_HEAT,
                 expectedOn = repeatHeatExpectedOn.value!!,
                 status = repeatHeatStatus.value,
                 doneOn = repeatHeatDoneOn.value
             ),
             BreedingEvent(
-                type = PREGNANCY_CHECK,
                 expectedOn = pregnancyCheckExpectedOn.value!!,
                 status = pregnancyCheckStatus.value,
                 doneOn = pregnancyCheckDoneOn.value
             ),
             BreedingEvent(
-                type = DRY_OFF,
                 expectedOn = dryOffExpectedOn.value!!,
                 status = dryOffStatus.value,
                 doneOn = dryOffDoneOn.value
@@ -155,8 +151,7 @@ class AddEditBreedingViewModel @Inject constructor(
             BreedingEvent(
                 expectedOn = calvingExpectedOn.value!!,
                 status = calvingStatus.value,
-                doneOn = calvingDoneOn.value,
-                type = CALVING
+                doneOn = calvingDoneOn.value
             )
         ).apply {
             id = oldBreeding?.id ?: FirestoreUtil.autoId()

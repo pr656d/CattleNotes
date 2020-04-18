@@ -5,7 +5,6 @@ import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInseminationInfo
 import com.pr656d.model.Breeding.BreedingEvent
-import com.pr656d.model.Breeding.BreedingEvent.Type.*
 import com.pr656d.shared.utils.BreedingUtil
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertNull
@@ -35,23 +34,19 @@ class TestBreeding {
         return Breeding(
             cattleId = UUID.randomUUID().toString(),
             artificialInsemination = ArtificialInseminationInfo(aiDate, null, null, null),
-            repeatHeat = BreedingEvent(
-                type = REPEAT_HEAT,
+            repeat_heat = BreedingEvent(
                 expectedOn = BreedingUtil.getExpectedRepeatHeatDate(aiDate),
                 status = repeatHeatStatus
             ),
-            pregnancyCheck = BreedingEvent(
-                type = PREGNANCY_CHECK,
+            pregnancy_check = BreedingEvent(
                 expectedOn = BreedingUtil.getExpectedPregnancyCheckDate(aiDate),
                 status = pregnancyCheckStatus
             ),
-            dryOff = BreedingEvent(
-                type = DRY_OFF,
+            dry_off = BreedingEvent(
                 expectedOn = BreedingUtil.getExpectedDryOffDate(aiDate),
                 status = dryOffStatus
             ),
-            calving = BreedingEvent(
-                type = CALVING,
+            calving_ = BreedingEvent(
                 expectedOn = BreedingUtil.getExpectedCalvingDate(aiDate),
                 status = calvingStatus
             )

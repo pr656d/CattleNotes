@@ -45,9 +45,14 @@
     <!--  AddEditCattle  -->
     <dimen name="parent_list_bottom_sheet_peek_height">@dimen/a11y_min_touch_target</dimen>
 
-    <dimen name="item_breeding_history_card_stroke_width">1dp</dimen>
-    <dimen name="item_breeding_history_card_elevation">0dp</dimen>
+    <dimen name="default_outlined_card_stroke_width">1dp</dimen>
+    <dimen name="default_outlined_card_elevation">0dp</dimen>
 
     <!--  Profile  -->
     <dimen name="profile_image_size">120dp</dimen>
+
+    <!--  Timeline  -->
+    <dimen name="day_header_text_size">18sp</dimen>
+    <dimen name="day_header_decor_width">300dp</dimen>
+    <dimen name="day_header_decor_height">72dp</dimen>
 </resources>

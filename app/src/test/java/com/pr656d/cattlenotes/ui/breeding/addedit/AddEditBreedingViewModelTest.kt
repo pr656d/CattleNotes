@@ -224,7 +224,7 @@ class AddEditBreedingViewModelTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set old breeding
-        viewModel.setBreeding(TestData.breedingCycle1)
+        viewModel.setBreeding(TestData.breedingInitial)
 
         val editing = LiveDataTestUtil.getValue(viewModel.editing)!!
         assertTrue(editing)
@@ -234,7 +234,7 @@ class AddEditBreedingViewModelTest {
     fun editingExistingBreedingCycleBindDataCalled_verifyBindingOfData() {
         val viewModel = createAddEditBreedingViewModel()
 
-        val actualOldBreedingCycle = TestData.breedingCycle1
+        val actualOldBreedingCycle = TestData.breedingInitial
 
         // Set old breeding
         viewModel.setBreeding(actualOldBreedingCycle)
@@ -295,7 +295,7 @@ class AddEditBreedingViewModelTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set breeding cycle
-        viewModel.setBreeding(TestData.breedingCycle1)
+        viewModel.setBreeding(TestData.breedingInitial)
 
         // AiDate gets changed.
         viewModel.aiDate.value = null

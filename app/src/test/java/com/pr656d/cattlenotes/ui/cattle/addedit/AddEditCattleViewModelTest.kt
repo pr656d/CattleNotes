@@ -64,10 +64,10 @@ class AddEditCattleViewModelTest {
             GetParentListUseCase(LoadCattleListUseCase(repository))
     ): AddEditCattleViewModel {
         return AddEditCattleViewModel(
-            addCattleUseCase,
-            updateCattleUseCase,
-            cattleTagNumberValidatorUseCase,
-            getParentListUseCase
+            addCattleUseCase = addCattleUseCase,
+            updateCattleUseCase = updateCattleUseCase,
+            getParentListUseCase = getParentListUseCase,
+            cattleTagNumberValidatorUseCase = cattleTagNumberValidatorUseCase
         ).apply { observeUnobserved() }
     }
 

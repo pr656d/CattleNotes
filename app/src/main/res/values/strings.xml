@@ -140,6 +140,9 @@
     <string name="breeding_cycle_complete">Breeding cycle completed</string>
     <string name="breeding_cycle_complete_message">Once breeding cycle is complete you can not modify this breeding later.</string>
 
+    <!-- Timeline -->
+    <string name="timeline_empty">All breeding is completed.\nStart adding new breeding, you will see your next breeding event here.</string>
+
     <!--  Profile  -->
     <string name="farm_info">Farm info</string>
     <string name="farm_name">Farm name</string>

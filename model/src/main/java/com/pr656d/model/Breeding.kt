@@ -3,6 +3,7 @@ package com.pr656d.model
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
 import com.pr656d.model.Breeding.BreedingEvent
+import com.pr656d.model.Breeding.BreedingEvent.Type.*
 import org.threeten.bp.LocalDate
 
 @Entity(
@@ -29,38 +30,77 @@ data class Breeding(
     val artificialInsemination: ArtificialInseminationInfo,
 
     /**
-     * Holds repeat heat data as [BreedingEvent].
+     * Holds repeat heat data as [BreedingEvent] with UNKNOWN type.
+     * @see repeatHeat  To access repeatHeat data.
      */
     @SerializedName("repeatHeat")
     @Embedded(prefix = "repeatHeat")
-    val repeatHeat: BreedingEvent,
+    val repeat_heat: BreedingEvent,
 
     /**
-     * Holds pregnancy check data as [BreedingEvent].
+     * Holds pregnancy check data as [BreedingEvent] with UNKNOWN type.
+     * @see pregnancyCheck  To access pregnancy check data.
      */
     @SerializedName("pregnancyCheck")
     @Embedded(prefix = "pregnancyCheck")
-    val pregnancyCheck: BreedingEvent,
+    val pregnancy_check: BreedingEvent,
 
     /**
-     * Holds dry off data as [BreedingEvent].
+     * Holds dry off data as [BreedingEvent] with UNKNOWN type.
+     * @see dryOff  To access dry off data.
      */
     @SerializedName("dryOff")
     @Embedded(prefix = "dryOff")
-    val dryOff: BreedingEvent,
+    val dry_off: BreedingEvent,
 
     /**
-     * Holds calving data as [BreedingEvent].
+     * Holds calving data as [BreedingEvent] with UNKNOWN type.
+     * @see calving  To access calving data.
      */
     @SerializedName("calving")
     @Embedded(prefix = "calving")
-    val calving: BreedingEvent
+    val calving_: BreedingEvent
 ) {
 
     @SerializedName("id")
     @ColumnInfo(name = "id")
     @PrimaryKey
     var id: String = ""
+        set(value) = if (!value.isBlank()) {
+            field = value
+        } else {
+            throw IllegalArgumentException("Breeding id is blank")
+        }
+
+    /**
+     * Our primary goal is when [BreedingEvent] is used it holds it's type.
+     *
+     * [Breeding] fields it self represents type of [BreedingEvent],
+     * So no need to explicitly add type while creating [Breeding].
+     * Ex:  val breeding = Breeding(
+     *          ...,
+     *          _repeatHeat = BreedingEvent(...),
+     *          ...
+     *      )
+     *
+     * Allow calls like :
+     *      breeding.repeatHeat.type (returns REPEAT_HEAT)
+     */
+    @Ignore
+    @SerializedName("repeatHeatWithType")
+    val repeatHeat: BreedingEvent = repeat_heat.apply { type = REPEAT_HEAT }
+
+    @Ignore
+    @SerializedName("pregnancyCheckWithType")
+    val pregnancyCheck: BreedingEvent = pregnancy_check.apply { type = PREGNANCY_CHECK }
+
+    @Ignore
+    @SerializedName("dryOffWithType")
+    val dryOff: BreedingEvent = dry_off.apply { type = DRY_OFF }
+
+    @Ignore
+    @SerializedName("calvingWithType")
+    val calving: BreedingEvent = calving_.apply { type = CALVING }
 
     /**
      * When
@@ -108,9 +148,6 @@ data class Breeding(
     )
 
     data class BreedingEvent(
-        @Ignore
-        val type: Type?,
-
         @SerializedName("expectedOn")
         @ColumnInfo(name = "ExpectedOn")
         val expectedOn: LocalDate,
@@ -125,14 +162,11 @@ data class Breeding(
     ) {
 
         /**
-         * Eliminate Room error : Entities and POJOs must have a usable public constructor.
-         * https://github.com/android/architecture-components-samples/issues/421#issuecomment-533217060
+         * Type of breeding event. Initially it's unknown.
          */
-        constructor(
-            expectedOn: LocalDate,
-            status: Boolean? = null,
-            doneOn: LocalDate? = null
-        ) : this(null, expectedOn, status, doneOn)
+        @Ignore
+        @SerializedName("type")
+        var type: Type = UNKNOWN
 
         @Ignore
         val statusString: String = when (status) {
@@ -145,7 +179,8 @@ data class Breeding(
             REPEAT_HEAT("Repeat heat"),
             PREGNANCY_CHECK("Pregnancy check"),
             DRY_OFF("Dry off"),
-            CALVING("Calving")
+            CALVING("Calving"),
+            UNKNOWN("Unknown")
         }
     }
 }
