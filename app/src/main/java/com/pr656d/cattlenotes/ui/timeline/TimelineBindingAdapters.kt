@@ -12,13 +12,11 @@ fun timelineItems(
     list: List<BreedingWithCattle>?,
     timelineViewModel: TimelineViewModel
 ) {
-    list ?: return
-
     if (recyclerView.adapter == null) {
         recyclerView.adapter = TimelineAdapter(timelineViewModel)
     }
 
-    if (list.isEmpty()) {
+    if (list.isNullOrEmpty()) {
         recyclerView.isVisible = false
     } else {
         recyclerView.isVisible = true
@@ -27,7 +25,7 @@ fun timelineItems(
 
     // Recreate the decoration used for the sticky date headers
     recyclerView.clearDecorations()
-    if (list.isNotEmpty()) {
+    if (!list.isNullOrEmpty()) {
         recyclerView.addItemDecoration(
             TimelineHeadersDecoration(recyclerView.context, list)
         )
