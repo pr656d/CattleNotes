@@ -20,4 +20,10 @@
     <string name="error_contain_digits_only">This field should contain digits only</string>
     <string name="error_length_exceed">Length exceed</string>
 
+    <!--  Timeline  -->
+    <string name="day_today">Today</string>
+    <string name="day_yesterday">Yesterday</string>
+    <string name="day_tomorrow">Tomorrow</string>
+    <string name="day_itself">%1s</string>
+
 </resources>

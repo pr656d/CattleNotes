@@ -120,7 +120,7 @@ class TimelineHeadersDecoration(
         context: Context,
         time: LocalDate
     ): StaticLayout {
-        val text = TimeUtils.dateString(time)
+        val text = TimeUtils.getLabelForTimelineHeader(context, time)
         return newStaticLayout(text, paint, textWidth, ALIGN_CENTER, 1f, 0f, false)
     }
 }

@@ -52,7 +52,7 @@
     <dimen name="profile_image_size">120dp</dimen>
 
     <!--  Timeline  -->
-    <dimen name="day_header_text_size">18sp</dimen>
+    <dimen name="day_header_text_size">20sp</dimen>
     <dimen name="day_header_decor_width">300dp</dimen>
     <dimen name="day_header_decor_height">72dp</dimen>
 </resources>

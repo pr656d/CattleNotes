@@ -119,7 +119,9 @@ data class Breeding(
     /**
      * Provides next breeding event.
      */
-    fun getNextBreedingEvent(): BreedingEvent? =
+    @Ignore
+    @SerializedName("nextBreedingEvent")
+    val nextBreedingEvent: BreedingEvent? =
         when {
             breedingCompleted -> null
             repeatHeat.status == null -> repeatHeat

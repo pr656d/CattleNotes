@@ -59,14 +59,14 @@ class TestBreeding {
             repeatHeatStatus = null
         )
 
-        assertThat(breeding.repeatHeat, isEqualTo(breeding.getNextBreedingEvent()))
+        assertThat(breeding.repeatHeat, isEqualTo(breeding.nextBreedingEvent))
     }
 
     @Test
     fun repeatHeatIsPositive_nextBreedingEventIsNull() {
         val breeding = createBreeding(repeatHeatStatus = true)
 
-        assertNull(breeding.getNextBreedingEvent())
+        assertNull(breeding.nextBreedingEvent)
     }
 
     @Test
@@ -75,7 +75,7 @@ class TestBreeding {
             repeatHeatStatus = false
         )
 
-        assertThat(breeding.pregnancyCheck, isEqualTo(breeding.getNextBreedingEvent()))
+        assertThat(breeding.pregnancyCheck, isEqualTo(breeding.nextBreedingEvent))
     }
 
     @Test
@@ -84,7 +84,7 @@ class TestBreeding {
             repeatHeatStatus = false, pregnancyCheckStatus = null
         )
 
-        assertThat(breeding.pregnancyCheck, isEqualTo(breeding.getNextBreedingEvent()))
+        assertThat(breeding.pregnancyCheck, isEqualTo(breeding.nextBreedingEvent))
     }
 
     @Test
@@ -93,7 +93,7 @@ class TestBreeding {
             repeatHeatStatus = false, pregnancyCheckStatus = true
         )
 
-        assertThat(breeding.dryOff, isEqualTo(breeding.getNextBreedingEvent()))
+        assertThat(breeding.dryOff, isEqualTo(breeding.nextBreedingEvent))
     }
 
     @Test
@@ -102,7 +102,7 @@ class TestBreeding {
             repeatHeatStatus = false, pregnancyCheckStatus = false
         )
 
-        assertNull(breeding.getNextBreedingEvent())
+        assertNull(breeding.nextBreedingEvent)
     }
 
     @Test
@@ -112,7 +112,7 @@ class TestBreeding {
             dryOffStatus = null
         )
 
-        assertThat(breeding.dryOff, isEqualTo(breeding.getNextBreedingEvent()))
+        assertThat(breeding.dryOff, isEqualTo(breeding.nextBreedingEvent))
     }
 
     @Test
@@ -122,7 +122,7 @@ class TestBreeding {
             dryOffStatus = true
         )
 
-        assertThat(breeding.calving, isEqualTo(breeding.getNextBreedingEvent()))
+        assertThat(breeding.calving, isEqualTo(breeding.nextBreedingEvent))
     }
 
     @Test
@@ -132,7 +132,7 @@ class TestBreeding {
             dryOffStatus = true, calvingStatus = null
         )
 
-        assertThat(breeding.calving, isEqualTo(breeding.getNextBreedingEvent()))
+        assertThat(breeding.calving, isEqualTo(breeding.nextBreedingEvent))
     }
 
     @Test
@@ -142,6 +142,6 @@ class TestBreeding {
             dryOffStatus = true, calvingStatus = true
         )
 
-        assertNull(breeding.getNextBreedingEvent())
+        assertNull(breeding.nextBreedingEvent)
     }
 }

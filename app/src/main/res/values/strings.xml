@@ -20,6 +20,7 @@
     <string name="dry">Dry</string>
     <string name="back_pressed_message">You want to go back?</string>
     <string name="changes_not_saved_message">If you go back changes will not be saved.</string>
+    <string name="undo">Undo</string>
 
     <!--  Transition name  -->
     <string name="tn_fabButton">fab_button</string>

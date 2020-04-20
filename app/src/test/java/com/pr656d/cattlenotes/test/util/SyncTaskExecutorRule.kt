@@ -16,7 +16,7 @@ class SyncTaskExecutorRule : TestWatcher() {
 
     override fun finished(description: Description?) {
         super.finished(description)
-        SyncScheduler.clearScheduledPostdelayedTasks()
+        SyncScheduler.clearScheduledPostDelayedTasks()
         DefaultScheduler.setDelegate(null)
     }
 

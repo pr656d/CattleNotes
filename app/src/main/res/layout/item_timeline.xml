@@ -22,6 +22,7 @@
 
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/containerMaterialCardView"
         style="@style/Widget.CattleNOTES.Timeline.ItemTimelineMaterialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

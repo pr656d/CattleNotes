@@ -109,13 +109,13 @@ object SyncScheduler : Scheduler {
 
     fun runAllScheduledPostDelayedTasks() {
         val tasks = postDelayedTasks.toList()
-        clearScheduledPostdelayedTasks()
+        clearScheduledPostDelayedTasks()
         for (task in tasks) {
             task()
         }
     }
 
-    fun clearScheduledPostdelayedTasks() {
+    fun clearScheduledPostDelayedTasks() {
         postDelayedTasks.clear()
     }
 }

@@ -15,10 +15,10 @@ open class LoadTimelineUseCase @Inject constructor(
             DefaultScheduler.execute {
                 val filteredList = list
                     .filter {
-                        // If it's not null then breeding is not completed yet.
-                        it.breeding.getNextBreedingEvent() != null
+                        // We need only incomplete breeding
+                        !it.breeding.breedingCompleted
                     }
-                    .sortedBy { it.breeding.getNextBreedingEvent()?.expectedOn }
+                    .sortedBy { it.breeding.nextBreedingEvent?.expectedOn }
 
                 result.postValue(Result.Success(filteredList))
             }

@@ -27,7 +27,7 @@ fun indexTimelineHeaders(timelineItems: List<BreedingWithCattle>): List<Pair<Int
     return timelineItems
         .mapIndexed { index, block ->
             /** Assumes [block.breeding.getNextBreeding()] is always not null. */
-            index to block.breeding.getNextBreedingEvent()!!.expectedOn
+            index to block.breeding.nextBreedingEvent!!.expectedOn
         }
         .distinctBy { it.second.dayOfMonth }
 }
