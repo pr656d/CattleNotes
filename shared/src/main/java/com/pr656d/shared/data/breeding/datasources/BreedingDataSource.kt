@@ -117,7 +117,7 @@ class FirestoreBreedingDataSource @Inject constructor(
                 .document(breeding.id)
                 .set(breeding.asHashMap(), SetOptions.merge())
                 .addOnFailureListener {
-                    Timber.d("deleteBreeding() failed() : ${it.localizedMessage}")
+                    Timber.d("updateBreeding() failed() : ${it.localizedMessage}")
                 }
         }
     }

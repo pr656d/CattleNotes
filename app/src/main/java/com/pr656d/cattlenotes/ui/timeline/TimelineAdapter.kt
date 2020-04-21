@@ -2,18 +2,18 @@ package com.pr656d.cattlenotes.ui.timeline
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.IdRes
 import androidx.core.view.children
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pr656d.cattlenotes.databinding.ItemTimelineBinding
+import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.OnOptionSelectedData
 import com.pr656d.cattlenotes.utils.executeAfter
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.Breeding.BreedingEvent.Type
 import com.pr656d.model.BreedingWithCattle
-import com.pr656d.shared.domain.result.Event
 
 class TimelineAdapter(
     private val timelineViewModel: TimelineViewModel
@@ -21,7 +21,11 @@ class TimelineAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder {
         return TimelineViewHolder(
-            ItemTimelineBinding.inflate(LayoutInflater.from(parent.context), parent, false),
+            ItemTimelineBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ),
             timelineViewModel
         )
     }
@@ -38,101 +42,18 @@ class TimelineViewHolder(
 
     private lateinit var data: BreedingWithCattle
 
-    private val undoObserver by lazy {
-        object : Observer<Event<String>> {
-            override fun onChanged(event: Event<String>?) {
-                event?.peekContent()?.let { id ->
-                    if (id != data.breeding.id)
-                        return  // Ignore if id doesn't match.
-                }
-
-                event?.getContentIfNotHandled()?.let {
-                    undoSelection()
-                    listener.undoOptionSelected.removeObserver(this)
-                }
-            }
-        }
-    }
-
     init {
-        /**
-         * Use click listener for each radio button if you want to handle radio group selection
-         * for once only. Radio group onCheckedChangedListener called multiple times.
-         * https://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times
-         */
-
         binding.radioButtonNeutral.setOnClickListener {
-            binding.executeAfter {
-                // Ignore
-            }
+            onCheckedChanged(it.id, null)
         }
 
-        binding.radioButtonPositive.setOnClickListener { view ->
-            binding.executeAfter {
-                val checkedId = view.id
-                // Check the card.
-                containerMaterialCardView.isChecked = true
-                // Disable all radio button except checked button.
-                radioGroupBreedingStatus.children.forEach {
-                    if (checkedId != it.id) it.isEnabled = false
-                }
-            }
-
-            listener.onOptionSelected(data, data.newData(false), false)
-
-            // Start waiting for undo
-            listener.undoOptionSelected.observeForever(undoObserver)
+        binding.radioButtonPositive.setOnClickListener {
+            onCheckedChanged(it.id, true)
         }
 
-        binding.radioButtonNegative.setOnClickListener { view ->
-            binding.executeAfter {
-                val checkedId = view.id
-                // Check the card.
-                containerMaterialCardView.isChecked = true
-                // Disable all radio button except checked button.
-                radioGroupBreedingStatus.children.forEach {
-                    if (checkedId != it.id) it.isEnabled = false
-                }
-            }
-
-            listener.onOptionSelected(data, data.newData(true), true)
-
-            // Start waiting for undo
-            listener.undoOptionSelected.observeForever(undoObserver)
+        binding.radioButtonNegative.setOnClickListener {
+            onCheckedChanged(it.id, false)
         }
-
-        /*binding.radioGroupBreedingStatus.setOnCheckedChangeListener { _, checkedId ->
-            binding.executeAfter {
-                // Default checked button is neutral.
-                if (checkedId == radioButtonNeutral.id)
-                    return@setOnCheckedChangeListener   // Ignore
-
-                when (checkedId) {
-                    radioButtonNegative.id -> {
-                        // Check the card.
-                        containerMaterialCardView.isChecked = true
-                        // Disable all radio button except checked button.
-                        radioGroupBreedingStatus.children.forEach {
-                            if (checkedId != it.id) it.isEnabled = false
-                        }
-                        listener.onOptionSelected(data, data.newData(false), false)
-                    }
-
-                    radioButtonPositive.id -> {
-                        // Check the card.
-                        containerMaterialCardView.isChecked = true
-                        // Disable all radio button except checked button.
-                        radioGroupBreedingStatus.children.forEach {
-                            if (checkedId != it.id) it.isEnabled = false
-                        }
-                        listener.onOptionSelected(data, data.newData(true), true)
-                    }
-                }
-
-                // Start waiting for undo
-                listener.undoOptionSelected.observeForever(undoObserver)
-            }
-        }*/
     }
 
     fun bind(data: BreedingWithCattle) {
@@ -146,7 +67,38 @@ class TimelineViewHolder(
         }
     }
 
-    private fun undoSelection() {
+    /**
+     * Use click listener for each radio button to handle radio group selection for once only.
+     * Radio group onCheckedChangedListener called multiple times.
+     * https://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times
+     */
+    private fun onCheckedChanged(@IdRes checkedId: Int, selectedOption: Boolean?) {
+        binding.executeAfter {
+            if (checkedId == radioButtonNeutral.id)
+                return  // Ignore
+
+            // Check the card.
+            containerMaterialCardView.isChecked = true
+            // Disable all radio button except checked button.
+            radioGroupBreedingStatus.children.forEach {
+                if (checkedId != it.id)
+                    it.isEnabled = false
+                else
+                    it.isClickable = false
+            }
+
+            listener.onOptionSelected(
+                OnOptionSelectedData(
+                    data,
+                    data.newData(selectedOption),
+                    selectedOption,
+                    undoSelection()
+                )
+            )
+        }
+    }
+
+    private fun undoSelection(): () -> Unit = {
         binding.executeAfter {
             // uncheck the card.
             containerMaterialCardView.isChecked = false
@@ -154,6 +106,7 @@ class TimelineViewHolder(
             // Enable all radio button.
             radioGroupBreedingStatus.children.forEach {
                 it.isEnabled = true
+                it.isClickable = true
             }
 
             // Check neutral button.
@@ -209,6 +162,9 @@ class TimelineViewHolder(
                 )
             )
             Type.UNKNOWN -> throw IllegalStateException("Breeding type can not be UNKNOWN for breeding event ${this.nextBreedingEvent}")
+        }.apply {
+            // Assign id
+            breeding.id = id
         }
     }
 }

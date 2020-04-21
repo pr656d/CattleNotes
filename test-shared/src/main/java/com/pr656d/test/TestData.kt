@@ -153,6 +153,31 @@ object TestData {
         )
     )
 
+    // Repeat heat status negative, pregnancy check status none
+    val breedingRHNegativePregnancyCheckNone = Breeding(
+        cattleId = cattle3.id,
+        artificialInsemination = ArtificialInseminationInfo(
+            date = LocalDate.now(),
+            didBy = null,
+            bullName = null,
+            strawCode = null
+        ),
+        repeat_heat = BreedingEvent(
+            expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
+            status = false
+        ),
+        pregnancy_check = BreedingEvent(
+            expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
+            status = null
+        ),
+        dry_off = BreedingEvent(
+            expectedOn = getExpectedDryOffDate(LocalDate.now())
+        ),
+        calving_ = BreedingEvent(
+            expectedOn = getExpectedCalvingDate(LocalDate.now())
+        )
+    )
+
     // Repeat heat status negative, pregnancy check status negative
     val breedingRHNegativePregnancyCheckNegative = Breeding(
         cattleId = cattle3.id,

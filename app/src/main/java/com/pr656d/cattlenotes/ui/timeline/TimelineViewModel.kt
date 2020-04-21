@@ -1,6 +1,10 @@
 package com.pr656d.cattlenotes.ui.timeline
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.*
+import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.OnOptionSelectedData
+import com.pr656d.model.Breeding
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
 import com.pr656d.shared.domain.result.Event
@@ -15,6 +19,8 @@ class TimelineViewModel @Inject constructor(
 
     private val breedingListResult = loadTimelineUseCase.observe()
 
+    private val updateBreedingResult = MutableLiveData<Result<Unit>>()
+
     private val _timelineList = MediatorLiveData<List<BreedingWithCattle>>()
     val timelineList: LiveData<List<BreedingWithCattle>> = _timelineList
 
@@ -24,12 +30,11 @@ class TimelineViewModel @Inject constructor(
 
     val isEmpty: LiveData<Boolean>
 
-    private val _undoOptionSelected = MutableLiveData<Event<String>>()
-    override val undoOptionSelected: LiveData<Event<String>> = _undoOptionSelected
+    private val _showUndo = MutableLiveData<Event<OnOptionSelectedData>>()
+    val showUndo: LiveData<Event<OnOptionSelectedData>> = _showUndo
 
-    // Event with Breeding id and message
-    private val _showUndo = MutableLiveData<Event<Pair<String, String>>>()
-    val showUndo: LiveData<Event<Pair<String, String>>> = _showUndo
+    private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
+    val showMessage = _showMessage
 
     init {
         loadTimelineUseCase.execute(Unit)
@@ -45,29 +50,23 @@ class TimelineViewModel @Inject constructor(
         _loading.addSource(timelineList) {
             _loading.postValue(false)
         }
+
+        _showMessage.addSource(updateBreedingResult) {
+            (it as? Result.Error)?.exception?.let { e ->
+                _showMessage.postValue(Event(R.string.error_unknown))
+            }
+        }
     }
 
-    fun undoOptionSelected(breedingId: String) {
-        _undoOptionSelected.postValue(Event(breedingId))
+    fun saveBreeding(newBreeding: Breeding) {
+        updateBreedingUseCase(newBreeding, updateBreedingResult)
     }
 
-    override fun onOptionSelected(
-        oldBreedingWithCattle: BreedingWithCattle,
-        newBreedingWithCattle: BreedingWithCattle,
-        selectedOption: Boolean?
-    ) {
-        val message = oldBreedingWithCattle.undoMessage(selectedOption)
-        _showUndo.postValue(Event(Pair(oldBreedingWithCattle.breeding.id, message)))
+    fun undoOptionSelected(optionSelectedData: OnOptionSelectedData) {
+        optionSelectedData.executeOnUndo()
     }
 
-    /**
-     * Return message like "Repeat heat marked as positive for `name` or `tagNumber`"
-     */
-    private fun BreedingWithCattle.undoMessage(actionTaken: Boolean?): String {
-        val typeDisplayName = breeding.nextBreedingEvent!!.type.displayName
-        val actionName = actionTaken?.let { if (it) "positive" else "negative" } ?: "none"
-        val nameOrTagNumber = cattle.name?.let { it } ?: cattle.tagNumber.toString()
-
-        return "$typeDisplayName marked as $actionName of $nameOrTagNumber"
+    override fun onOptionSelected(onOptionSelectedData: OnOptionSelectedData) {
+        _showUndo.postValue(Event(onOptionSelectedData))
     }
 }
