@@ -61,9 +61,19 @@ class TimelineViewHolder(
         binding.executeAfter {
             cattle = data.cattle
             breedingEvent = data.breeding.nextBreedingEvent
+            val nameOrTagNumber =
+                if (!data.cattle.name.isNullOrBlank())
+                    data.cattle.name
+                else
+                    data.cattle.tagNumber.toString()
+
             // Title : Repeat heat ( `cattle name` ) or Repeat heat ( `Tag number` )
-            title = "${data.breeding.nextBreedingEvent!!.type.displayName} " +
-                    "( ${data.cattle.name ?: data.cattle.tagNumber} )"
+            title = "${data.breeding.nextBreedingEvent!!.type.displayName} ( $nameOrTagNumber )"
+            negativeVisibility = when (breedingEvent!!.type) {
+                Type.DRY_OFF -> false
+                Type.CALVING -> false
+                else -> true
+            }
         }
     }
 

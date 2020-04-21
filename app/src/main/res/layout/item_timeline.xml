@@ -18,6 +18,10 @@
         <variable
             name="title"
             type="String" />
+
+        <variable
+            name="negativeVisibility"
+            type="Boolean" />
     </data>
 
 
@@ -61,7 +65,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/negative"
-                    app:goneUnless="@{ breedingEvent.type != Type.DRY_OFF || breedingEvent.type != Type.CALVING }" />
+                    app:goneUnless="@{ negativeVisibility }" />
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
                     android:id="@+id/radioButtonNeutral"
