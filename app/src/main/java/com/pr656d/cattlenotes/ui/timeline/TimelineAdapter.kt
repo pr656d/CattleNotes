@@ -14,6 +14,7 @@ import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.Breeding.BreedingEvent.Type
 import com.pr656d.model.BreedingWithCattle
+import com.pr656d.shared.utils.nameOrTagNumber
 
 class TimelineAdapter(
     private val timelineViewModel: TimelineViewModel
@@ -61,14 +62,8 @@ class TimelineViewHolder(
         binding.executeAfter {
             cattle = data.cattle
             breedingEvent = data.breeding.nextBreedingEvent
-            val nameOrTagNumber =
-                if (!data.cattle.name.isNullOrBlank())
-                    data.cattle.name
-                else
-                    data.cattle.tagNumber.toString()
-
             // Title : Repeat heat ( `cattle name` ) or Repeat heat ( `Tag number` )
-            title = "${data.breeding.nextBreedingEvent!!.type.displayName} ( $nameOrTagNumber )"
+            title = "${data.breeding.nextBreedingEvent!!.type.displayName} ( ${data.cattle.nameOrTagNumber()} )"
             negativeVisibility = when (breedingEvent!!.type) {
                 Type.DRY_OFF -> false
                 Type.CALVING -> false

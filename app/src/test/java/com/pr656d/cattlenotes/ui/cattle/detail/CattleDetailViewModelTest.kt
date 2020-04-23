@@ -51,7 +51,7 @@ class CattleDetailViewModelTest {
         repository: CattleRepository = cattleRepository,
         getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(repository),
         getParentCattleUseCase: GetParentCattleUseCase = GetParentCattleUseCase(repository),
-        deleteCattleUseCase: DeleteCattleUseCase = DeleteCattleUseCase(repository)
+        deleteCattleUseCase: DeleteCattleUseCase = DeleteCattleUseCase(repository, mock())
     ): CattleDetailViewModel {
         return CattleDetailViewModel(
             getCattleByIdUseCase,
@@ -199,7 +199,7 @@ class CattleDetailViewModelTest {
     /**
      * Use case that always returns an error when executed.
      */
-    object FailingDeleteCattleUseCase : DeleteCattleUseCase(cattleRepository = FakeCattleRepository()) {
+    object FailingDeleteCattleUseCase : DeleteCattleUseCase(FakeCattleRepository(), mock()) {
         override fun execute(parameters: Cattle) {
             throw Exception("Error!")
         }

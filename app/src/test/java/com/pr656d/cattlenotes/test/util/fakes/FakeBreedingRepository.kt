@@ -23,16 +23,28 @@ open class FakeBreedingRepository(
         return fakeAppDatabase.breedingDao().insert(breeding)
     }
 
+    override fun getBreeding(breedingId: String): LiveData<Breeding?> {
+        return fakeAppDatabase.breedingDao().get(breedingId)
+    }
+
     override fun getAllBreeding(): LiveData<List<Breeding>> {
         return fakeAppDatabase.breedingDao().getAll()
     }
 
-    override fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>> {
-        return fakeAppDatabase.breedingDao().getAllWithCattle()
-    }
-
     override fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>> {
         return fakeAppDatabase.breedingDao().getAllByCattleId(cattleId)
+    }
+
+    override fun getBreedingWithCattle(breedingId: String): LiveData<BreedingWithCattle?> {
+        return fakeAppDatabase.breedingDao().getBreedingWithCattle(breedingId)
+    }
+
+    override fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>> {
+        return fakeAppDatabase.breedingDao().getAllBreedingWithCattle()
+    }
+
+    override fun getAllBreedingWithCattleByCattleId(cattleId: String): LiveData<List<BreedingWithCattle>> {
+        return fakeAppDatabase.breedingDao().getAllBreedingWithCattleByCattleId(cattleId)
     }
 
     override fun deleteBreeding(breeding: Breeding) {

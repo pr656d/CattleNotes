@@ -99,8 +99,9 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
         }
 
         if (savedInstanceState == null) {
-            // default showing cattle list
-            val initialNavId = intent.getIntExtra(EXTRA_NAVIGATION_ID, R.id.cattleListScreen)
+            // default do not navigate to anywhere.
+            // We se deep link so this navigation will overlap deep link navigation.
+            val initialNavId = intent.getIntExtra(EXTRA_NAVIGATION_ID, NAV_ID_NONE)
             navigation.setCheckedItem(initialNavId) // doesn't trigger listener
             navigateTo(initialNavId)
         }
@@ -121,7 +122,7 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
     }
 
     private fun navigateTo(navId: Int) {
-        if (navId == currentNavId) {
+        if (navId == currentNavId || navId == NAV_ID_NONE) {
             return // user tapped the current item
         }
         navController.navigate(navId)

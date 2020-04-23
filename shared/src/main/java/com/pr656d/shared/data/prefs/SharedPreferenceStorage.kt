@@ -8,6 +8,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pr656d.model.Theme
+import org.threeten.bp.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.properties.ReadWriteProperty
@@ -15,6 +16,7 @@ import kotlin.reflect.KProperty
 
 /**
  * Storage for app and user preferences.
+ * @see SharedPreferenceStorage
  */
 interface PreferenceStorage {
     var loginCompleted: Boolean
@@ -44,6 +46,14 @@ interface PreferenceStorage {
     var observeReloadData: LiveData<Boolean>
 
     /**
+     * Hold preferred time for breeding event reminder.
+     * Saves [org.threeten.bp.LocalTime.toNanoOfDay].
+     */
+    var preferredTimeOfBreedingReminder: Long
+
+    var observePreferredTimeOfBreedingReminder: LiveData<Long>
+
+    /**
      * Clear the shared preferences.
      */
     fun clear()
@@ -70,11 +80,15 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
 
     private val observeReloadDataResult = MutableLiveData<Boolean>()
 
+    private val observePreferredTimeOfBreedingReminderResult = MutableLiveData<Long>()
+
     private val changeListener = OnSharedPreferenceChangeListener { _, key ->
         when (key) {
             PREF_DARK_MODE_ENABLED -> observableSelectedThemeResult.value = selectedTheme
             PREF_LOG_IN -> observableLoginCompletedResult.value = loginCompleted
             PREF_RELOAD_DATA -> observeReloadDataResult.value = reloadData
+            PREF_PREFERRED_TIME_OF_BREEDING_REMINDER ->
+                observePreferredTimeOfBreedingReminderResult.value = preferredTimeOfBreedingReminder
         }
     }
 
@@ -133,6 +147,19 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         }
         set(_) = throw IllegalAccessException("This property can't be changed")
 
+    override var preferredTimeOfBreedingReminder: Long by LongPreference(
+        prefs,
+        PREF_PREFERRED_TIME_OF_BREEDING_REMINDER,
+        DEFAULT_REMINDER_TIME
+    )
+
+    override var observePreferredTimeOfBreedingReminder: LiveData<Long>
+        get() {
+            observePreferredTimeOfBreedingReminderResult.value = preferredTimeOfBreedingReminder
+            return observePreferredTimeOfBreedingReminderResult
+        }
+        set(_) = throw IllegalAccessException("This property can't be changed")
+
     override fun clear() {
         prefs.value.edit { clear() }
     }
@@ -144,6 +171,10 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         const val PREF_ONBOARDING = "pref_onboarding"
         const val PREF_DARK_MODE_ENABLED = "pref_dark_mode"
         const val PREF_RELOAD_DATA = "reload_data"
+        const val PREF_PREFERRED_TIME_OF_BREEDING_REMINDER = "preferred_time_of_breeding_reminder"
+
+        // Default time for reminders will be 09:00 AM in nano day.
+        val DEFAULT_REMINDER_TIME by lazy { LocalTime.of(9, 0).toNanoOfDay() }
     }
 }
 
@@ -176,5 +207,21 @@ class StringPreference(
 
     override fun setValue(thisRef: Any, property: KProperty<*>, value: String?) {
         preferences.value.edit { putString(name, value) }
+    }
+}
+
+class LongPreference(
+    private val preferences: Lazy<SharedPreferences>,
+    private val name: String,
+    private val defaultValue: Long
+) : ReadWriteProperty<Any, Long> {
+
+    @WorkerThread
+    override fun getValue(thisRef: Any, property: KProperty<*>): Long {
+        return preferences.value.getLong(name, defaultValue)
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: Long) {
+        preferences.value.edit { putLong(name, value) }
     }
 }

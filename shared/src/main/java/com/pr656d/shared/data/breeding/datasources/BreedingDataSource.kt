@@ -10,7 +10,8 @@ import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.shared.data.db.BreedingDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.domain.internal.DefaultScheduler
-import com.pr656d.shared.utils.TimeUtils
+import com.pr656d.shared.utils.toLocalDate
+import com.pr656d.shared.utils.toLong
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -128,7 +129,7 @@ class FirestoreBreedingDataSource @Inject constructor(
                 cattleId = get(KEY_CATTLE_ID) as String,
                 artificialInsemination = (get(KEY_ARTIFICIAL_INSEMINATION) as HashMap<*, *>).let { ai ->
                     ArtificialInseminationInfo(
-                        (ai[KEY_AI_DATE] as Long).let { TimeUtils.toLocalDate(it) },
+                        (ai[KEY_AI_DATE] as Long).toLocalDate(),
                         didBy = ai[KEY_AI_DID_BY] as? String,
                         bullName = ai[KEY_AI_BULL_NAME] as? String,
                         strawCode = ai[KEY_AI_STRAW_CODE] as? String
@@ -144,13 +145,9 @@ class FirestoreBreedingDataSource @Inject constructor(
 
     private fun parseBreedingEvent(data: HashMap<*, *>): BreedingEvent {
         return BreedingEvent(
-            expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).let {
-                TimeUtils.toLocalDate(it)
-            },
+            expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).toLocalDate(),
             status = data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
-            doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.let {
-                TimeUtils.toLocalDate(it)
-            }
+            doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.toLocalDate()
         )
     }
 
@@ -159,9 +156,7 @@ class FirestoreBreedingDataSource @Inject constructor(
         put(
             KEY_ARTIFICIAL_INSEMINATION,
             hashMapOf<String, Any?>().apply {
-                put(KEY_AI_DATE, artificialInsemination.date.let {
-                    TimeUtils.toEpochMillis(it)
-                })
+                put(KEY_AI_DATE, artificialInsemination.date.toLong())
                 put(KEY_AI_DID_BY, artificialInsemination.didBy)
                 put(KEY_AI_BULL_NAME, artificialInsemination.bullName)
                 put(KEY_AI_STRAW_CODE, artificialInsemination.strawCode)
@@ -170,49 +165,33 @@ class FirestoreBreedingDataSource @Inject constructor(
         put(
             KEY_REPEAT_HEAT,
             hashMapOf<String, Any?>().apply {
-                put(KEY_BREEDING_EVENT_EXPECTED_ON, repeatHeat.expectedOn.let {
-                    TimeUtils.toEpochMillis(it)
-                })
+                put(KEY_BREEDING_EVENT_EXPECTED_ON, repeatHeat.expectedOn.toLong())
                 put(KEY_BREEDING_EVENT_STATUS, repeatHeat.status)
-                put(KEY_BREEDING_EVENT_DONE_ON, repeatHeat.doneOn?.let {
-                    TimeUtils.toEpochMillis(it)
-                })
+                put(KEY_BREEDING_EVENT_DONE_ON, repeatHeat.doneOn?.toLong())
             }
         )
         put(
             KEY_PREGNANCY_CHECK,
             hashMapOf<String, Any?>().apply {
-                put(KEY_BREEDING_EVENT_EXPECTED_ON, pregnancyCheck.expectedOn.let {
-                    TimeUtils.toEpochMillis(it)
-                })
+                put(KEY_BREEDING_EVENT_EXPECTED_ON, pregnancyCheck.expectedOn.toLong())
                 put(KEY_BREEDING_EVENT_STATUS, pregnancyCheck.status)
-                put(KEY_BREEDING_EVENT_DONE_ON, pregnancyCheck.doneOn?.let {
-                    TimeUtils.toEpochMillis(it)
-                })
+                put(KEY_BREEDING_EVENT_DONE_ON, pregnancyCheck.doneOn?.toLong())
             }
         )
         put(
             KEY_DRY_OFF,
             hashMapOf<String, Any?>().apply {
-                put(KEY_BREEDING_EVENT_EXPECTED_ON, dryOff.expectedOn.let {
-                    TimeUtils.toEpochMillis(it)
-                })
+                put(KEY_BREEDING_EVENT_EXPECTED_ON, dryOff.expectedOn.toLong())
                 put(KEY_BREEDING_EVENT_STATUS, dryOff.status)
-                put(KEY_BREEDING_EVENT_DONE_ON, dryOff.doneOn?.let {
-                    TimeUtils.toEpochMillis(it)
-                })
+                put(KEY_BREEDING_EVENT_DONE_ON, dryOff.doneOn?.toLong())
             }
         )
         put(
             KEY_CALVING,
             hashMapOf<String, Any?>().apply {
-                put(KEY_BREEDING_EVENT_EXPECTED_ON, calving.expectedOn.let {
-                    TimeUtils.toEpochMillis(it)
-                })
+                put(KEY_BREEDING_EVENT_EXPECTED_ON, calving.expectedOn.toLong())
                 put(KEY_BREEDING_EVENT_STATUS, calving.status)
-                put(KEY_BREEDING_EVENT_DONE_ON, calving.doneOn?.let {
-                    TimeUtils.toEpochMillis(it)
-                })
+                put(KEY_BREEDING_EVENT_DONE_ON, calving.doneOn?.toLong())
             }
         )
         put(KEY_BREEDING_COMPLETED, breedingCompleted)

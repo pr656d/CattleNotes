@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.ui.settings
 
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.pr656d.cattlenotes.databinding.FragmentSettingsBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.settings.SettingsFragmentDirections.Companion.toCredits
 import com.pr656d.shared.domain.result.EventObserver
+import com.pr656d.shared.utils.TimeUtils
 import javax.inject.Inject
 
 class SettingsFragment : NavigationFragment() {
@@ -60,6 +62,15 @@ class SettingsFragment : NavigationFragment() {
             startActivity(
                 Intent(requireContext(), OssLicensesMenuActivity::class.java)
             )
+        })
+
+        model.navigateToBreedingReminderTimeSelector.observe(viewLifecycleOwner, EventObserver {
+            TimePickerDialog(requireContext(), R.style.TimePicker,
+                TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                    model.setBreedingReminderTime(TimeUtils.toLocalTime(hourOfDay, minute))
+                },
+                0, 0, false
+            ).show()
         })
     }
 }

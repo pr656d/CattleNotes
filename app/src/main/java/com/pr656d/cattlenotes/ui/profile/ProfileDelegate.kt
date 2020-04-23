@@ -16,7 +16,8 @@ import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.user.info.ObserveUserInfoDetailed
 import com.pr656d.shared.domain.user.info.UpdateUserInfoDetailedUseCase
 import com.pr656d.shared.utils.NetworkHelper
-import com.pr656d.shared.utils.TimeUtils
+import com.pr656d.shared.utils.toLocalDate
+import com.pr656d.shared.utils.toLong
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
@@ -161,9 +162,7 @@ class ProfileDelegateImp @Inject constructor(
 
         dob.addSource(currentUserInfo) { user ->
             dob.postValue(
-                user?.getDateOfBirth()?.toLongOrNull()?.let {
-                    TimeUtils.toLocalDate(it)
-                }
+                user?.getDateOfBirth()?.toLongOrNull()?.toLocalDate()
             )
         }
 
@@ -278,7 +277,7 @@ class ProfileDelegateImp @Inject constructor(
             }
 
             override fun getDateOfBirth(): String? {
-                return dob.value?.let { TimeUtils.toEpochMillis(it).toString() }
+                return dob.value?.toLong().toString()
             }
 
             override fun getAddress(): String? {

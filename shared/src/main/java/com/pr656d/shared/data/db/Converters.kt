@@ -3,15 +3,16 @@ package com.pr656d.shared.data.db
 import androidx.room.TypeConverter
 import com.pr656d.model.Animal
 import com.pr656d.model.Cattle
-import com.pr656d.shared.utils.TimeUtils
+import com.pr656d.shared.utils.toLocalDate
+import com.pr656d.shared.utils.toLong
 import org.threeten.bp.LocalDate
 
 class Converters {
     @TypeConverter
-    fun fromMillisToDate(millis: Long?): LocalDate? = millis?.let { TimeUtils.toLocalDate(it) }
+    fun fromMillisToDate(millis: Long?): LocalDate? = millis?.toLocalDate()
 
     @TypeConverter
-    fun fromDateToMillis(localDate: LocalDate?): Long? = localDate?.let { TimeUtils.toEpochMillis(it) }
+    fun fromDateToMillis(localDate: LocalDate?): Long? = localDate?.toLong()
 
     @TypeConverter
     fun fromStringToAnimalType(value: String): Animal.Type = when(value) {

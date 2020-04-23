@@ -61,6 +61,36 @@
                     android:onClick="@{ () -> viewModel.onThemeSettingClicked() }"
                     android:text="@string/theme_title"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:baselineAligned="true"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:onClick="@{ () -> viewModel.onBreedingReminderClicked() }">
+
+                    <TextView
+                        style="@style/Widget.CattleNOTES.Settings.NotificationButton"
+                        android:id="@+id/textViewChooseBreedingReminderTime"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:text="@string/reminder_notification_time_title" />
+
+                    <TextView
+                        style="@style/Widget.CattleNOTES.Settings.NotificationButton"
+                        android:id="@+id/textViewBreedingReminderTime"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textAlignment="textEnd"
+                        android:maxLength="8"
+                        android:text="@{viewModel.preferredTimeOfBreedingReminder}"
+                        tools:text="09:00 AM"/>
+                </LinearLayout>
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"

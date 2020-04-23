@@ -17,11 +17,17 @@ import javax.inject.Singleton
 interface BreedingRepository {
     fun addBreeding(breeding: Breeding)
 
+    fun getBreeding(breedingId: String): LiveData<Breeding?>
+
     fun getAllBreeding(): LiveData<List<Breeding>>
+
+    fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>>
+
+    fun getBreedingWithCattle(breedingId: String): LiveData<BreedingWithCattle?>
 
     fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>>
 
-    fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>>
+    fun getAllBreedingWithCattleByCattleId(cattleId: String): LiveData<List<BreedingWithCattle>>
 
     fun deleteBreeding(breeding: Breeding)
 
@@ -42,16 +48,28 @@ open class BreedingDataRepository @Inject constructor(
         breedingDataSource.addBreeding(breeding)
     }
 
+    override fun getBreeding(breedingId: String): LiveData<Breeding?> {
+        return appDatabase.breedingDao().get(breedingId)
+    }
+
     override fun getAllBreeding(): LiveData<List<Breeding>> {
         return appDatabase.breedingDao().getAll()
     }
 
     override fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>> {
-        return appDatabase.breedingDao().getAllWithCattle()
+        return appDatabase.breedingDao().getAllBreedingWithCattle()
     }
 
     override fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>> {
         return appDatabase.breedingDao().getAllByCattleId(cattleId)
+    }
+
+    override fun getBreedingWithCattle(breedingId: String): LiveData<BreedingWithCattle?> {
+        return appDatabase.breedingDao().getBreedingWithCattle(breedingId)
+    }
+
+    override fun getAllBreedingWithCattleByCattleId(cattleId: String): LiveData<List<BreedingWithCattle>> {
+        return appDatabase.breedingDao().getAllBreedingWithCattleByCattleId(cattleId)
     }
 
     /**

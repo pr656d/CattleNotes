@@ -44,8 +44,8 @@ fun setDate(view: TextInputEditText, newDate: LocalDate?) {
 
 @InverseBindingAdapter(attribute = "dateText")
 fun getDate(view: TextInputEditText): LocalDate? {
-    view.text?.toString()?.let {
-        if (it.isNotEmpty())
+    view.text?.toString().let {
+        if (!it.isNullOrBlank())
             return TimeUtils.toLocalDate(it)
     }
     return null

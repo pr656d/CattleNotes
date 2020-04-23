@@ -17,6 +17,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.utils.CircularOutlineProvider
 import com.pr656d.shared.utils.TimeUtils
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
 import timber.log.Timber
 
 /** Set text on a [TextView] from a string resource. */
@@ -60,6 +61,14 @@ fun errorText(view: TextInputLayout, @StringRes messageId: Int) {
 fun setText(view: TextView, date: LocalDate?) {
     date?.let {
         view.text = TimeUtils.dateString(it)
+    }
+}
+
+/** Set text on [TextView] from a [LocalTime] resource */
+@BindingAdapter("android:text")
+fun setText(view: TextView, time: LocalTime?) {
+    time?.let {
+        view.text = TimeUtils.timeString(it)
     }
 }
 

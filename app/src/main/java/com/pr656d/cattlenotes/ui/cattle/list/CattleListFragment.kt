@@ -13,13 +13,12 @@ import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.cattle.list.CattleListFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.cattle.list.CattleListFragmentDirections.Companion.toCattleDetail
 import com.pr656d.shared.domain.result.EventObserver
-import com.pr656d.shared.log.Logger
 import javax.inject.Inject
 
 class CattleListFragment : NavigationFragment() {
 
     companion object {
-        const val TAG = "CattleFragment"
+        const val TAG = "CattleListFragment"
     }
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -46,7 +45,6 @@ class CattleListFragment : NavigationFragment() {
         })
 
         model.launchCattleDetail.observe(viewLifecycleOwner, EventObserver {
-            Logger.d(TAG, "$it")
             findNavController().navigate(toCattleDetail(Gson().toJson(it)))
         })
     }

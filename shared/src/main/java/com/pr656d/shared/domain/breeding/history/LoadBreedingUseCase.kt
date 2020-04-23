@@ -5,7 +5,7 @@ import com.pr656d.model.Breeding
 import com.pr656d.shared.data.breeding.BreedingRepository
 import javax.inject.Inject
 
-open class LoadBreedingHistoryUseCase @Inject constructor(
+open class LoadBreedingUseCase @Inject constructor(
     private val breedingRepository: BreedingRepository
 ) {
     operator fun invoke(): LiveData<List<Breeding>> {

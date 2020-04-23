@@ -24,12 +24,23 @@ interface BreedingDao {
     @Query("SELECT * FROM breedingList ORDER BY cattleId")
     fun getAll(): LiveData<List<Breeding>>
 
+    @Query("SELECT * FROM breedingList WHERE id == :breedingId")
+    fun get(breedingId: String): LiveData<Breeding?>
+
     @Transaction
     @Query("SELECT * FROM breedingList")
-    fun getAllWithCattle(): LiveData<List<BreedingWithCattle>>
+    fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>>
 
     @Query("SELECT * FROM breedingList WHERE cattleId == :cattleId")
     fun getAllByCattleId(cattleId: String): LiveData<List<Breeding>>
+
+    @Transaction
+    @Query("SELECT * FROM breedingList WHERE id == :breedingId")
+    fun getBreedingWithCattle(breedingId: String): LiveData<BreedingWithCattle?>
+
+    @Transaction
+    @Query("SELECT * FROM breedingList WHERE cattleId == :cattleId")
+    fun getAllBreedingWithCattleByCattleId(cattleId: String): LiveData<List<BreedingWithCattle>>
 
     @Update
     fun update(breeding: Breeding)

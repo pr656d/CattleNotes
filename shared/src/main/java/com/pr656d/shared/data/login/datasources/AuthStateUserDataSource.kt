@@ -22,6 +22,7 @@ import com.pr656d.shared.domain.result.Result
 
 /**
  * Listens to an Authentication state data source that emits updates on the current user.
+ * @see FirebaseAuthStateUserDataSource
  */
 interface AuthStateUserDataSource : ReloadFirebaseUserInfo {
     /**
@@ -42,6 +43,7 @@ interface AuthStateUserDataSource : ReloadFirebaseUserInfo {
 
 /**
  * Force to reload firebase user info.
+ * @see FirebaseAuthStateUserDataSource.reload
  */
 interface ReloadFirebaseUserInfo {
     /**

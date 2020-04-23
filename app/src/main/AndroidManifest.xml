@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.pr656d.cattlenotes">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <application
         android:name=".CattleNotesApplication"
         android:allowBackup="false"
@@ -37,6 +34,8 @@
             android:name=".ui.MainActivity"
             android:windowSoftInputMode="adjustPan">
 
+            <nav-graph android:value="@navigation/main_nav_graph" />
+
         </activity>
 
         <activity
@@ -45,7 +44,7 @@
 
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="${crashlyticsCollectionEnabled}" />
+            android:value="${crashlyticsEnabled}" />
     </application>
 
 </manifest>

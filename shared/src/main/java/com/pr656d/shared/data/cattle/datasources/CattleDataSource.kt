@@ -9,10 +9,7 @@ import com.pr656d.model.Cattle
 import com.pr656d.shared.data.db.CattleDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.domain.internal.DefaultScheduler
-import com.pr656d.shared.utils.TimeUtils
-import com.pr656d.shared.utils.toBreed
-import com.pr656d.shared.utils.toGroup
-import com.pr656d.shared.utils.toType
+import com.pr656d.shared.utils.*
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -173,10 +170,8 @@ class FirestoreCattleDataSource @Inject constructor(
                 lactation = get(KEY_LACTATION) as Long,
                 homeBorn = get(KEY_HOME_BORN) as Boolean,
                 purchaseAmount = get(KEY_PURCHASE_AMOUNT) as? Long,
-                purchaseDate = (get(KEY_PURCHASE_Date) as? Long)?.let {
-                    TimeUtils.toLocalDate(it)
-                },
-                dateOfBirth = (get(KEY_DOB) as? Long)?.let { TimeUtils.toLocalDate(it) },
+                purchaseDate = (get(KEY_PURCHASE_Date) as? Long)?.toLocalDate(),
+                dateOfBirth = (get(KEY_DOB) as? Long)?.toLocalDate(),
                 parent = get(KEY_PARENT) as? String
             ).apply { id = doc.id }
         }
@@ -192,8 +187,8 @@ class FirestoreCattleDataSource @Inject constructor(
         put(KEY_LACTATION, lactation)
         put(KEY_HOME_BORN, homeBorn)
         put(KEY_PURCHASE_AMOUNT, purchaseAmount)
-        put(KEY_PURCHASE_Date, purchaseDate?.let { TimeUtils.toEpochMillis(it) })
-        put(KEY_DOB, dateOfBirth?.let { TimeUtils.toEpochMillis(it) })
+        put(KEY_PURCHASE_Date, purchaseDate?.toLong())
+        put(KEY_DOB, dateOfBirth?.toLong())
         put(KEY_PARENT, parent)
     }
 

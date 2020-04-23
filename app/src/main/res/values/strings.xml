@@ -97,12 +97,12 @@
     <string name="bull_name">Bull name</string>
     <string name="straw_code">Straw code</string>
     <string name="repeat_heat_date">Repeat heat date</string>
-    <string name="repeat_heat">Repeat heat</string>
+    <string name="repeat_heat">Repeat heat</string> <!-- Exist in shared module -->
     <string name="pregnancy_check_date">Pregnancy check date</string>
-    <string name="pregnancy_check">Pregnancy check</string>
+    <string name="pregnancy_check">Pregnancy check</string> <!-- Exist in shared module -->
     <string name="dry_off_date">Dry off date</string>
-    <string name="dry_off">Dry off</string>
-    <string name="calving">Calving</string>
+    <string name="dry_off">Dry off</string> <!-- Exist in shared module -->
+    <string name="calving">Calving</string> <!-- Exist in shared module -->
     <string name="delete">Delete</string>
     <string name="home_born">Home born</string>
     <string name="expected">Expected</string>
@@ -168,6 +168,7 @@
 
     <!--  Settings  -->
     <string name="theme_title">Choose theme</string>
+    <string name="reminder_notification_time_title">Reminder notifications time</string>
     <string name="version_name" translation_description="Label for the app version name in Settings.">Version %s</string>
     <string name="settings_theme_system" translation_description="Theme option to use the system default">System default</string>
     <string name="settings_theme_light" translation_description="Theme option to use the light theme">Light</string>

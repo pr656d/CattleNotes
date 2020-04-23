@@ -8,6 +8,7 @@ import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.user.info.FirebaseUserInfo
 import com.pr656d.shared.data.user.info.UserInfoBasic
+import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.fcm.FcmTokenUpdater
@@ -19,7 +20,8 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
     appDatabaseDao: AppDatabaseDao,
     tokenUpdater: FcmTokenUpdater,
     preferenceStorage: PreferenceStorage,
-    dbLoader: DbLoader
+    dbLoader: DbLoader,
+    breedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater
 ) : AuthStateUserDataSource {
 
     private val currentFirebaseUserObservable = MutableLiveData<Result<UserInfoBasic?>>()
@@ -32,44 +34,48 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
 
     // Listener that saves the [FirebaseUser], fetches the ID token
     // and updates the user ID observable.
-    private val authStateListener: ((FirebaseAuth) -> Unit) = {
+    private val authStateListener: ((FirebaseAuth) -> Unit) = { auth ->
         // Initialize auth as global
-        auth = it
+        this.auth = auth
 
         DefaultScheduler.execute {
             Timber.d("Received a FirebaseAuth update.")
             // Post the current user for observers
             currentFirebaseUserObservable.postValue(
                 Result.Success(
-                    FirebaseUserInfo(auth.currentUser)
+                    FirebaseUserInfo(this.auth.currentUser)
                 )
             )
 
-            auth.currentUser?.let { currentUser ->
+            this.auth.currentUser?.let { currentUser ->
                 // Save the FCM ID token in firestore
                 tokenUpdater.updateTokenForUser(currentUser.uid)
             }
         }
 
         // Log out
-        if (auth.currentUser == null) {
-            DefaultScheduler.execute {
-                preferenceStorage.clear()
-                appDatabaseDao.clear()
-                dbLoader.stop()
-            }
-            // notificationAlarmUpdater.cancelAll()
+        if (this.auth.currentUser == null) {
+            preferenceStorage.clear()
+            // Cancel all the breeding alarms.
+            breedingNotificationAlarmUpdater.cancelAll(onComplete = {
+                DefaultScheduler.execute {
+                    // Wait until alarm cancellation completes before erasing data.
+                    appDatabaseDao.clear()
+                }
+            })
+            dbLoader.stop()
         }
 
         // Log in
-        auth.currentUser?.let {
-            if (lastUid != auth.uid) { // Prevent duplicates
+        this.auth.currentUser?.let {
+            if (lastUid != this.auth.uid) { // Prevent duplicates
                 dbLoader.initialize()
-                // notificationAlarmUpdater.updateAll(it.uid)
+                // Update all the breeding alarms.
+                breedingNotificationAlarmUpdater.updateAll(it.uid)
             }
         }
         // Save the last UID to prevent setting too many alarms.
-        lastUid = auth.uid
+        lastUid = this.auth.uid
     }
 
     override fun startListening() {

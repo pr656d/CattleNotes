@@ -1,5 +1,7 @@
 package com.pr656d.shared.data.db
 
+import androidx.annotation.WorkerThread
+
 /**
  * [AppDatabase] API surface.
  *
@@ -9,5 +11,6 @@ interface AppDatabaseDao {
     /**
      * Clear all the table entries from the database.
      */
+    @WorkerThread
     fun clear()
 }

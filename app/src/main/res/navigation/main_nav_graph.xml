@@ -139,7 +139,17 @@
         android:id="@+id/timelineScreen"
         android:name="com.pr656d.cattlenotes.ui.timeline.TimelineFragment"
         android:label="@string/timeline"
-        tools:layout="@layout/fragment_timeline" />
+        tools:layout="@layout/fragment_timeline">
+
+        <deepLink app:uri="cattlenotes://timeline/{breeding_id}" />
+
+        <argument
+            android:name="breeding_id"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/cashflowScreen"

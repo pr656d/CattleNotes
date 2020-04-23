@@ -22,6 +22,7 @@ import com.pr656d.shared.utils.NetworkHelper
 import com.pr656d.shared.utils.NetworkHelperImpl
 import dagger.Module
 import dagger.Provides
+import timber.log.Timber
 import javax.inject.Singleton
 
 /**
@@ -65,7 +66,9 @@ class AppModule {
     fun provideAppDatabaseDao(appDatabase: AppDatabase): AppDatabaseDao {
         return object : AppDatabaseDao {
             override fun clear() {
+                Timber.d("Clearing app database")
                 appDatabase.clearAllTables()
+                Timber.d("Cleared app database")
             }
         }
     }

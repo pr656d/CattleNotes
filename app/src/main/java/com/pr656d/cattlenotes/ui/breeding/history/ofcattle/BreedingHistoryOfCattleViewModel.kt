@@ -5,13 +5,13 @@ import com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryActionListener
 import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.DeleteBreedingUseCase
-import com.pr656d.shared.domain.breeding.history.LoadBreedingHistoryByCattleIdUseCase
+import com.pr656d.shared.domain.breeding.history.LoadBreedingByCattleIdUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import javax.inject.Inject
 
 class BreedingHistoryOfCattleViewModel @Inject constructor(
-    private val loadBreedingHistoryByCattleIdUseCase: LoadBreedingHistoryByCattleIdUseCase,
+    private val loadBreedingByCattleIdUseCase: LoadBreedingByCattleIdUseCase,
     private val deleteBreedingUseCase: DeleteBreedingUseCase
 ) : ViewModel(),
     BreedingHistoryActionListener {
@@ -50,7 +50,7 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
     fun setCattle(cattle: Cattle) {
         this.cattle.value = cattle
 
-        breedingList.addSource(loadBreedingHistoryByCattleIdUseCase(cattle.id)) {
+        breedingList.addSource(loadBreedingByCattleIdUseCase(cattle.id)) {
             breedingList.postValue(it)
         }
     }

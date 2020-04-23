@@ -1,11 +1,19 @@
 <resources>
     <string name="app_name">Cattle NOTES</string>
 
+    <!--  Breeding  -->
+    <string name="repeat_heat">Repeat heat</string>
+    <string name="pregnancy_check">Pregnancy check</string>
+    <string name="dry_off">Dry off</string>
+    <string name="calving">Calving</string>
+
     <!-- Notifications -->
     <string name="progress_notifications">Progress notifications</string>
     <string name="progress_notifications_title">Loading your data</string>
-    <string name="restoring_data_notifications">Restoring data progress notifications</string>
+    <string name="restoring_data_notifications">Data restore progress notifications</string>
     <string name="restoring_data_notifications_title">Restoring your data</string>
+    <string name="breeding_reminder_notifications">Breeding reminder notifications</string>
+    <string name="breeding_reminder_notifications_title">Breeding reminder</string>
 
     <!--  Cattle details  -->
     <string name="error_save">Could not save cattle. Try again.</string>

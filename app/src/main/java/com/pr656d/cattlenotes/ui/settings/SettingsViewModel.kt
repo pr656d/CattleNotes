@@ -5,18 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.pr656d.model.Theme
+import com.pr656d.shared.data.prefs.SharedPreferenceStorage.Companion.DEFAULT_REMINDER_TIME
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Success
-import com.pr656d.shared.domain.settings.GetAvailableThemesUseCase
-import com.pr656d.shared.domain.settings.GetThemeUseCase
-import com.pr656d.shared.domain.settings.SetThemeUseCase
+import com.pr656d.shared.domain.settings.*
+import com.pr656d.shared.utils.TimeUtils
+import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
     getThemeUseCase: GetThemeUseCase,
-    val setThemeUseCase: SetThemeUseCase,
-    getAvailableThemesUseCase: GetAvailableThemesUseCase
+    getAvailableThemesUseCase: GetAvailableThemesUseCase,
+    observePreferredTimeOfBreedingReminderUseCase: ObservePreferredTimeOfBreedingReminderUseCase,
+    private val setThemeUseCase: SetThemeUseCase,
+    private val setPreferredTimeOfBreedingReminderUseCase: SetPreferredTimeOfBreedingReminderUseCase
 ) : ViewModel() {
 
     // Theme setting
@@ -31,6 +34,10 @@ class SettingsViewModel @Inject constructor(
     val navigateToThemeSelector: LiveData<Event<Unit>>
         get() = _navigateToThemeSelector
 
+    private val _navigateToBreedingReminderTimeSelector = MutableLiveData<Event<Unit>>()
+    val navigateToBreedingReminderTimeSelector: LiveData<Event<Unit>>
+        get() = _navigateToBreedingReminderTimeSelector
+
     private val _launchCredits = MutableLiveData<Event<Unit>>()
     val launchCredits: LiveData<Event<Unit>>
         get() = _launchCredits
@@ -38,6 +45,8 @@ class SettingsViewModel @Inject constructor(
     private val _launchOpenSourceLicense = MutableLiveData<Event<Unit>>()
     val launchOpenSourceLicense: LiveData<Event<Unit>>
         get() = _launchOpenSourceLicense
+
+    val preferredTimeOfBreedingReminder: LiveData<LocalTime>
 
     init {
         getThemeUseCase(Unit, themeResult)
@@ -49,6 +58,11 @@ class SettingsViewModel @Inject constructor(
         availableThemes = availableThemesResult.map {
             (it as? Success<List<Theme>>)?.data ?: emptyList()
         }
+
+        observePreferredTimeOfBreedingReminderUseCase.execute(Unit)
+        preferredTimeOfBreedingReminder = observePreferredTimeOfBreedingReminderUseCase.observe().map {
+            (it as? Success<LocalTime>)?.data ?: TimeUtils.toLocalTime(DEFAULT_REMINDER_TIME)
+        }
     }
 
     fun setTheme(theme: Theme) {
@@ -57,6 +71,14 @@ class SettingsViewModel @Inject constructor(
 
     fun onThemeSettingClicked() {
         _navigateToThemeSelector.value = Event(Unit)
+    }
+
+    fun onBreedingReminderClicked() {
+        _navigateToBreedingReminderTimeSelector.postValue(Event(Unit))
+    }
+
+    fun setBreedingReminderTime(time: LocalTime) {
+        setPreferredTimeOfBreedingReminderUseCase(time)
     }
 
     fun openCredits() {

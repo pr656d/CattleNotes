@@ -2,6 +2,7 @@ package com.pr656d.shared.di
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.pr656d.shared.data.breeding.BreedingRepository
 import com.pr656d.shared.data.breeding.datasources.BreedingDataSource
 import com.pr656d.shared.data.breeding.datasources.FirestoreBreedingDataSource
 import com.pr656d.shared.data.cattle.datasources.CattleDataSource
@@ -9,6 +10,9 @@ import com.pr656d.shared.data.cattle.datasources.FirestoreCattleDataSource
 import com.pr656d.shared.data.db.BreedingDao
 import com.pr656d.shared.data.db.CattleDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
+import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
+import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdaterImp
+import com.pr656d.shared.notifications.BreedingAlarmManager
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -48,5 +52,14 @@ class SharedModule {
         breedingDao: BreedingDao
     ) : BreedingDataSource {
         return FirestoreBreedingDataSource(authIdDataSource, firestore, breedingDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideBreedingNotificationAlarmUpdater(
+        breedingAlarmManager: BreedingAlarmManager,
+        breedingRepository: BreedingRepository
+    ) : BreedingNotificationAlarmUpdater {
+        return BreedingNotificationAlarmUpdaterImp(breedingAlarmManager, breedingRepository)
     }
 }

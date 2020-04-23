@@ -10,6 +10,7 @@ import com.pr656d.shared.data.login.datasources.FirebaseAuthStateUserDataSource
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSource
 import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSourceImpl
+import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
 import com.pr656d.shared.fcm.FcmTokenUpdater
 import dagger.Module
 import dagger.Provides
@@ -41,14 +42,16 @@ class LoginModule {
         appDatabaseDao: AppDatabaseDao,
         firestore: FirebaseFirestore,
         preferenceStorage: PreferenceStorage,
-        dbLoader: DbLoader
+        dbLoader: DbLoader,
+        breedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater
     ): AuthStateUserDataSource {
         return FirebaseAuthStateUserDataSource(
             firebase,
             appDatabaseDao,
             FcmTokenUpdater(firestore),
             preferenceStorage,
-            dbLoader
+            dbLoader,
+            breedingNotificationAlarmUpdater
         )
     }
 

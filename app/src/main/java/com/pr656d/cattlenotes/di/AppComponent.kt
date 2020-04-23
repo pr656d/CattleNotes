@@ -3,6 +3,7 @@ package com.pr656d.cattlenotes.di
 import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.cattlenotes.ui.profile.ProfileDelegateModule
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegateModule
+import com.pr656d.shared.di.BroadcastReceiverBindingModule
 import com.pr656d.shared.di.SharedModule
 import com.pr656d.shared.di.ViewModelModule
 import dagger.BindsInstance
@@ -24,6 +25,7 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         ViewModelModule::class,
         ActivityBindingModule::class,
+        BroadcastReceiverBindingModule::class,
         AppModule::class,
         SharedModule::class,
         LoginModule::class,

@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentTimelineBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.domain.result.EventObserver
+import timber.log.Timber
 import javax.inject.Inject
 
 class TimelineFragment : NavigationFragment() {
@@ -21,8 +23,17 @@ class TimelineFragment : NavigationFragment() {
     }
 
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
+
     private val model by viewModels<TimelineViewModel> { viewModelFactory }
     private lateinit var binding: FragmentTimelineBinding
+    private val args by navArgs<TimelineFragmentArgs>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        args.breedingId?.let {
+            Timber.d("Timeline get the breeding $it")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -23,6 +23,7 @@ import javax.inject.Inject
 
 /**
  * Load data from data source and save to Local db.
+ * @see DatabaseLoader
  */
 interface DbLoader {
     /**
@@ -74,7 +75,6 @@ class DatabaseLoader @Inject constructor(
         }
 
         Timber.d("Initialized DbLoader")
-
     }
 
     override fun load(onComplete: () -> Unit) {
@@ -111,9 +111,7 @@ class DatabaseLoader @Inject constructor(
         Timber.d("Stopping DbLoader")
 
         tasksCompletedCounter = null
-        DefaultScheduler.postToMainThread {
-            preferenceStorage.observeReloadData.removeObserver(reloadObserver)
-        }
+        preferenceStorage.observeReloadData.removeObserver(reloadObserver)
 
         Timber.d("Stopped DbLoader")
     }
