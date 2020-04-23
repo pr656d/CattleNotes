@@ -29,5 +29,5 @@ fun indexTimelineHeaders(timelineItems: List<BreedingWithCattle>): List<Pair<Int
             /** Assumes [block.breeding.getNextBreeding()] is always not null. */
             index to block.breeding.nextBreedingEvent!!.expectedOn
         }
-        .distinctBy { it.second.dayOfMonth }
+        .distinctBy { it.second }
 }

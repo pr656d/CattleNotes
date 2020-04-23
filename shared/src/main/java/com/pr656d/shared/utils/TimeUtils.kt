@@ -79,6 +79,16 @@ object TimeUtils {
     }
 
     /**
+     * Return [ZonedDateTime] as [String] in this [pattern].
+     * Default return as 01/12/2020.
+     */
+    fun dateString(localDate: ZonedDateTime, pattern: String = "dd/MM/yyyy"): String {
+        return DateTimeFormatter
+            .ofPattern(pattern)
+            .format(localDate)
+    }
+
+    /**
      * Return [LocalTime] as [String] in this [pattern].
      * Default return as 09:00 AM.
      */
@@ -114,6 +124,17 @@ object TimeUtils {
     /** Return a string to use for nearest day to given time. */
     fun getLabelForTimelineHeader(context: Context, time: LocalDate): String {
         val timeNow = LocalDate.now()
+        return when {
+            time.isEqual(timeNow.minusDays(1)) -> context.getString(R.string.day_yesterday)
+            time.isEqual(timeNow) -> context.getString(R.string.day_today)
+            time.isEqual(timeNow.plusDays(1)) -> context.getString(R.string.day_tomorrow)
+            else -> context.getString(R.string.day_itself, dateString(time, "MMM d, yyyy"))
+        }
+    }
+
+    /** Return a string to use for nearest day to given time. */
+    fun getLabelForTimelineHeader(context: Context, time: ZonedDateTime): String {
+        val timeNow = ZonedDateTime.now()
         return when {
             time.isEqual(timeNow.minusDays(1)) -> context.getString(R.string.day_yesterday)
             time.isEqual(timeNow) -> context.getString(R.string.day_today)
