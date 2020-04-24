@@ -3,20 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.pr656d.cattlenotes">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".CattleNotesApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:hardwareAccelerated="true"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup">
 
-        <activity android:name=".ui.launch.LauncherActivity"
+        <activity
+            android:name=".ui.launch.LauncherActivity"
             android:theme="@style/LaunchTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,6 +55,15 @@
         <receiver
             android:name="com.pr656d.shared.notifications.BreedingAlarmBroadcastReceiver"
             android:exported="false" />
+
+        <receiver
+            android:name="com.pr656d.shared.reboot.RebootBroadcastReceiver"
+            android:enabled="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

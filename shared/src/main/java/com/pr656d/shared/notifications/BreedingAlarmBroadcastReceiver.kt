@@ -27,12 +27,12 @@ import javax.inject.Inject
 class BreedingAlarmBroadcastReceiver : DaggerBroadcastReceiver() {
     @Inject lateinit var loadBreedingWithCattleByIdUseCase: GetBreedingWithCattleByIdUseCase
 
-    override fun onReceive(context: Context, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
-        Timber.d("Alarm received")
+        Timber.d("Received breeding alarm.")
 
-        val breedingId = intent?.getStringExtra(EXTRA_BREEDING_ID) ?: return
+        val breedingId = intent.getStringExtra(EXTRA_BREEDING_ID) ?: return
 
         loadBreedingWithCattleByIdUseCase(breedingId).let {
             val observer = object : Observer<BreedingWithCattle?> {
