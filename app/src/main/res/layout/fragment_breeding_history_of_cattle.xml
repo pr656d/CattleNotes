@@ -35,7 +35,7 @@
                 app:layout_scrollFlags="noScroll"
                 app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/breeding_history"
-                app:subtitle="@{ String.valueOf(viewModel.cattle.tagNumber) }"
+                app:subtitle="@{ viewModel.nameOrTagNumber }"
                 tools:subtitle="532412413412"/>
         </com.google.android.material.appbar.AppBarLayout>
 

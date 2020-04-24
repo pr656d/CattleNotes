@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentBreedingHistoryOfCattleBinding
@@ -77,5 +78,8 @@ class BreedingHistoryOfCattleFragment : NavigationFragment() {
             )
         })
 
+        model.showMessage.observe(viewLifecycleOwner, EventObserver {
+            Snackbar.make(requireView(), requireContext().getString(it), Snackbar.LENGTH_LONG).show()
+        })
     }
 }

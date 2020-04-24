@@ -199,7 +199,7 @@ class CattleDetailViewModelTest {
     /**
      * Use case that always returns an error when executed.
      */
-    object FailingDeleteCattleUseCase : DeleteCattleUseCase(FakeCattleRepository(), mock()) {
+    private object FailingDeleteCattleUseCase : DeleteCattleUseCase(FakeCattleRepository(), mock()) {
         override fun execute(parameters: Cattle) {
             throw Exception("Error!")
         }

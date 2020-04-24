@@ -1,6 +1,8 @@
 package com.pr656d.cattlenotes.ui.breeding.history.ofcattle
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.*
+import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.breeding.history.BreedingHistoryActionListener
 import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
@@ -8,6 +10,7 @@ import com.pr656d.shared.domain.breeding.addedit.DeleteBreedingUseCase
 import com.pr656d.shared.domain.breeding.history.LoadBreedingByCattleIdUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.utils.nameOrTagNumber
 import javax.inject.Inject
 
 class BreedingHistoryOfCattleViewModel @Inject constructor(
@@ -17,6 +20,8 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
     BreedingHistoryActionListener {
 
     val cattle = MutableLiveData<Cattle>()
+
+    val nameOrTagNumber = cattle.map { it.nameOrTagNumber() }
 
     private val deleteBreedingResult = MutableLiveData<Result<Unit>>()
 
@@ -29,8 +34,8 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
     val isEmpty: LiveData<Boolean>
         get() = breedingList.map { it.isNullOrEmpty() }
 
-    private val _showMessage = MediatorLiveData<Event<String>>()
-    val showMessage: LiveData<Event<String>>
+    private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
+    val showMessage: LiveData<Event<Int>>
         get() = _showMessage
 
     private val _launchDeleteConfirmation = MutableLiveData<Event<Breeding>>()
@@ -45,6 +50,12 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
         _loading.addSource(breedingList) {
             _loading.value = false
         }
+
+        _showMessage.addSource(deleteBreedingResult) {
+            (it as? Result.Error)?.exception?.let {
+                _showMessage.postValue(Event(R.string.error_unknown))
+            }
+        }
     }
 
     fun setCattle(cattle: Cattle) {
@@ -56,9 +67,7 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
     }
 
     override fun editBreeding(breeding: Breeding) {
-        _launchEditBreeding.postValue(
-            Event(Pair(cattle.value!!, breeding))
-        )
+        _launchEditBreeding.postValue(Event(cattle.value!! to breeding))
     }
 
     override fun deleteBreeding(breeding: Breeding, deleteConfirmation: Boolean) {
