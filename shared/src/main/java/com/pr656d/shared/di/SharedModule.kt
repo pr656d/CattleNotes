@@ -10,6 +10,7 @@ import com.pr656d.shared.data.cattle.datasources.FirestoreCattleDataSource
 import com.pr656d.shared.data.db.BreedingDao
 import com.pr656d.shared.data.db.CattleDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
+import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdaterImp
 import com.pr656d.shared.notifications.BreedingAlarmManager
@@ -58,8 +59,11 @@ class SharedModule {
     @Provides
     fun provideBreedingNotificationAlarmUpdater(
         breedingAlarmManager: BreedingAlarmManager,
-        breedingRepository: BreedingRepository
+        breedingRepository: BreedingRepository,
+        preferenceStorage: PreferenceStorage
     ) : BreedingNotificationAlarmUpdater {
-        return BreedingNotificationAlarmUpdaterImp(breedingAlarmManager, breedingRepository)
+        return BreedingNotificationAlarmUpdaterImp(
+            breedingAlarmManager, breedingRepository, preferenceStorage
+        )
     }
 }

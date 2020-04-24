@@ -13,8 +13,9 @@ import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.notifications.BreedingAlarmBroadcastReceiver.Companion.EXTRA_BREEDING_ID
 import com.pr656d.shared.utils.TimeUtils
 import com.pr656d.shared.utils.toEpochMilli
-import org.threeten.bp.Instant
 import org.threeten.bp.LocalTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -26,10 +27,6 @@ open class BreedingAlarmManager @Inject constructor(val context: Context) {
     @Inject lateinit var preferenceStorage: PreferenceStorage
 
     private val systemAlarmManager: AlarmManager? = context.getSystemService()
-
-    private val preferredTimeForBreedingReminder: LocalTime by lazy {
-        TimeUtils.toLocalTime(preferenceStorage.preferredTimeOfBreedingReminder)
-    }
 
     /**
      * Schedule an alarm for a breeding.
@@ -49,10 +46,12 @@ open class BreedingAlarmManager @Inject constructor(val context: Context) {
             return
         }
 
+        val preferredTimeForBreedingReminder =
+            TimeUtils.toLocalTime(preferenceStorage.preferredTimeOfBreedingReminder)
+
         val isPastBreedingEvent = TimeUtils
             .toZonedDateTime(breedingEvent.expectedOn, preferredTimeForBreedingReminder)
-            .toInstant()
-            .isBefore(Instant.now())
+            .isBefore(ZonedDateTime.now(ZoneId.systemDefault()))
 
         if (isPastBreedingEvent) {
             Timber.d("Trying to schedule alarm for past breeding event for breeding ${breeding.id}, Ignoring.")
@@ -60,7 +59,7 @@ open class BreedingAlarmManager @Inject constructor(val context: Context) {
         }
 
         makePendingIntent(breeding.id)?.let {
-            scheduleAlarmForBreeding(it, breeding)
+            scheduleAlarmForBreeding(it, breeding, preferredTimeForBreedingReminder)
         }
     }
 
@@ -89,7 +88,11 @@ open class BreedingAlarmManager @Inject constructor(val context: Context) {
         }
     }
 
-    private fun scheduleAlarmForBreeding(pendingIntent: PendingIntent, breeding: Breeding) {
+    private fun scheduleAlarmForBreeding(
+        pendingIntent: PendingIntent,
+        breeding: Breeding,
+        preferredTimeForBreedingReminder: LocalTime
+    ) {
         val triggerAtMillis = TimeUtils
             .toZonedDateTime(breeding.nextBreedingEvent!!.expectedOn, preferredTimeForBreedingReminder)
             .toEpochMilli()

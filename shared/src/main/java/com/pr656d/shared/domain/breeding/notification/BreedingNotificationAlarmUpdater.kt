@@ -5,8 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.pr656d.model.Breeding
 import com.pr656d.shared.data.breeding.BreedingRepository
+import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.notifications.BreedingAlarmManager
+import com.pr656d.shared.utils.TimeUtils
+import org.threeten.bp.LocalTime
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,27 +33,61 @@ interface BreedingNotificationAlarmUpdater {
 @Singleton
 class BreedingNotificationAlarmUpdaterImp @Inject constructor(
     private val breedingAlarmManager: BreedingAlarmManager,
-    private val breedingRepository: BreedingRepository
+    private val breedingRepository: BreedingRepository,
+    private val preferenceStorage: PreferenceStorage
 ) : BreedingNotificationAlarmUpdater {
-    var observerBreedingList: (Observer<List<Breeding>>)? = null
-    var breedingList: LiveData<List<Breeding>>? = null
+    private var observerBreedingList: Observer<List<Breeding>>? = null
+    private var breedingList: LiveData<List<Breeding>>? = null
 
-    var cancelBreedingListObserver: (Observer<List<Breeding>>)? = null
-    var cancelBreedingList: LiveData<List<Breeding>>? = null
+    private var observerPreferredTimeOfBreedingReminder: Observer<Long>? = null
+    private var preferredTimeOfBreedingReminder: LiveData<Long>? = null
+
+    private var lastPreferredTimeForBreedingReminder: LocalTime? = null
+
+    private var cancelBreedingListObserver: Observer<List<Breeding>>? = null
+    private var cancelBreedingList: LiveData<List<Breeding>>? = null
+
+    init {
+        DefaultScheduler.execute {
+            lastPreferredTimeForBreedingReminder = TimeUtils.toLocalTime(
+                preferenceStorage.preferredTimeOfBreedingReminder
+            )
+        }
+    }
 
     override fun updateAll(userId: String) {
         // Go through every breeding and make sure alarm is set for the notification.
-        val newObserver = Observer<List<Breeding>> {
-            DefaultScheduler.execute {
-                processBreedings(userId, it)
-            }
-        }
-
         breedingList = breedingRepository.getAllBreeding().apply {
+            val newObserver = Observer<List<Breeding>> {
+                DefaultScheduler.execute {
+                    processBreedings(userId, it)
+                }
+            }
+
             DefaultScheduler.postToMainThread { observeForever(newObserver) }
+
+            observerBreedingList = newObserver
         }
 
-        observerBreedingList = newObserver
+        // Observe for reminder time changes.
+        preferredTimeOfBreedingReminder = preferenceStorage.observePreferredTimeOfBreedingReminder.apply {
+            val newObserver = Observer<Long> {
+                val newTime = TimeUtils.toLocalTime(it)
+
+                Timber.d("PreferredTimeOfBreedingReminder changed to $newTime")
+
+                // Prevent loop
+                if (lastPreferredTimeForBreedingReminder != newTime) {
+                    updateAll(userId)
+                    Timber.d("Got new PreferredTimeOfBreedingReminder $newTime")
+                    lastPreferredTimeForBreedingReminder = newTime
+                }
+            }
+
+            DefaultScheduler.postToMainThread { observeForever(newObserver) }
+
+            observerPreferredTimeOfBreedingReminder = newObserver
+        }
     }
 
     @WorkerThread
@@ -70,13 +107,24 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
         observerBreedingList?.let {
             breedingList?.removeObserver(it)
         }
+
         cancelBreedingListObserver?.let {
             cancelBreedingList?.removeObserver(it)
         }
+
+        observerPreferredTimeOfBreedingReminder?.let {
+            preferredTimeOfBreedingReminder?.removeObserver(it)
+        }
+
         observerBreedingList = null
-        cancelBreedingListObserver = null
         breedingList = null
+
+        cancelBreedingListObserver = null
         cancelBreedingList = null
+
+        observerPreferredTimeOfBreedingReminder = null
+        lastPreferredTimeForBreedingReminder = null
+        preferredTimeOfBreedingReminder = null
     }
 
     override fun cancelAll(onComplete: () -> Unit) {
