@@ -74,7 +74,8 @@ dependencies {
     api "com.google.firebase:firebase-analytics:$rootProject.firebaseAnalyticsVersion"
     api "com.google.firebase:firebase-perf:$firebasePerformanceVersion"
     api "com.google.firebase:firebase-firestore:$rootProject.firebaseFirestoreVersion"
-    api "com.google.firebase:firebase-firestore-ktx:$firebaseFirestoreVersion"
+    api "com.google.firebase:firebase-firestore-ktx:$rootProject.firebaseFirestoreVersion"
+    api "com.google.firebase:firebase-messaging:$rootProject.firebaseMessagingVersion"
 
     // Local Unit tests
     testImplementation "junit:junit:$rootProject.junitVersion"
