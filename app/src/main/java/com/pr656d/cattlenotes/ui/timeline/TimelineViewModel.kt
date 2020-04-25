@@ -3,8 +3,7 @@ package com.pr656d.cattlenotes.ui.timeline
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.OnOptionSelectedData
-import com.pr656d.model.Breeding
+import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.ItemTimelineSaveData
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
 import com.pr656d.shared.domain.result.Event
@@ -29,9 +28,6 @@ class TimelineViewModel @Inject constructor(
         get() = _loading
 
     val isEmpty: LiveData<Boolean>
-
-    private val _showUndo = MutableLiveData<Event<OnOptionSelectedData>>()
-    val showUndo: LiveData<Event<OnOptionSelectedData>> = _showUndo
 
     private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
     val showMessage = _showMessage
@@ -58,15 +54,8 @@ class TimelineViewModel @Inject constructor(
         }
     }
 
-    fun saveBreeding(newBreeding: Breeding) {
+    override fun saveBreeding(itemTimelineSaveData: ItemTimelineSaveData) {
+        val newBreeding = itemTimelineSaveData.newBreedingWithCattle.breeding
         updateBreedingUseCase(newBreeding, updateBreedingResult)
-    }
-
-    fun undoOptionSelected(optionSelectedData: OnOptionSelectedData) {
-        optionSelectedData.executeOnUndo()
-    }
-
-    override fun onOptionSelected(onOptionSelectedData: OnOptionSelectedData) {
-        _showUndo.postValue(Event(onOptionSelectedData))
     }
 }

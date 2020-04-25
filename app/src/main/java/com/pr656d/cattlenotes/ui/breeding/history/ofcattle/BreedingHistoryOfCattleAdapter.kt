@@ -46,10 +46,7 @@ class BreedingHistoryOfCattleListViewHolder(
     private lateinit var uiBehaviour: ItemBreedingUiBehaviour
 
     fun bind(data: Breeding) {
-        uiBehaviour =
-            ItemBreedingUiBehaviour(
-                data
-            )
+        uiBehaviour = ItemBreedingUiBehaviour(data)
 
         binding.executeAfter {
             breeding = data

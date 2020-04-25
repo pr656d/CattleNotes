@@ -5,19 +5,16 @@ import com.pr656d.model.BreedingWithCattle
 interface TimelineActionListener {
 
     /**
-     * On option selected callback.
+     * On save clicked callback.
      */
-    fun onOptionSelected(onOptionSelectedData: OnOptionSelectedData)
+    fun saveBreeding(itemTimelineSaveData: ItemTimelineSaveData)
 
     /**
      * @param newBreedingWithCattle The new breeding with change and cattle.
      * @param selectedOption Option chosen by user.
-     * @param executeOnUndo Execute to undo option selected.
      */
-    data class OnOptionSelectedData(
-        val oldBreedingWithCattle: BreedingWithCattle,
+    data class ItemTimelineSaveData(
         val newBreedingWithCattle: BreedingWithCattle,
-        val selectedOption: Boolean?,   // null : Neutral, true : Positive, false : Negative
-        val executeOnUndo: () -> Unit
+        val selectedOption: Boolean?   // null : Neutral, true : Positive, false : Negative
     )
 }

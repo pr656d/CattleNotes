@@ -3,18 +3,23 @@ package com.pr656d.cattlenotes.ui.timeline
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.IdRes
-import androidx.core.view.children
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ItemTimelineBinding
-import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.OnOptionSelectedData
+import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.ItemTimelineSaveData
 import com.pr656d.cattlenotes.utils.executeAfter
+import com.pr656d.cattlenotes.utils.hideKeyboard
+import com.pr656d.cattlenotes.utils.pickADate
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.Breeding.BreedingEvent.Type
 import com.pr656d.model.BreedingWithCattle
+import com.pr656d.shared.utils.TimeUtils
 import com.pr656d.shared.utils.nameOrTagNumber
+import org.threeten.bp.LocalDate
 
 class TimelineAdapter(
     private val timelineViewModel: TimelineViewModel
@@ -43,7 +48,100 @@ class TimelineViewHolder(
 
     private lateinit var data: BreedingWithCattle
 
-    init {
+    private lateinit var breedingEvent: BreedingEvent
+
+    private val breedingEventType: Type
+        get() = breedingEvent.type
+
+    private var selectedOption: Boolean? = null
+        set(value) = binding.executeAfter {
+            selectedOption = value
+            field = value
+        }
+
+    private var showMoreActions: Boolean = false
+        set(value) = binding.executeAfter {
+            showMoreActions = value
+            field = value
+        }
+
+    private var breedingCompleted: Boolean = false
+        set(value) = binding.executeAfter {
+            breedingCompleted = value
+            field = value
+        }
+
+    private var doneOn: LocalDate? = null
+        set(value) = binding.executeAfter {
+            doneOn = value
+            field = value
+        }
+
+    fun bind(data: BreedingWithCattle) {
+        breedingEvent = data.breeding.nextBreedingEvent ?: return
+        this.data = data
+        binding.executeAfter {
+            // Title : Repeat heat ( `cattle name` ) or Repeat heat ( `Tag number` )
+            title = "${breedingEvent.type.displayName} ( ${data.cattle.nameOrTagNumber()} )"
+            negativeVisibility = when (breedingEvent.type) {
+                Type.DRY_OFF -> false
+                Type.CALVING -> false
+                else -> true
+            }
+            showMoreActions = this@TimelineViewHolder.showMoreActions
+            doneOn = this@TimelineViewHolder.doneOn
+            selectedOption = this@TimelineViewHolder.selectedOption
+            breedingCompleted = this@TimelineViewHolder.breedingCompleted
+        }
+        initializeListeners()
+    }
+
+    /**
+     * Use click listener for each radio button to handle radio group selection for once only.
+     * Radio group onCheckedChangedListener called multiple times.
+     * https://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times
+     */
+    private fun onCheckedChanged(@IdRes checkedId: Int, selectedOption: Boolean?) {
+        if (this.selectedOption == selectedOption)
+            return  // Prevent same option click.
+
+        this.selectedOption = selectedOption
+
+        breedingCompleted = when {
+            breedingEventType == Type.REPEAT_HEAT && selectedOption == true -> true
+            breedingEventType == Type.PREGNANCY_CHECK && selectedOption == false -> true
+            else -> false
+        }
+
+        if (checkedId == binding.radioButtonNeutral.id) {
+            onCancelClicked()   // None means cancelled state
+            return  // Ignore
+        }
+
+        // Show more actions
+        showMoreActions = true
+    }
+
+    private fun onSaveClicked() {
+        val newData = newBreedingWithCattle(selectedOption, doneOn)
+        listener.saveBreeding(ItemTimelineSaveData(newData, selectedOption))
+    }
+
+    private fun onCancelClicked() {
+        // Reset selected option
+        selectedOption = null
+
+        // Reset done on
+        doneOn = null
+
+        // Breeding completed to false
+        breedingCompleted = false
+
+        // Hide more options
+        showMoreActions = false
+    }
+
+    private fun initializeListeners() {
         binding.radioButtonNeutral.setOnClickListener {
             onCheckedChanged(it.id, null)
         }
@@ -55,115 +153,110 @@ class TimelineViewHolder(
         binding.radioButtonNegative.setOnClickListener {
             onCheckedChanged(it.id, false)
         }
-    }
 
-    fun bind(data: BreedingWithCattle) {
-        this.data = data
-        binding.executeAfter {
-            cattle = data.cattle
-            breedingEvent = data.breeding.nextBreedingEvent
-            // Title : Repeat heat ( `cattle name` ) or Repeat heat ( `Tag number` )
-            title = "${data.breeding.nextBreedingEvent!!.type.displayName} ( ${data.cattle.nameOrTagNumber()} )"
-            negativeVisibility = when (breedingEvent!!.type) {
-                Type.DRY_OFF -> false
-                Type.CALVING -> false
-                else -> true
-            }
-        }
-    }
+        binding.buttonCancel.setOnClickListener { onCancelClicked() }
 
-    /**
-     * Use click listener for each radio button to handle radio group selection for once only.
-     * Radio group onCheckedChangedListener called multiple times.
-     * https://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times
-     */
-    private fun onCheckedChanged(@IdRes checkedId: Int, selectedOption: Boolean?) {
-        binding.executeAfter {
-            if (checkedId == radioButtonNeutral.id)
-                return  // Ignore
+        binding.buttonSave.setOnClickListener { onSaveClicked() }
 
-            // Check the card.
-            containerMaterialCardView.isChecked = true
-            // Disable all radio button except checked button.
-            radioGroupBreedingStatus.children.forEach {
-                if (checkedId != it.id)
-                    it.isEnabled = false
-                else
-                    it.isClickable = false
-            }
+        binding.editTextDoneOn.apply {
+            setOnClickListener { v ->
+                binding.executeAfter {
+                    // Hide keyboard if visible.
+                    hideKeyboard(v)
+                }
 
-            listener.onOptionSelected(
-                OnOptionSelectedData(
-                    data,
-                    data.newData(selectedOption),
-                    selectedOption,
-                    undoSelection()
+                // Show dialog.
+                v.pickADate(
+                    onDateCancelled = {
+                        binding.executeAfter {
+                            isFocusableInTouchMode = false
+                        }
+                    },
+                    onDateSet = { _, dd, mm, yyyy ->
+                        // `Month + 1` as it's starting from 0 index and LocalDate index starts from 1.
+                        TimeUtils.toLocalDate(dd, mm + 1, yyyy).let {
+                            binding.executeAfter {
+                                doneOn = it
+                                isFocusableInTouchMode = false
+                            }
+                        }
+                    }
                 )
-            )
-        }
-    }
-
-    private fun undoSelection(): () -> Unit = {
-        binding.executeAfter {
-            // uncheck the card.
-            containerMaterialCardView.isChecked = false
-
-            // Enable all radio button.
-            radioGroupBreedingStatus.children.forEach {
-                it.isEnabled = true
-                it.isClickable = true
             }
 
-            // Check neutral button.
-            radioGroupBreedingStatus.check(radioButtonNeutral.id)
+            setOnLongClickListener { v ->
+                binding.executeAfter {
+                    // Hide keyboard if visible.
+                    hideKeyboard(v)
+                }
+
+                if (!text.isNullOrEmpty()) {
+                    // Show dialog.
+                    MaterialAlertDialogBuilder(context)
+                        .setTitle(context.getString(R.string.remove_text, hint.toString()))
+                        .setPositiveButton(R.string.yes) { _, _ ->
+                            binding.executeAfter {
+                                doneOn = null
+                                isFocusableInTouchMode = false
+                            }
+                        }
+                        .setNegativeButton(R.string.no) { _, _ ->
+                            binding.executeAfter {
+                                isFocusableInTouchMode = false
+                            }
+                        }
+                        .create()
+                        .show()
+                }
+                true
+            }
         }
     }
 
-
-    private fun BreedingWithCattle.newData(newStatus: Boolean?): BreedingWithCattle = breeding.run {
-        when (nextBreedingEvent!!.type) {
+    private fun newBreedingWithCattle(newStatus: Boolean?, doneOn: LocalDate?): BreedingWithCattle = data.breeding.run {
+        when (breedingEventType) {
             Type.REPEAT_HEAT -> BreedingWithCattle(
-                cattle,
+                data.cattle,
                 Breeding(
                     cattleId,
                     artificialInsemination,
-                    BreedingEvent(repeatHeat.expectedOn, newStatus, repeatHeat.doneOn),
+                    BreedingEvent(repeatHeat.expectedOn, newStatus, doneOn),
                     pregnancyCheck,
                     dryOff,
                     calving
                 )
             )
             Type.PREGNANCY_CHECK -> BreedingWithCattle(
-                cattle,
+                data.cattle,
                 Breeding(
                     cattleId,
                     artificialInsemination,
                     repeatHeat,
-                    BreedingEvent(pregnancyCheck.expectedOn, newStatus, pregnancyCheck.doneOn),
+                    BreedingEvent(pregnancyCheck.expectedOn, newStatus, doneOn),
                     dryOff,
                     calving
                 )
             )
             Type.DRY_OFF -> BreedingWithCattle(
-                cattle,
+                data.cattle,
                 Breeding(
                     cattleId,
                     artificialInsemination,
                     repeat_heat,
                     pregnancyCheck,
-                    BreedingEvent(dryOff.expectedOn, newStatus, dryOff.doneOn),
+                    BreedingEvent(dryOff.expectedOn, newStatus, doneOn),
                     calving
                 )
             )
             Type.CALVING -> BreedingWithCattle(
-                cattle,
+                data.cattle,
                 Breeding(
                     cattleId,
                     artificialInsemination,
                     repeat_heat,
                     pregnancyCheck,
                     dryOff,
-                    BreedingEvent(calving.expectedOn, newStatus, calving.doneOn)
+                    BreedingEvent(calving.expectedOn, newStatus, doneOn)
                 )
             )
             Type.UNKNOWN -> throw IllegalStateException("Breeding type can not be UNKNOWN for breeding event ${this.nextBreedingEvent}")

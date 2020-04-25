@@ -56,27 +56,6 @@ class TimelineViewModelTest {
         assertThat(TestData.validTimelineList, isEqualTo(breedingWithCattleList))
     }
 
-    @Test
-    fun onOptionSelectedCalled_showUndo() {
-        val viewModel = createTimelineViewModel()
-
-        val selectedData = TimelineActionListener.OnOptionSelectedData(
-            TestData.breedingWithCattle1,
-            BreedingWithCattle(
-                TestData.breedingWithCattle1.cattle,
-                TestData.breedingRHNegativePregnancyCheckNone
-            ),
-            false,
-            {}
-        )
-
-        // Call on option selected.
-        viewModel.onOptionSelected(selectedData)
-
-        val showUndo = LiveDataTestUtil.getValue(viewModel.showUndo)
-        assertThat(selectedData, isEqualTo(showUndo?.getContentIfNotHandled()))
-    }
-
     object FailingUpdateBreedingUseCase : UpdateBreedingUseCase(FakeBreedingRepository()) {
         override fun execute(parameters: Breeding) {
             throw Exception("Error!")
@@ -93,21 +72,16 @@ class TimelineViewModelTest {
             updateBreedingUseCase = UpdateBreedingUseCase(mockBreedingRepository)
         )
 
-        val selectedData = TimelineActionListener.OnOptionSelectedData(
-            TestData.breedingWithCattle1,
+        val selectedData = TimelineActionListener.ItemTimelineSaveData(
             BreedingWithCattle(
                 TestData.breedingWithCattle1.cattle,
                 newBreeding
             ),
-            false,
-            {}
+            false
         )
 
         // Call on option selected.
-        viewModel.onOptionSelected(selectedData)
-
-        // Save called
-        viewModel.saveBreeding(newBreeding)
+        viewModel.saveBreeding(selectedData)
 
         // Verify update is called.
         verify(mockBreedingRepository, times(1)).updateBreeding(newBreeding)
@@ -121,51 +95,18 @@ class TimelineViewModelTest {
             updateBreedingUseCase = FailingUpdateBreedingUseCase
         )
 
-        val selectedData = TimelineActionListener.OnOptionSelectedData(
-            TestData.breedingWithCattle1,
+        val selectedData = TimelineActionListener.ItemTimelineSaveData(
             BreedingWithCattle(
                 TestData.breedingWithCattle1.cattle,
                 newBreeding
             ),
-            false,
-            {}
+            false
         )
 
-        // Call on option selected.
-        viewModel.onOptionSelected(selectedData)
-
         // Save called
-        viewModel.saveBreeding(newBreeding)
+        viewModel.saveBreeding(selectedData)
 
         val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
         assertNotNull(showMessage?.getContentIfNotHandled())
-    }
-
-    @Test
-    fun onUndoOptionSelected_invokeExecuteOnUndo() {
-        val newBreeding = TestData.breedingRHNegativePregnancyCheckNone
-
-        val viewModel = createTimelineViewModel()
-
-        val mockExecuteOnUndo = mock<() -> Unit> {  }
-
-        val selectedData = TimelineActionListener.OnOptionSelectedData(
-            TestData.breedingWithCattle1,
-            BreedingWithCattle(
-                TestData.breedingWithCattle1.cattle,
-                newBreeding
-            ),
-            false,
-            mockExecuteOnUndo
-        )
-
-        // Call on option selected
-        viewModel.onOptionSelected(selectedData)
-
-        // Call undo option selected
-        viewModel.undoOptionSelected(selectedData)
-
-        // Verify executeOnUndo is executed.
-        verify(mockExecuteOnUndo, times(1)).invoke()
     }
 }
