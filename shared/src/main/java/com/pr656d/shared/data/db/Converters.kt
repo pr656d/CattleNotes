@@ -1,7 +1,7 @@
 package com.pr656d.shared.data.db
 
 import androidx.room.TypeConverter
-import com.pr656d.model.Animal
+import com.pr656d.model.AnimalType
 import com.pr656d.model.Cattle
 import com.pr656d.shared.utils.toLocalDate
 import com.pr656d.shared.utils.toLong
@@ -15,15 +15,15 @@ class Converters {
     fun fromDateToMillis(localDate: LocalDate?): Long? = localDate?.toLong()
 
     @TypeConverter
-    fun fromStringToAnimalType(value: String): Animal.Type = when(value) {
-        Animal.Type.COW.displayName -> Animal.Type.COW
-        Animal.Type.BUFFALO.displayName -> Animal.Type.BUFFALO
-        Animal.Type.BULL.displayName -> Animal.Type.BULL
+    fun fromStringToAnimalType(value: String): AnimalType = when(value) {
+        AnimalType.Cow.displayName -> AnimalType.Cow
+        AnimalType.Buffalo.displayName -> AnimalType.Buffalo
+        AnimalType.Bull.displayName -> AnimalType.Bull
         else -> throw Exception("Invalid String: Can not convert $value to Cattle.Type")
     }
 
     @TypeConverter
-    fun fromAnimalTypeToString(value: Animal.Type): String = value.displayName
+    fun fromAnimalTypeToString(value: AnimalType): String = value.displayName
 
     @TypeConverter
     fun fromStringToBreed(value: String): Cattle.Breed = when (value) {

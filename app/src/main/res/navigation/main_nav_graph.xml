@@ -34,9 +34,8 @@
         android:label="@string/cattle_detail"
         tools:layout="@layout/fragment_cattle_detail">
 
-        <!--  Pass Cattle as JSON  -->
         <argument
-            android:name="cattle"
+            android:name="cattleId"
             app:argType="string" />
 
         <action
@@ -70,9 +69,8 @@
         android:label="@string/add_cattle"
         tools:layout="@layout/fragment_add_edit_cattle">
 
-        <!--  Pass Cattle as JSON  -->
         <argument
-            android:name="cattle"
+            android:name="cattleId"
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
@@ -100,9 +98,8 @@
         android:label="@string/breeding_history"
         tools:layout="@layout/fragment_breeding_history_of_cattle">
 
-        <!--  Pass Cattle as JSON  -->
         <argument
-            android:name="cattle"
+            android:name="cattleId"
             app:argType="string" />
 
         <action
@@ -121,9 +118,8 @@
         android:label="@string/add_new_breeding"
         tools:layout="@layout/fragment_add_edit_breeding">
 
-        <!--  Pass Cattle as JSON  -->
         <argument
-            android:name="cattle"
+            android:name="cattleId"
             app:argType="string" />
 
         <!--  Pass Breeding as JSON  -->

@@ -23,7 +23,7 @@ data class Cattle(
 
     @SerializedName("type")
     @ColumnInfo(name = "type")
-    val type: Animal.Type,
+    val type: AnimalType,
 
     @SerializedName("breed")
     @ColumnInfo(name = "breed")

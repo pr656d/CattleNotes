@@ -8,6 +8,7 @@ import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.DeleteBreedingUseCase
 import com.pr656d.shared.domain.breeding.history.LoadBreedingByCattleIdUseCase
+import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.utils.nameOrTagNumber
@@ -15,17 +16,19 @@ import javax.inject.Inject
 
 class BreedingHistoryOfCattleViewModel @Inject constructor(
     private val loadBreedingByCattleIdUseCase: LoadBreedingByCattleIdUseCase,
-    private val deleteBreedingUseCase: DeleteBreedingUseCase
-) : ViewModel(),
-    BreedingHistoryActionListener {
+    private val deleteBreedingUseCase: DeleteBreedingUseCase,
+    getCattleByIdUseCase: GetCattleByIdUseCase
+) : ViewModel(), BreedingHistoryActionListener {
 
-    val cattle = MutableLiveData<Cattle>()
+    private val cattleId = MutableLiveData<String>()
 
-    val nameOrTagNumber = cattle.map { it.nameOrTagNumber() }
+    val cattle = cattleId.switchMap { getCattleByIdUseCase(it) }
+
+    val nameOrTagNumber = cattle.map { it?.nameOrTagNumber() }
 
     private val deleteBreedingResult = MutableLiveData<Result<Unit>>()
 
-    val breedingList = MediatorLiveData<List<Breeding>>()
+    val breedingList = cattleId.switchMap { loadBreedingByCattleIdUseCase(it) }
 
     private val _loading = MediatorLiveData<Boolean>().apply { value = true }
     val loading: LiveData<Boolean>
@@ -58,13 +61,7 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
         }
     }
 
-    fun setCattle(cattle: Cattle) {
-        this.cattle.value = cattle
-
-        breedingList.addSource(loadBreedingByCattleIdUseCase(cattle.id)) {
-            breedingList.postValue(it)
-        }
-    }
+    fun setCattle(id: String) = cattleId.postValue(id)
 
     override fun editBreeding(breeding: Breeding) {
         _launchEditBreeding.postValue(Event(cattle.value!! to breeding))

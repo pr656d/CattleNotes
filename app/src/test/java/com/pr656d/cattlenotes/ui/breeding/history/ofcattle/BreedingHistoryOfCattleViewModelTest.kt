@@ -11,9 +11,11 @@ import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeBreedingRepository
 import com.pr656d.model.Breeding
 import com.pr656d.shared.data.breeding.BreedingRepository
+import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.domain.breeding.addedit.DeleteBreedingUseCase
 import com.pr656d.shared.domain.breeding.history.LoadBreedingByCattleIdUseCase
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
+import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.test.TestData
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertThat
@@ -37,6 +39,10 @@ class BreedingHistoryOfCattleViewModelTest {
     private val cattle = TestData.cattle1
     private val breedingListOfCattle = TestData.breedingList.filter { it.cattleId == cattle.id }
 
+    private val mockCattleRepository = mock<CattleRepository> {
+        on { getCattleById(cattle.id) }.doReturn(MutableLiveData(cattle))
+    }
+
     private val mockBreedingRepository: BreedingRepository = mock {
         on { getAllBreedingByCattleId(cattle.id) }.doReturn(MutableLiveData(breedingListOfCattle))
     }
@@ -47,12 +53,16 @@ class BreedingHistoryOfCattleViewModelTest {
         loadCattleByCattleIdUseCase: LoadBreedingByCattleIdUseCase =
             LoadBreedingByCattleIdUseCase(mockBreedingRepository),
         deleteBreedingUseCase: DeleteBreedingUseCase =
-            DeleteBreedingUseCase(mockBreedingRepository, mockBreedingNotificationAlarmUpdater)
+            DeleteBreedingUseCase(mockBreedingRepository, mockBreedingNotificationAlarmUpdater),
+        getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(mockCattleRepository)
     ): BreedingHistoryOfCattleViewModel {
         return BreedingHistoryOfCattleViewModel(
             loadBreedingByCattleIdUseCase = loadCattleByCattleIdUseCase,
-            deleteBreedingUseCase = deleteBreedingUseCase
-        )
+            deleteBreedingUseCase = deleteBreedingUseCase,
+            getCattleByIdUseCase = getCattleByIdUseCase
+        ).apply {
+            cattle.observeForever {}
+        }
     }
 
     @Test
@@ -60,7 +70,7 @@ class BreedingHistoryOfCattleViewModelTest {
         val viewModel = createBreedingHistoryOfCattleViewModel()
 
         // Set cattle
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         val breedingList = LiveDataTestUtil.getValue(viewModel.breedingList)
         assertThat(breedingListOfCattle, isEqualTo(breedingList))
@@ -71,7 +81,7 @@ class BreedingHistoryOfCattleViewModelTest {
         val viewModel = createBreedingHistoryOfCattleViewModel()
 
         // Set cattle
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         val breeding = breedingListOfCattle.first()
 
@@ -88,7 +98,7 @@ class BreedingHistoryOfCattleViewModelTest {
         val viewModel = createBreedingHistoryOfCattleViewModel()
 
         // Set cattle
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         val breeding = breedingListOfCattle.first()
 
@@ -105,7 +115,7 @@ class BreedingHistoryOfCattleViewModelTest {
         val viewModel = createBreedingHistoryOfCattleViewModel()
 
         // Set cattle
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         val breeding = breedingListOfCattle.first()
 
@@ -120,7 +130,7 @@ class BreedingHistoryOfCattleViewModelTest {
         val viewModel = createBreedingHistoryOfCattleViewModel()
 
         // Set cattle
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         val breeding = breedingListOfCattle.first()
 
@@ -143,7 +153,7 @@ class BreedingHistoryOfCattleViewModelTest {
         )
 
         // Set cattle
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         val breeding = breedingListOfCattle.first()
 

@@ -12,7 +12,6 @@ import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
-import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Error
@@ -23,8 +22,7 @@ import javax.inject.Inject
 class AddEditBreedingViewModel @Inject constructor(
     breedingBehaviour: BreedingBehaviour,
     private val addBreedingUseCase: AddBreedingUseCase,
-    private val updateBreedingUseCase: UpdateBreedingUseCase,
-    private val getCattleByIdUseCase: GetCattleByIdUseCase
+    private val updateBreedingUseCase: UpdateBreedingUseCase
 ) : ViewModel(),
     BreedingBehaviour by breedingBehaviour {
 
@@ -77,16 +75,12 @@ class AddEditBreedingViewModel @Inject constructor(
     fun setBreeding(breeding: Breeding) {
         _editing.value = true
         // Trigger cattle to be fetched and get Live updates
-        fetchCattle(breeding.cattleId)
+        setCattle(breeding.cattleId)
         breeding.bindData()
         oldBreeding = breeding
     }
 
-    fun setCattle(c: Cattle) {
-        cattle.value = c
-        // Trigger cattle to be fetched and get Live updates
-        fetchCattle(c.id)
-    }
+    fun setCattle(id: String) = cattleId.postValue(id)
 
     fun save() = save(breedingCompletedConfirmation = false)
 
@@ -114,13 +108,6 @@ class AddEditBreedingViewModel @Inject constructor(
             }
         } else {
             _showMessage.value = Event(R.string.provide_ai_date)
-        }
-    }
-
-    private fun fetchCattle(cattleId: String) {
-        cattle.addSource(getCattleByIdUseCase(cattleId)) { newCattle ->
-            if (cattle.value != newCattle)
-                cattle.value = newCattle
         }
     }
 

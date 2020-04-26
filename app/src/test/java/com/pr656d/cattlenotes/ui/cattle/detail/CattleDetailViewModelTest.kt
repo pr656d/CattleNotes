@@ -57,7 +57,9 @@ class CattleDetailViewModelTest {
             getCattleByIdUseCase,
             getParentCattleUseCase,
             deleteCattleUseCase
-        )
+        ).apply {
+            cattle.observeForever{}
+        }
     }
 
     @Test
@@ -68,7 +70,7 @@ class CattleDetailViewModelTest {
         val viewModel = createCattleDetailViewModel()
 
         // Call the method
-        viewModel.fetchCattle(actualCattle)
+        viewModel.fetchCattle(actualCattle.id)
 
         val cattle = LiveDataTestUtil.getValue(viewModel.cattle)
         assertThat(actualCattle, isEqualTo(cattle))
@@ -88,7 +90,7 @@ class CattleDetailViewModelTest {
         whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(MutableLiveData(oldCattle))
 
         // First call for the method
-        viewModel.fetchCattle(oldCattle)
+        viewModel.fetchCattle(oldCattle.id)
 
         // Cattle has been modified
         val newCattle = Cattle(
@@ -111,7 +113,7 @@ class CattleDetailViewModelTest {
          * Second call for the method
          * Mostly this happens when user modifies and comes back.
          */
-        viewModel.fetchCattle(oldCattle)
+        viewModel.fetchCattle(oldCattle.id)
 
         val cattle = LiveDataTestUtil.getValue(viewModel.cattle)
         assertThat(newCattle, isEqualTo(cattle))
@@ -136,7 +138,7 @@ class CattleDetailViewModelTest {
         val viewModel = createCattleDetailViewModel()
 
         // Fetch cattle first
-        viewModel.fetchCattle(cattle)
+        viewModel.fetchCattle(cattle.id)
 
         // Delete cattle confirmation called
         viewModel.deleteCattle(deleteConfirmation = true)
@@ -153,7 +155,7 @@ class CattleDetailViewModelTest {
         val viewModel = createCattleDetailViewModel()
 
         // Fetch cattle first
-        viewModel.fetchCattle(cattle)
+        viewModel.fetchCattle(cattle.id)
 
         // Call method
         viewModel.showAllBreeding()
@@ -170,7 +172,7 @@ class CattleDetailViewModelTest {
         val viewModel = createCattleDetailViewModel()
 
         // Fetch cattle first
-        viewModel.fetchCattle(cattle)
+        viewModel.fetchCattle(cattle.id)
 
         // Call method
         viewModel.addNewBreeding()
@@ -187,7 +189,7 @@ class CattleDetailViewModelTest {
         val viewModel = createCattleDetailViewModel()
 
         // Fetch cattle first
-        viewModel.fetchCattle(cattle)
+        viewModel.fetchCattle(cattle.id)
 
         // Call method
         viewModel.editCattle()
@@ -214,7 +216,7 @@ class CattleDetailViewModelTest {
         val cattle = TestData.cattle1
 
         // Fetch cattle first
-        viewModel.fetchCattle(cattle)
+        viewModel.fetchCattle(cattle.id)
 
         viewModel.deleteCattle(true)
 
@@ -233,7 +235,7 @@ class CattleDetailViewModelTest {
         )
 
         // Fetch cattle first
-        viewModel.fetchCattle(cattle)
+        viewModel.fetchCattle(cattle.id)
 
         val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
         assertNotNull(showMessage?.getContentIfNotHandled())
@@ -247,7 +249,7 @@ class CattleDetailViewModelTest {
         val parentCattle = TestData.cattle1 // Parent of cattle2
 
         // Fetch cattle first
-        viewModel.fetchCattle(cattle)
+        viewModel.fetchCattle(cattle.id)
 
         val parentDetail = LiveDataTestUtil.getValue(viewModel.parentCattle)
         assertThat(parentCattle, isEqualTo(parentDetail))

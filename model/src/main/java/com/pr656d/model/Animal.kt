@@ -1,9 +1,15 @@
 package com.pr656d.model
 
-object Animal {
-    enum class Type(val displayName: String) {
-        COW("Cow"),
-        BUFFALO("Buffalo"),
-        BULL("Bull")
+sealed class AnimalType(val displayName: String) {
+    object Cow : AnimalType("Cow") {
+        override fun toString(): String = displayName
+    }
+
+    object Buffalo : AnimalType("Buffalo") {
+        override fun toString(): String = displayName
+    }
+
+    object Bull : AnimalType("Bull") {
+        override fun toString(): String = displayName
     }
 }

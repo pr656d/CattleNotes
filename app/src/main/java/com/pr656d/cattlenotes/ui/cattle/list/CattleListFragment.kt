@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.gson.Gson
 import com.pr656d.cattlenotes.databinding.FragmentCattleListBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.cattle.list.CattleListFragmentDirections.Companion.toAddEditCattle
@@ -45,7 +44,7 @@ class CattleListFragment : NavigationFragment() {
         })
 
         model.launchCattleDetail.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toCattleDetail(Gson().toJson(it)))
+            findNavController().navigate(toCattleDetail(it.id))
         })
     }
 }

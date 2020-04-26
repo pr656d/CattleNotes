@@ -15,7 +15,6 @@ import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentBreedingHistoryOfCattleBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.breeding.history.ofcattle.BreedingHistoryOfCattleFragmentDirections.Companion.toAddEditBreeding
-import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
@@ -36,9 +35,7 @@ class BreedingHistoryOfCattleFragment : NavigationFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        model.setCattle(
-            Gson().fromJson(args.cattle, Cattle::class.java)
-        )
+        model.setCattle(args.cattleId)
     }
 
     override fun onCreateView(
@@ -72,7 +69,7 @@ class BreedingHistoryOfCattleFragment : NavigationFragment() {
         model.launchEditBreeding.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(
                 toAddEditBreeding(
-                    cattle = Gson().toJson(it.first),
+                    cattleId = it.first.id,
                     breeding = Gson().toJson(it.second)
                 )
             )

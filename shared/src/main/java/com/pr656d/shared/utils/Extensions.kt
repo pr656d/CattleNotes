@@ -1,6 +1,6 @@
 package com.pr656d.shared.utils
 
-import com.pr656d.model.Animal
+import com.pr656d.model.AnimalType
 import com.pr656d.model.Cattle
 import com.pr656d.shared.data.db.Converters
 import org.threeten.bp.LocalDate
@@ -8,7 +8,7 @@ import org.threeten.bp.ZonedDateTime
 
 // region converters
 
-fun String.toType(): Animal.Type = Converters().fromStringToAnimalType(this)
+fun String.toType(): AnimalType = Converters().fromStringToAnimalType(this)
 
 fun String.toBreed(): Cattle.Breed = Converters().fromStringToBreed(this)
 

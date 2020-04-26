@@ -20,7 +20,6 @@ import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddBreeding
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toBreedingHistory
-import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
@@ -44,8 +43,7 @@ class CattleDetailFragment : NavigationFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val cattle = Gson().fromJson(args.cattle, Cattle::class.java)
-        model.fetchCattle(cattle)
+        model.fetchCattle(args.cattleId)
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             onBackPressed()
@@ -120,7 +118,7 @@ class CattleDetailFragment : NavigationFragment() {
         })
 
         model.launchEditCattle.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toAddEditCattle(Gson().toJson(it)))
+            findNavController().navigate(toAddEditCattle(it.id))
         })
 
         model.launchDeleteConfirmation.observe(viewLifecycleOwner, EventObserver {

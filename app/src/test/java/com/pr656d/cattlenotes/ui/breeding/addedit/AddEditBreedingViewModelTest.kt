@@ -2,6 +2,7 @@ package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
@@ -33,7 +34,11 @@ class AddEditBreedingViewModelTest {
     var syncTaskExecutorRule = SyncTaskExecutorRule()
 
     private fun getBreedingBehaviour(): BreedingBehaviour =
-        BreedingBehaviourImpl(BreedingUiImplDelegate() as BreedingUiDelegate)
+        BreedingBehaviourImpl(
+            BreedingUiImplDelegate(
+                GetCattleByIdUseCase(cattleRepository)
+            ) as BreedingUiDelegate
+        )
 
     private val cattleRepository = object : FakeCattleRepository() {
         override fun getCattleById(id: String): LiveData<Cattle?> {
@@ -46,14 +51,12 @@ class AddEditBreedingViewModelTest {
     private fun createAddEditBreedingViewModel(
         breedingBehaviour: BreedingBehaviour = getBreedingBehaviour(),
         addBreedingUseCase: AddBreedingUseCase = AddBreedingUseCase(FakeBreedingRepository()),
-        updateBreedingUseCase: UpdateBreedingUseCase = UpdateBreedingUseCase(FakeBreedingRepository()),
-        getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(cattleRepository)
+        updateBreedingUseCase: UpdateBreedingUseCase = UpdateBreedingUseCase(FakeBreedingRepository())
     ): AddEditBreedingViewModel {
         return AddEditBreedingViewModel(
             breedingBehaviour = breedingBehaviour,
             addBreedingUseCase = addBreedingUseCase,
-            updateBreedingUseCase = updateBreedingUseCase,
-            getCattleByIdUseCase = getCattleByIdUseCase
+            updateBreedingUseCase = updateBreedingUseCase
         ).apply {
             /**
              * For testing we need to initialize them with initial value
@@ -63,12 +66,12 @@ class AddEditBreedingViewModelTest {
             pregnancyCheckStatus.value = null
             dryOffStatus.value = null
             calvingStatus.value = null
-
             observeUnobserved()
         }
     }
 
     private fun AddEditBreedingViewModel.observeUnobserved() {
+        cattle.observeForever{}
         repeatHeatExpectedOn.observeForever {}
         pregnancyCheckExpectedOn.observeForever {}
         dryOffExpectedOn.observeForever {}
@@ -105,7 +108,7 @@ class AddEditBreedingViewModelTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
-        viewModel.setCattle(TestData.cattle1)
+        viewModel.setCattle(TestData.cattle1.id)
 
         // Set AI date
         viewModel.aiDate.value = LocalDate.now()
@@ -195,7 +198,7 @@ class AddEditBreedingViewModelTest {
         )
 
         // Set cattle
-        viewModel.setCattle(TestData.cattle1)
+        viewModel.setCattle(TestData.cattle1.id)
 
         // Set AI date
         viewModel.aiDate.value = LocalDate.now()
@@ -727,7 +730,7 @@ class AddEditBreedingViewModelTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
-        viewModel.setCattle(TestData.cattle1)
+        viewModel.setCattle(TestData.cattle1.id)
 
         // Set aiDate
         viewModel.aiDate.value = LocalDate.now()
@@ -755,7 +758,7 @@ class AddEditBreedingViewModelTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
-        viewModel.setCattle(TestData.cattle1)
+        viewModel.setCattle(TestData.cattle1.id)
 
         // Set aiDate
         viewModel.aiDate.value = LocalDate.now()
@@ -786,7 +789,7 @@ class AddEditBreedingViewModelTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
-        viewModel.setCattle(TestData.cattle1)
+        viewModel.setCattle(TestData.cattle1.id)
 
         // Set aiDate
         viewModel.aiDate.value = LocalDate.now()
@@ -816,7 +819,7 @@ class AddEditBreedingViewModelTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
-        viewModel.setCattle(TestData.cattle1)
+        viewModel.setCattle(TestData.cattle1.id)
 
         // Set aiDate
         viewModel.aiDate.value = LocalDate.now()

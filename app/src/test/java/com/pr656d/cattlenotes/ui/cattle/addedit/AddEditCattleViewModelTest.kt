@@ -6,13 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
-import com.pr656d.model.Animal
+import com.pr656d.model.AnimalType
 import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.domain.cattle.addedit.AddCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.IsCattleExistWithTagNumberUseCase
 import com.pr656d.shared.domain.cattle.addedit.UpdateCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.parent.GetParentListUseCase
+import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.shared.domain.cattle.list.LoadCattleListUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleTagNumberValidatorUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleValidator.VALID_FIELD
@@ -61,13 +62,15 @@ class AddEditCattleViewModelTest {
         cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase =
             CattleTagNumberValidatorUseCase(IsCattleExistWithTagNumberUseCase(repository)),
         getParentListUseCase: GetParentListUseCase =
-            GetParentListUseCase(LoadCattleListUseCase(repository))
+            GetParentListUseCase(LoadCattleListUseCase(repository)),
+        getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(repository)
     ): AddEditCattleViewModel {
         return AddEditCattleViewModel(
             addCattleUseCase = addCattleUseCase,
             updateCattleUseCase = updateCattleUseCase,
             getParentListUseCase = getParentListUseCase,
-            cattleTagNumberValidatorUseCase = cattleTagNumberValidatorUseCase
+            cattleTagNumberValidatorUseCase = cattleTagNumberValidatorUseCase,
+            getCattleByIdUseCase = getCattleByIdUseCase
         ).apply { observeUnobserved() }
     }
 
@@ -76,6 +79,18 @@ class AddEditCattleViewModelTest {
          * Live data which have to explicitly gets observed as they were
          * observed in xml by data binding.
          */
+        oldCattle.observeForever {  }
+        tagNumber.observeForever {  }
+        name.observeForever {  }
+        type.observeForever {  }
+        breed.observeForever {  }
+        group.observeForever {  }
+        lactation.observeForever {  }
+        dob.observeForever {  }
+        parent.observeForever {  }
+        homeBorn.observeForever {  }
+        purchaseAmount.observeForever {  }
+        purchaseDate.observeForever {  }
         tagNumberErrorMessage.observeForever {  }
         typeErrorMessage.observeForever {  }
         breedErrorMessage.observeForever {  }
@@ -246,7 +261,7 @@ class AddEditCattleViewModelTest {
         viewModel.tagNumber.value = "312546"
 
         // Valid type
-        viewModel.type.value = Animal.Type.COW.displayName
+        viewModel.type.value = AnimalType.Cow.toString()
 
         // Valid breed
         viewModel.breed.value = Cattle.Breed.HF.displayName
@@ -270,12 +285,12 @@ class AddEditCattleViewModelTest {
 
         val cattle = TestData.cattle2
 
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         // Update tag number.
         viewModel.tagNumber.value = "312546"
         // Update type
-        viewModel.type.value = Animal.Type.COW.displayName
+        viewModel.type.value = AnimalType.Cow.toString()
         // Update breed
         viewModel.breed.value = Cattle.Breed.HF.displayName
         // Update group
@@ -298,7 +313,7 @@ class AddEditCattleViewModelTest {
 
         val cattle = TestData.cattle2
 
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         // Save cattle
         viewModel.save()
@@ -316,7 +331,7 @@ class AddEditCattleViewModelTest {
 
         val cattle = TestData.cattle2
 
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         viewModel.pickParent()
 
@@ -352,10 +367,11 @@ class AddEditCattleViewModelTest {
         val parentCattle = TestData.cattle5
 
         // Set cattle
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         // Pick parent
         viewModel.pickParent()
+
         // Parent is selected
         viewModel.parentSelected(parentCattle)
 
@@ -370,7 +386,7 @@ class AddEditCattleViewModelTest {
         viewModel.apply {
             tagNumber.value = "123456789012"
             name.value = "Sita"
-            type.value = Animal.Type.COW.displayName
+            type.value = AnimalType.Cow.toString()
             breed.value = Cattle.Breed.HF.displayName
             group.value = Cattle.Group.HEIFER.displayName
             lactation.value = "3"
@@ -402,7 +418,7 @@ class AddEditCattleViewModelTest {
         viewModel.apply {
             tagNumber.value = "123456789012"
             name.value = "Sita"
-            type.value = Animal.Type.COW.displayName
+            type.value = AnimalType.Cow.toString()
             breed.value = Cattle.Breed.HF.displayName
             group.value = Cattle.Group.HEIFER.displayName
             lactation.value = "3"
@@ -535,7 +551,7 @@ class AddEditCattleViewModelTest {
         val cattle = TestData.cattleList.random()
 
         // Set cattle will be called in edit cattle mode
-        viewModel.setCattle(cattle)
+        viewModel.setCattle(cattle.id)
 
         val editing = LiveDataTestUtil.getValue(viewModel.editing)!!
         assertTrue(editing)

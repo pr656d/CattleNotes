@@ -16,13 +16,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentAddEditCattleBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
-import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
@@ -44,9 +42,7 @@ class AddEditCattleFragment : NavigationFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        args.cattle?.let {
-            model.setCattle(Gson().fromJson(it, Cattle::class.java))
-        }
+        args.cattleId?.let { model.setCattle(it) }
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             onBackPressed()

@@ -1,10 +1,7 @@
 package com.pr656d.cattlenotes.ui.cattle.detail
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.cattle.addedit.DeleteCattleUseCase
@@ -24,9 +21,9 @@ class CattleDetailViewModel @Inject constructor(
 
     private val deleteCattleResult = MutableLiveData<Result<Unit>>()
 
-    private val _cattle = MediatorLiveData<Cattle?>()
-    val cattle: LiveData<Cattle?>
-        get() = _cattle
+    private val cattleId = MutableLiveData<String>()
+
+    val cattle: LiveData<Cattle?> = cattleId.switchMap { getCattleUseCase(it) }
 
     private val _parentCattle = MediatorLiveData<Cattle?>()
     val parentCattle: LiveData<Cattle?>
@@ -105,17 +102,7 @@ class CattleDetailViewModel @Inject constructor(
         }
     }
 
-    fun fetchCattle(cattle: Cattle) {
-        // Set cattle
-        _cattle.value = cattle
-        // Fetch cattle from database to update if there are any changes
-        _cattle.addSource(getCattleUseCase(cattle.id)) { newCattle ->
-            // Update cattle if there are any changes
-            if (this.cattle.value != newCattle) {
-                _cattle.value = newCattle
-            }
-        }
-    }
+    fun fetchCattle(id: String) = cattleId.postValue(id)
 
     fun showAllBreeding() {
         cattle.value?.let {

@@ -1,10 +1,8 @@
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import com.pr656d.model.Cattle
+import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.shared.utils.BreedingUtil
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
@@ -14,8 +12,10 @@ import javax.inject.Inject
  */
 interface BreedingUiDelegate {
 
+    val cattleId: MutableLiveData<String>
+
     /* Cattle */
-    val cattle: MediatorLiveData<Cattle>
+    val cattle: LiveData<Cattle?>
 
     val active: MutableLiveData<Boolean>
 
@@ -62,10 +62,14 @@ interface BreedingUiDelegate {
     val calvingDoneOn: MutableLiveData<LocalDate>
 }
 
-class BreedingUiImplDelegate @Inject constructor() : BreedingUiDelegate {
+class BreedingUiImplDelegate @Inject constructor(
+    getCattleByIdUseCase: GetCattleByIdUseCase
+) : BreedingUiDelegate {
+
+    override val cattleId: MutableLiveData<String> = MutableLiveData()
 
     /* Cattle */
-    override val cattle: MediatorLiveData<Cattle> = MediatorLiveData()
+    override val cattle = cattleId.switchMap { getCattleByIdUseCase(it) }
 
     override val active: MutableLiveData<Boolean> = MutableLiveData(false)
 
