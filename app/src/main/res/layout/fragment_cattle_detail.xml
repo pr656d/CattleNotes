@@ -85,7 +85,7 @@
                         android:onClick="@{ () -> viewModel.addNewBreeding() }"
                         android:text="@string/add_new_breeding"
                         android:textAllCaps="false"
-                        app:goneUnless="@{ viewModel.isCattleTypeBull }"/>
+                        app:goneUnless="@{ !viewModel.isCattleTypeBull }"/>
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnShowAllBreeding"
@@ -96,7 +96,7 @@
                         android:onClick="@{ () -> viewModel.showAllBreeding() }"
                         android:text="@string/show_all_breeding"
                         android:textAllCaps="false"
-                        app:goneUnless="@{ viewModel.isCattleTypeBull }"/>
+                        app:goneUnless="@{ !viewModel.isCattleTypeBull }"/>
 
                     <Space
                         android:layout_width="match_parent"
