@@ -1,5 +1,6 @@
 package com.pr656d.shared.domain.cattle.validator
 
+import com.pr656d.model.AnimalType
 import com.pr656d.shared.R
 import com.pr656d.shared.utils.isDigitsOnly
 
@@ -11,7 +12,8 @@ object CattleValidator {
         else -> VALID_FIELD
     }
 
-    fun isValidLactation(totalCalving: String?): Int = when {
+    fun isValidLactation(totalCalving: String?, type: String?): Int = when {
+        type == AnimalType.Bull.displayName -> VALID_FIELD
         totalCalving.isNullOrEmpty() -> R.string.error_empty_field
         !totalCalving.isDigitsOnly() -> R.string.error_contain_digits_only
         else -> VALID_FIELD
@@ -22,7 +24,8 @@ object CattleValidator {
         else -> VALID_FIELD
     }
 
-    fun isValidGroup(group: String?): Int = when {
+    fun isValidGroup(group: String?, type: String?): Int = when {
+        type == AnimalType.Bull.displayName -> VALID_FIELD
         group.isNullOrEmpty() -> R.string.error_empty_field
         else -> VALID_FIELD
     }

@@ -16,7 +16,7 @@ import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.shared.domain.cattle.detail.GetParentCattleUseCase
 import com.pr656d.test.TestData
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Assert.assertNotNull
+import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
 import org.hamcrest.Matchers.equalTo as isEqualTo
@@ -58,8 +58,13 @@ class CattleDetailViewModelTest {
             getParentCattleUseCase,
             deleteCattleUseCase
         ).apply {
-            cattle.observeForever{}
+            observeUnobserved()
         }
+    }
+
+    private fun CattleDetailViewModel.observeUnobserved() {
+        cattle.observeForever {  }
+        isCattleTypeBull.observeForever {  }
     }
 
     @Test
@@ -98,7 +103,7 @@ class CattleDetailViewModelTest {
             name = "Modified name", // Modified
             image = oldCattle.image,
             type = oldCattle.type,
-            breed = Cattle.Breed.JERSEY, // Modified
+            breed = "Jersey", // Modified
             group = oldCattle.group,
             lactation = oldCattle.lactation,
             homeBorn = oldCattle.homeBorn,
@@ -149,8 +154,7 @@ class CattleDetailViewModelTest {
 
     @Test
     fun showAllBreedingIsCalled_launchAllBreeding() {
-        // Returns any random cattle from the list
-        val cattle = TestData.cattleList.random()
+        val cattle = TestData.cattle1
 
         val viewModel = createCattleDetailViewModel()
 
@@ -166,8 +170,7 @@ class CattleDetailViewModelTest {
 
     @Test
     fun addNewBreedingIsCalled_launchAddNewBreeding() {
-        // Returns any random cattle from the list
-        val cattle = TestData.cattleList.random()
+        val cattle = TestData.cattle1
 
         val viewModel = createCattleDetailViewModel()
 
@@ -179,6 +182,38 @@ class CattleDetailViewModelTest {
 
         val launchAddBreeding = LiveDataTestUtil.getValue(viewModel.launchAddBreeding)
         assertThat(cattle, isEqualTo(launchAddBreeding?.getContentIfNotHandled()))
+    }
+
+    @Test
+    fun cattleTypeIsBull_doNotLaunchAddBreeding() {
+        val cattle = TestData.cattleBull
+
+        val viewModel = createCattleDetailViewModel()
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle.id)
+
+        // Call method
+        viewModel.addNewBreeding()
+
+        val launchAddBreeding = LiveDataTestUtil.getValue(viewModel.launchAddBreeding)
+        assertNull(launchAddBreeding?.getContentIfNotHandled())
+    }
+
+    @Test
+    fun cattleTypeIsBull_doNotShowAllBreeding() {
+        val cattle = TestData.cattleBull
+
+        val viewModel = createCattleDetailViewModel()
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle.id)
+
+        // Call method
+        viewModel.showAllBreeding()
+
+        val launchAllBreeding = LiveDataTestUtil.getValue(viewModel.launchAllBreeding)
+        assertNull(launchAllBreeding?.getContentIfNotHandled())
     }
 
     @Test
@@ -253,5 +288,36 @@ class CattleDetailViewModelTest {
 
         val parentDetail = LiveDataTestUtil.getValue(viewModel.parentCattle)
         assertThat(parentCattle, isEqualTo(parentDetail))
+    }
+
+    @Test
+    fun cattleHasPrentAndParentHasParent_fetchData() {
+        val viewModel = createCattleDetailViewModel()
+
+        val cattle = TestData.cattle5
+        val parentCattle = TestData.cattle2 // Parent of cattle5
+        val parentParentCattle = TestData.cattle1 // Parent of cattle2
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle.id)
+
+        val parentDetail = LiveDataTestUtil.getValue(viewModel.parentCattle)
+        assertThat(parentCattle, isEqualTo(parentDetail))
+
+        val parentParentDetail = LiveDataTestUtil.getValue(viewModel.parentParentCattle)
+        assertThat(parentParentCattle, isEqualTo(parentParentDetail))
+    }
+
+    @Test
+    fun cattleTypeIsBull_isCattleTypeBullIsTrue() {
+        val viewModel = createCattleDetailViewModel()
+
+        val cattle = TestData.cattleBull
+
+        // Fetch cattle first
+        viewModel.fetchCattle(cattle.id)
+
+        val isCattleBull = LiveDataTestUtil.getValue(viewModel.isCattleTypeBull)!!
+        assertTrue(isCattleBull)
     }
 }

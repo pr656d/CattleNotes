@@ -1,24 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-    <string-array name="list_breed">
-        <item>HF</item>
-        <item>Jersey</item>
-        <item>Gir</item>
-        <item>Kankrej</item>
-        <item>Shahival</item>
+
+    <!-- Source : http://www.agritech.tnau.ac.in/expert_system/cattlebuffalo/Breeds%20of%20cattle%20&%20baffalo.html -->
+    <string-array name="list_breed_cow">
+        <item>@string/amritmahal</item>
+        <item>@string/alambadi</item>
+        <item>@string/ayrshire</item>
+        <item>@string/bargur</item>
+        <item>@string/brown_swiss</item>
+        <item>@string/deoni</item>
+        <item>@string/gir</item>
+        <item>@string/guernsey</item>
+        <item>@string/hariana</item>
+        <item>@string/hf</item>
+        <item>@string/hallikar</item>
+        <item>@string/holstein_friesian</item>
+        <item>@string/holstein_friesian_cross</item>
+        <item>@string/jersey</item>
+        <item>@string/jersey_cross</item>
+        <item>@string/kankrej</item>
+        <item>@string/kangayam</item>
+        <item>@string/khillari</item>
+        <item>@string/krishna_valley</item>
+        <item>@string/ongole</item>
+        <item>@string/pulikulam</item>
+        <item>@string/red_dane</item>
+        <item>@string/red_sindhi</item>
+        <item>@string/sahiwal</item>
+        <item>@string/tharparkar</item>
+        <item>@string/umblachery</item>
+    </string-array>
+
+    <!-- Source : http://www.agritech.tnau.ac.in/expert_system/cattlebuffalo/Breeds%20of%20cattle%20&%20baffalo.html -->
+    <string-array name="list_breed_buffalo">
+        <item>@string/bhadawari</item>
+        <item>@string/jaffrabadi</item>
+        <item>@string/mehsana</item>
+        <item>@string/murrah</item>
+        <item>@string/nagpuri</item>
+        <item>@string/nili_ravi</item>
+        <item>@string/surti</item>
+        <item>@string/toda</item>
+    </string-array>
+
+    <!-- list_breed_cow + list_breed_buffalo -->
+    <string-array name="list_breed_bull">
+        <!-- Cow -->
+        <item>@string/amritmahal</item>
+        <item>@string/alambadi</item>
+        <item>@string/ayrshire</item>
+        <item>@string/bargur</item>
+        <item>@string/brown_swiss</item>
+        <item>@string/deoni</item>
+        <item>@string/gir</item>
+        <item>@string/guernsey</item>
+        <item>@string/hariana</item>
+        <item>@string/hf</item>
+        <item>@string/hallikar</item>
+        <item>@string/holstein_friesian</item>
+        <item>@string/holstein_friesian_cross</item>
+        <item>@string/jersey</item>
+        <item>@string/jersey_cross</item>
+        <item>@string/kankrej</item>
+        <item>@string/kangayam</item>
+        <item>@string/khillari</item>
+        <item>@string/krishna_valley</item>
+        <item>@string/ongole</item>
+        <item>@string/pulikulam</item>
+        <item>@string/red_dane</item>
+        <item>@string/red_sindhi</item>
+        <item>@string/sahiwal</item>
+        <item>@string/tharparkar</item>
+        <item>@string/umblachery</item>
+        <!-- Buffalo -->
+        <item>@string/bhadawari</item>
+        <item>@string/jaffrabadi</item>
+        <item>@string/mehsana</item>
+        <item>@string/murrah</item>
+        <item>@string/nagpuri</item>
+        <item>@string/nili_ravi</item>
+        <item>@string/surti</item>
+        <item>@string/toda</item>
     </string-array>
     
     <string-array name="list_type">
-        <item>Cow</item>
-        <item>Buffalo</item>
-        <item>Bull</item>
+        <item>@string/cow</item>
+        <item>@string/buffalo</item>
+        <item>@string/bull</item>
     </string-array>
     
     <string-array name="list_group">
-        <item>Heifer</item>
-        <item>Milking</item>
-        <item>Dry</item>
+        <item>@string/heifer</item>
+        <item>@string/milking</item>
+        <item>@string/dry</item>
     </string-array>
     
 </resources>

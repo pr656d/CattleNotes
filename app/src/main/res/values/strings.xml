@@ -15,12 +15,57 @@
     <string name="remove_text">Remove %1$s?</string>
     <string name="required">Required</string>
     <string name="zero">0</string>
-    <string name="cow">Cow</string>
-    <string name="hf">HF</string>
-    <string name="dry">Dry</string>
     <string name="back_pressed_message">You want to go back?</string>
     <string name="changes_not_saved_message">If you go back changes will not be saved.</string>
     <string name="undo">Undo</string>
+
+    <!-- Type -->
+    <string name="cow">Cow</string>
+    <string name="buffalo">Buffalo</string>
+    <string name="bull">Bull</string>
+
+    <!-- Group -->
+    <string name="heifer">Heifer</string>
+    <string name="milking">Milking</string>
+    <string name="dry">Dry</string>
+
+    <!-- List cow breed -->
+    <string name="amritmahal">Amritmahal</string>
+    <string name="alambadi">Alambadi</string>
+    <string name="ayrshire">Ayrshire</string>
+    <string name="bargur">Bargur</string>
+    <string name="brown_swiss">Brown Swiss</string>
+    <string name="deoni">Deoni</string>
+    <string name="gir">Gir</string>
+    <string name="guernsey">Guernsey</string>
+    <string name="hariana">Hariana</string>
+    <string name="hf">HF</string>
+    <string name="hallikar">Hallikar</string>
+    <string name="holstein_friesian">Holstein Friesian</string>
+    <string name="holstein_friesian_cross">Holstein Friesian cross</string>
+    <string name="jersey">Jersey</string>
+    <string name="jersey_cross">Jersey cross</string>
+    <string name="kankrej">Kankrej</string>
+    <string name="kangayam">Kangayam</string>
+    <string name="khillari">Khillari</string>
+    <string name="krishna_valley">Krishna Valley</string>
+    <string name="ongole">Ongole</string>
+    <string name="pulikulam">Pulikulam</string>
+    <string name="red_dane">Red Dane</string>
+    <string name="red_sindhi">Red Sindhi</string>
+    <string name="sahiwal">Sahiwal</string>
+    <string name="tharparkar">Tharparkar</string>
+    <string name="umblachery">Umblachery</string>
+
+    <!-- List buffalo breed -->
+    <string name="bhadawari">Bhadawari</string>
+    <string name="jaffrabadi">Jaffrabadi</string>
+    <string name="mehsana">mehsana</string>
+    <string name="murrah">Murrah</string>
+    <string name="nagpuri">Nagpuri</string>
+    <string name="nili_ravi">Nili Ravi</string>
+    <string name="surti">Surti</string>
+    <string name="toda">Toda</string>
 
     <!--  Transition name  -->
     <string name="tn_fabButton">fab_button</string>
@@ -52,7 +97,6 @@
     <!--  Texts  -->
     <string name="cattle">Cattle</string>
     <string name="timeline">Timeline</string>
-    <string name="milking">Milking</string>
     <string name="cashflow">Cashflow</string>
     <string name="settings">Settings</string>
     <string name="profile">Profile</string>

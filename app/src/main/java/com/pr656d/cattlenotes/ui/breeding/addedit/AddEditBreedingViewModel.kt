@@ -65,6 +65,10 @@ class AddEditBreedingViewModel @Inject constructor(
             }
         }
 
+        _showMessage.addSource(cattle) {
+            if (it == null) _showMessage.postValue(Event(R.string.error_cattle_not_found))
+        }
+
         _showMessage.addSource(addUpdateBreedingResult) {
             (it as? Error)?.let {
                 _showMessage.value = Event(R.string.retry)

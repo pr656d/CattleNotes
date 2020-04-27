@@ -18,6 +18,10 @@
             type="org.threeten.bp.LocalDate" />
 
         <variable
+            name="doneOnVisibility"
+            type="Boolean" />
+
+        <variable
             name="showMoreActions"
             type="Boolean" />
 
@@ -104,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:hint="@string/done_on"
-                    app:goneUnless="@{ showMoreActions }"
+                    app:goneUnless="@{ doneOnVisibility }"
                     tools:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputEditText

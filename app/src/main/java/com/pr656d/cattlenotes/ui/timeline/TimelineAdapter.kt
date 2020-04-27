@@ -77,6 +77,12 @@ class TimelineViewHolder(
             field = value
         }
 
+    private var doneOnVisibility: Boolean = false
+        set(value) = binding.executeAfter {
+            doneOnVisibility = value
+            field = value
+        }
+
     fun bind(data: BreedingWithCattle) {
         breedingEvent = data.breeding.nextBreedingEvent ?: return
         this.data = data
@@ -92,6 +98,7 @@ class TimelineViewHolder(
             doneOn = this@TimelineViewHolder.doneOn
             selectedOption = this@TimelineViewHolder.selectedOption
             breedingCompleted = this@TimelineViewHolder.breedingCompleted
+            doneOnVisibility = this@TimelineViewHolder.doneOnVisibility
         }
         initializeListeners()
     }
@@ -107,12 +114,6 @@ class TimelineViewHolder(
 
         this.selectedOption = selectedOption
 
-        breedingCompleted = when {
-            breedingEventType == Type.REPEAT_HEAT && selectedOption == true -> true
-            breedingEventType == Type.PREGNANCY_CHECK && selectedOption == false -> true
-            else -> false
-        }
-
         if (checkedId == binding.radioButtonNeutral.id) {
             onCancelClicked()   // None means cancelled state
             return  // Ignore
@@ -120,6 +121,17 @@ class TimelineViewHolder(
 
         // Show more actions
         showMoreActions = true
+
+        breedingCompleted = when {
+            breedingEventType == Type.REPEAT_HEAT && selectedOption == true -> true
+            breedingEventType == Type.PREGNANCY_CHECK && selectedOption == false -> true
+            else -> false
+        }
+
+        doneOnVisibility = when {
+            breedingEventType == Type.REPEAT_HEAT && selectedOption == false -> false
+            else -> showMoreActions
+        }
     }
 
     private fun onSaveClicked() {
@@ -130,6 +142,9 @@ class TimelineViewHolder(
     private fun onCancelClicked() {
         // Reset selected option
         selectedOption = null
+
+        // Reset done on visibility
+        doneOnVisibility = false
 
         // Reset done on
         doneOn = null

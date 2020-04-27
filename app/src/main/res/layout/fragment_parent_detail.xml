@@ -56,7 +56,8 @@
             <include
                 android:id="@+id/include_cattle_detail"
                 layout="@layout/layout_cattle_detail"
-                bind:cattle="@{viewModel.parentCattle}" />
+                bind:cattle="@{viewModel.parentCattle}"
+                bind:parent="@{viewModel.parentParent}"/>
 
         </androidx.core.widget.NestedScrollView>
 

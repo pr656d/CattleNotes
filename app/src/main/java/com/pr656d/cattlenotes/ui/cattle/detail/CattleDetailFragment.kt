@@ -13,7 +13,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentCattleDetailBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
@@ -110,11 +109,11 @@ class CattleDetailFragment : NavigationFragment() {
         }
 
         model.launchAllBreeding.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toBreedingHistory(Gson().toJson(it)))
+            findNavController().navigate(toBreedingHistory(it.id))
         })
 
         model.launchAddBreeding.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toAddBreeding(Gson().toJson(it)))
+            findNavController().navigate(toAddBreeding(it.id))
         })
 
         model.launchEditCattle.observe(viewLifecycleOwner, EventObserver {

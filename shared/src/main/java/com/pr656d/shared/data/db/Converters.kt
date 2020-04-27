@@ -19,34 +19,22 @@ class Converters {
         AnimalType.Cow.displayName -> AnimalType.Cow
         AnimalType.Buffalo.displayName -> AnimalType.Buffalo
         AnimalType.Bull.displayName -> AnimalType.Bull
-        else -> throw Exception("Invalid String: Can not convert $value to Cattle.Type")
+        else -> throw IllegalArgumentException("Invalid String: Can not convert $value to Cattle.Type")
     }
 
     @TypeConverter
     fun fromAnimalTypeToString(value: AnimalType): String = value.displayName
 
     @TypeConverter
-    fun fromStringToBreed(value: String): Cattle.Breed = when (value) {
-        Cattle.Breed.HF.displayName -> Cattle.Breed.HF
-        Cattle.Breed.GIR.displayName -> Cattle.Breed.GIR
-        Cattle.Breed.JERSEY.displayName -> Cattle.Breed.JERSEY
-        Cattle.Breed.KANKREJ.displayName -> Cattle.Breed.KANKREJ
-        Cattle.Breed.SHAHIVAL.displayName -> Cattle.Breed.SHAHIVAL
-        else -> throw Exception("Invalid String: Can not convert $value to Cattle.Breed")
-    }
+    fun fromGroupToString(value: Cattle.Group?): String? = value?.displayName
 
     @TypeConverter
-    fun fromBreedToString(value: Cattle.Breed): String = value.displayName
-
-    @TypeConverter
-    fun fromGroupToString(value: Cattle.Group): String = value.displayName
-
-    @TypeConverter
-    fun fromStringToGroup(value: String): Cattle.Group = when (value) {
+    fun fromStringToGroup(value: String?): Cattle.Group? = when (value) {
+        null -> null
         Cattle.Group.Milking.displayName -> Cattle.Group.Milking
         Cattle.Group.Dry.displayName -> Cattle.Group.Dry
         Cattle.Group.Heifer.displayName -> Cattle.Group.Heifer
-        else -> throw Exception("Invalid String: Can not convert $value to Cattle.Group")
+        else -> throw IllegalArgumentException("Invalid String: Can not convert $value to Cattle.Group")
     }
 
     @TypeConverter

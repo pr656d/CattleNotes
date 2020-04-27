@@ -4,11 +4,13 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentActionListener
+import com.pr656d.model.AnimalType
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.cattle.addedit.AddCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.UpdateCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.parent.GetParentListUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
+import com.pr656d.shared.domain.cattle.detail.GetParentCattleUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleTagNumberValidatorUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleValidator
 import com.pr656d.shared.domain.cattle.validator.CattleValidator.VALID_FIELD
@@ -17,7 +19,7 @@ import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Error
 import com.pr656d.shared.domain.result.Result.Success
 import com.pr656d.shared.utils.FirestoreUtil
-import com.pr656d.shared.utils.toBreed
+import com.pr656d.shared.utils.nameOrTagNumber
 import com.pr656d.shared.utils.toGroup
 import com.pr656d.shared.utils.toType
 import org.threeten.bp.LocalDate
@@ -28,6 +30,7 @@ class AddEditCattleViewModel @Inject constructor(
     private val updateCattleUseCase: UpdateCattleUseCase,
     private val getParentListUseCase: GetParentListUseCase,
     getCattleByIdUseCase: GetCattleByIdUseCase,
+    getParentCattleUseCase: GetParentCattleUseCase,
     cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase
 ) : ViewModel(), ParentActionListener {
     private val cattleId = MutableLiveData<String>()
@@ -50,25 +53,48 @@ class AddEditCattleViewModel @Inject constructor(
     val typeErrorMessage: LiveData<Int> = type.map {
         CattleValidator.isValidType(it)
     }
+    val typeList: LiveData<Int> = MutableLiveData(R.array.list_type)
+
+    val isCattleTypeBull: LiveData<Boolean> = type.map { it.toType() is AnimalType.Bull }
 
     val breed = MediatorLiveData<String>()
     val breedErrorMessage: LiveData<Int> = breed.map {
         CattleValidator.isValidBreed(it)
     }
+    val breedList: LiveData<Int> = type.map {
+        // Reset breed.
+        breed.postValue(null)
 
-    val group = MediatorLiveData<String>()
+        // Check if it's same as old cattle.
+        if (oldCattle.value?.type?.displayName == it)
+            breed.postValue(oldCattle.value?.breed)
+
+        when (it.toType()) {
+            AnimalType.Cow -> R.array.list_breed_cow
+            AnimalType.Buffalo -> R.array.list_breed_buffalo
+            AnimalType.Bull -> R.array.list_breed_bull
+        }
+    }
+
+    val group = MediatorLiveData<String?>()
     val groupErrorMessage: LiveData<Int> = group.map {
-        CattleValidator.isValidGroup(it)
+        CattleValidator.isValidGroup(it, type.value)
     }
 
     val lactation = MediatorLiveData<String>()
     val lactationErrorMessage: LiveData<Int> = lactation.map {
-        CattleValidator.isValidLactation(it)
+        CattleValidator.isValidLactation(it, type.value)
     }
 
     val dob = MediatorLiveData<LocalDate>()
 
-    val parent = MediatorLiveData<String>()
+    private val parentId = MediatorLiveData<String?>()
+
+    val parentCattle: LiveData<Cattle?> = parentId.switchMap { id ->
+        id?.let { getParentCattleUseCase(id) } ?: MutableLiveData<Cattle?>(null)
+    }
+
+    val parent:LiveData<String?> = parentCattle.map { it?.nameOrTagNumber() }
 
     val homeBorn = MediatorLiveData<Boolean>()
 
@@ -122,27 +148,45 @@ class AddEditCattleViewModel @Inject constructor(
         }
 
         type.addSource(oldCattle) {
-            type.postValue(it?.type?.toString())
+            type.postValue(it?.type?.displayName)
         }
 
         breed.addSource(oldCattle) {
-            breed.postValue(it?.breed?.displayName)
+            breed.postValue(it?.breed)
         }
 
         group.addSource(oldCattle) {
             group.postValue(it?.group?.displayName)
         }
 
+        group.addSource(isCattleTypeBull) {
+            if (it) {
+                // Bull doesn't have group
+                group.postValue(null)
+            } else {
+                group.postValue(oldCattle.value?.group?.displayName)
+            }
+        }
+
         lactation.addSource(oldCattle) {
             lactation.postValue(it?.lactation?.toString())
+        }
+
+        lactation.addSource(isCattleTypeBull) {
+            if (it) {
+                // Bull doesn't have group
+                lactation.postValue(null)
+            } else {
+                lactation.postValue(oldCattle.value?.lactation?.toString())
+            }
         }
 
         dob.addSource(oldCattle) {
             dob.postValue(it?.dateOfBirth)
         }
 
-        parent.addSource(oldCattle) {
-            parent.postValue(it?.parent)
+        parentId.addSource(oldCattle) {
+            parentId.postValue(it?.parent)
         }
 
         homeBorn.addSource(oldCattle) {
@@ -233,14 +277,14 @@ class AddEditCattleViewModel @Inject constructor(
             name.value,
             null,
             type.value!!.toType(),
-            breed.value!!.toBreed(),
-            group.value!!.toGroup(),
-            lactation.value?.toLongOrNull() ?: 0,
+            breed.value!!,
+            group.value?.toGroup(),
+            lactation.value?.toLongOrNull(),
             homeBorn.value ?: false,
             purchaseAmount.value?.toLongOrNull(),
             purchaseDate.value,
             dob.value,
-            parent.value
+            parentId.value
         ).apply {
             id = oldCattle.value?.id ?: FirestoreUtil.autoId()
         }
@@ -267,8 +311,8 @@ class AddEditCattleViewModel @Inject constructor(
                 purchaseDate.value == null
     }
 
-    override fun parentSelected(cattle: Cattle) {
-        parent.postValue(cattle.id)
+    override fun parentSelected(parent: Cattle) {
+        parentId.postValue(parent.id)
         _selectingParent.postValue(false)
     }
 

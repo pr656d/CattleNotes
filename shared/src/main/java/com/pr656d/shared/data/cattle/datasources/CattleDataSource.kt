@@ -9,7 +9,10 @@ import com.pr656d.model.Cattle
 import com.pr656d.shared.data.db.CattleDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.domain.internal.DefaultScheduler
-import com.pr656d.shared.utils.*
+import com.pr656d.shared.utils.toGroup
+import com.pr656d.shared.utils.toLocalDate
+import com.pr656d.shared.utils.toLong
+import com.pr656d.shared.utils.toType
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -165,7 +168,7 @@ class FirestoreCattleDataSource @Inject constructor(
                 name = get(KEY_NAME) as? String,
                 image = (get(KEY_IMAGE_URL) as? String)?.let { Cattle.Image(null, it) },
                 type = (get(KEY_TYPE) as String).toType(),
-                breed = (get(KEY_BREED) as String).toBreed(),
+                breed = (get(KEY_BREED) as String),
                 group = (get(KEY_GROUP) as String).toGroup(),
                 lactation = get(KEY_LACTATION) as Long,
                 homeBorn = get(KEY_HOME_BORN) as Boolean,
@@ -182,8 +185,8 @@ class FirestoreCattleDataSource @Inject constructor(
         put(KEY_NAME, name)
         put(KEY_IMAGE_URL, image?.remotePath)
         put(KEY_TYPE, type.displayName)
-        put(KEY_BREED, breed.displayName)
-        put(KEY_GROUP, group.displayName)
+        put(KEY_BREED, breed)
+        put(KEY_GROUP, group?.displayName)
         put(KEY_LACTATION, lactation)
         put(KEY_HOME_BORN, homeBorn)
         put(KEY_PURCHASE_AMOUNT, purchaseAmount)

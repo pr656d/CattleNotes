@@ -3,6 +3,7 @@ package com.pr656d.cattlenotes.ui.cattle.detail
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
+import com.pr656d.model.AnimalType
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.cattle.addedit.DeleteCattleUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
@@ -11,10 +12,11 @@ import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Error
 import com.pr656d.shared.domain.result.Result.Success
+import com.pr656d.shared.utils.nameOrTagNumber
 import javax.inject.Inject
 
 class CattleDetailViewModel @Inject constructor(
-    private val getCattleUseCase: GetCattleByIdUseCase,
+    private val getCattleByIdUseCase: GetCattleByIdUseCase,
     private val getParentCattleUseCase: GetParentCattleUseCase,
     private val deleteCattleUseCase: DeleteCattleUseCase
 ) : ViewModel() {
@@ -23,11 +25,31 @@ class CattleDetailViewModel @Inject constructor(
 
     private val cattleId = MutableLiveData<String>()
 
-    val cattle: LiveData<Cattle?> = cattleId.switchMap { getCattleUseCase(it) }
+    val cattle: LiveData<Cattle?> = cattleId.switchMap { getCattleByIdUseCase(it) }
 
-    private val _parentCattle = MediatorLiveData<Cattle?>()
-    val parentCattle: LiveData<Cattle?>
-        get() = _parentCattle
+    val isCattleTypeBull: LiveData<Boolean> = cattle.map { it?.type is AnimalType.Bull }
+
+    /**
+     * Cattle's parent detail
+     */
+    private val parentId: LiveData<String?> = cattle.map { it?.parent }
+
+    val parentCattle: LiveData<Cattle?> = parentId.switchMap { id ->
+        id?.let { getParentCattleUseCase(id) } ?: MutableLiveData<Cattle?>(null)
+    }
+
+    val parent:LiveData<String?> = parentCattle.map { it?.nameOrTagNumber() }
+
+    /**
+     * Parent cattle's parent detail
+     */
+    private val parentParentId: LiveData<String?> = parentCattle.map { it?.parent }
+
+    val parentParentCattle: LiveData<Cattle?> = parentParentId.switchMap { id ->
+        id?.let { getParentCattleUseCase(id) } ?: MutableLiveData<Cattle?>(null)
+    }
+
+    val parentParent:LiveData<String?> = parentParentCattle.map { it?.nameOrTagNumber() }
 
     private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
     val showMessage: LiveData<Event<Int>>
@@ -86,17 +108,6 @@ class CattleDetailViewModel @Inject constructor(
             }
         }
 
-        // Trigger when cattle is available.
-        _parentCattle.addSource(cattle) { cattle ->
-            // If cattle has parent
-            cattle?.parent?.let { parentId ->
-                // Fetch parent details as LiveData
-                _parentCattle.addSource(getParentCattleUseCase(parentId)) { parentCattle ->
-                    _parentCattle.postValue(parentCattle)
-                }
-            }
-        }
-
         _loadingParent.addSource(parentCattle) {
             _loadingParent.value = false
         }
@@ -106,13 +117,17 @@ class CattleDetailViewModel @Inject constructor(
 
     fun showAllBreeding() {
         cattle.value?.let {
-            _launchAllBreeding.postValue(Event(it))
+            // Bull doesn't have breeding
+            if (isCattleTypeBull.value == false)
+                _launchAllBreeding.postValue(Event(it))
         }
     }
 
     fun addNewBreeding() {
         cattle.value?.let {
-            _launchAddBreeding.postValue(Event(it))
+            // Bull doesn't have breeding
+            if (isCattleTypeBull.value == false)
+                _launchAddBreeding.postValue(Event(it))
         }
     }
 

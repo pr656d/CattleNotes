@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
+import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
 import com.pr656d.model.AnimalType
@@ -14,9 +15,11 @@ import com.pr656d.shared.domain.cattle.addedit.IsCattleExistWithTagNumberUseCase
 import com.pr656d.shared.domain.cattle.addedit.UpdateCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.parent.GetParentListUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
+import com.pr656d.shared.domain.cattle.detail.GetParentCattleUseCase
 import com.pr656d.shared.domain.cattle.list.LoadCattleListUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleTagNumberValidatorUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleValidator.VALID_FIELD
+import com.pr656d.shared.utils.nameOrTagNumber
 import com.pr656d.test.TestData
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.*
@@ -63,14 +66,16 @@ class AddEditCattleViewModelTest {
             CattleTagNumberValidatorUseCase(IsCattleExistWithTagNumberUseCase(repository)),
         getParentListUseCase: GetParentListUseCase =
             GetParentListUseCase(LoadCattleListUseCase(repository)),
-        getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(repository)
+        getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(repository),
+        getParentCattleUseCase: GetParentCattleUseCase = GetParentCattleUseCase(repository)
     ): AddEditCattleViewModel {
         return AddEditCattleViewModel(
             addCattleUseCase = addCattleUseCase,
             updateCattleUseCase = updateCattleUseCase,
             getParentListUseCase = getParentListUseCase,
             cattleTagNumberValidatorUseCase = cattleTagNumberValidatorUseCase,
-            getCattleByIdUseCase = getCattleByIdUseCase
+            getCattleByIdUseCase = getCattleByIdUseCase,
+            getParentCattleUseCase = getParentCattleUseCase
         ).apply { observeUnobserved() }
     }
 
@@ -83,7 +88,9 @@ class AddEditCattleViewModelTest {
         tagNumber.observeForever {  }
         name.observeForever {  }
         type.observeForever {  }
+        typeList.observeForever {  }
         breed.observeForever {  }
+        breedList.observeForever {  }
         group.observeForever {  }
         lactation.observeForever {  }
         dob.observeForever {  }
@@ -261,10 +268,10 @@ class AddEditCattleViewModelTest {
         viewModel.tagNumber.value = "312546"
 
         // Valid type
-        viewModel.type.value = AnimalType.Cow.toString()
+        viewModel.type.value = AnimalType.Cow.displayName
 
         // Valid breed
-        viewModel.breed.value = Cattle.Breed.HF.displayName
+        viewModel.breed.value = "HF"
 
         // Valid group
         viewModel.group.value = Cattle.Group.Milking.displayName
@@ -290,9 +297,9 @@ class AddEditCattleViewModelTest {
         // Update tag number.
         viewModel.tagNumber.value = "312546"
         // Update type
-        viewModel.type.value = AnimalType.Cow.toString()
+        viewModel.type.value = AnimalType.Cow.displayName
         // Update breed
-        viewModel.breed.value = Cattle.Breed.HF.displayName
+        viewModel.breed.value = "HF"
         // Update group
         viewModel.group.value = Cattle.Group.Milking.displayName
         // Update lactation
@@ -364,7 +371,7 @@ class AddEditCattleViewModelTest {
         val viewModel = createAddEditCattleViewModel()
 
         val cattle = TestData.cattle4
-        val parentCattle = TestData.cattle5
+        val actualParentCattle = TestData.cattle5
 
         // Set cattle
         viewModel.setCattle(cattle.id)
@@ -373,10 +380,13 @@ class AddEditCattleViewModelTest {
         viewModel.pickParent()
 
         // Parent is selected
-        viewModel.parentSelected(parentCattle)
+        viewModel.parentSelected(actualParentCattle)
+
+        val parentCattle = LiveDataTestUtil.getValue(viewModel.parentCattle)
+        assertThat(actualParentCattle, isEqualTo(parentCattle))
 
         val parent = LiveDataTestUtil.getValue(viewModel.parent)
-        assertThat(parentCattle.id, isEqualTo(parent))
+        assertThat(actualParentCattle.nameOrTagNumber(), isEqualTo(parent))
     }
 
     @Test
@@ -386,8 +396,8 @@ class AddEditCattleViewModelTest {
         viewModel.apply {
             tagNumber.value = "123456789012"
             name.value = "Sita"
-            type.value = AnimalType.Cow.toString()
-            breed.value = Cattle.Breed.HF.displayName
+            type.value = AnimalType.Cow.displayName
+            breed.value = "HF"
             group.value = Cattle.Group.Heifer.displayName
             lactation.value = "3"
             dob.value = LocalDate.ofEpochDay(1562606700)
@@ -418,8 +428,8 @@ class AddEditCattleViewModelTest {
         viewModel.apply {
             tagNumber.value = "123456789012"
             name.value = "Sita"
-            type.value = AnimalType.Cow.toString()
-            breed.value = Cattle.Breed.HF.displayName
+            type.value = AnimalType.Cow.displayName
+            breed.value = "HF"
             group.value = Cattle.Group.Heifer.displayName
             lactation.value = "3"
             dob.value = LocalDate.ofEpochDay(1562606700)
@@ -540,6 +550,70 @@ class AddEditCattleViewModelTest {
         assertFalse(editing)
     }
 
+    @Test
+    fun changeBreedListAsTypeChanges() {
+        val viewModel = createAddEditCattleViewModel()
+
+        val cattle = TestData.cattle1
+
+        // Set cattle
+        viewModel.setCattle(cattle.id)
+
+        // Type changed
+        viewModel.type.value = AnimalType.Buffalo.displayName
+
+        assertThat(
+            R.array.list_breed_buffalo,
+            isEqualTo(LiveDataTestUtil.getValue(viewModel.breedList))
+        )
+
+        // Type changed
+        viewModel.type.value = AnimalType.Bull.displayName
+
+        assertThat(
+            R.array.list_breed_bull,
+            isEqualTo(LiveDataTestUtil.getValue(viewModel.breedList))
+        )
+
+        // Type changed
+        viewModel.type.value = AnimalType.Cow.displayName
+
+        assertThat(
+            R.array.list_breed_cow,
+            isEqualTo(LiveDataTestUtil.getValue(viewModel.breedList))
+        )
+    }
+
+    @Test
+    fun cattleTypeIsBull_resetGroupAndLactation() {
+        val viewModel = createAddEditCattleViewModel()
+
+        // Set tag number
+        viewModel.tagNumber.value = "1"
+
+        viewModel.type.value = AnimalType.Bull.displayName
+
+        assertNull(LiveDataTestUtil.getValue(viewModel.group))
+        assertNull(LiveDataTestUtil.getValue(viewModel.lactation))
+    }
+
+    @Test
+    fun saveCattleTypeBull_navigateUpOnSuccess() {
+        val viewModel = createAddEditCattleViewModel()
+
+        viewModel.tagNumber.value = "2131"
+
+        viewModel.type.value = AnimalType.Bull.displayName
+
+        viewModel.breed.value = "Gir"
+
+        // Call save
+        viewModel.save()
+
+        val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
+        assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
+    }
+
     /** Region end */
 
     /** Region : Edit [Cattle] */
@@ -555,6 +629,68 @@ class AddEditCattleViewModelTest {
 
         val editing = LiveDataTestUtil.getValue(viewModel.editing)!!
         assertTrue(editing)
+    }
+
+    @Test
+    fun editingCattleTypeChanged_changeBreedAccordingly() {
+        val viewModel = createAddEditCattleViewModel()
+
+        val cattle = TestData.cattle1
+
+        // Set cattle
+        viewModel.setCattle(cattle.id)
+
+        // Type changed
+        viewModel.type.value = AnimalType.Buffalo.displayName
+
+        // Check breed is reset.
+        assertNull(LiveDataTestUtil.getValue(viewModel.breed))
+
+        // Type changed again back to cow.
+        viewModel.type.value = AnimalType.Cow.displayName
+
+        assertThat(
+            R.array.list_breed_cow,
+            isEqualTo(LiveDataTestUtil.getValue(viewModel.breedList))
+        )
+
+        // Check that we set breed as it was.
+        assertThat(
+            cattle.breed,
+            isEqualTo(LiveDataTestUtil.getValue(viewModel.breed))
+        )
+    }
+
+    @Test
+    fun editingBullCattle_resetBreedAndLactation() {
+        val viewModel = createAddEditCattleViewModel()
+
+        val bullCattle = TestData.cattleBull
+
+        viewModel.setCattle(bullCattle.id)
+
+        assertNull(LiveDataTestUtil.getValue(viewModel.group))
+        assertNull(LiveDataTestUtil.getValue(viewModel.lactation))
+    }
+
+    @Test
+    fun editingCattleTypeChangedToBull_resetBreedAndLactation() {
+        val viewModel = createAddEditCattleViewModel()
+
+        val bullCattle = TestData.cattle1
+
+        // Set the cattle
+        viewModel.setCattle(bullCattle.id)
+
+        // Change type to bull
+        viewModel.type.value = AnimalType.Bull.displayName
+
+        assertNull(LiveDataTestUtil.getValue(viewModel.group))
+
+        assertNull(LiveDataTestUtil.getValue(viewModel.lactation))
+
+        // Call save to check for any errors in fields
+        viewModel.save()
     }
 
     /** Region end */

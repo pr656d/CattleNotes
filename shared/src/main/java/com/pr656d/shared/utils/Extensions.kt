@@ -10,9 +10,7 @@ import org.threeten.bp.ZonedDateTime
 
 fun String.toType(): AnimalType = Converters().fromStringToAnimalType(this)
 
-fun String.toBreed(): Cattle.Breed = Converters().fromStringToBreed(this)
-
-fun String.toGroup(): Cattle.Group = Converters().fromStringToGroup(this)
+fun String.toGroup(): Cattle.Group? = Converters().fromStringToGroup(this)
 
 // end region
 

@@ -147,7 +147,7 @@
                             style="@style/Widget.CattleNOTES.AutoCompleteTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownList="@{@stringArray/list_type}"
+                            app:dropDownList="@{ viewModel.typeList }"
                             app:dropDownText="@={ viewModel.type }"
                             tools:ignore="LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -168,7 +168,7 @@
                             style="@style/Widget.CattleNOTES.AutoCompleteTextView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:dropDownList="@{@stringArray/list_breed}"
+                            app:dropDownList="@{ viewModel.breedList }"
                             app:dropDownText="@={ viewModel.breed }"
                             tools:ignore="Deprecated,LabelFor" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -184,7 +184,8 @@
                     android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/containerTypeBreed">
+                    app:layout_constraintTop_toBottomOf="@+id/containerTypeBreed"
+                    app:goneUnless="@{!viewModel.isCattleTypeBull}">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layoutGroup"
@@ -270,7 +271,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="@{ InputType.TYPE_NULL }"
                         android:onClick="@{ () -> viewModel.pickParent() }"
-                        android:text="@={ viewModel.parent }" />
+                        android:text="@{ viewModel.parent }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.checkbox.MaterialCheckBox

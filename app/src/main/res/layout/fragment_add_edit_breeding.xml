@@ -114,7 +114,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/margin_small"
                             android:layout_marginBottom="@dimen/margin_normal"
-                            android:text="@{ viewModel.cattle.breed.displayName }"
+                            android:text="@{ viewModel.cattle.breed }"
                             android:textAppearance="?textAppearanceSubtitle1"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/textViewGroup"

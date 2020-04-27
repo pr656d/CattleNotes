@@ -22,7 +22,7 @@ import timber.log.Timber
         Cattle::class,
         Breeding::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

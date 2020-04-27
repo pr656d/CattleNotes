@@ -14,7 +14,7 @@ import com.pr656d.cattlenotes.R
  */
 @BindingAdapter("dropDownText")
 fun setDropDownText(view: AutoCompleteTextView, newText: String?) {
-    if (view.text.toString() != newText)
+    if (view.text?.toString() != newText)
         view.setText(newText, false)
 }
 
@@ -32,10 +32,14 @@ fun getDropDownText(view: AutoCompleteTextView): String? {
 )
 fun setListeners(
     view: AutoCompleteTextView,
-    dropDownList: Array<String>,
+    list: Array<String>,
     listener: AdapterView.OnItemClickListener?,
     attrChange: InverseBindingListener?
 ) {
+
+    /** Sort the list */
+    val dropDownList: List<String> = list.sorted()
+
     view.setAdapter(
         ArrayAdapter(
             view.context,
@@ -53,4 +57,22 @@ fun setListeners(
             attrChange.onChange()
         }
     }
+}
+
+@BindingAdapter(
+    value = [
+        "dropDownList",
+        "onItemClickListener",
+        "dropDownTextAttrChanged"
+    ], requireAll = false
+)
+fun setListeners(
+    view: AutoCompleteTextView,
+    dropDownListId: Int?,
+    listener: AdapterView.OnItemClickListener?,
+    attrChange: InverseBindingListener?
+) {
+    dropDownListId ?: return
+    val list: Array<String> = view.resources.getStringArray(dropDownListId)
+    setListeners(view, list, listener, attrChange)
 }

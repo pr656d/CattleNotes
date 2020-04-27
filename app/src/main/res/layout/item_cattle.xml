@@ -66,11 +66,12 @@
             style="@style/AppTheme.Body2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginTop="@dimen/margin_micro"
             android:text="@{ cattle.type.displayName }"
             android:textAppearance="?textAppearanceListItemSmall"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tvGroup"
+            app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
             app:layout_constraintStart_toEndOf="@+id/tvGroup"
+            app:layout_constraintTop_toBottomOf="@+id/tvTagNumber"
             tools:text="Cow" />
 
         <TextView
@@ -79,8 +80,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_micro"
+            android:paddingStart="0dp"
+            android:paddingEnd="@dimen/padding_small"
             android:text="@{ cattle.group.displayName }"
             android:textAppearance="?textAppearanceListItemSmall"
+            app:goneUnless="@{ cattle.group != null }"
             app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
             app:layout_constraintStart_toStartOf="@+id/tvTagNumber"
             app:layout_constraintTop_toBottomOf="@+id/tvTagNumber"

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
+import com.google.android.material.textfield.TextInputLayout
 import com.pr656d.cattlenotes.databinding.FragmentParentDetailBinding
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailViewModel
 import com.pr656d.cattlenotes.utils.parentViewModelProvider
@@ -40,6 +41,8 @@ class ParentDetailFragment : DaggerFragment() {
         // ViewModel is scoped to parent fragment.
         model = parentViewModelProvider(viewModelFactory)
         binding.viewModel = model
+
+        binding.includeCattleDetail.layoutParent.endIconMode = TextInputLayout.END_ICON_NONE
 
         behavior = BottomSheetBehavior.from(binding.parentDetailSheet)
 

@@ -27,15 +27,15 @@ data class Cattle(
 
     @SerializedName("breed")
     @ColumnInfo(name = "breed")
-    val breed: Breed,
+    val breed: String,
 
     @SerializedName("group")
     @ColumnInfo(name = "group")
-    val group: Group,
+    val group: Group?,
 
     @SerializedName("lactation")
     @ColumnInfo(name = "lactation")
-    val lactation: Long,
+    val lactation: Long?,
 
     @SerializedName("homeBorn")
     @ColumnInfo(name = "homeBorn")
@@ -79,14 +79,6 @@ data class Cattle(
         object Heifer : Group("Heifer") {
             override fun toString(): String = displayName
         }
-    }
-
-    enum class Breed(val displayName: String) {
-        HF("HF"),
-        JERSEY("Jersey"),
-        GIR("Gir"),
-        KANKREJ("Kankrej"),
-        SHAHIVAL("Shahival")
     }
 
     data class Image(
