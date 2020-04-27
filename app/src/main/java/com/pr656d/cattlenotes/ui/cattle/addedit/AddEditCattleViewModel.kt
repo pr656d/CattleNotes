@@ -158,7 +158,7 @@ class AddEditCattleViewModel @Inject constructor(
         }
 
         _tagNumberErrorMessage.addSource(tagNumber) {
-            cattleTagNumberValidatorUseCase.execute(Pair(it, oldCattle.value?.tagNumber))
+            cattleTagNumberValidatorUseCase.execute(it to oldCattle.value?.tagNumber)
         }
 
         _tagNumberErrorMessage.addSource(cattleTagNumberValidatorUseCase.observe()) { result ->

@@ -67,10 +67,18 @@ data class Cattle(
             throw IllegalArgumentException("Cattle id is blank")
         }
 
-    enum class Group(val displayName: String) {
-        HEIFER("Heifer"),
-        MILKING("Milking"),
-        DRY("Dry")
+    sealed class Group(val displayName: String) {
+        object Milking : Group("Milking") {
+            override fun toString(): String = displayName
+        }
+
+        object Dry : Group("Dry") {
+            override fun toString(): String = displayName
+        }
+
+        object Heifer : Group("Heifer") {
+            override fun toString(): String = displayName
+        }
     }
 
     enum class Breed(val displayName: String) {

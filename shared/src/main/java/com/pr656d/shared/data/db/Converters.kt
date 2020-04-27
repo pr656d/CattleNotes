@@ -43,9 +43,9 @@ class Converters {
 
     @TypeConverter
     fun fromStringToGroup(value: String): Cattle.Group = when (value) {
-        Cattle.Group.MILKING.displayName -> Cattle.Group.MILKING
-        Cattle.Group.DRY.displayName -> Cattle.Group.DRY
-        Cattle.Group.HEIFER.displayName -> Cattle.Group.HEIFER
+        Cattle.Group.Milking.displayName -> Cattle.Group.Milking
+        Cattle.Group.Dry.displayName -> Cattle.Group.Dry
+        Cattle.Group.Heifer.displayName -> Cattle.Group.Heifer
         else -> throw Exception("Invalid String: Can not convert $value to Cattle.Group")
     }
 

@@ -19,35 +19,35 @@ object TestData {
 
     val cattle1 = Cattle(
         tagNumber = 1, name = "Janu", image = Cattle.Image(localPath = null, remotePath =  null),
-        type = AnimalType.Cow, breed = Cattle.Breed.HF, group = Cattle.Group.MILKING, lactation = 3,
+        type = AnimalType.Cow, breed = Cattle.Breed.HF, group = Cattle.Group.Milking, lactation = 3,
         homeBorn = false, purchaseAmount = 85000, purchaseDate = LocalDate.ofEpochDay(1582806700),
         dateOfBirth = LocalDate.ofEpochDay(1551270660), parent = null
     ).apply { id = UUID.randomUUID().toString() }
 
     val cattle2 = Cattle(
         tagNumber = 2, name = null, image = Cattle.Image(localPath = null, remotePath =  null),
-        type = AnimalType.Cow, breed = Cattle.Breed.HF, group = Cattle.Group.DRY, lactation = 1,
+        type = AnimalType.Cow, breed = Cattle.Breed.HF, group = Cattle.Group.Dry, lactation = 1,
         homeBorn = true, purchaseAmount = null, purchaseDate = LocalDate.ofEpochDay(1562606700),
         dateOfBirth = LocalDate.ofEpochDay(1562606700), parent = cattle1.id
     ).apply { id = UUID.randomUUID().toString() }
 
     val cattle3 = Cattle(
         tagNumber = 872634658165, name = "Sita", image = Cattle.Image(localPath = null, remotePath =  null),
-        type = AnimalType.Cow, breed = Cattle.Breed.HF, group = Cattle.Group.HEIFER, lactation = 4,
+        type = AnimalType.Cow, breed = Cattle.Breed.HF, group = Cattle.Group.Heifer, lactation = 4,
         homeBorn = false, purchaseAmount = null, purchaseDate = null,
         dateOfBirth = null, parent = cattle1.id
     ).apply { id = UUID.randomUUID().toString() }
 
     val cattle4 = Cattle(
         tagNumber = 243287657216, name = null, image = Cattle.Image(localPath = null, remotePath =  null),
-        type = AnimalType.Cow, breed = Cattle.Breed.GIR, group = Cattle.Group.MILKING, lactation = 0,
+        type = AnimalType.Cow, breed = Cattle.Breed.GIR, group = Cattle.Group.Milking, lactation = 0,
         homeBorn = false, purchaseAmount = null, purchaseDate = null,
         dateOfBirth = null, parent = cattle2.id
     ).apply { id = UUID.randomUUID().toString() }
 
     val cattle5 = Cattle(
         tagNumber = 5, name = "Lakshmi", image = Cattle.Image(localPath = null, remotePath =  null),
-        type = AnimalType.Cow, breed = Cattle.Breed.HF, group = Cattle.Group.DRY, lactation = 1,
+        type = AnimalType.Cow, breed = Cattle.Breed.HF, group = Cattle.Group.Dry, lactation = 1,
         homeBorn = false, purchaseAmount = null, purchaseDate = LocalDate.ofEpochDay(1562606700),
         dateOfBirth = LocalDate.ofEpochDay(1562606700), parent = null
     ).apply { id = UUID.randomUUID().toString() }

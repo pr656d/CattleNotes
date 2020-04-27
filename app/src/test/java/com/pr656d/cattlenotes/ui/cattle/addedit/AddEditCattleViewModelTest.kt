@@ -267,7 +267,7 @@ class AddEditCattleViewModelTest {
         viewModel.breed.value = Cattle.Breed.HF.displayName
 
         // Valid group
-        viewModel.group.value = Cattle.Group.MILKING.displayName
+        viewModel.group.value = Cattle.Group.Milking.displayName
 
         // Valid lactation
         viewModel.lactation.value = "2"
@@ -294,7 +294,7 @@ class AddEditCattleViewModelTest {
         // Update breed
         viewModel.breed.value = Cattle.Breed.HF.displayName
         // Update group
-        viewModel.group.value = Cattle.Group.MILKING.displayName
+        viewModel.group.value = Cattle.Group.Milking.displayName
         // Update lactation
         viewModel.lactation.value = "2"
         // Update purchase amount
@@ -388,7 +388,7 @@ class AddEditCattleViewModelTest {
             name.value = "Sita"
             type.value = AnimalType.Cow.toString()
             breed.value = Cattle.Breed.HF.displayName
-            group.value = Cattle.Group.HEIFER.displayName
+            group.value = Cattle.Group.Heifer.displayName
             lactation.value = "3"
             dob.value = LocalDate.ofEpochDay(1562606700)
             homeBorn.value = true
@@ -420,7 +420,7 @@ class AddEditCattleViewModelTest {
             name.value = "Sita"
             type.value = AnimalType.Cow.toString()
             breed.value = Cattle.Breed.HF.displayName
-            group.value = Cattle.Group.HEIFER.displayName
+            group.value = Cattle.Group.Heifer.displayName
             lactation.value = "3"
             dob.value = LocalDate.ofEpochDay(1562606700)
             homeBorn.value = true
