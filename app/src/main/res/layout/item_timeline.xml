@@ -6,32 +6,8 @@
     <data>
 
         <variable
-            name="title"
-            type="String" />
-
-        <variable
-            name="negativeVisibility"
-            type="Boolean" />
-
-        <variable
-            name="doneOn"
-            type="org.threeten.bp.LocalDate" />
-
-        <variable
-            name="doneOnVisibility"
-            type="Boolean" />
-
-        <variable
-            name="showMoreActions"
-            type="Boolean" />
-
-        <variable
-            name="selectedOption"
-            type="Boolean" />
-
-        <variable
-            name="breedingCompleted"
-            type="Boolean" />
+            name="uiBehaviour"
+            type="com.pr656d.cattlenotes.ui.timeline.TimelineViewHolder.ItemTimelineUiBehaviour" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -40,30 +16,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_normal"
-        android:layout_marginTop="@dimen/margin_normal"
-        android:animateLayoutChanges="true">
+        android:layout_marginTop="@dimen/margin_normal">
 
         <LinearLayout
             android:id="@+id/containerBreedingStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
+            android:background="@drawable/outline"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="@dimen/padding_normal"
                 android:paddingHorizontal="@dimen/padding_normal"
-                android:paddingBottom="@dimen/padding_small"
-                android:animateLayoutChanges="true">
+                android:paddingTop="@dimen/padding_normal"
+                android:paddingBottom="@dimen/padding_small">
 
                 <TextView
                     android:id="@+id/textViewBreedingTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{ title }"
+                    android:text="@{ uiBehaviour.title }"
                     android:textAppearance="?attr/textAppearanceSubtitle1"
                     tools:text="Title" />
 
@@ -72,10 +46,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:animateLayoutChanges="true"
                     android:baselineAligned="true"
                     android:orientation="horizontal"
-                    app:checkedButton="@{selectedOption}">
+                    app:checkedButton="@{ uiBehaviour.selectedOption }">
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/radioButtonNegative"
@@ -83,7 +56,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/negative"
-                        app:goneUnless="@{ negativeVisibility }" />
+                        app:goneUnless="@{ uiBehaviour.negativeVisibility }" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
                         android:id="@+id/radioButtonNeutral"
@@ -108,7 +81,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_small"
                     android:hint="@string/done_on"
-                    app:goneUnless="@{ doneOnVisibility }"
+                    app:goneUnless="@{ uiBehaviour.doneOnVisibility }"
                     tools:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -116,8 +89,8 @@
                         style="@style/Widget.CattleNOTES.TextInputDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:dateText="@{ doneOn }"
-                        app:resetText="@{ !showMoreActions }" />
+                        app:dateText="@{ uiBehaviour.doneOn }"
+                        app:resetText="@{ !uiBehaviour.showMoreActions }" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -127,8 +100,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_normal"
                     android:text="@string/breeding_cycle_complete"
-                    app:goneUnless="@{ breedingCompleted }"
-                    tools:visibility="visible"/>
+                    app:goneUnless="@{ uiBehaviour.breedingCompleted }"
+                    tools:visibility="visible" />
             </LinearLayout>
 
             <LinearLayout
@@ -136,10 +109,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_small"
                 android:layout_marginBottom="@dimen/margin_small"
-                android:animateLayoutChanges="true"
                 android:baselineAligned="true"
                 android:orientation="horizontal"
-                app:goneUnless="@{ showMoreActions }"
+                app:goneUnless="@{ uiBehaviour.showMoreActions }"
                 tools:visibility="visible">
 
                 <com.google.android.material.button.MaterialButton

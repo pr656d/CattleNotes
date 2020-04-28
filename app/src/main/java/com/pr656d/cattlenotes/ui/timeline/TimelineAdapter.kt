@@ -6,6 +6,8 @@ import androidx.annotation.IdRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ItemTimelineBinding
@@ -46,59 +48,13 @@ class TimelineViewHolder(
     private val listener: TimelineActionListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private lateinit var data: BreedingWithCattle
-
-    private lateinit var breedingEvent: BreedingEvent
-
-    private val breedingEventType: Type
-        get() = breedingEvent.type
-
-    private var selectedOption: Boolean? = null
-        set(value) = binding.executeAfter {
-            selectedOption = value
-            field = value
-        }
-
-    private var showMoreActions: Boolean = false
-        set(value) = binding.executeAfter {
-            showMoreActions = value
-            field = value
-        }
-
-    private var breedingCompleted: Boolean = false
-        set(value) = binding.executeAfter {
-            breedingCompleted = value
-            field = value
-        }
-
-    private var doneOn: LocalDate? = null
-        set(value) = binding.executeAfter {
-            doneOn = value
-            field = value
-        }
-
-    private var doneOnVisibility: Boolean = false
-        set(value) = binding.executeAfter {
-            doneOnVisibility = value
-            field = value
-        }
+    private lateinit var uiBehaviour: ItemTimelineUiBehaviour
 
     fun bind(data: BreedingWithCattle) {
-        breedingEvent = data.breeding.nextBreedingEvent ?: return
-        this.data = data
+        data.breeding.nextBreedingEvent ?: return
+        uiBehaviour = ItemTimelineUiBehaviour(data)
         binding.executeAfter {
-            // Title : Repeat heat ( `cattle name` ) or Repeat heat ( `Tag number` )
-            title = "${breedingEvent.type.displayName} ( ${data.cattle.nameOrTagNumber()} )"
-            negativeVisibility = when (breedingEvent.type) {
-                Type.DRY_OFF -> false
-                Type.CALVING -> false
-                else -> true
-            }
-            showMoreActions = this@TimelineViewHolder.showMoreActions
-            doneOn = this@TimelineViewHolder.doneOn
-            selectedOption = this@TimelineViewHolder.selectedOption
-            breedingCompleted = this@TimelineViewHolder.breedingCompleted
-            doneOnVisibility = this@TimelineViewHolder.doneOnVisibility
+            uiBehaviour = this@TimelineViewHolder.uiBehaviour
         }
         initializeListeners()
     }
@@ -109,10 +65,10 @@ class TimelineViewHolder(
      * https://stackoverflow.com/questions/10263778/radiogroup-calls-oncheckchanged-three-times
      */
     private fun onCheckedChanged(@IdRes checkedId: Int, selectedOption: Boolean?) {
-        if (this.selectedOption == selectedOption)
+        if (uiBehaviour.selectedOption == selectedOption)
             return  // Prevent same option click.
 
-        this.selectedOption = selectedOption
+        uiBehaviour.selectedOption = selectedOption
 
         if (checkedId == binding.radioButtonNeutral.id) {
             onCancelClicked()   // None means cancelled state
@@ -120,40 +76,27 @@ class TimelineViewHolder(
         }
 
         // Show more actions
-        showMoreActions = true
+        uiBehaviour.showMoreActions = true
 
-        breedingCompleted = when {
-            breedingEventType == Type.REPEAT_HEAT && selectedOption == true -> true
-            breedingEventType == Type.PREGNANCY_CHECK && selectedOption == false -> true
-            else -> false
-        }
-
-        doneOnVisibility = when {
-            breedingEventType == Type.REPEAT_HEAT && selectedOption == false -> false
-            else -> showMoreActions
-        }
+        uiBehaviour.bind()
     }
 
     private fun onSaveClicked() {
-        val newData = newBreedingWithCattle(selectedOption, doneOn)
-        listener.saveBreeding(ItemTimelineSaveData(newData, selectedOption))
+        val newData = newBreedingWithCattle(uiBehaviour.selectedOption, uiBehaviour.doneOn)
+        listener.saveBreeding(ItemTimelineSaveData(newData, uiBehaviour.selectedOption))
     }
 
     private fun onCancelClicked() {
         // Reset selected option
-        selectedOption = null
-
-        // Reset done on visibility
-        doneOnVisibility = false
+        uiBehaviour.selectedOption = null
 
         // Reset done on
-        doneOn = null
-
-        // Breeding completed to false
-        breedingCompleted = false
+        uiBehaviour.doneOn = null
 
         // Hide more options
-        showMoreActions = false
+        uiBehaviour.showMoreActions = false
+
+        uiBehaviour.bind()
     }
 
     private fun initializeListeners() {
@@ -182,18 +125,11 @@ class TimelineViewHolder(
 
                 // Show dialog.
                 v.pickADate(
-                    onDateCancelled = {
-                        binding.executeAfter {
-                            isFocusableInTouchMode = false
-                        }
-                    },
                     onDateSet = { _, dd, mm, yyyy ->
                         // `Month + 1` as it's starting from 0 index and LocalDate index starts from 1.
                         TimeUtils.toLocalDate(dd, mm + 1, yyyy).let {
-                            binding.executeAfter {
-                                doneOn = it
-                                isFocusableInTouchMode = false
-                            }
+                            uiBehaviour.doneOn = it
+                            uiBehaviour.bind()
                         }
                     }
                 )
@@ -210,16 +146,10 @@ class TimelineViewHolder(
                     MaterialAlertDialogBuilder(context)
                         .setTitle(context.getString(R.string.remove_text, hint.toString()))
                         .setPositiveButton(R.string.yes) { _, _ ->
-                            binding.executeAfter {
-                                doneOn = null
-                                isFocusableInTouchMode = false
-                            }
+                            uiBehaviour.doneOn = null
+                            uiBehaviour.bind()
                         }
-                        .setNegativeButton(R.string.no) { _, _ ->
-                            binding.executeAfter {
-                                isFocusableInTouchMode = false
-                            }
-                        }
+                        .setNegativeButton(R.string.no, null)
                         .create()
                         .show()
                 }
@@ -228,56 +158,99 @@ class TimelineViewHolder(
         }
     }
 
-    private fun newBreedingWithCattle(newStatus: Boolean?, doneOn: LocalDate?): BreedingWithCattle = data.breeding.run {
-        when (breedingEventType) {
-            Type.REPEAT_HEAT -> BreedingWithCattle(
-                data.cattle,
-                Breeding(
-                    cattleId,
-                    artificialInsemination,
-                    BreedingEvent(repeatHeat.expectedOn, newStatus, doneOn),
-                    pregnancyCheck,
-                    dryOff,
-                    calving
+    private fun newBreedingWithCattle(newStatus: Boolean?, doneOn: LocalDate?): BreedingWithCattle {
+        return uiBehaviour.data.breeding.run {
+            when (uiBehaviour.breedingEventType) {
+                Type.REPEAT_HEAT -> BreedingWithCattle(
+                    uiBehaviour.data.cattle,
+                    Breeding(
+                        cattleId,
+                        artificialInsemination,
+                        BreedingEvent(repeatHeat.expectedOn, newStatus, doneOn),
+                        pregnancyCheck,
+                        dryOff,
+                        calving
+                    )
                 )
-            )
-            Type.PREGNANCY_CHECK -> BreedingWithCattle(
-                data.cattle,
-                Breeding(
-                    cattleId,
-                    artificialInsemination,
-                    repeatHeat,
-                    BreedingEvent(pregnancyCheck.expectedOn, newStatus, doneOn),
-                    dryOff,
-                    calving
+                Type.PREGNANCY_CHECK -> BreedingWithCattle(
+                    uiBehaviour.data.cattle,
+                    Breeding(
+                        cattleId,
+                        artificialInsemination,
+                        repeatHeat,
+                        BreedingEvent(pregnancyCheck.expectedOn, newStatus, doneOn),
+                        dryOff,
+                        calving
+                    )
                 )
-            )
-            Type.DRY_OFF -> BreedingWithCattle(
-                data.cattle,
-                Breeding(
-                    cattleId,
-                    artificialInsemination,
-                    repeat_heat,
-                    pregnancyCheck,
-                    BreedingEvent(dryOff.expectedOn, newStatus, doneOn),
-                    calving
+                Type.DRY_OFF -> BreedingWithCattle(
+                    uiBehaviour.data.cattle,
+                    Breeding(
+                        cattleId,
+                        artificialInsemination,
+                        repeat_heat,
+                        pregnancyCheck,
+                        BreedingEvent(dryOff.expectedOn, newStatus, doneOn),
+                        calving
+                    )
                 )
-            )
-            Type.CALVING -> BreedingWithCattle(
-                data.cattle,
-                Breeding(
-                    cattleId,
-                    artificialInsemination,
-                    repeat_heat,
-                    pregnancyCheck,
-                    dryOff,
-                    BreedingEvent(calving.expectedOn, newStatus, doneOn)
+                Type.CALVING -> BreedingWithCattle(
+                    uiBehaviour.data.cattle,
+                    Breeding(
+                        cattleId,
+                        artificialInsemination,
+                        repeat_heat,
+                        pregnancyCheck,
+                        dryOff,
+                        BreedingEvent(calving.expectedOn, newStatus, doneOn)
+                    )
                 )
-            )
-            Type.UNKNOWN -> throw IllegalStateException("Breeding type can not be UNKNOWN for breeding event ${this.nextBreedingEvent}")
-        }.apply {
-            // Assign id
-            breeding.id = id
+                Type.UNKNOWN -> throw IllegalStateException("Breeding type can not be UNKNOWN for breeding event ${this.nextBreedingEvent}")
+            }.apply {
+                // Assign id
+                breeding.id = id
+            }
+        }
+    }
+
+    inner class ItemTimelineUiBehaviour(val data: BreedingWithCattle) {
+        val breedingEventType = data.breeding.nextBreedingEvent!!.type
+
+        // Title : Repeat heat ( `cattle name` ) or Repeat heat ( `Tag number` )
+        val title = "${breedingEventType.displayName} ( ${data.cattle.nameOrTagNumber()} )"
+
+        val negativeVisibility
+            get() = when (breedingEventType) {
+                Type.DRY_OFF -> false
+                Type.CALVING -> false
+                else -> true
+            }
+
+        var showMoreActions = false
+
+        var doneOn: LocalDate? = null
+
+        val doneOnVisibility: Boolean
+            get() = when {
+                breedingEventType == Type.REPEAT_HEAT && selectedOption == false -> false
+                else -> showMoreActions
+            }
+
+        var selectedOption: Boolean? = null
+
+        val breedingCompleted: Boolean
+            get() = when {
+                breedingEventType == Type.REPEAT_HEAT && selectedOption == true -> true
+                breedingEventType == Type.PREGNANCY_CHECK && selectedOption == false -> true
+                else -> false
+            }
+
+        fun bind() {
+            val parent = itemView.parent as? ViewGroup ?: return
+            TransitionManager.beginDelayedTransition(parent, AutoTransition())
+            binding.executeAfter {
+                uiBehaviour = this@ItemTimelineUiBehaviour
+            }
         }
     }
 }

@@ -91,7 +91,7 @@ class TimelineHeadersDecoration(
         outRect.top = if (daySlots.containsKey(position)) decorHeight else 0
     }
 
-    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: State) {
+    override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: State) {
         val layoutManager = parent.layoutManager ?: return
         val centerX = parent.width / 2f
 

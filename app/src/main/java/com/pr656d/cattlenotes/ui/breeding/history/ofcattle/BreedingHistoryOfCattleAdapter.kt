@@ -72,7 +72,7 @@ class BreedingHistoryOfCattleListViewHolder(
      * Holds UI behaviour of item.
      * See for reference [BreedingBehaviour] for [AddEditBreedingFragment] UI behaviour.
      */
-    internal class ItemBreedingUiBehaviour(val breeding: Breeding) {
+    inner class ItemBreedingUiBehaviour(val breeding: Breeding) {
 
         var expanded = false
 

@@ -79,7 +79,7 @@ data class Breeding(
      * So no need to explicitly add type while creating [Breeding].
      * Ex:  val breeding = Breeding(
      *          ...,
-     *          _repeatHeat = BreedingEvent(...),
+     *          repeat_heat = BreedingEvent(...),
      *          ...
      *      )
      *
