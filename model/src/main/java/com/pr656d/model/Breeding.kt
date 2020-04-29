@@ -2,8 +2,6 @@ package com.pr656d.model
 
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
-import com.pr656d.model.Breeding.BreedingEvent
-import com.pr656d.model.Breeding.BreedingEvent.Type.*
 import org.threeten.bp.LocalDate
 
 @Entity(
@@ -27,39 +25,35 @@ data class Breeding(
      */
     @SerializedName("artificialInsemination")
     @Embedded(prefix = "artificialInsemination")
-    val artificialInsemination: ArtificialInseminationInfo,
+    val artificialInsemination: ArtificialInsemination,
 
     /**
-     * Holds repeat heat data as [BreedingEvent] with UNKNOWN type.
-     * @see repeatHeat  To access repeatHeat data.
+     * Repeat heat.
      */
     @SerializedName("repeatHeat")
     @Embedded(prefix = "repeatHeat")
-    val repeat_heat: BreedingEvent,
+    val repeatHeat: BreedingEvent.RepeatHeat,
 
     /**
-     * Holds pregnancy check data as [BreedingEvent] with UNKNOWN type.
-     * @see pregnancyCheck  To access pregnancy check data.
+     * Pregnancy check.
      */
     @SerializedName("pregnancyCheck")
     @Embedded(prefix = "pregnancyCheck")
-    val pregnancy_check: BreedingEvent,
+    val pregnancyCheck: BreedingEvent.PregnancyCheck,
 
     /**
-     * Holds dry off data as [BreedingEvent] with UNKNOWN type.
-     * @see dryOff  To access dry off data.
+     * Dry off.
      */
     @SerializedName("dryOff")
     @Embedded(prefix = "dryOff")
-    val dry_off: BreedingEvent,
+    val dryOff: BreedingEvent.DryOff,
 
     /**
-     * Holds calving data as [BreedingEvent] with UNKNOWN type.
-     * @see calving  To access calving data.
+     * Calving.
      */
     @SerializedName("calving")
     @Embedded(prefix = "calving")
-    val calving_: BreedingEvent
+    val calving: BreedingEvent.Calving
 ) {
 
     @SerializedName("id")
@@ -71,36 +65,6 @@ data class Breeding(
         } else {
             throw IllegalArgumentException("Breeding id is blank")
         }
-
-    /**
-     * Our primary goal is when [BreedingEvent] is used it holds it's type.
-     *
-     * [Breeding] fields it self represents type of [BreedingEvent],
-     * So no need to explicitly add type while creating [Breeding].
-     * Ex:  val breeding = Breeding(
-     *          ...,
-     *          repeat_heat = BreedingEvent(...),
-     *          ...
-     *      )
-     *
-     * Allow calls like :
-     *      breeding.repeatHeat.type (returns REPEAT_HEAT)
-     */
-    @Ignore
-    @SerializedName("repeatHeatWithType")
-    val repeatHeat: BreedingEvent = repeat_heat.apply { type = REPEAT_HEAT }
-
-    @Ignore
-    @SerializedName("pregnancyCheckWithType")
-    val pregnancyCheck: BreedingEvent = pregnancy_check.apply { type = PREGNANCY_CHECK }
-
-    @Ignore
-    @SerializedName("dryOffWithType")
-    val dryOff: BreedingEvent = dry_off.apply { type = DRY_OFF }
-
-    @Ignore
-    @SerializedName("calvingWithType")
-    val calving: BreedingEvent = calving_.apply { type = CALVING }
 
     /**
      * When
@@ -118,20 +82,26 @@ data class Breeding(
 
     /**
      * Provides next breeding event.
+     * Order of checks matters
+     *  1. Check Breeding completed or not
+     *  2. Check repeat heat status
+     *  3. Check pregnancy check status
+     *  4. Check dry off status
+     *  5. Check calving status
      */
     @Ignore
     @SerializedName("nextBreedingEvent")
     val nextBreedingEvent: BreedingEvent? =
         when {
-            breedingCompleted -> null
-            repeatHeat.status == null -> repeatHeat
-            pregnancyCheck.status == null -> pregnancyCheck
-            dryOff.status == null -> dryOff
-            calving.status == null -> calving
+            breedingCompleted -> null   // Breeding completed
+            repeatHeat.status == null -> repeatHeat // Repeat heat is pending
+            pregnancyCheck.status == null -> pregnancyCheck // Pregnancy check is pending
+            dryOff.status == null -> dryOff // Dry off is pending
+            calving.status == null -> calving   // Calving is pending
             else -> throw IllegalStateException("Can not generate next breeding event: Breeding data is $this")
         }
 
-    data class ArtificialInseminationInfo(
+    data class ArtificialInsemination(
         @SerializedName("date")
         @ColumnInfo(name = "Date")
         val date: LocalDate,
@@ -149,40 +119,68 @@ data class Breeding(
         val strawCode: String?
     )
 
-    data class BreedingEvent(
+    sealed class BreedingEvent(
         @SerializedName("expectedOn")
         @ColumnInfo(name = "ExpectedOn")
-        val expectedOn: LocalDate,
+        open val expectedOn: LocalDate,
 
         @SerializedName("status")
         @ColumnInfo(name = "Status")
-        val status: Boolean? = null,
+        open val status: Boolean? = null,
 
         @SerializedName("doneOn")
         @ColumnInfo(name = "DoneOn")
-        val doneOn: LocalDate? = null
+        open val doneOn: LocalDate? = null
     ) {
 
-        /**
-         * Type of breeding event. Initially it's unknown.
-         */
-        @Ignore
-        @SerializedName("type")
-        var type: Type = UNKNOWN
-
-        @Ignore
-        val statusString: String = when (status) {
+        fun getStatusString(): String = when (status) {
             null -> "None"
             true -> "Positive"
             false -> "Negative"
         }
 
-        enum class Type(val displayName: String) {
-            REPEAT_HEAT("Repeat heat"),
-            PREGNANCY_CHECK("Pregnancy check"),
-            DRY_OFF("Dry off"),
-            CALVING("Calving"),
-            UNKNOWN("Unknown")
-        }
+        data class RepeatHeat(
+            @Ignore
+            override val expectedOn: LocalDate,
+
+            @Ignore
+            override val status: Boolean? = null,
+
+            @Ignore
+            override val doneOn: LocalDate? = null
+        ) : BreedingEvent(expectedOn, status, doneOn)
+
+        data class PregnancyCheck(
+            @Ignore
+            override val expectedOn: LocalDate,
+
+            @Ignore
+            override val status: Boolean? = null,
+
+            @Ignore
+            override val doneOn: LocalDate? = null
+        ) : BreedingEvent(expectedOn, status, doneOn)
+
+        data class DryOff(
+            @Ignore
+            override val expectedOn: LocalDate,
+
+            @Ignore
+            override val status: Boolean? = null,
+
+            @Ignore
+            override val doneOn: LocalDate? = null
+        ) : BreedingEvent(expectedOn, status, doneOn)
+
+        data class Calving(
+            @Ignore
+            override val expectedOn: LocalDate,
+
+            @Ignore
+            override val status: Boolean? = null,
+
+            @Ignore
+            override val doneOn: LocalDate? = null
+        ) : BreedingEvent(expectedOn, status, doneOn)
     }
 }

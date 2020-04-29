@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.pr656d.cattlenotes.R
 import com.pr656d.model.Breeding
-import com.pr656d.model.Breeding.ArtificialInseminationInfo
+import com.pr656d.model.Breeding.ArtificialInsemination
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
@@ -118,28 +118,28 @@ class AddEditBreedingViewModel @Inject constructor(
     private fun getBreedingCycle(cattle: Cattle): Breeding =
         Breeding(
             cattle.id,
-            ArtificialInseminationInfo(
+            ArtificialInsemination(
                 aiDate.value!!,
                 didBy.value,
                 bullName.value,
                 strawCode.value
             ),
-            BreedingEvent(
+            BreedingEvent.RepeatHeat(
                 expectedOn = repeatHeatExpectedOn.value!!,
                 status = repeatHeatStatus.value,
                 doneOn = repeatHeatDoneOn.value
             ),
-            BreedingEvent(
+            BreedingEvent.PregnancyCheck(
                 expectedOn = pregnancyCheckExpectedOn.value!!,
                 status = pregnancyCheckStatus.value,
                 doneOn = pregnancyCheckDoneOn.value
             ),
-            BreedingEvent(
+            BreedingEvent.DryOff(
                 expectedOn = dryOffExpectedOn.value!!,
                 status = dryOffStatus.value,
                 doneOn = dryOffDoneOn.value
             ),
-            BreedingEvent(
+            BreedingEvent.Calving(
                 expectedOn = calvingExpectedOn.value!!,
                 status = calvingStatus.value,
                 doneOn = calvingDoneOn.value

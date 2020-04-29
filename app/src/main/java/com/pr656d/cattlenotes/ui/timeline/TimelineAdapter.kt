@@ -1,5 +1,6 @@
 package com.pr656d.cattlenotes.ui.timeline
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.IdRes
@@ -17,7 +18,6 @@ import com.pr656d.cattlenotes.utils.hideKeyboard
 import com.pr656d.cattlenotes.utils.pickADate
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.BreedingEvent
-import com.pr656d.model.Breeding.BreedingEvent.Type
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.utils.TimeUtils
 import com.pr656d.shared.utils.nameOrTagNumber
@@ -52,10 +52,15 @@ class TimelineViewHolder(
 
     fun bind(data: BreedingWithCattle) {
         data.breeding.nextBreedingEvent ?: return
-        uiBehaviour = ItemTimelineUiBehaviour(data)
+
+        val context = binding.root.context
+
+        uiBehaviour = ItemTimelineUiBehaviour(context, data)
+
         binding.executeAfter {
             uiBehaviour = this@TimelineViewHolder.uiBehaviour
         }
+
         initializeListeners()
     }
 
@@ -161,51 +166,50 @@ class TimelineViewHolder(
     private fun newBreedingWithCattle(newStatus: Boolean?, doneOn: LocalDate?): BreedingWithCattle {
         return uiBehaviour.data.breeding.run {
             when (uiBehaviour.breedingEventType) {
-                Type.REPEAT_HEAT -> BreedingWithCattle(
+                is BreedingEvent.RepeatHeat -> BreedingWithCattle(
                     uiBehaviour.data.cattle,
                     Breeding(
                         cattleId,
                         artificialInsemination,
-                        BreedingEvent(repeatHeat.expectedOn, newStatus, doneOn),
+                        BreedingEvent.RepeatHeat(repeatHeat.expectedOn, newStatus, doneOn),
                         pregnancyCheck,
                         dryOff,
                         calving
                     )
                 )
-                Type.PREGNANCY_CHECK -> BreedingWithCattle(
+                is BreedingEvent.PregnancyCheck -> BreedingWithCattle(
                     uiBehaviour.data.cattle,
                     Breeding(
                         cattleId,
                         artificialInsemination,
                         repeatHeat,
-                        BreedingEvent(pregnancyCheck.expectedOn, newStatus, doneOn),
+                        BreedingEvent.PregnancyCheck(pregnancyCheck.expectedOn, newStatus, doneOn),
                         dryOff,
                         calving
                     )
                 )
-                Type.DRY_OFF -> BreedingWithCattle(
+                is BreedingEvent.DryOff -> BreedingWithCattle(
                     uiBehaviour.data.cattle,
                     Breeding(
                         cattleId,
                         artificialInsemination,
-                        repeat_heat,
+                        repeatHeat,
                         pregnancyCheck,
-                        BreedingEvent(dryOff.expectedOn, newStatus, doneOn),
+                        BreedingEvent.DryOff(dryOff.expectedOn, newStatus, doneOn),
                         calving
                     )
                 )
-                Type.CALVING -> BreedingWithCattle(
+                is BreedingEvent.Calving -> BreedingWithCattle(
                     uiBehaviour.data.cattle,
                     Breeding(
                         cattleId,
                         artificialInsemination,
-                        repeat_heat,
+                        repeatHeat,
                         pregnancyCheck,
                         dryOff,
-                        BreedingEvent(calving.expectedOn, newStatus, doneOn)
+                        BreedingEvent.Calving(calving.expectedOn, newStatus, doneOn)
                     )
                 )
-                Type.UNKNOWN -> throw IllegalStateException("Breeding type can not be UNKNOWN for breeding event ${this.nextBreedingEvent}")
             }.apply {
                 // Assign id
                 breeding.id = id
@@ -213,16 +217,25 @@ class TimelineViewHolder(
         }
     }
 
-    inner class ItemTimelineUiBehaviour(val data: BreedingWithCattle) {
-        val breedingEventType = data.breeding.nextBreedingEvent!!.type
+    inner class ItemTimelineUiBehaviour(context: Context, val data: BreedingWithCattle) {
+        val breedingEventType = data.breeding.nextBreedingEvent!!
+
+        private val typeDisplayName = context.getString(
+            when (breedingEventType) {
+                is BreedingEvent.RepeatHeat -> R.string.repeat_heat
+                is BreedingEvent.PregnancyCheck -> R.string.pregnancy_check
+                is BreedingEvent.DryOff -> R.string.dry_off
+                is BreedingEvent.Calving -> R.string.calving
+            }
+        )
 
         // Title : Repeat heat ( `cattle name` ) or Repeat heat ( `Tag number` )
-        val title = "${breedingEventType.displayName} ( ${data.cattle.nameOrTagNumber()} )"
+        val title = "$typeDisplayName ( ${data.cattle.nameOrTagNumber()} )"
 
         val negativeVisibility
             get() = when (breedingEventType) {
-                Type.DRY_OFF -> false
-                Type.CALVING -> false
+                is BreedingEvent.DryOff -> false
+                is BreedingEvent.Calving -> false
                 else -> true
             }
 
@@ -232,7 +245,7 @@ class TimelineViewHolder(
 
         val doneOnVisibility: Boolean
             get() = when {
-                breedingEventType == Type.REPEAT_HEAT && selectedOption == false -> false
+                breedingEventType is BreedingEvent.RepeatHeat && selectedOption == false -> false
                 else -> showMoreActions
             }
 
@@ -240,8 +253,8 @@ class TimelineViewHolder(
 
         val breedingCompleted: Boolean
             get() = when {
-                breedingEventType == Type.REPEAT_HEAT && selectedOption == true -> true
-                breedingEventType == Type.PREGNANCY_CHECK && selectedOption == false -> true
+                breedingEventType is BreedingEvent.RepeatHeat && selectedOption == true -> true
+                breedingEventType is BreedingEvent.PregnancyCheck && selectedOption == false -> true
                 else -> false
             }
 

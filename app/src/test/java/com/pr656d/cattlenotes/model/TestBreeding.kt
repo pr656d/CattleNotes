@@ -3,7 +3,7 @@ package com.pr656d.cattlenotes.model
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.model.Breeding
-import com.pr656d.model.Breeding.ArtificialInseminationInfo
+import com.pr656d.model.Breeding.ArtificialInsemination
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.shared.utils.BreedingUtil
 import org.hamcrest.MatcherAssert.assertThat
@@ -33,20 +33,20 @@ class TestBreeding {
 
         return Breeding(
             cattleId = UUID.randomUUID().toString(),
-            artificialInsemination = ArtificialInseminationInfo(aiDate, null, null, null),
-            repeat_heat = BreedingEvent(
+            artificialInsemination = ArtificialInsemination(aiDate, null, null, null),
+            repeatHeat = BreedingEvent.RepeatHeat(
                 expectedOn = BreedingUtil.getExpectedRepeatHeatDate(aiDate),
                 status = repeatHeatStatus
             ),
-            pregnancy_check = BreedingEvent(
+            pregnancyCheck = BreedingEvent.PregnancyCheck(
                 expectedOn = BreedingUtil.getExpectedPregnancyCheckDate(aiDate),
                 status = pregnancyCheckStatus
             ),
-            dry_off = BreedingEvent(
+            dryOff = BreedingEvent.DryOff(
                 expectedOn = BreedingUtil.getExpectedDryOffDate(aiDate),
                 status = dryOffStatus
             ),
-            calving_ = BreedingEvent(
+            calving = BreedingEvent.Calving(
                 expectedOn = BreedingUtil.getExpectedCalvingDate(aiDate),
                 status = calvingStatus
             )

@@ -2,7 +2,7 @@ package com.pr656d.test
 
 import com.pr656d.model.AnimalType
 import com.pr656d.model.Breeding
-import com.pr656d.model.Breeding.ArtificialInseminationInfo
+import com.pr656d.model.Breeding.ArtificialInsemination
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.model.Cattle
@@ -67,22 +67,22 @@ object TestData {
     // Initial breeding
     val breedingInitial = Breeding(
         cattleId = cattle1.id,
-        artificialInsemination = ArtificialInseminationInfo(
+        artificialInsemination = ArtificialInsemination(
             date = LocalDate.now(),
             didBy = null,
             bullName = null,
             strawCode = null
         ),
-        repeat_heat = BreedingEvent(
+        repeatHeat = BreedingEvent.RepeatHeat(
             expectedOn = getExpectedRepeatHeatDate(LocalDate.now())
         ),
-        pregnancy_check = BreedingEvent(
+        pregnancyCheck = BreedingEvent.PregnancyCheck(
             expectedOn = getExpectedPregnancyCheckDate(LocalDate.now())
         ),
-        dry_off = BreedingEvent(
+        dryOff = BreedingEvent.DryOff(
             expectedOn = getExpectedDryOffDate(LocalDate.now())
         ),
-        calving_ = BreedingEvent(
+        calving = BreedingEvent.Calving(
             expectedOn = getExpectedCalvingDate(LocalDate.now())
         )
     )
@@ -90,23 +90,23 @@ object TestData {
     // Repeat heat status negative
     val breedingRepeatHeatNegative = Breeding(
         cattleId = cattle2.id,
-        artificialInsemination = ArtificialInseminationInfo(
+        artificialInsemination = ArtificialInsemination(
             date = LocalDate.now(),
             didBy = null,
             bullName = null,
             strawCode = null
         ),
-        repeat_heat = BreedingEvent(
+        repeatHeat = BreedingEvent.RepeatHeat(
             expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
             status = false
         ),
-        pregnancy_check = BreedingEvent(
+        pregnancyCheck = BreedingEvent.PregnancyCheck(
             expectedOn = getExpectedPregnancyCheckDate(LocalDate.now())
         ),
-        dry_off = BreedingEvent(
+        dryOff = BreedingEvent.DryOff(
             expectedOn = getExpectedDryOffDate(LocalDate.now())
         ),
-        calving_ = BreedingEvent(
+        calving = BreedingEvent.Calving(
             expectedOn = getExpectedCalvingDate(LocalDate.now())
         )
     )
@@ -114,23 +114,23 @@ object TestData {
     // Repeat heat status positive
     val breedingRepeatHeatPositive = Breeding(
         cattleId = cattle2.id,
-        artificialInsemination = ArtificialInseminationInfo(
+        artificialInsemination = ArtificialInsemination(
             date = LocalDate.now(),
             didBy = null,
             bullName = null,
             strawCode = null
         ),
-        repeat_heat = BreedingEvent(
+        repeatHeat = BreedingEvent.RepeatHeat(
             expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
             status = true
         ),
-        pregnancy_check = BreedingEvent(
+        pregnancyCheck = BreedingEvent.PregnancyCheck(
             expectedOn = getExpectedPregnancyCheckDate(LocalDate.now())
         ),
-        dry_off = BreedingEvent(
+        dryOff = BreedingEvent.DryOff(
             expectedOn = getExpectedDryOffDate(LocalDate.now())
         ),
-        calving_ = BreedingEvent(
+        calving = BreedingEvent.Calving(
             expectedOn = getExpectedCalvingDate(LocalDate.now())
         )
     )
@@ -138,24 +138,24 @@ object TestData {
     // Repeat heat status negative, pregnancy check status positive
     val breedingRHNegativePregnancyCheckPositive = Breeding(
         cattleId = cattle3.id,
-        artificialInsemination = ArtificialInseminationInfo(
+        artificialInsemination = ArtificialInsemination(
             date = LocalDate.now(),
             didBy = null,
             bullName = null,
             strawCode = null
         ),
-        repeat_heat = BreedingEvent(
+        repeatHeat = BreedingEvent.RepeatHeat(
             expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
             status = false
         ),
-        pregnancy_check = BreedingEvent(
+        pregnancyCheck = BreedingEvent.PregnancyCheck(
             expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
             status = true
         ),
-        dry_off = BreedingEvent(
+        dryOff = BreedingEvent.DryOff(
             expectedOn = getExpectedDryOffDate(LocalDate.now())
         ),
-        calving_ = BreedingEvent(
+        calving = BreedingEvent.Calving(
             expectedOn = getExpectedCalvingDate(LocalDate.now())
         )
     )
@@ -163,24 +163,24 @@ object TestData {
     // Repeat heat status negative, pregnancy check status none
     val breedingRHNegativePregnancyCheckNone = Breeding(
         cattleId = cattle3.id,
-        artificialInsemination = ArtificialInseminationInfo(
+        artificialInsemination = ArtificialInsemination(
             date = LocalDate.now(),
             didBy = null,
             bullName = null,
             strawCode = null
         ),
-        repeat_heat = BreedingEvent(
+        repeatHeat = BreedingEvent.RepeatHeat(
             expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
             status = false
         ),
-        pregnancy_check = BreedingEvent(
+        pregnancyCheck = BreedingEvent.PregnancyCheck(
             expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
             status = null
         ),
-        dry_off = BreedingEvent(
+        dryOff = BreedingEvent.DryOff(
             expectedOn = getExpectedDryOffDate(LocalDate.now())
         ),
-        calving_ = BreedingEvent(
+        calving = BreedingEvent.Calving(
             expectedOn = getExpectedCalvingDate(LocalDate.now())
         )
     )
@@ -188,24 +188,24 @@ object TestData {
     // Repeat heat status negative, pregnancy check status negative
     val breedingRHNegativePregnancyCheckNegative = Breeding(
         cattleId = cattle3.id,
-        artificialInsemination = ArtificialInseminationInfo(
+        artificialInsemination = ArtificialInsemination(
             date = LocalDate.now(),
             didBy = null,
             bullName = null,
             strawCode = null
         ),
-        repeat_heat = BreedingEvent(
+        repeatHeat = BreedingEvent.RepeatHeat(
             expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
             status = false
         ),
-        pregnancy_check = BreedingEvent(
+        pregnancyCheck = BreedingEvent.PregnancyCheck(
             expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
             status = false
         ),
-        dry_off = BreedingEvent(
+        dryOff = BreedingEvent.DryOff(
             expectedOn = getExpectedDryOffDate(LocalDate.now())
         ),
-        calving_ = BreedingEvent(
+        calving = BreedingEvent.Calving(
             expectedOn = getExpectedCalvingDate(LocalDate.now())
         )
     )
@@ -213,25 +213,25 @@ object TestData {
     // Repeat heat status negative, pregnancy check status positive, dry off status positive
     val breedingRHNegativePCPositiveDryOffPositive = Breeding(
         cattleId = cattle4.id,
-        artificialInsemination = ArtificialInseminationInfo(
+        artificialInsemination = ArtificialInsemination(
             date = LocalDate.now(),
             didBy = null,
             bullName = null,
             strawCode = null
         ),
-        repeat_heat = BreedingEvent(
+        repeatHeat = BreedingEvent.RepeatHeat(
             expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
             status = false
         ),
-        pregnancy_check = BreedingEvent(
+        pregnancyCheck = BreedingEvent.PregnancyCheck(
             expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
             status = true
         ),
-        dry_off = BreedingEvent(
+        dryOff = BreedingEvent.DryOff(
             expectedOn = getExpectedDryOffDate(LocalDate.now()),
             status = true
         ),
-        calving_ = BreedingEvent(
+        calving = BreedingEvent.Calving(
             expectedOn = getExpectedCalvingDate(LocalDate.now())
         )
     )
@@ -240,25 +240,25 @@ object TestData {
     // Calving status positive
     val breedingRHNegativePCPositiveDOPositiveCalvingPositive = Breeding(
         cattleId = cattle4.id,
-        artificialInsemination = ArtificialInseminationInfo(
+        artificialInsemination = ArtificialInsemination(
             date = LocalDate.now(),
             didBy = null,
             bullName = null,
             strawCode = null
         ),
-        repeat_heat = BreedingEvent(
+        repeatHeat = BreedingEvent.RepeatHeat(
             expectedOn = getExpectedRepeatHeatDate(LocalDate.now()),
             status = false
         ),
-        pregnancy_check = BreedingEvent(
+        pregnancyCheck = BreedingEvent.PregnancyCheck(
             expectedOn = getExpectedPregnancyCheckDate(LocalDate.now()),
             status = true
         ),
-        dry_off = BreedingEvent(
+        dryOff = BreedingEvent.DryOff(
             expectedOn = getExpectedDryOffDate(LocalDate.now()),
             status = true
         ),
-        calving_ = BreedingEvent(
+        calving = BreedingEvent.Calving(
             expectedOn = getExpectedCalvingDate(LocalDate.now()),
             status = true
         )

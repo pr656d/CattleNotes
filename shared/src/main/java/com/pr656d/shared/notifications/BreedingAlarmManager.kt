@@ -112,7 +112,7 @@ open class BreedingAlarmManager @Inject constructor(val context: Context) {
                 pendingIntent
             )
             Timber.d("""Scheduled alarm for breeding ${breeding.id} at $triggerAtMillis
-                |for breeding event type : ${breeding.nextBreedingEvent?.type?.displayName}"""
+                |for breeding event type : ${breeding.nextBreedingEvent}"""
                 .trimMargin()
             )
         }

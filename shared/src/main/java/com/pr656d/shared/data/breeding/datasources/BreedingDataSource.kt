@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.pr656d.model.Breeding
-import com.pr656d.model.Breeding.ArtificialInseminationInfo
+import com.pr656d.model.Breeding.ArtificialInsemination
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.shared.data.db.BreedingDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
@@ -128,28 +128,52 @@ class FirestoreBreedingDataSource @Inject constructor(
             Breeding(
                 cattleId = get(KEY_CATTLE_ID) as String,
                 artificialInsemination = (get(KEY_ARTIFICIAL_INSEMINATION) as HashMap<*, *>).let { ai ->
-                    ArtificialInseminationInfo(
+                    ArtificialInsemination(
                         (ai[KEY_AI_DATE] as Long).toLocalDate(),
                         didBy = ai[KEY_AI_DID_BY] as? String,
                         bullName = ai[KEY_AI_BULL_NAME] as? String,
                         strawCode = ai[KEY_AI_STRAW_CODE] as? String
                     )
                 },
-                repeat_heat = parseBreedingEvent(get(KEY_REPEAT_HEAT) as HashMap<*, *>),
-                pregnancy_check = parseBreedingEvent(get(KEY_PREGNANCY_CHECK) as HashMap<*, *>),
-                dry_off = parseBreedingEvent(get(KEY_DRY_OFF) as HashMap<*, *>),
-                calving_ = parseBreedingEvent(get(KEY_CALVING) as HashMap<*, *>)
+                repeatHeat = (get(KEY_REPEAT_HEAT) as HashMap<*, *>).let { data ->
+                    BreedingEvent.RepeatHeat(
+                        expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).toLocalDate(),
+                        status = data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
+                        doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.toLocalDate()
+                    )
+                },
+                pregnancyCheck = (get(KEY_PREGNANCY_CHECK) as HashMap<*, *>).let { data ->
+                    BreedingEvent.PregnancyCheck(
+                        expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).toLocalDate(),
+                        status = data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
+                        doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.toLocalDate()
+                    )
+                },
+                dryOff = (get(KEY_DRY_OFF) as HashMap<*, *>).let { data ->
+                    BreedingEvent.DryOff(
+                        expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).toLocalDate(),
+                        status = data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
+                        doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.toLocalDate()
+                    )
+                },
+                calving = (get(KEY_CALVING) as HashMap<*, *>).let { data ->
+                    BreedingEvent.Calving(
+                        expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).toLocalDate(),
+                        status = data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
+                        doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.toLocalDate()
+                    )
+                }
             ).apply { id = document.id }
         }
     }
 
-    private fun parseBreedingEvent(data: HashMap<*, *>): BreedingEvent {
+   /* private fun parseBreedingEvent(data: HashMap<*, *>) {
         return BreedingEvent(
             expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).toLocalDate(),
             status = data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
             doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.toLocalDate()
         )
-    }
+    }*/
 
     private fun Breeding.asHashMap(): HashMap<String, Any?> = hashMapOf<String, Any?>().apply {
         put(KEY_CATTLE_ID, cattleId)

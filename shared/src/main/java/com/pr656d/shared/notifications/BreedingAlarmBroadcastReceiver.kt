@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
-import com.pr656d.model.Breeding
+import com.pr656d.model.Breeding.BreedingEvent.*
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.R
 import com.pr656d.shared.domain.breeding.detail.GetBreedingWithCattleByIdUseCase
@@ -75,12 +75,12 @@ class BreedingAlarmBroadcastReceiver : DaggerBroadcastReceiver() {
         }
 
         val typeDisplayName = context.getString(
-            when (val type = data.breeding.nextBreedingEvent?.type) {
-                Breeding.BreedingEvent.Type.REPEAT_HEAT -> R.string.repeat_heat
-                Breeding.BreedingEvent.Type.PREGNANCY_CHECK -> R.string.pregnancy_check
-                Breeding.BreedingEvent.Type.DRY_OFF -> R.string.dry_off
-                Breeding.BreedingEvent.Type.CALVING -> R.string.calving
-                else -> throw IllegalStateException("Next breeding event type can not be ${type?.displayName} of breeding ${data.breeding.id}")
+            when (val type = data.breeding.nextBreedingEvent) {
+                is RepeatHeat -> R.string.repeat_heat
+                is PregnancyCheck -> R.string.pregnancy_check
+                is DryOff -> R.string.dry_off
+                is Calving -> R.string.calving
+                null -> throw IllegalStateException("Next breeding event type can not be $type for breeding ${data.breeding.id}")
             }
         )
 
