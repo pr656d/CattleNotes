@@ -12,7 +12,7 @@ import androidx.transition.TransitionManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.ItemTimelineBinding
-import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.ItemTimelineSaveData
+import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.ItemTimelineData
 import com.pr656d.cattlenotes.utils.executeAfter
 import com.pr656d.cattlenotes.utils.hideKeyboard
 import com.pr656d.cattlenotes.utils.pickADate
@@ -86,9 +86,12 @@ class TimelineViewHolder(
         uiBehaviour.bind()
     }
 
-    private fun onSaveClicked() {
+    private fun onSaveClicked(addNewCattle: Boolean = false) {
         val newData = newBreedingWithCattle(uiBehaviour.selectedOption, uiBehaviour.doneOn)
-        listener.saveBreeding(ItemTimelineSaveData(newData, uiBehaviour.selectedOption))
+        listener.saveBreeding(
+            ItemTimelineData(newData, uiBehaviour.selectedOption),
+            addNewCattle
+        )
     }
 
     private fun onCancelClicked() {
@@ -120,6 +123,8 @@ class TimelineViewHolder(
         binding.buttonCancel.setOnClickListener { onCancelClicked() }
 
         binding.buttonSave.setOnClickListener { onSaveClicked() }
+
+        binding.buttonSaveAndAddNewCattle.setOnClickListener { onSaveClicked(addNewCattle = true) }
 
         binding.editTextDoneOn.apply {
             setOnClickListener { v ->
@@ -255,8 +260,12 @@ class TimelineViewHolder(
             get() = when {
                 breedingEventType is BreedingEvent.RepeatHeat && selectedOption == true -> true
                 breedingEventType is BreedingEvent.PregnancyCheck && selectedOption == false -> true
+                breedingEventType is BreedingEvent.Calving && selectedOption == true -> true
                 else -> false
             }
+
+        val saveAndAddNewCattleVisibility: Boolean
+            get() = breedingEventType is BreedingEvent.Calving && selectedOption == true
 
         fun bind() {
             val parent = itemView.parent as? ViewGroup ?: return

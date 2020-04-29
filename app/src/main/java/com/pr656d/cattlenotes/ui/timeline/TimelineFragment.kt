@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.pr656d.cattlenotes.databinding.FragmentTimelineBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
+import com.pr656d.cattlenotes.ui.timeline.TimelineFragmentDirections.Companion.toAddEditCattle
+import com.pr656d.shared.domain.result.EventObserver
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -18,8 +21,7 @@ class TimelineFragment : NavigationFragment() {
         const val TAG = "TimelineFragment"
     }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val model by viewModels<TimelineViewModel> { viewModelFactory }
     private lateinit var binding: FragmentTimelineBinding
@@ -44,5 +46,13 @@ class TimelineFragment : NavigationFragment() {
         }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        model.launchAddNewCattleScreen.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(toAddEditCattle(parentId = it.id))
+        })
     }
 }

@@ -2,7 +2,6 @@ package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
@@ -12,6 +11,7 @@ import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
+import com.pr656d.shared.domain.breeding.detail.GetBreedingByIdUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.test.TestData
 import org.junit.Assert.*
@@ -36,7 +36,8 @@ class AddEditBreedingViewModelTest {
     private fun getBreedingBehaviour(): BreedingBehaviour =
         BreedingBehaviourImpl(
             BreedingUiImplDelegate(
-                GetCattleByIdUseCase(cattleRepository)
+                GetCattleByIdUseCase(cattleRepository),
+                GetBreedingByIdUseCase(breedingRepository)
             ) as BreedingUiDelegate
         )
 
@@ -44,6 +45,14 @@ class AddEditBreedingViewModelTest {
         override fun getCattleById(id: String): LiveData<Cattle?> {
             return MutableLiveData<Cattle?>().apply {
                 value = TestData.cattleList.firstOrNull { it.id == id }
+            }
+        }
+    }
+
+    private val breedingRepository = object : FakeBreedingRepository() {
+        override fun getBreeding(breedingId: String): LiveData<Breeding?> {
+            return MutableLiveData<Breeding?>().apply {
+                value = TestData.breedingList.firstOrNull { it.id == breedingId }
             }
         }
     }
@@ -58,24 +67,59 @@ class AddEditBreedingViewModelTest {
             addBreedingUseCase = addBreedingUseCase,
             updateBreedingUseCase = updateBreedingUseCase
         ).apply {
-            /**
-             * For testing we need to initialize them with initial value
-             * as they are [MediatorLiveData].
-             */
-            repeatHeatStatus.value = null
-            pregnancyCheckStatus.value = null
-            dryOffStatus.value = null
-            calvingStatus.value = null
+            initializeLiveData()
             observeUnobserved()
         }
     }
 
+    /**
+     * For testing we need to initialize them with initial value
+     * as they are [MediatorLiveData].
+     */
+    private fun AddEditBreedingViewModel.initializeLiveData() {
+        /*  AI  */
+        aiDate.value = null
+        didBy.value = null
+        bullName.value = null
+        strawCode.value = null
+        /*  Repeat heat  */
+        repeatHeatStatus.value = null
+        repeatHeatDoneOn.value = null
+        /*  Pregnancy check  */
+        pregnancyCheckStatus.value = null
+        pregnancyCheckDoneOn.value = null
+        /*  Dry off  */
+        dryOffStatus.value = null
+        dryOffDoneOn.value = null
+        /*  Calving  */
+        calvingStatus.value = null
+        calvingDoneOn.value = null
+    }
+
     private fun AddEditBreedingViewModel.observeUnobserved() {
-        cattle.observeForever{}
-        repeatHeatExpectedOn.observeForever {}
-        pregnancyCheckExpectedOn.observeForever {}
-        dryOffExpectedOn.observeForever {}
-        calvingExpectedOn.observeForever {}
+        cattle.observeForever {  }
+        oldBreeding.observeForever {  }
+        /*  AI  */
+        aiDate.observeForever {  }
+        didBy.observeForever {  }
+        bullName.observeForever {  }
+        strawCode.observeForever {  }
+        /*  Repeat heat  */
+        repeatHeatExpectedOn.observeForever {  }
+        repeatHeatStatus.observeForever {  }
+        repeatHeatDoneOn.observeForever {  }
+        /*  Pregnancy check  */
+        pregnancyCheckExpectedOn.observeForever {  }
+        pregnancyCheckStatus.observeForever {  }
+        pregnancyCheckDoneOn.observeForever {  }
+        /*  Dry off  */
+        dryOffExpectedOn.observeForever {  }
+        dryOffStatus.observeForever {  }
+        dryOffDoneOn.observeForever {  }
+        /*  Calving  */
+        calvingExpectedOn.observeForever {  }
+        calvingStatus.observeForever {  }
+        calvingDoneOn.observeForever {  }
     }
 
     @Test
@@ -227,7 +271,7 @@ class AddEditBreedingViewModelTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set old breeding
-        viewModel.setBreeding(TestData.breedingInitial)
+        viewModel.setBreeding(TestData.breedingInitial.id)
 
         val editing = LiveDataTestUtil.getValue(viewModel.editing)!!
         assertTrue(editing)
@@ -240,7 +284,7 @@ class AddEditBreedingViewModelTest {
         val actualOldBreedingCycle = TestData.breedingInitial
 
         // Set old breeding
-        viewModel.setBreeding(actualOldBreedingCycle)
+        viewModel.setBreeding(actualOldBreedingCycle.id)
 
         // AI
         val aiDate = LiveDataTestUtil.getValue(viewModel.aiDate)
@@ -298,7 +342,7 @@ class AddEditBreedingViewModelTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set breeding cycle
-        viewModel.setBreeding(TestData.breedingInitial)
+        viewModel.setBreeding(TestData.breedingInitial.id)
 
         // AiDate gets changed.
         viewModel.aiDate.value = null
@@ -780,12 +824,8 @@ class AddEditBreedingViewModelTest {
         assertThat(Unit, isEqualTo(showBreedingCompletedDialog?.getContentIfNotHandled()))
     }
 
-    /**
-     *  When repeat heat status is negative, pregnancy check status is positive, calving status is positive
-     *  and save called, show breeding completed dialog.
-     */
     @Test
-    fun saveCalledAndCalvingStatusPositive_showBreedingCompletedDialog() {
+    fun saveCalledWithCalvingStatusIsTrue_showSaveAndAddNewCattleDialog() {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
@@ -798,20 +838,28 @@ class AddEditBreedingViewModelTest {
         val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
         assertTrue(hasAiDate)
 
-        // Set repeat heat status positive
+        // Set repeat heat status negative
         viewModel.repeatHeatStatus.value = false
 
-        // Set pregnancy check status negative
+        // Pregnancy check status positive
         viewModel.pregnancyCheckStatus.value = true
 
-        // Set calving check status positive
+        // Dry off status positive
+        viewModel.dryOffStatus.value = true
+
+        // Calving status positive
         viewModel.calvingStatus.value = true
 
         // Call save
         viewModel.save()
 
+        // Check we don't show showBreedingCompletedDialog dialog.
         val showBreedingCompletedDialog = LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
-        assertThat(Unit, isEqualTo(showBreedingCompletedDialog?.getContentIfNotHandled()))
+        assertNull(showBreedingCompletedDialog?.getContentIfNotHandled())
+
+        // Check we show showBreedingCompletedDialogWithAddCattleOption dialog.
+        val showBreedingCompletedDialogWithAddCattleOption = LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialogWithAddCattleOption)
+        assertThat(Unit, isEqualTo(showBreedingCompletedDialogWithAddCattleOption?.getContentIfNotHandled()))
     }
 
     @Test
@@ -2523,5 +2571,38 @@ class AddEditBreedingViewModelTest {
         val calvingDateActualVisibility =
             LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
         assertFalse(calvingDateActualVisibility)
+    }
+
+    @Test
+    fun saveCalledForSaveAndAddNewCattle_launchAddNewCattleOnSuccess() {
+        val viewModel = createAddEditBreedingViewModel()
+
+        // Set cattle
+        viewModel.setCattle(TestData.cattle1.id)
+
+        // Set aiDate
+        viewModel.aiDate.value = LocalDate.now()
+
+        // Make sure we have aiDate.
+        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+        assertTrue(hasAiDate)
+
+        // Set repeat heat status negative
+        viewModel.repeatHeatStatus.value = false
+
+        // Pregnancy check status positive
+        viewModel.pregnancyCheckStatus.value = true
+
+        // Dry off status positive
+        viewModel.dryOffStatus.value = true
+
+        // Calving status positive
+        viewModel.calvingStatus.value = true
+
+        // Call save
+        viewModel.save(breedingCompletedConfirmation = true, saveAndAddNewCattle = true)
+
+        val launchAddNewCattle = LiveDataTestUtil.getValue(viewModel.launchAddNewCattleScreen)
+        assertThat(TestData.cattle1, isEqualTo(launchAddNewCattle?.getContentIfNotHandled()))
     }
 }

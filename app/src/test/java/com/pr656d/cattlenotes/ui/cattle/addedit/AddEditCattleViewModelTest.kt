@@ -614,6 +614,19 @@ class AddEditCattleViewModelTest {
         assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
     }
 
+    @Test
+    fun setParentCalled_setParent() {
+        val viewModel = createAddEditCattleViewModel()
+
+        val actualParentCattle = TestData.cattle2
+
+        // Set parent
+        viewModel.setParent(actualParentCattle.id)
+
+        val parentCattle = LiveDataTestUtil.getValue(viewModel.parentCattle)
+        assertThat(actualParentCattle, isEqualTo(parentCattle))
+    }
+
     /** Region end */
 
     /** Region : Edit [Cattle] */

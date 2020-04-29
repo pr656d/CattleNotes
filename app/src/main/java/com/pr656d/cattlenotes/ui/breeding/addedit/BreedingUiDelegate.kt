@@ -1,7 +1,9 @@
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import androidx.lifecycle.*
+import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
+import com.pr656d.shared.domain.breeding.detail.GetBreedingByIdUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.shared.utils.BreedingUtil
 import org.threeten.bp.LocalDate
@@ -14,20 +16,25 @@ interface BreedingUiDelegate {
 
     val cattleId: MutableLiveData<String>
 
+    val breedingId: MutableLiveData<String>
+
     /* Cattle */
     val cattle: LiveData<Cattle?>
+
+    /* Breeding */
+    val oldBreeding: LiveData<Breeding?>
 
     val active: MutableLiveData<Boolean>
 
     /* Artificial Insemination */
 
-    val aiDate: MutableLiveData<LocalDate?>
+    val aiDate: MediatorLiveData<LocalDate?>
 
-    val didBy: MutableLiveData<String>
+    val didBy: MediatorLiveData<String>
 
-    val bullName: MutableLiveData<String>
+    val bullName: MediatorLiveData<String>
 
-    val strawCode: MutableLiveData<String>
+    val strawCode: MediatorLiveData<String>
 
     /* Repeat Heat */
 
@@ -35,7 +42,7 @@ interface BreedingUiDelegate {
 
     val repeatHeatStatus: MediatorLiveData<Boolean?>
 
-    val repeatHeatDoneOn: MutableLiveData<LocalDate>
+    val repeatHeatDoneOn: MediatorLiveData<LocalDate>
 
     /* Pregnancy Check */
 
@@ -43,7 +50,7 @@ interface BreedingUiDelegate {
 
     val pregnancyCheckStatus: MediatorLiveData<Boolean?>
 
-    val pregnancyCheckDoneOn: MutableLiveData<LocalDate>
+    val pregnancyCheckDoneOn: MediatorLiveData<LocalDate>
 
     /* Dry Off */
 
@@ -51,7 +58,7 @@ interface BreedingUiDelegate {
 
     val dryOffStatus: MediatorLiveData<Boolean?>
 
-    val dryOffDoneOn: MutableLiveData<LocalDate>
+    val dryOffDoneOn: MediatorLiveData<LocalDate>
 
     /* Calving */
 
@@ -59,31 +66,36 @@ interface BreedingUiDelegate {
 
     val calvingStatus: MediatorLiveData<Boolean?>
 
-    val calvingDoneOn: MutableLiveData<LocalDate>
+    val calvingDoneOn: MediatorLiveData<LocalDate>
 }
 
 class BreedingUiImplDelegate @Inject constructor(
-    getCattleByIdUseCase: GetCattleByIdUseCase
+    getCattleByIdUseCase: GetCattleByIdUseCase,
+    getBreedingByIdUseCase: GetBreedingByIdUseCase
 ) : BreedingUiDelegate {
 
     override val cattleId: MutableLiveData<String> = MutableLiveData()
 
+    override val breedingId: MutableLiveData<String> = MutableLiveData()
+
     /* Cattle */
     override val cattle = cattleId.switchMap { getCattleByIdUseCase(it) }
+
+    override val oldBreeding: LiveData<Breeding?> = breedingId.switchMap { getBreedingByIdUseCase(it) }
 
     override val active: MutableLiveData<Boolean> = MutableLiveData(false)
 
     /* Artificial Insemination */
 
-    override val aiDate: MutableLiveData<LocalDate?> = MutableLiveData(null)
+    override val aiDate = MediatorLiveData<LocalDate?>()
 
-    override val didBy: MutableLiveData<String> = MutableLiveData()
+    override val didBy = MediatorLiveData<String>()
 
-    override val bullName = MutableLiveData<String>()
+    override val bullName = MediatorLiveData<String>()
 
-    override val strawCode = MutableLiveData<String>()
+    override val strawCode = MediatorLiveData<String>()
 
-    /* Dry Off */
+    /* Repeat heat */
 
     override val repeatHeatExpectedOn: LiveData<LocalDate?> = aiDate.map { date ->
         date?.let { BreedingUtil.getExpectedRepeatHeatDate(it) }
@@ -91,7 +103,7 @@ class BreedingUiImplDelegate @Inject constructor(
 
     override val repeatHeatStatus: MediatorLiveData<Boolean?> = MediatorLiveData()
 
-    override val repeatHeatDoneOn: MutableLiveData<LocalDate> = MutableLiveData()
+    override val repeatHeatDoneOn = MediatorLiveData<LocalDate>()
 
     /* Pregnancy Check */
 
@@ -101,7 +113,7 @@ class BreedingUiImplDelegate @Inject constructor(
 
     override val pregnancyCheckStatus = MediatorLiveData<Boolean?>()
 
-    override val pregnancyCheckDoneOn = MutableLiveData<LocalDate>()
+    override val pregnancyCheckDoneOn = MediatorLiveData<LocalDate>()
 
     /* Dry Off */
 
@@ -109,9 +121,9 @@ class BreedingUiImplDelegate @Inject constructor(
         date?.let { BreedingUtil.getExpectedDryOffDate(it) }
     }
 
-    override val dryOffStatus: MediatorLiveData<Boolean?> = MediatorLiveData()
+    override val dryOffStatus = MediatorLiveData<Boolean?>()
 
-    override val dryOffDoneOn: MutableLiveData<LocalDate> = MutableLiveData()
+    override val dryOffDoneOn = MediatorLiveData<LocalDate>()
 
     /* Calving */
 
@@ -119,7 +131,67 @@ class BreedingUiImplDelegate @Inject constructor(
         date?.let { BreedingUtil.getExpectedCalvingDate(it) }
     }
 
-    override val calvingStatus: MediatorLiveData<Boolean?> = MediatorLiveData()
+    override val calvingStatus = MediatorLiveData<Boolean?>()
 
-    override val calvingDoneOn: MutableLiveData<LocalDate> = MutableLiveData()
+    override val calvingDoneOn = MediatorLiveData<LocalDate>()
+
+    init {
+        /* Artificial Insemination */
+
+        aiDate.addSource(oldBreeding) {
+            aiDate.postValue(it?.artificialInsemination?.date)
+        }
+
+        didBy.addSource(oldBreeding) {
+            didBy.postValue(it?.artificialInsemination?.didBy)
+        }
+
+        bullName.addSource(oldBreeding) {
+            bullName.postValue(it?.artificialInsemination?.bullName)
+        }
+
+        strawCode.addSource(oldBreeding) {
+            strawCode.postValue(it?.artificialInsemination?.strawCode)
+        }
+
+        /* Repeat heat */
+
+        repeatHeatStatus.addSource(oldBreeding) {
+            repeatHeatStatus.postValue(it?.repeatHeat?.status)
+        }
+
+        repeatHeatDoneOn.addSource(oldBreeding) {
+            repeatHeatDoneOn.postValue(it?.repeatHeat?.doneOn)
+        }
+
+        /* Pregnancy check */
+
+        pregnancyCheckStatus.addSource(oldBreeding) {
+            pregnancyCheckStatus.postValue(it?.pregnancyCheck?.status)
+        }
+
+        pregnancyCheckDoneOn.addSource(oldBreeding) {
+            pregnancyCheckDoneOn.postValue(it?.pregnancyCheck?.doneOn)
+        }
+
+        /* Dry off */
+
+        dryOffStatus.addSource(oldBreeding) {
+            dryOffStatus.postValue(it?.dryOff?.status)
+        }
+
+        dryOffDoneOn.addSource(oldBreeding) {
+            dryOffDoneOn.postValue(it?.dryOff?.doneOn)
+        }
+
+        /* Calving */
+
+        calvingStatus.addSource(oldBreeding) {
+            calvingStatus.postValue(it?.calving?.status)
+        }
+
+        calvingDoneOn.addSource(oldBreeding) {
+            calvingDoneOn.postValue(it?.calving?.doneOn)
+        }
+    }
 }

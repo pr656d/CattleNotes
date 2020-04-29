@@ -10,7 +10,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentBreedingHistoryOfCattleBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
@@ -67,10 +66,11 @@ class BreedingHistoryOfCattleFragment : NavigationFragment() {
         })
 
         model.launchEditBreeding.observe(viewLifecycleOwner, EventObserver {
+            val (cattle, breeding) = it
             findNavController().navigate(
                 toAddEditBreeding(
-                    cattleId = it.first.id,
-                    breeding = Gson().toJson(it.second)
+                    cattleId = cattle.id,
+                    breedingId = breeding.id
                 )
             )
         })

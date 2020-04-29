@@ -271,6 +271,10 @@ class AddEditCattleViewModel @Inject constructor(
         cattleId.postValue(id)
     }
 
+    fun setParent(id: String) {
+        parentId.postValue(id)
+    }
+
     private fun getCattle(): Cattle =
         Cattle(
             tagNumber.value!!.toLong(),

@@ -7,13 +7,13 @@ interface TimelineActionListener {
     /**
      * On save clicked callback.
      */
-    fun saveBreeding(itemTimelineSaveData: ItemTimelineSaveData)
+    fun saveBreeding(itemTimelineData: ItemTimelineData, addNewCattle: Boolean = false)
 
     /**
      * @param newBreedingWithCattle The new breeding with change and cattle.
      * @param selectedOption Option chosen by user.
      */
-    data class ItemTimelineSaveData(
+    data class ItemTimelineData(
         val newBreedingWithCattle: BreedingWithCattle,
         val selectedOption: Boolean?   // null : Neutral, true : Positive, false : Negative
     )

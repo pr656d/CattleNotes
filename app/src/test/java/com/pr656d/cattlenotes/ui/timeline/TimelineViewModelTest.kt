@@ -72,7 +72,7 @@ class TimelineViewModelTest {
             updateBreedingUseCase = UpdateBreedingUseCase(mockBreedingRepository)
         )
 
-        val selectedData = TimelineActionListener.ItemTimelineSaveData(
+        val selectedData = TimelineActionListener.ItemTimelineData(
             BreedingWithCattle(
                 TestData.breedingWithCattle1.cattle,
                 newBreeding
@@ -95,7 +95,7 @@ class TimelineViewModelTest {
             updateBreedingUseCase = FailingUpdateBreedingUseCase
         )
 
-        val selectedData = TimelineActionListener.ItemTimelineSaveData(
+        val selectedData = TimelineActionListener.ItemTimelineData(
             BreedingWithCattle(
                 TestData.breedingWithCattle1.cattle,
                 newBreeding
@@ -108,5 +108,27 @@ class TimelineViewModelTest {
 
         val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
         assertNotNull(showMessage?.getContentIfNotHandled())
+    }
+
+    @Test
+    fun saveBreedingCalledWithAddNewCattle_launchAddNewCattleOnSuccess() {
+        val viewModel = createTimelineViewModel()
+
+        val cattle = TestData.breedingWithCattle1.cattle
+        val newBreeding = TestData.breedingRepeatHeatNegative
+
+        val selectedData = TimelineActionListener.ItemTimelineData(
+            BreedingWithCattle(
+                cattle,
+                newBreeding
+            ),
+            false
+        )
+
+        // Save called
+        viewModel.saveBreeding(itemTimelineData = selectedData, addNewCattle = true)
+
+        val launchAddNewCattle = LiveDataTestUtil.getValue(viewModel.launchAddNewCattleScreen)
+        assertThat(cattle, isEqualTo(launchAddNewCattle?.getContentIfNotHandled()))
     }
 }

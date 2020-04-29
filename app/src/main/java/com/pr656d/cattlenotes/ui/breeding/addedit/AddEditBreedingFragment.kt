@@ -12,11 +12,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentAddEditBreedingBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
-import com.pr656d.model.Breeding
+import com.pr656d.cattlenotes.ui.breeding.addedit.AddEditBreedingFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
@@ -51,10 +50,8 @@ class AddEditBreedingFragment : NavigationFragment() {
 
         model.setCattle(args.cattleId)
 
-        args.breeding?.let {
-            model.setBreeding(
-                Gson().fromJson(it, Breeding::class.java)
-            )
+        args.breedingId?.let {
+            model.setBreeding(it)
         }
 
         model.editing.observe(viewLifecycleOwner) {
@@ -94,6 +91,25 @@ class AddEditBreedingFragment : NavigationFragment() {
                 .setNegativeButton(R.string.cancel, null)
                 .create()
                 .show()
+        })
+
+        model.showBreedingCompletedDialogWithAddCattleOption.observe(viewLifecycleOwner, EventObserver {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.breeding_cycle_complete)
+                .setMessage(R.string.breeding_cycle_complete_message)
+                .setPositiveButton(R.string.just_save) { _, _ ->
+                    model.save(breedingCompletedConfirmation = true)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .setNeutralButton(R.string.save_and_add_new_cattle) { _, _ ->
+                    model.save(breedingCompletedConfirmation = true, saveAndAddNewCattle = true)
+                }
+                .create()
+                .show()
+        })
+
+        model.launchAddNewCattleScreen.observe(viewLifecycleOwner, EventObserver {
+            findNavController().navigate(toAddEditCattle(parentId = it.id))
         })
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {

@@ -16,7 +16,9 @@ class CattleNotesFirebaseMessagingService: DaggerFirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Timber.d("Firebase message data payload ${remoteMessage.data}")
 
-        // TODO("FCM") : Handle firebase messaging here
+        if (remoteMessage.data[KEY_TRIGGER_DATA_SYNC] == TRIGGER_DATA_SYNC) {
+            // TODO("FCM") : Handle firebase messaging here
+        }
     }
 
     companion object {

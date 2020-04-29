@@ -161,8 +161,7 @@ interface BreedingBehaviour : BreedingUiDelegate {
 
 class BreedingBehaviourImpl @Inject constructor(
     breedingUiDelegate: BreedingUiDelegate
-) : BreedingBehaviour,
-    BreedingUiDelegate by breedingUiDelegate {
+) : BreedingBehaviour, BreedingUiDelegate by breedingUiDelegate {
 
     init {
         /**

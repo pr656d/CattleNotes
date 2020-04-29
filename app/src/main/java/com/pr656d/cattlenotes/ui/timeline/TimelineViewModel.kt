@@ -3,8 +3,9 @@ package com.pr656d.cattlenotes.ui.timeline
 import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.ItemTimelineSaveData
+import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.ItemTimelineData
 import com.pr656d.model.BreedingWithCattle
+import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
@@ -32,6 +33,17 @@ class TimelineViewModel @Inject constructor(
     private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
     val showMessage = _showMessage
 
+    private var launchAddNewCattleWhenSaveCompleted = false
+
+    /**
+     * This is to hold [Cattle] for temporary purpose only.
+     */
+    private var itemCattle: Cattle? = null
+
+    private val _launchAddNewCattleScreen = MediatorLiveData<Event<Cattle>>()
+    val launchAddNewCattleScreen: LiveData<Event<Cattle>>
+        get() = _launchAddNewCattleScreen
+
     init {
         loadTimelineUseCase.execute(Unit)
 
@@ -52,10 +64,20 @@ class TimelineViewModel @Inject constructor(
                 _showMessage.postValue(Event(R.string.error_unknown))
             }
         }
+
+        _launchAddNewCattleScreen.addSource(updateBreedingResult) {
+            if (launchAddNewCattleWhenSaveCompleted)
+                (it as? Result.Success)?.let {
+                    _launchAddNewCattleScreen.postValue(Event(itemCattle!!))
+                    itemCattle = null
+                }
+        }
     }
 
-    override fun saveBreeding(itemTimelineSaveData: ItemTimelineSaveData) {
-        val newBreeding = itemTimelineSaveData.newBreedingWithCattle.breeding
+    override fun saveBreeding(itemTimelineData: ItemTimelineData, addNewCattle: Boolean) {
+        val newBreeding = itemTimelineData.newBreedingWithCattle.breeding
+        itemCattle = itemTimelineData.newBreedingWithCattle.cattle
+        launchAddNewCattleWhenSaveCompleted = addNewCattle
         updateBreedingUseCase(newBreeding, updateBreedingResult)
     }
 }

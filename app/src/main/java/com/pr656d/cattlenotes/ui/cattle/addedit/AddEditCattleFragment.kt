@@ -42,7 +42,10 @@ class AddEditCattleFragment : NavigationFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         args.cattleId?.let { model.setCattle(it) }
+
+        args.parentId?.let { model.setParent(it) }
 
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             onBackPressed()

@@ -35,7 +35,7 @@
         tools:layout="@layout/fragment_cattle_detail">
 
         <argument
-            android:name="cattleId"
+            android:name="cattle_id"
             app:argType="string" />
 
         <action
@@ -70,7 +70,13 @@
         tools:layout="@layout/fragment_add_edit_cattle">
 
         <argument
-            android:name="cattleId"
+            android:name="cattle_id"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
+        <argument
+            android:name="parent_id"
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
@@ -99,7 +105,7 @@
         tools:layout="@layout/fragment_breeding_history_of_cattle">
 
         <argument
-            android:name="cattleId"
+            android:name="cattle_id"
             app:argType="string" />
 
         <action
@@ -119,15 +125,23 @@
         tools:layout="@layout/fragment_add_edit_breeding">
 
         <argument
-            android:name="cattleId"
+            android:name="cattle_id"
             app:argType="string" />
 
-        <!--  Pass Breeding as JSON  -->
         <argument
-            android:name="breeding"
+            android:name="breeding_id"
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
+
+        <action
+            android:id="@+id/to_add_edit_cattle"
+            app:destination="@id/addEditCattleScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/cattleListScreen" />
 
     </fragment>
 
@@ -144,6 +158,15 @@
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
+
+        <action
+            android:id="@+id/to_add_edit_cattle"
+            app:destination="@id/addEditCattleScreen"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/cattleListScreen" />
 
     </fragment>
 

@@ -23,12 +23,9 @@ class AddEditBreedingViewModel @Inject constructor(
     breedingBehaviour: BreedingBehaviour,
     private val addBreedingUseCase: AddBreedingUseCase,
     private val updateBreedingUseCase: UpdateBreedingUseCase
-) : ViewModel(),
-    BreedingBehaviour by breedingBehaviour {
+) : ViewModel(), BreedingBehaviour by breedingBehaviour {
 
-    private var oldBreeding: Breeding? = null
-
-    private val _editing = MutableLiveData<Boolean>(false)
+    private val _editing = MutableLiveData(false)
 
     val editing: LiveData<Boolean>
         get() = _editing
@@ -54,15 +51,33 @@ class AddEditBreedingViewModel @Inject constructor(
     val showBreedingCompletedDialog: LiveData<Event<Unit>>
         get() = _showBreedingCompletedDialog
 
+    private val _showBreedingCompletedDialogWithAddCattleOption = MutableLiveData<Event<Unit>>()
+    val showBreedingCompletedDialogWithAddCattleOption: LiveData<Event<Unit>>
+        get() = _showBreedingCompletedDialogWithAddCattleOption
+
+    private var launchAddNewCattleWhenSaveCompleted = false
+
+    private val _launchAddNewCattleScreen = MediatorLiveData<Event<Cattle>>()
+    val launchAddNewCattleScreen: LiveData<Event<Cattle>>
+        get() = _launchAddNewCattleScreen
+
     init {
         _saving.addSource(addUpdateBreedingResult) {
             _saving.value = false
         }
 
         _navigateUp.addSource(addUpdateBreedingResult) {
-            (it as? Success)?.let {
-                navigateUp()
-            }
+            if (!launchAddNewCattleWhenSaveCompleted)
+                (it as? Success)?.let {
+                    navigateUp()
+                }
+        }
+
+        _launchAddNewCattleScreen.addSource(addUpdateBreedingResult) {
+            if (launchAddNewCattleWhenSaveCompleted)
+                (it as? Success)?.let {
+                    _launchAddNewCattleScreen.postValue(Event(cattle.value!!))
+                }
         }
 
         _showMessage.addSource(cattle) {
@@ -76,33 +91,33 @@ class AddEditBreedingViewModel @Inject constructor(
         }
     }
 
-    fun setBreeding(breeding: Breeding) {
+    fun setBreeding(id: String) {
         _editing.value = true
-        // Trigger cattle to be fetched and get Live updates
-        setCattle(breeding.cattleId)
-        breeding.bindData()
-        oldBreeding = breeding
+        breedingId.postValue(id)
     }
 
     fun setCattle(id: String) = cattleId.postValue(id)
 
     fun save() = save(breedingCompletedConfirmation = false)
 
-    fun save(breedingCompletedConfirmation: Boolean) {
+    fun save(breedingCompletedConfirmation: Boolean, saveAndAddNewCattle: Boolean = false) {
         val cattle = cattle.value ?: return
 
         if (aiDate.value != null) {
             val newBreedingCycle = getBreedingCycle(cattle)
 
             if (newBreedingCycle.breedingCompleted && !breedingCompletedConfirmation) {
-                _showBreedingCompletedDialog.postValue(Event(Unit))
+                showBreedingCompletedScreen()
                 return
             }
 
-            if (oldBreeding != newBreedingCycle) {
+            if (saveAndAddNewCattle)
+                launchAddNewCattleWhenSaveCompleted = true
+
+            if (oldBreeding.value != newBreedingCycle) {
                 _saving.value = true
 
-                if (oldBreeding == null)
+                if (oldBreeding.value == null)
                     addBreedingUseCase(newBreedingCycle, addUpdateBreedingResult)
                 else
                     updateBreedingUseCase(newBreedingCycle, addUpdateBreedingResult)
@@ -113,6 +128,13 @@ class AddEditBreedingViewModel @Inject constructor(
         } else {
             _showMessage.value = Event(R.string.provide_ai_date)
         }
+    }
+
+    private fun showBreedingCompletedScreen() {
+        if (calvingStatus.value == true)
+            _showBreedingCompletedDialogWithAddCattleOption.postValue(Event(Unit))
+        else
+            _showBreedingCompletedDialog.postValue(Event(Unit))
     }
 
     private fun getBreedingCycle(cattle: Cattle): Breeding =
@@ -145,28 +167,8 @@ class AddEditBreedingViewModel @Inject constructor(
                 doneOn = calvingDoneOn.value
             )
         ).apply {
-            id = oldBreeding?.id ?: FirestoreUtil.autoId()
+            id = oldBreeding.value?.id ?: FirestoreUtil.autoId()
         }
-
-    private fun Breeding.bindData() {
-        // AI
-        aiDate.value = artificialInsemination.date
-        didBy.value = artificialInsemination.didBy
-        bullName.value = artificialInsemination.bullName
-        strawCode.value = artificialInsemination.strawCode
-        // Repeat Heat
-        repeatHeatStatus.value = repeatHeat.status
-        repeatHeatDoneOn.value = repeatHeat.doneOn
-        // Pregnancy Check
-        pregnancyCheckStatus.value = pregnancyCheck.status
-        pregnancyCheckDoneOn.value = pregnancyCheck.doneOn
-        // Dry Off
-        dryOffStatus.value = dryOff.status
-        dryOffDoneOn.value = dryOff.doneOn
-        // Calving
-        calvingStatus.value = calving.status
-        calvingDoneOn.value = calving.doneOn
-    }
 
     fun onBackPressed(backConfirmation: Boolean = false) {
         if (aiDate.value == null && !_editing.value!!) {

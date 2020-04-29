@@ -89,7 +89,7 @@ object TestData {
 
     // Repeat heat status negative
     val breedingRepeatHeatNegative = Breeding(
-        cattleId = cattle2.id,
+        cattleId = cattle1.id,
         artificialInsemination = ArtificialInsemination(
             date = LocalDate.now(),
             didBy = null,

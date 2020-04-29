@@ -8,6 +8,7 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="save">Save</string>
+    <string name="just_save">Just save</string>
     <string name="go_back">Go Back</string>
     <string name="retry">Retry</string>
     <string name="edit">Edit</string>
@@ -183,6 +184,7 @@
     <string name="delete_breeding">Delete breeding?</string>
     <string name="not_set">Not set</string>
     <string name="breeding_cycle_complete">Breeding cycle completed</string>
+    <string name="save_and_add_new_cattle">Save &amp; Add new cattle</string>
     <string name="breeding_cycle_complete_message">Once breeding cycle is complete you can not modify this breeding later.</string>
 
     <!-- Timeline -->

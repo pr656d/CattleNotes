@@ -111,6 +111,7 @@
                 android:layout_marginBottom="@dimen/margin_small"
                 android:baselineAligned="true"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 app:goneUnless="@{ uiBehaviour.showMoreActions }"
                 tools:visibility="visible">
 
@@ -125,11 +126,22 @@
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonSaveAndAddNewCattle"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save_and_add_new_cattle"
+                    android:layout_marginEnd="@dimen/margin_small"
+                    android:textAlignment="textStart"
+                    app:goneUnless="@{ uiBehaviour.saveAndAddNewCattleVisibility }"
+                    tools:ignore="ContentDescription"
+                    tools:visibility="gone"/>
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/buttonSave"
                     style="?attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/margin_small"
                     android:text="@string/save"
                     android:textAlignment="textStart"
                     tools:ignore="ContentDescription" />
