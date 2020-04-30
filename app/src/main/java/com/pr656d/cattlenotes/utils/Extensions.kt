@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.pm.PackageManager
 import android.os.Build
 import android.text.Layout
 import android.text.StaticLayout
@@ -13,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -105,6 +107,14 @@ fun AppCompatActivity.updateForTheme(theme: Theme) = when (theme) {
     Theme.SYSTEM -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     Theme.BATTERY_SAVER -> delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
 }
+// end region
+
+// region Permissions
+
+fun Context.isAllPermissionGranted(permission: String) =
+    (ContextCompat.checkSelfPermission(this, permission)
+        == PackageManager.PERMISSION_GRANTED)
+
 // end region
 
 /**

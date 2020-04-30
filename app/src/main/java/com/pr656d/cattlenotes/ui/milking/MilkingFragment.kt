@@ -6,11 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.pr656d.cattlenotes.databinding.FragmentMilkingBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
+import com.pr656d.cattlenotes.utils.isAllPermissionGranted
 import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
@@ -68,11 +68,9 @@ class MilkingFragment : NavigationFragment() {
     }
 
     private fun getPendingPermissions() =
-        PERMISSIONS_REQUIRED.filter { !isPermissionGranted(it) }.toTypedArray()
-
-    private fun isPermissionGranted(permission: String) =
-        (ContextCompat.checkSelfPermission(requireActivity(), permission) 
-                == PackageManager.PERMISSION_GRANTED)
+        PERMISSIONS_REQUIRED
+            .filter { !requireActivity().isAllPermissionGranted(it) }
+            .toTypedArray()
 
     /**
      * If empty then all permissions are granted.
