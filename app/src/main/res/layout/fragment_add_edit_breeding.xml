@@ -24,7 +24,8 @@
             style="@style/Widget.CattleNOTES.AppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            android:animateLayoutChanges="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"

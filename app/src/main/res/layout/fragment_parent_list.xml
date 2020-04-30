@@ -17,7 +17,8 @@
         android:layout_height="match_parent"
         android:elevation="@dimen/parent_list_sheet_elevation"
         android:background="?attr/colorSurface"
-        android:backgroundTint="?attr/colorSurface">
+        android:backgroundTint="?attr/colorSurface"
+        android:animateLayoutChanges="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -28,7 +29,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:liftOnScroll="true">
+            app:liftOnScroll="true"
+            android:animateLayoutChanges="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"

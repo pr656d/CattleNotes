@@ -54,9 +54,9 @@ fun showCattleListDivider(recyclerView: RecyclerView, value: Boolean) {
             }
 
             override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-                val ivProfileImage = parent.findViewById<ImageView>(R.id.ivProfileImage)
-                val tvTagNumber = parent.findViewById<TextView>(R.id.tvTagNumber)
-                val tvName = parent.findViewById<TextView>(R.id.tvName)
+                val ivProfileImage = parent.findViewById<ImageView>(R.id.ivProfileImage) ?: return
+                val tvTagNumber = parent.findViewById<TextView>(R.id.tvTagNumber) ?: return
+                val tvName = parent.findViewById<TextView>(R.id.tvName) ?: return
 
                 val dividerLeft = parent.paddingStart + ivProfileImage.marginStart +
                         ivProfileImage.width + tvTagNumber.marginStart

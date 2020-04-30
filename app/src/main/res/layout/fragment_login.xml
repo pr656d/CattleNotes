@@ -14,24 +14,6 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-<!--
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
-            style="@style/Widget.CattleNOTES.AppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?actionBarSize"
-                app:layout_scrollFlags="noScroll"
-                app:navigationIcon="@drawable/ic_menu"
-                app:title="@string/login_title" />
-        </com.google.android.material.appbar.AppBarLayout>
--->
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

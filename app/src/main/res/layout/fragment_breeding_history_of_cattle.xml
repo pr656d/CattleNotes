@@ -13,14 +13,16 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             style="@style/Widget.CattleNOTES.AppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            android:animateLayoutChanges="true">
 
             <!--
                     Subtitle gets cut from bottom when using layout_height as ?actionBarSize.
@@ -37,6 +39,21 @@
                 app:title="@string/breeding_history"
                 app:subtitle="@{ viewModel.nameOrTagNumber }"
                 tools:subtitle="532412413412"/>
+
+            <!--
+            ~ TODO : Use better progress indicator
+            ~ Material progress indicator is planned
+            ~ Reference : https://material.io/components/progress-indicators/
+            -->
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                app:goneUnless="@{ viewModel.loading }"
+                app:layout_anchor="@id/appBarLayout"
+                app:layout_anchorGravity="bottom"
+                tools:visibility="visible" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.recyclerview.widget.RecyclerView
