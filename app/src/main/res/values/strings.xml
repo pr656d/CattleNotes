@@ -190,6 +190,9 @@
     <!-- Timeline -->
     <string name="timeline_empty">All breeding is completed.\nStart adding new breeding, you will see your next breeding event here.</string>
 
+    <!-- Milking -->
+    <string name="permissions_message_at_milking">SMS permission required to enable automatic milking collection feature.\nClick here to grant permission.</string>
+
     <!--  Profile  -->
     <string name="farm_info">Farm info</string>
     <string name="farm_name">Farm name</string>

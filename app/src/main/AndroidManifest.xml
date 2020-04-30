@@ -4,6 +4,8 @@
     package="com.pr656d.cattlenotes">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
         android:name=".CattleNotesApplication"
@@ -56,6 +58,7 @@
             android:name="com.pr656d.shared.notifications.BreedingAlarmBroadcastReceiver"
             android:exported="false" />
 
+        <!-- Receiver for reboot of device -->
         <receiver
             android:name="com.pr656d.shared.reboot.RebootBroadcastReceiver"
             android:enabled="true"
@@ -64,6 +67,16 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-    </application>
 
+        <!-- Receiver for new SMS arrival -->
+        <receiver
+            android:name="com.pr656d.shared.sms.SmsBroadcastReceiver"
+            android:enabled="true"
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+    </application>
 </manifest>
