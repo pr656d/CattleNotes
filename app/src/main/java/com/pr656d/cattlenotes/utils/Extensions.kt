@@ -111,7 +111,7 @@ fun AppCompatActivity.updateForTheme(theme: Theme) = when (theme) {
 
 // region Permissions
 
-fun Context.isAllPermissionGranted(permission: String) =
+fun Context.isPermissionGranted(permission: String) =
     (ContextCompat.checkSelfPermission(this, permission)
         == PackageManager.PERMISSION_GRANTED)
 

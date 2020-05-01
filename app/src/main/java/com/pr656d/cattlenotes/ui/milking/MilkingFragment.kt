@@ -1,16 +1,22 @@
 package com.pr656d.cattlenotes.ui.milking
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentMilkingBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
-import com.pr656d.cattlenotes.utils.isAllPermissionGranted
+import com.pr656d.cattlenotes.utils.isPermissionGranted
 import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
 
@@ -57,25 +63,84 @@ class MilkingFragment : NavigationFragment() {
         model.requestPermissions.observe(viewLifecycleOwner, EventObserver {
             requestPermission()
         })
-    }
 
-    private fun checkAndRequestPermission() {
-        if (!isAllPermissionsGranted()) requestPermission()
+        model.showPermissionExplanation.observe(viewLifecycleOwner, EventObserver {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.sms_permission_required)
+                .setMessage(R.string.sms_permission_explanation_for_amc_feature)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    model.requestPermission()
+                }
+                .create()
+                .show()
+        })
     }
-
-    private fun requestPermission() {
-        requestPermissions(getPendingPermissions(), PERMISSION_REQUEST_AT_MILKING)
-    }
-
-    private fun getPendingPermissions() =
-        PERMISSIONS_REQUIRED
-            .filter { !requireActivity().isAllPermissionGranted(it) }
-            .toTypedArray()
 
     /**
-     * If empty then all permissions are granted.
+     * Check whether all required permissions are granted or not.
+     */
+    private fun checkAndRequestPermission() {
+        if (!isAllPermissionsGranted()) {
+            val showPermissionRational = getPendingPermissions().shouldShowPermissionRationale()
+
+            if (showPermissionRational) {
+                // User have previously denied the permission request.
+                // Show explanation.
+                model.showPermissionExplanation()
+                return
+            } else {
+                // Asking for first time.
+                // Request for permission.
+                requestPermission()
+            }
+        }
+    }
+
+    /**
+     * Request for permission.
+     */
+    private fun requestPermission() {
+        val pendingPermissions = getPendingPermissions().also {
+            // Safe check. Return, no permissions found to ask for.
+            if (it.isEmpty()) return
+        }.toTypedArray()
+
+        requestPermissions(pendingPermissions, PERMISSION_REQUEST_AT_MILKING)
+    }
+
+    /**
+     * Any permission from this list needs to be shown explanation.
+     */
+    private fun List<String>.shouldShowPermissionRationale(): Boolean =
+        any { ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), it) }
+
+    /**
+     * Return pending permissions from permissions list.
+     */
+    private fun getPendingPermissions(): List<String> =
+        PERMISSIONS_REQUIRED.filter { !requireActivity().isPermissionGranted(it) }
+
+    /**
+     * Whether all permissions are granted or not.
      */
     private fun isAllPermissionsGranted() = getPendingPermissions().isEmpty()
+
+    private fun openSettingsScreen() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.sms_permission_required)
+            .setMessage(R.string.go_to_settings_for_permission_title)
+            .setPositiveButton(R.string.go_to_settings) { _, _ ->
+                // Open settings page.
+                val intent = Intent().apply {
+                    action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                    data = Uri.fromParts("package", requireActivity().packageName, null)
+                }
+                startActivity(intent)
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .create()
+            .show()
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -85,9 +150,26 @@ class MilkingFragment : NavigationFragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == PERMISSION_REQUEST_AT_MILKING) {
-            model.setPermissionsGranted(
-                grantResults.all { it == PackageManager.PERMISSION_GRANTED }
-            )
+            /**
+             * Check if all permissions are granted which we have requested for.
+             */
+            val isGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+
+            model.setPermissionsGranted(isGranted)
+
+            /**
+             * when [shouldShowPermissionRationale] returns
+             *      true -> User has previously denied the permission.
+             *      false -> User have denied the request and checked don't ask again.
+             */
+            val permissionDeniedAndCheckedDontAskAgain =
+                !getPendingPermissions().shouldShowPermissionRationale()
+
+            if (!isGranted && permissionDeniedAndCheckedDontAskAgain) {
+                // User denied for permission and checked don't ask again.
+                // Open settings screen of app.
+                openSettingsScreen()
+            }
         }
     }
 }

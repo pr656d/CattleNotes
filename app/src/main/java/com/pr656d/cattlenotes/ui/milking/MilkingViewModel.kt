@@ -18,9 +18,15 @@ class MilkingViewModel @Inject constructor(
     val requestPermissions: LiveData<Event<Unit>>
         get() = _requestPermissions
 
+    private val _showPermissionExplanation = MutableLiveData<Event<Unit>>()
+    val showPermissionExplanation: LiveData<Event<Unit>>
+        get() = _showPermissionExplanation
+
     fun setPermissionsGranted(isGranted: Boolean) {
         _permissionsGranted.postValue(isGranted)
     }
 
     fun requestPermission() = _requestPermissions.postValue(Event(Unit))
+
+    fun showPermissionExplanation() = _showPermissionExplanation.postValue(Event(Unit))
 }
