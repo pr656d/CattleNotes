@@ -33,6 +33,10 @@ class ParentDetailFragment : DaggerFragment() {
         binding = FragmentParentDetailBinding.inflate(inflater, container, false).apply {
             lifecycleOwner = viewLifecycleOwner
         }
+        // ViewModel is scoped to parent fragment.
+        model = parentViewModelProvider(viewModelFactory)
+        binding.viewModel = model
+
         return binding.root
     }
 
