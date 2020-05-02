@@ -23,7 +23,7 @@
     <string name="go_to_settings">Go to settings</string>
     <string name="sms_permission_required">SMS permission required</string>
     <string name="go_to_settings_for_permission_title">Go to app settings to allow permission</string>
-    <string name="go_to_settings_for_sms_permission_message">You have selected deny and don\'t ask again. Please go to Cattle NOTES app Settings -> Permissions -> SMS -> Click Allow</string>
+    <string name="go_to_settings_for_sms_permission_message">Please go to Cattle NOTES app Settings -> Permissions -> SMS -> Click Allow</string>
 
     <!-- Type -->
     <string name="cow">Cow</string>
