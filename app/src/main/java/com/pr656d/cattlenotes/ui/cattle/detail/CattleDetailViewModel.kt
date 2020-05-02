@@ -40,6 +40,8 @@ class CattleDetailViewModel @Inject constructor(
 
     val parent:LiveData<String?> = parentCattle.map { it?.nameOrTagNumber() }
 
+    val isParentCattleTypeBull: LiveData<Boolean> = parentCattle.map { it?.type is AnimalType.Bull }
+
     /**
      * Parent cattle's parent detail
      */
@@ -83,6 +85,10 @@ class CattleDetailViewModel @Inject constructor(
     val loadingParent: LiveData<Boolean>
         get() = _loadingParent
 
+    private val _showParentDetail = MutableLiveData<Event<Unit>>()
+    val showParentDetail: LiveData<Event<Unit>>
+        get() = _showParentDetail
+
     init {
         _showMessage.addSource(cattle) {
             if (it == null) showMessage(R.string.error_cattle_not_found)
@@ -114,6 +120,8 @@ class CattleDetailViewModel @Inject constructor(
     }
 
     fun fetchCattle(id: String) = cattleId.postValue(id)
+
+    fun showParentDetail() = _showParentDetail.postValue(Event(Unit))
 
     fun showAllBreeding() {
         cattle.value?.let {

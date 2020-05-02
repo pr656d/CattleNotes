@@ -38,9 +38,6 @@ class ParentDetailFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        // ViewModel is scoped to parent fragment.
-        model = parentViewModelProvider(viewModelFactory)
-        binding.viewModel = model
 
         binding.includeCattleDetail.layoutParent.endIconMode = TextInputLayout.END_ICON_NONE
 

@@ -12,15 +12,15 @@
 
     </data>
 
+    <!-- Do not use animateLayoutChanges for bottom sheet
+         it expands sheet unfortunately -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/parent_detail_sheet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:elevation="@dimen/parent_list_sheet_elevation"
         android:background="?attr/colorSurface"
-        android:backgroundTint="?attr/colorSurface"
-        android:focusable="true"
-        android:animateLayoutChanges="true">
+        android:backgroundTint="?attr/colorSurface">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -31,8 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:liftOnScroll="true"
-            android:animateLayoutChanges="true">
+            app:liftOnScroll="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -76,7 +75,8 @@
                 android:id="@+id/include_cattle_detail"
                 layout="@layout/layout_cattle_detail"
                 bind:cattle="@{viewModel.parentCattle}"
-                bind:parent="@{viewModel.parentParent}"/>
+                bind:parent="@{viewModel.parentParent}"
+                bind:isCattleTypeBull="@{viewModel.isParentCattleTypeBull}"/>
 
         </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>

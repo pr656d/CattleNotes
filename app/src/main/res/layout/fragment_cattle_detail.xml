@@ -14,16 +14,14 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             style="@style/Widget.CattleNOTES.AppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:animateLayoutChanges="true">
+            android:fitsSystemWindows="true">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -56,14 +54,12 @@
             android:layout_below="@id/appBarLayout"
             android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical"
-            android:animateLayoutChanges="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:animateLayoutChanges="true">
+                android:orientation="vertical">
 
                 <include
                     android:id="@+id/include_cattle_detail"
@@ -76,8 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_normal"
-                    android:orientation="vertical"
-                    android:animateLayoutChanges="true">
+                    android:orientation="vertical">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAddNewBreeding"
@@ -118,7 +113,6 @@
             android:backgroundTint="?attr/colorSurface"
             app:fabAlignmentMode="end"
             app:menu="@menu/cattle_detail_menu" />
-
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabButtonEditCattle"

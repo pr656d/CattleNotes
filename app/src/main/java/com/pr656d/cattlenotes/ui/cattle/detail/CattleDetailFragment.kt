@@ -28,8 +28,7 @@ class CattleDetailFragment : NavigationFragment() {
         const val TAG = "CattleDetailsFragment"
     }
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val model by viewModels<CattleDetailViewModel> { viewModelFactory }
 
@@ -104,9 +103,12 @@ class CattleDetailFragment : NavigationFragment() {
         })
 
         binding.includeCattleDetail.layoutParent.setEndIconOnClickListener {
-            if (model.parentCattle.value != null)
-                bottomSheetBehavior.state = STATE_EXPANDED
+            model.showParentDetail()
         }
+
+        model.showParentDetail.observe(viewLifecycleOwner, EventObserver {
+            bottomSheetBehavior.state = STATE_EXPANDED
+        })
 
         model.launchAllBreeding.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(toBreedingHistory(it.id))
