@@ -41,6 +41,12 @@ class MilkingFragment : NavigationFragment() {
         checkAndRequestPermission()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        model.setPermissionsGranted(isAllPermissionsGranted())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -57,8 +63,6 @@ class MilkingFragment : NavigationFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        model.setPermissionsGranted(isAllPermissionsGranted())
 
         model.requestPermissions.observe(viewLifecycleOwner, EventObserver {
             requestPermission()
@@ -127,8 +131,8 @@ class MilkingFragment : NavigationFragment() {
 
     private fun openSettingsScreen() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle(R.string.sms_permission_required)
-            .setMessage(R.string.go_to_settings_for_permission_title)
+            .setTitle(R.string.go_to_settings_for_permission_title)
+            .setMessage(R.string.go_to_settings_for_sms_permission_message)
             .setPositiveButton(R.string.go_to_settings) { _, _ ->
                 // Open settings page.
                 val intent = Intent().apply {
@@ -137,7 +141,7 @@ class MilkingFragment : NavigationFragment() {
                 }
                 startActivity(intent)
             }
-            .setNegativeButton(R.string.cancel, null)
+            .setNegativeButton(R.string.not_now, null)
             .create()
             .show()
     }

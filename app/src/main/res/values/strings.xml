@@ -16,12 +16,14 @@
     <string name="remove_text">Remove %1$s?</string>
     <string name="required">Required</string>
     <string name="zero">0</string>
+    <string name="not_now">Not now</string>
     <string name="back_pressed_message">You want to go back?</string>
     <string name="changes_not_saved_message">If you go back changes will not be saved.</string>
     <string name="undo">Undo</string>
     <string name="go_to_settings">Go to settings</string>
     <string name="sms_permission_required">SMS permission required</string>
-    <string name="go_to_settings_for_permission_title">You have selected deny and don\'t ask again. Please go to Cattle NOTES app Settings -> Permissions -> Allow permissions</string>
+    <string name="go_to_settings_for_permission_title">Go to app settings to allow permission</string>
+    <string name="go_to_settings_for_sms_permission_message">You have selected deny and don\'t ask again. Please go to Cattle NOTES app Settings -> Permissions -> SMS -> Click Allow</string>
 
     <!-- Type -->
     <string name="cow">Cow</string>
