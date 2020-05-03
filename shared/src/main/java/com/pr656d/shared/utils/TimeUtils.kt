@@ -36,8 +36,17 @@ object TimeUtils {
     /**
      * Return [ZonedDateTime] of [dayOfMonth], [month] and [year].
      */
-    fun toZonedDateTime(dayOfMonth: Int, month: Int, year: Int): ZonedDateTime {
-        return toZonedDateTime(toLocalDate(dayOfMonth, month, year))
+    fun toZonedDateTime(
+        dayOfMonth: Int,
+        month: Int,
+        year: Int,
+        hour: Int = 0,
+        minute: Int = 0,
+        second: Int = 0,
+        nanoSecond: Int = 0,
+        zoneId: ZoneId = ZoneId.systemDefault()
+    ): ZonedDateTime {
+        return ZonedDateTime.of(year, month, dayOfMonth, hour, minute, second, nanoSecond, zoneId)
     }
 
     /**
@@ -108,6 +117,25 @@ object TimeUtils {
      */
     fun toEpochMilli(time: ZonedDateTime): Long {
         return time.toInstant().toEpochMilli()
+    }
+
+    /**
+     * Returns epoch millis from
+     * dayOfMonth, Month, Year, Hour, Minute, Second, NanoSecond and ZoneId.
+     */
+    fun toEpochMilli(
+        dd: Int,
+        mm: Int,
+        yyyy: Int,
+        hour: Int = 0,
+        minute: Int = 0,
+        second: Int = 0,
+        nanoSecond: Int = 0,
+        zoneId: ZoneId = ZoneId.systemDefault()
+    ): Long {
+        return toZonedDateTime(dd, mm, yyyy, hour, minute, second, nanoSecond, zoneId)
+            .toInstant()
+            .toEpochMilli()
     }
 
     /**

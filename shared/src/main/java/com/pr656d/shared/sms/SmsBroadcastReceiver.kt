@@ -11,10 +11,9 @@ import timber.log.Timber
  * Handles new SMS arrival.
  */
 class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
+
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-
-        Timber.d("SmsBroadcastReceiver onReceived()")
 
         if (intent.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
 
@@ -22,8 +21,23 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
 
             val messages: Array<SmsMessage> = Telephony.Sms.Intents.getMessagesFromIntent(intent)
 
-            Timber.d("data : ${messages.forEach { it.displayOriginatingAddress }}")
+            messages.forEach { smsMessage ->
+                Timber.d("SENDER : ${smsMessage.displayOriginatingAddress}")
+                Timber.d("SMS BODY : ${smsMessage.displayMessageBody}")
 
+                // Check if we have message body.
+                val message = smsMessage.displayMessageBody ?: return
+
+                try {
+                    val milkingData = MilkSmsParser.getMilkingData(smsMessage)
+                    Timber.d("Got milk data : $milkingData")
+                } catch (e: NotAMilkSmsException) {
+                    // Ignore, it's not a milking message.
+                    return
+                } catch (e: Exception) {
+                    Timber.e(e, "Could not parse message : $message")
+                }
+            }
         }
     }
 }
