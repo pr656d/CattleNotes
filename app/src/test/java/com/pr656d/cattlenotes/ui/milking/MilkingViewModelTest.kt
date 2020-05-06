@@ -1,8 +1,10 @@
 package com.pr656d.cattlenotes.ui.milking
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.nhaarman.mockito_kotlin.mock
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
+import com.pr656d.shared.domain.milk.LoadAllNewMilkFromSmsUseCase
 import org.junit.Assert.assertThat
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -21,8 +23,10 @@ class MilkingViewModelTest {
     @get:Rule
     var syncTaskExecutorRule = SyncTaskExecutorRule()
 
-    private fun createMilkingViewModel(): MilkingViewModel {
-        return MilkingViewModel()
+    private fun createMilkingViewModel(
+        loadAllNewMilkFromSmsUseCase: LoadAllNewMilkFromSmsUseCase = mock {  }
+    ): MilkingViewModel {
+        return MilkingViewModel(loadAllNewMilkFromSmsUseCase)
     }
 
     @Test

@@ -3,24 +3,31 @@ package com.pr656d.shared.data.db
 import androidx.room.TypeConverter
 import com.pr656d.model.AnimalType
 import com.pr656d.model.Cattle
+import com.pr656d.model.Milk
+import com.pr656d.shared.utils.TimeUtils
 import com.pr656d.shared.utils.toLocalDate
 import com.pr656d.shared.utils.toLong
+import com.pr656d.shared.utils.toZonedDateTime
 import org.threeten.bp.LocalDate
+import org.threeten.bp.ZonedDateTime
 
 class Converters {
     @TypeConverter
-    fun fromMillisToDate(millis: Long?): LocalDate? = millis?.toLocalDate()
+    fun fromMillisToLocalDate(millis: Long?): LocalDate? = millis?.toLocalDate()
 
     @TypeConverter
-    fun fromDateToMillis(localDate: LocalDate?): Long? = localDate?.toLong()
+    fun fromLocalDateToMillis(localDate: LocalDate?): Long? = localDate?.toLong()
 
     @TypeConverter
-    fun fromStringToAnimalType(value: String): AnimalType = when(value) {
-        AnimalType.Cow.displayName -> AnimalType.Cow
-        AnimalType.Buffalo.displayName -> AnimalType.Buffalo
-        AnimalType.Bull.displayName -> AnimalType.Bull
-        else -> throw IllegalArgumentException("Invalid String: Can not convert $value to Cattle.Type")
-    }
+    fun fromMillisToZonedDateTime(millis: Long?): ZonedDateTime? = millis?.toZonedDateTime()
+
+    @TypeConverter
+    fun fromZonedDateTimeToMillis(zonedDateTime: ZonedDateTime): Long? =
+        TimeUtils.toEpochMilli(zonedDateTime)
+
+    @TypeConverter
+    fun fromStringToAnimalType(value: String): AnimalType = AnimalType.INSTANCES[value]
+        ?: throw IllegalArgumentException("Invalid String: Can not convert $value to Cattle.Type")
 
     @TypeConverter
     fun fromAnimalTypeToString(value: AnimalType): String = value.displayName
@@ -29,13 +36,31 @@ class Converters {
     fun fromGroupToString(value: Cattle.Group?): String? = value?.displayName
 
     @TypeConverter
-    fun fromStringToGroup(value: String?): Cattle.Group? = when (value) {
-        null -> null
-        Cattle.Group.Milking.displayName -> Cattle.Group.Milking
-        Cattle.Group.Dry.displayName -> Cattle.Group.Dry
-        Cattle.Group.Heifer.displayName -> Cattle.Group.Heifer
-        else -> throw IllegalArgumentException("Invalid String: Can not convert $value to Cattle.Group")
+    fun fromStringToGroup(value: String?): Cattle.Group? = value?.let {
+        Cattle.Group.INSTANCES[it]
+            ?: throw IllegalArgumentException("Invalid String: Can not convert $value to Cattle.Group")
     }
+
+    @TypeConverter
+    fun fromMilkOfToString(value: Milk.MilkOf): String = value.displayName
+
+    @TypeConverter
+    fun fromStringToMilkOf(value: String): Milk.MilkOf = Milk.MilkOf.INSTANCES[value]
+        ?: throw IllegalArgumentException("Invalid String: Can not convert $value to Milk.MilkOf")
+
+    @TypeConverter
+    fun fromShiftToString(value: Milk.Shift): String = value.displayName
+
+    @TypeConverter
+    fun fromStringToShift(value: String): Milk.Shift = Milk.Shift.INSTANCES[value]
+        ?: throw IllegalArgumentException("Invalid String: Can not convert $value to Milk.Shift")
+
+    @TypeConverter
+    fun fromMilkSourceToString(value: Milk.Source): String = value.SENDER_ADDRESS
+
+    @TypeConverter
+    fun fromStringToMilkSource(value: String): Milk.Source = Milk.Source.INSTANCES[value]
+        ?: throw IllegalArgumentException("Invalid String : Can not convert $value to Milk.Source")
 
     @TypeConverter
     fun fromImageToString(value: Cattle.Image?): String? = value?.let{

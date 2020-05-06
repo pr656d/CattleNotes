@@ -277,6 +277,7 @@ class AddEditCattleViewModel @Inject constructor(
 
     private fun getCattle(): Cattle =
         Cattle(
+            oldCattle.value?.id ?: FirestoreUtil.autoId(),
             tagNumber.value!!.toLong(),
             name.value,
             null,
@@ -289,9 +290,7 @@ class AddEditCattleViewModel @Inject constructor(
             purchaseDate.value,
             dob.value,
             parentId.value
-        ).apply {
-            id = oldCattle.value?.id ?: FirestoreUtil.autoId()
-        }
+        )
 
     private fun isAllFieldsValid(): Boolean {
         return tagNumberErrorMessage.value == VALID_FIELD &&
@@ -315,8 +314,8 @@ class AddEditCattleViewModel @Inject constructor(
                 purchaseDate.value == null
     }
 
-    override fun parentSelected(parent: Cattle) {
-        parentId.postValue(parent.id)
+    override fun parentSelected(cattle: Cattle) {
+        parentId.postValue(cattle.id)
         _selectingParent.postValue(false)
     }
 

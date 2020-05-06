@@ -6,6 +6,7 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper
 import com.pr656d.shared.data.db.AppDatabase
 import com.pr656d.shared.data.db.BreedingDao
 import com.pr656d.shared.data.db.CattleDao
+import com.pr656d.shared.data.db.MilkDao
 import org.mockito.Mockito
 
 class FakeAppDatabase : AppDatabase() {
@@ -16,6 +17,10 @@ class FakeAppDatabase : AppDatabase() {
 
     override fun breedingDao(): BreedingDao {
         return Mockito.mock(BreedingDao::class.java)
+    }
+
+    override fun milkDao(): MilkDao {
+        return Mockito.mock(MilkDao::class.java)
     }
 
     override fun createOpenHelper(config: DatabaseConfiguration?): SupportSQLiteOpenHelper {

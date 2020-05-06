@@ -1,15 +1,21 @@
 package com.pr656d.shared.di
 
+import android.content.Context
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.pr656d.shared.data.breeding.BreedingRepository
-import com.pr656d.shared.data.breeding.datasources.BreedingDataSource
-import com.pr656d.shared.data.breeding.datasources.FirestoreBreedingDataSource
-import com.pr656d.shared.data.cattle.datasources.CattleDataSource
-import com.pr656d.shared.data.cattle.datasources.FirestoreCattleDataSource
+import com.pr656d.shared.data.breeding.datasource.BreedingDataSource
+import com.pr656d.shared.data.breeding.datasource.FirestoreBreedingDataSource
+import com.pr656d.shared.data.cattle.datasource.CattleDataSource
+import com.pr656d.shared.data.cattle.datasource.FirestoreCattleDataSource
 import com.pr656d.shared.data.db.BreedingDao
 import com.pr656d.shared.data.db.CattleDao
+import com.pr656d.shared.data.db.MilkDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
+import com.pr656d.shared.data.milk.datasource.FirestoreMilkDataSource
+import com.pr656d.shared.data.milk.datasource.MilkDataSource
+import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSms
+import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSmsImpl
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdaterImp
@@ -65,5 +71,23 @@ class SharedModule {
         return BreedingNotificationAlarmUpdaterImp(
             breedingAlarmManager, breedingRepository, preferenceStorage
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideMilkDataSource(
+        authIdDataSource: AuthIdDataSource,
+        firestore: FirebaseFirestore,
+        milkDao: MilkDao
+    ) : MilkDataSource {
+        return FirestoreMilkDataSource(authIdDataSource, firestore, milkDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMilkDataSourceFromSms(
+        context: Context
+    ) : MilkDataSourceFromSms {
+        return MilkDataSourceFromSmsImpl(context)
     }
 }

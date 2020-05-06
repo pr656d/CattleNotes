@@ -14,8 +14,9 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.pr656d.shared.R
-import com.pr656d.shared.data.breeding.datasources.BreedingDataSource
-import com.pr656d.shared.data.cattle.datasources.CattleDataSource
+import com.pr656d.shared.data.breeding.datasource.BreedingDataSource
+import com.pr656d.shared.data.cattle.datasource.CattleDataSource
+import com.pr656d.shared.data.milk.datasource.MilkDataSource
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import timber.log.Timber
@@ -50,6 +51,7 @@ interface DbLoader {
 class DatabaseLoader @Inject constructor(
     private val cattleDataSource: CattleDataSource,
     private val breedingDataSource: BreedingDataSource,
+    private val milkDataSource: MilkDataSource,
     private val context: Context,
     private val preferenceStorage: PreferenceStorage
 ) : DbLoader {
@@ -70,6 +72,7 @@ class DatabaseLoader @Inject constructor(
         Timber.d("Initializing DbLoader")
 
         tasksCompletedCounter = MutableLiveData(0)
+
         DefaultScheduler.postToMainThread {
             preferenceStorage.observeReloadData.observeForever(reloadObserver)
         }
@@ -98,6 +101,13 @@ class DatabaseLoader @Inject constructor(
             breedingDataSource.load(onComplete = {
                 notifyTaskCompleted()
             })
+        })
+
+        /**
+         * Task 3 : Load milk data.
+         */
+        milkDataSource.load(onComplete = {
+            notifyTaskCompleted()
         })
     }
 
@@ -211,7 +221,8 @@ class DatabaseLoader @Inject constructor(
          * Total tasks to complete.
          *      1. Load cattle data
          *      2. Load Breeding data
+         *      3. Load Milk data
          */
-        private const val TOTAL_TASKS: Int = 2
+        private const val TOTAL_TASKS: Int = 3
     }
 }

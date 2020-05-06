@@ -10,6 +10,7 @@ import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
+import com.pr656d.model.Milk
 import com.pr656d.shared.data.prefs.SharedPreferenceStorage
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import timber.log.Timber
@@ -20,9 +21,10 @@ import timber.log.Timber
 @Database(
     entities = [
         Cattle::class,
-        Breeding::class
+        Breeding::class,
+        Milk::class
     ],
-    version = 3,
+    version = 5,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -30,6 +32,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun cattleDao(): CattleDao
     abstract fun breedingDao(): BreedingDao
+    abstract fun milkDao(): MilkDao
 
     companion object {
         private const val databaseName = "cattlenotes-db"

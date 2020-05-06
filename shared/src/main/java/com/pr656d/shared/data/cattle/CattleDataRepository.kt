@@ -2,8 +2,8 @@ package com.pr656d.shared.data.cattle
 
 import androidx.lifecycle.LiveData
 import com.pr656d.model.Cattle
-import com.pr656d.shared.data.cattle.datasources.CattleDataSource
-import com.pr656d.shared.data.db.AppDatabase
+import com.pr656d.shared.data.cattle.datasource.CattleDataSource
+import com.pr656d.shared.data.db.CattleDao
 import javax.inject.Inject
 
 /**
@@ -30,7 +30,7 @@ interface CattleRepository {
 }
 
 open class CattleDataRepository @Inject constructor(
-    private val appDatabase: AppDatabase,
+    private val cattleDao: CattleDao,
     private val cattleDataSource: CattleDataSource
 ) : CattleRepository {
 
@@ -38,27 +38,27 @@ open class CattleDataRepository @Inject constructor(
      * Add cattle at Local DB and at data source also. To optimise CRUD operations count.
      */
     override fun addCattle(cattle: Cattle) {
-        appDatabase.cattleDao().insert(cattle)
+        cattleDao.insert(cattle)
         cattleDataSource.addCattle(cattle)
     }
 
     override fun getAllCattle(): LiveData<List<Cattle>> {
-        return appDatabase.cattleDao().getAll()
+        return cattleDao.getAll()
     }
 
     override fun getCattleById(id: String): LiveData<Cattle?> {
-        return appDatabase.cattleDao().getById(id)
+        return cattleDao.getById(id)
     }
 
     override fun getCattleByTagNumber(tagNumber: Long): LiveData<Cattle?> {
-        return appDatabase.cattleDao().getByTagNumber(tagNumber)
+        return cattleDao.getByTagNumber(tagNumber)
     }
 
     /**
      * Delete cattle at Local DB and at data source also. To optimise CRUD operations count.
      */
     override fun deleteCattle(cattle: Cattle) {
-        appDatabase.cattleDao().delete(cattle)
+        cattleDao.delete(cattle)
         cattleDataSource.deleteCattle(cattle)
     }
 
@@ -66,12 +66,12 @@ open class CattleDataRepository @Inject constructor(
      * Update cattle at Local DB and at data source also. To optimise CRUD operations count.
      */
     override fun updateCattle(cattle: Cattle) {
-        appDatabase.cattleDao().update(cattle)
+        cattleDao.update(cattle)
         cattleDataSource.updateCattle(cattle)
     }
 
     override fun isCattleExistByTagNumber(tagNumber: Long): Boolean {
         // If count is more than 0 than it exists.
-        return appDatabase.cattleDao().getRowCountWithMatchingTagNumber(tagNumber) > 0
+        return cattleDao.getRowCountWithMatchingTagNumber(tagNumber) > 0
     }
 }

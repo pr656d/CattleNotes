@@ -9,6 +9,11 @@ import org.threeten.bp.LocalDate
 
 @Entity(tableName = "cattleList")
 data class Cattle(
+    @PrimaryKey
+    @SerializedName("id")
+    @ColumnInfo(name = "id")
+    val id: String,
+
     @SerializedName("tagNumber")
     @ColumnInfo(name = "tagNumber", index = true)
     val tagNumber: Long,
@@ -57,17 +62,20 @@ data class Cattle(
     @ColumnInfo(name = "parentId")
     val parent: String? = null
 ) {
-
-    @PrimaryKey
-    @SerializedName("id")
-    var id: String = ""
-        set(value) = if (!value.isBlank()) {
-            field = value
-        } else {
-            throw IllegalArgumentException("Cattle id is blank")
+    sealed class Group(val displayName: String) {
+        companion object {
+            /**
+             * All instances of [Group].
+             */
+            val INSTANCES: Map<String, Group> by lazy {
+                mapOf(
+                    Milking.displayName to Milking,
+                    Dry.displayName to Dry,
+                    Heifer.displayName to Heifer
+                )
+            }
         }
 
-    sealed class Group(val displayName: String) {
         object Milking : Group("Milking") {
             override fun toString(): String = displayName
         }

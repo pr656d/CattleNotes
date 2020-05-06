@@ -1,11 +1,15 @@
-package com.pr656d.shared.sms
+package com.pr656d.shared.sms.parser
 
 import com.pr656d.model.Milk
+import com.pr656d.model.Milk.Source.Sms.BGAMAMCS
+import com.pr656d.shared.utils.FirestoreUtil
 import com.pr656d.shared.utils.TimeUtils
+import com.pr656d.shared.utils.toMilkOf
+import com.pr656d.shared.utils.toMilkShift
 import org.threeten.bp.ZonedDateTime
 
 /**
- * Sms parser for BGAMAMCS sender AKA Amul to convert it into [Milk].
+ * Sms parser for BGAMAMCS sender AKA Amul to convert it into [Milk] data.
  *
  *  BGAMAMCS sample message :
  *      Code-(264) 1047
@@ -19,11 +23,11 @@ import org.threeten.bp.ZonedDateTime
  *      TAmt-11282.60
  *      https://goo.gl/UY1HAC
  */
-object AmulSmsParser : SmsParser {
+object BGAMAMCSSmsParser : MilkSmsParser {
 
-    override val SENDER_ID = "BGAMAMCS"
+    override val SOURCE = BGAMAMCS
 
-    override fun getMilkingData(message: String): Milk {
+    override fun getMilk(message: String): Milk {
         // Divide message by lines.
         val parts = message.lines()
 
@@ -38,10 +42,10 @@ object AmulSmsParser : SmsParser {
         val tAmt = getTotalAmount(parts[8])
         val link = getLink(parts[9])
 
-        return Milk(
-            dairyCode, customerId, timeStamp, shift,
-            milkOf, qty, fat, amt, tQty, tAmt, link
-        )
+        return Milk(SOURCE, timeStamp, shift, milkOf, qty, fat, amt, tQty, tAmt, link).apply {
+            // This milk is new, Assign new id.
+            id = FirestoreUtil.autoId()
+        }
     }
 
     /**
@@ -75,20 +79,20 @@ object AmulSmsParser : SmsParser {
      * Parses `Shift-M or E` returns char.
      * Make it open for testing.
      */
-    fun getShift(str: String): Char {
+    fun getShift(str: String): Milk.Shift {
         return SHIFT_REGEX.find(str)!!
             .destructured
-            .let { (value) -> value.toCharArray().first() }
+            .let { (value) -> value.first().toMilkShift() }
     }
 
     /**
      * Parses `Milk-C or B` returns char.
      * Make it open for testing.
      */
-    fun getMilkOf(str: String): Char {
+    fun getMilkOf(str: String): Milk.MilkOf {
         return MILK_REGEX.find(str)!!
             .destructured
-            .let { (value) -> value.toCharArray().first() }
+            .let { (value) -> value.first().toMilkOf() }
     }
 
     /**

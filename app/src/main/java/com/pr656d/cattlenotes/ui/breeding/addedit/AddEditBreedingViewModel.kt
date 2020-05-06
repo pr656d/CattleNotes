@@ -139,36 +139,35 @@ class AddEditBreedingViewModel @Inject constructor(
 
     private fun getBreedingCycle(cattle: Cattle): Breeding =
         Breeding(
-            cattle.id,
-            ArtificialInsemination(
+            id = oldBreeding.value?.id ?: FirestoreUtil.autoId(),
+            cattleId = cattle.id,
+            artificialInsemination = ArtificialInsemination(
                 aiDate.value!!,
                 didBy.value,
                 bullName.value,
                 strawCode.value
             ),
-            BreedingEvent.RepeatHeat(
+            repeatHeat = BreedingEvent.RepeatHeat(
                 expectedOn = repeatHeatExpectedOn.value!!,
                 status = repeatHeatStatus.value,
                 doneOn = repeatHeatDoneOn.value
             ),
-            BreedingEvent.PregnancyCheck(
+            pregnancyCheck = BreedingEvent.PregnancyCheck(
                 expectedOn = pregnancyCheckExpectedOn.value!!,
                 status = pregnancyCheckStatus.value,
                 doneOn = pregnancyCheckDoneOn.value
             ),
-            BreedingEvent.DryOff(
+            dryOff = BreedingEvent.DryOff(
                 expectedOn = dryOffExpectedOn.value!!,
                 status = dryOffStatus.value,
                 doneOn = dryOffDoneOn.value
             ),
-            BreedingEvent.Calving(
+            calving = BreedingEvent.Calving(
                 expectedOn = calvingExpectedOn.value!!,
                 status = calvingStatus.value,
                 doneOn = calvingDoneOn.value
             )
-        ).apply {
-            id = oldBreeding.value?.id ?: FirestoreUtil.autoId()
-        }
+        )
 
     fun onBackPressed(backConfirmation: Boolean = false) {
         if (aiDate.value == null && !_editing.value!!) {

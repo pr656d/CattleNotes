@@ -32,6 +32,7 @@ class TestBreeding {
         val aiDate = LocalDate.now()
 
         return Breeding(
+            id = UUID.randomUUID().toString(),
             cattleId = UUID.randomUUID().toString(),
             artificialInsemination = ArtificialInsemination(aiDate, null, null, null),
             repeatHeat = BreedingEvent.RepeatHeat(

@@ -16,6 +16,11 @@ import org.threeten.bp.LocalDate
     ]
 )
 data class Breeding(
+    @SerializedName("id")
+    @ColumnInfo(name = "id")
+    @PrimaryKey
+    var id: String,
+
     @SerializedName("cattleId")
     @ColumnInfo(name = "cattleId", index = true)
     val cattleId: String,
@@ -55,17 +60,6 @@ data class Breeding(
     @Embedded(prefix = "calving")
     val calving: BreedingEvent.Calving
 ) {
-
-    @SerializedName("id")
-    @ColumnInfo(name = "id")
-    @PrimaryKey
-    var id: String = ""
-        set(value) = if (!value.isBlank()) {
-            field = value
-        } else {
-            throw IllegalArgumentException("Breeding id is blank")
-        }
-
     /**
      * When
      *

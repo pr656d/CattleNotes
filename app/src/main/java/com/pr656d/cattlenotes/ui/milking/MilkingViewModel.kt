@@ -3,14 +3,15 @@ package com.pr656d.cattlenotes.ui.milking
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.pr656d.shared.domain.milk.LoadAllNewMilkFromSmsUseCase
 import com.pr656d.shared.domain.result.Event
 import javax.inject.Inject
 
 class MilkingViewModel @Inject constructor(
-
+    private val loadAllNewMilkFromSmsUseCase: LoadAllNewMilkFromSmsUseCase
 ) : ViewModel() {
 
-    private val _permissionsGranted = MutableLiveData<Boolean>()
+    private val _permissionsGranted = MutableLiveData<Boolean>(true)
     val permissionsGranted: LiveData<Boolean>
         get() = _permissionsGranted
 

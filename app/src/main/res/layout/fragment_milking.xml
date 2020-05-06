@@ -43,7 +43,6 @@
             app:layout_anchor="@id/appBarLayout"
             app:layout_anchorGravity="bottom"
             app:goneUnless="@{ !viewModel.permissionsGranted }"
-            android:visibility="gone"
             tools:ignore="UnusedAttribute"
             tools:visibility="visible"/>
 

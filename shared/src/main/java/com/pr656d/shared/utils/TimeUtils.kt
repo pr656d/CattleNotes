@@ -2,10 +2,7 @@ package com.pr656d.shared.utils
 
 import android.content.Context
 import com.pr656d.shared.R
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalTime
-import org.threeten.bp.ZoneId
-import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
 
 object TimeUtils {
@@ -62,6 +59,13 @@ object TimeUtils {
             zoneId
         )
     }
+
+    /**
+     * Returns [ZonedDateTime] from [millis].
+     */
+    fun toZonedDateTime(millis: Long): ZonedDateTime = ZonedDateTime.from(
+        Instant.ofEpochMilli(millis)
+    )
 
     /**
      * Return [LocalTime] of [nanoOfDay].

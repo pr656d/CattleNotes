@@ -5,16 +5,17 @@ import com.pr656d.cattlenotes.CattleNotesApplication
 import com.pr656d.shared.analytics.AnalyticsHelper
 import com.pr656d.shared.data.breeding.BreedingDataRepository
 import com.pr656d.shared.data.breeding.BreedingRepository
-import com.pr656d.shared.data.breeding.datasources.BreedingDataSource
+import com.pr656d.shared.data.breeding.datasource.BreedingDataSource
 import com.pr656d.shared.data.cattle.CattleDataRepository
 import com.pr656d.shared.data.cattle.CattleRepository
-import com.pr656d.shared.data.cattle.datasources.CattleDataSource
-import com.pr656d.shared.data.db.AppDatabase
-import com.pr656d.shared.data.db.AppDatabaseDao
-import com.pr656d.shared.data.db.BreedingDao
-import com.pr656d.shared.data.db.CattleDao
+import com.pr656d.shared.data.cattle.datasource.CattleDataSource
+import com.pr656d.shared.data.db.*
 import com.pr656d.shared.data.db.updater.DatabaseLoader
 import com.pr656d.shared.data.db.updater.DbLoader
+import com.pr656d.shared.data.milk.MilkDataRepository
+import com.pr656d.shared.data.milk.MilkRepository
+import com.pr656d.shared.data.milk.datasource.MilkDataSource
+import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSms
 import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.data.prefs.SharedPreferenceStorage
 import com.pr656d.shared.utils.FirebaseAnalyticsHelper
@@ -63,6 +64,10 @@ class AppModule {
 
     @Singleton
     @Provides
+    fun provideMilkDao(appDatabase: AppDatabase): MilkDao = appDatabase.milkDao()
+
+    @Singleton
+    @Provides
     fun provideAppDatabaseDao(appDatabase: AppDatabase): AppDatabaseDao {
         return object : AppDatabaseDao {
             override fun clear() {
@@ -76,25 +81,29 @@ class AppModule {
     @Singleton
     @Provides
     fun provideCattleRepository(
-        appDatabase: AppDatabase,
+        cattleDao: CattleDao,
         cattleDataSource: CattleDataSource
     ): CattleRepository {
-        return CattleDataRepository(
-            appDatabase,
-            cattleDataSource
-        )
+        return CattleDataRepository(cattleDao, cattleDataSource)
     }
 
     @Singleton
     @Provides
     fun provideBreedingRepository(
-        appDatabase: AppDatabase,
+        breedingDao: BreedingDao,
         breedingDataSource: BreedingDataSource
     ): BreedingRepository {
-        return BreedingDataRepository(
-            appDatabase,
-            breedingDataSource
-        )
+        return BreedingDataRepository(breedingDao, breedingDataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMilkRepository(
+        milkDao: MilkDao,
+        milkDataSource: MilkDataSource,
+        milkDataSourceFromSms: MilkDataSourceFromSms
+    ): MilkRepository {
+        return MilkDataRepository(milkDao, milkDataSource, milkDataSourceFromSms)
     }
 
     @Singleton
@@ -102,10 +111,11 @@ class AppModule {
     fun provideDbUpdater(
         cattleDataSource: CattleDataSource,
         breedingDataSource: BreedingDataSource,
+        milkDataSource: MilkDataSource,
         context: Context,
         preferenceStorage: PreferenceStorage
     ): DbLoader {
-        return DatabaseLoader(cattleDataSource, breedingDataSource, context, preferenceStorage)
+        return DatabaseLoader(cattleDataSource, breedingDataSource, milkDataSource, context, preferenceStorage)
     }
 
     @Singleton

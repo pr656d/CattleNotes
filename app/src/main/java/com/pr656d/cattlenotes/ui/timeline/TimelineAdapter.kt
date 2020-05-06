@@ -16,7 +16,6 @@ import com.pr656d.cattlenotes.ui.timeline.TimelineActionListener.ItemTimelineDat
 import com.pr656d.cattlenotes.utils.executeAfter
 import com.pr656d.cattlenotes.utils.hideKeyboard
 import com.pr656d.cattlenotes.utils.pickADate
-import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.utils.TimeUtils
@@ -168,59 +167,31 @@ class TimelineViewHolder(
         }
     }
 
-    private fun newBreedingWithCattle(newStatus: Boolean?, doneOn: LocalDate?): BreedingWithCattle {
-        return uiBehaviour.data.breeding.run {
+    private fun newBreedingWithCattle(newStatus: Boolean?, doneOn: LocalDate?): BreedingWithCattle =
+        uiBehaviour.data.let { data ->
             when (uiBehaviour.breedingEventType) {
-                is BreedingEvent.RepeatHeat -> BreedingWithCattle(
-                    uiBehaviour.data.cattle,
-                    Breeding(
-                        cattleId,
-                        artificialInsemination,
-                        BreedingEvent.RepeatHeat(repeatHeat.expectedOn, newStatus, doneOn),
-                        pregnancyCheck,
-                        dryOff,
-                        calving
+                is BreedingEvent.RepeatHeat -> data.copy(
+                    breeding = data.breeding.copy(
+                        repeatHeat = data.breeding.repeatHeat.copy(status = newStatus, doneOn =  doneOn)
                     )
                 )
-                is BreedingEvent.PregnancyCheck -> BreedingWithCattle(
-                    uiBehaviour.data.cattle,
-                    Breeding(
-                        cattleId,
-                        artificialInsemination,
-                        repeatHeat,
-                        BreedingEvent.PregnancyCheck(pregnancyCheck.expectedOn, newStatus, doneOn),
-                        dryOff,
-                        calving
+                is BreedingEvent.PregnancyCheck -> data.copy(
+                    breeding = data.breeding.copy(
+                        pregnancyCheck = data.breeding.pregnancyCheck.copy(status = newStatus, doneOn =  doneOn)
                     )
                 )
-                is BreedingEvent.DryOff -> BreedingWithCattle(
-                    uiBehaviour.data.cattle,
-                    Breeding(
-                        cattleId,
-                        artificialInsemination,
-                        repeatHeat,
-                        pregnancyCheck,
-                        BreedingEvent.DryOff(dryOff.expectedOn, newStatus, doneOn),
-                        calving
+                is BreedingEvent.DryOff -> data.copy(
+                    breeding = data.breeding.copy(
+                        dryOff = data.breeding.dryOff.copy(status = newStatus, doneOn =  doneOn)
                     )
                 )
-                is BreedingEvent.Calving -> BreedingWithCattle(
-                    uiBehaviour.data.cattle,
-                    Breeding(
-                        cattleId,
-                        artificialInsemination,
-                        repeatHeat,
-                        pregnancyCheck,
-                        dryOff,
-                        BreedingEvent.Calving(calving.expectedOn, newStatus, doneOn)
+                is BreedingEvent.Calving -> data.copy(
+                    breeding = data.breeding.copy(
+                        calving = data.breeding.calving.copy(status = newStatus, doneOn =  doneOn)
                     )
                 )
-            }.apply {
-                // Assign id
-                breeding.id = id
             }
         }
-    }
 
     inner class ItemTimelineUiBehaviour(context: Context, val data: BreedingWithCattle) {
         val breedingEventType = data.breeding.nextBreedingEvent!!

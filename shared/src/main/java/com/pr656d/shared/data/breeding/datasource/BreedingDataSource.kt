@@ -1,4 +1,4 @@
-package com.pr656d.shared.data.breeding.datasources
+package com.pr656d.shared.data.breeding.datasource
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,6 +18,7 @@ import javax.inject.Singleton
 
 /**
  * Remote data source for [Breeding].
+ * @see FirestoreBreedingDataSource
  */
 interface BreedingDataSource {
     /**
@@ -73,7 +74,7 @@ class FirestoreBreedingDataSource @Inject constructor(
                 .get()
                 .addOnSuccessListener(onSuccessListener)
                 .addOnFailureListener {
-                    Timber.d("load() failed at breeding data source : ${it.localizedMessage}")
+                    Timber.d("load() failed at breeding data source : ${it.message}")
                 }
         }
     }
@@ -88,7 +89,7 @@ class FirestoreBreedingDataSource @Inject constructor(
                 .document(breeding.id)
                 .set(breeding.asHashMap())
                 .addOnFailureListener {
-                    Timber.d("addBreeding() failed : ${it.localizedMessage}")
+                    Timber.d("addBreeding() failed : ${it.message}")
                 }
         }
     }
@@ -103,7 +104,7 @@ class FirestoreBreedingDataSource @Inject constructor(
                 .document(breeding.id)
                 .delete()
                 .addOnFailureListener {
-                    Timber.d("deleteBreeding() failed() : ${it.localizedMessage}")
+                    Timber.d("deleteBreeding() failed : ${it.message}")
                 }
         }
     }
@@ -118,7 +119,7 @@ class FirestoreBreedingDataSource @Inject constructor(
                 .document(breeding.id)
                 .set(breeding.asHashMap(), SetOptions.merge())
                 .addOnFailureListener {
-                    Timber.d("updateBreeding() failed() : ${it.localizedMessage}")
+                    Timber.d("updateBreeding() failed : ${it.message}")
                 }
         }
     }
@@ -126,6 +127,7 @@ class FirestoreBreedingDataSource @Inject constructor(
     private fun getBreeding(document: DocumentSnapshot): Breeding {
         return document.run {
             Breeding(
+                id = document.id,
                 cattleId = get(KEY_CATTLE_ID) as String,
                 artificialInsemination = (get(KEY_ARTIFICIAL_INSEMINATION) as HashMap<*, *>).let { ai ->
                     ArtificialInsemination(
@@ -163,17 +165,9 @@ class FirestoreBreedingDataSource @Inject constructor(
                         doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.toLocalDate()
                     )
                 }
-            ).apply { id = document.id }
+            )
         }
     }
-
-   /* private fun parseBreedingEvent(data: HashMap<*, *>) {
-        return BreedingEvent(
-            expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).toLocalDate(),
-            status = data[KEY_BREEDING_EVENT_STATUS] as? Boolean,
-            doneOn = (data[KEY_BREEDING_EVENT_DONE_ON] as? Long)?.toLocalDate()
-        )
-    }*/
 
     private fun Breeding.asHashMap(): HashMap<String, Any?> = hashMapOf<String, Any?>().apply {
         put(KEY_CATTLE_ID, cattleId)

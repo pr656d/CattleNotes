@@ -99,6 +99,7 @@ class CattleDetailViewModelTest {
 
         // Cattle has been modified
         val newCattle = Cattle(
+            id = oldCattle.id,
             tagNumber = oldCattle.tagNumber,
             name = "Modified name", // Modified
             image = oldCattle.image,
@@ -109,7 +110,7 @@ class CattleDetailViewModelTest {
             homeBorn = oldCattle.homeBorn,
             purchaseAmount = oldCattle.purchaseAmount,
             purchaseDate = oldCattle.purchaseDate
-        ).apply { id = oldCattle.id }
+        )
 
         // Returns new updated cattle
         whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(MutableLiveData(newCattle))

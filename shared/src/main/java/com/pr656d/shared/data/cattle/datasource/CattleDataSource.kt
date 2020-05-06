@@ -1,4 +1,4 @@
-package com.pr656d.shared.data.cattle.datasources
+package com.pr656d.shared.data.cattle.datasource
 
 import androidx.annotation.MainThread
 import com.google.firebase.firestore.DocumentSnapshot
@@ -19,6 +19,7 @@ import javax.inject.Singleton
 
 /**
  * Remote data source for [Cattle].
+ * @see FirestoreCattleDataSource
  */
 interface CattleDataSource {
     /**
@@ -164,6 +165,7 @@ class FirestoreCattleDataSource @Inject constructor(
     private fun getCattle(doc: DocumentSnapshot): Cattle {
         return doc.run {
             Cattle(
+                id = id,
                 tagNumber = get(KEY_TAG_NUMBER) as Long,
                 name = get(KEY_NAME) as? String,
                 image = (get(KEY_IMAGE_URL) as? String)?.let { Cattle.Image(null, it) },
@@ -176,7 +178,7 @@ class FirestoreCattleDataSource @Inject constructor(
                 purchaseDate = (get(KEY_PURCHASE_Date) as? Long)?.toLocalDate(),
                 dateOfBirth = (get(KEY_DOB) as? Long)?.toLocalDate(),
                 parent = get(KEY_PARENT) as? String
-            ).apply { id = doc.id }
+            )
         }
     }
 
