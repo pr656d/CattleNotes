@@ -7,7 +7,7 @@ import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.login.datasources.AuthStateUserDataSource
 import com.pr656d.shared.data.login.datasources.FirebaseAuthStateUserDataSource
-import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSource
 import com.pr656d.shared.data.user.info.datasources.ObserveFirestoreUserInfoDataSourceImpl
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
@@ -41,7 +41,7 @@ class LoginModule {
         firebase: FirebaseAuth,
         appDatabaseDao: AppDatabaseDao,
         firestore: FirebaseFirestore,
-        preferenceStorage: PreferenceStorage,
+        preferenceStorageRepository: PreferenceStorageRepository,
         dbLoader: DbLoader,
         breedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater
     ): AuthStateUserDataSource {
@@ -49,7 +49,7 @@ class LoginModule {
             firebase,
             appDatabaseDao,
             FcmTokenUpdater(firestore),
-            preferenceStorage,
+            preferenceStorageRepository,
             dbLoader,
             breedingNotificationAlarmUpdater
         )

@@ -1,4 +1,4 @@
-package com.pr656d.shared.data.prefs
+package com.pr656d.shared.data.prefs.datasource
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -39,11 +39,11 @@ interface PreferenceStorage {
     var observableSelectedTheme: LiveData<String>
 
     /**
-     * If true, reload user data from data source.
+     * Reload user data from data source.
      */
     var reloadData: Boolean
 
-    var observeReloadData: LiveData<Boolean>
+    var observableReloadData: LiveData<Boolean>
 
     /**
      * Hold preferred time for breeding event reminder.
@@ -51,7 +51,7 @@ interface PreferenceStorage {
      */
     var preferredTimeOfBreedingReminder: Long
 
-    var observePreferredTimeOfBreedingReminder: LiveData<Long>
+    var observablePreferredTimeOfBreedingReminder: LiveData<Long>
 
     var selectedMilkSmsSource: String?
 
@@ -142,7 +142,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         false
     )
 
-    override var observeReloadData: LiveData<Boolean>
+    override var observableReloadData: LiveData<Boolean>
         get() {
             observeReloadDataResult.value = reloadData
             return observeReloadDataResult
@@ -155,7 +155,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         DEFAULT_REMINDER_TIME
     )
 
-    override var observePreferredTimeOfBreedingReminder: LiveData<Long>
+    override var observablePreferredTimeOfBreedingReminder: LiveData<Long>
         get() {
             observePreferredTimeOfBreedingReminderResult.value = preferredTimeOfBreedingReminder
             return observePreferredTimeOfBreedingReminderResult

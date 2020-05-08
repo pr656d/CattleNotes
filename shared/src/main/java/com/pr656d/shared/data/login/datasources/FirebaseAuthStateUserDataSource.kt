@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.pr656d.shared.data.db.AppDatabaseDao
 import com.pr656d.shared.data.db.updater.DbLoader
-import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.data.user.info.FirebaseUserInfo
 import com.pr656d.shared.data.user.info.UserInfoBasic
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
@@ -19,7 +19,7 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
     private val firebase: FirebaseAuth,
     appDatabaseDao: AppDatabaseDao,
     tokenUpdater: FcmTokenUpdater,
-    preferenceStorage: PreferenceStorage,
+    preferenceStorageRepository: PreferenceStorageRepository,
     dbLoader: DbLoader,
     breedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater
 ) : AuthStateUserDataSource {
@@ -55,7 +55,6 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
 
         // Log out
         if (this.auth.currentUser == null) {
-            preferenceStorage.clear()
             // Cancel all the breeding alarms.
             breedingNotificationAlarmUpdater.cancelAll(onComplete = {
                 DefaultScheduler.execute {
@@ -64,6 +63,7 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
                 }
             })
             dbLoader.stop()
+            preferenceStorageRepository.clear()
         }
 
         // Log in

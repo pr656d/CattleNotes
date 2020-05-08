@@ -16,8 +16,10 @@ import com.pr656d.shared.data.milk.MilkDataRepository
 import com.pr656d.shared.data.milk.MilkRepository
 import com.pr656d.shared.data.milk.datasource.MilkDataSource
 import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSms
-import com.pr656d.shared.data.prefs.PreferenceStorage
-import com.pr656d.shared.data.prefs.SharedPreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.data.prefs.SharedPreferenceStorageRepository
+import com.pr656d.shared.data.prefs.datasource.PreferenceStorage
+import com.pr656d.shared.data.prefs.datasource.SharedPreferenceStorage
 import com.pr656d.shared.utils.FirebaseAnalyticsHelper
 import com.pr656d.shared.utils.NetworkHelper
 import com.pr656d.shared.utils.NetworkHelperImpl
@@ -41,8 +43,14 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun providesPreferenceStorage(context: Context): PreferenceStorage =
+    fun providePreferenceStorage(context: Context): PreferenceStorage =
         SharedPreferenceStorage(context)
+
+    @Singleton
+    @Provides
+    fun providePreferenceStorageRepository(
+        preferenceStorage: PreferenceStorage
+    ): PreferenceStorageRepository = SharedPreferenceStorageRepository(preferenceStorage)
 
     @Singleton
     @Provides
@@ -52,7 +60,7 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun providesAppDatabase(context: Context): AppDatabase = AppDatabase.buildDatabase(context)
+    fun provideAppDatabase(context: Context): AppDatabase = AppDatabase.buildDatabase(context)
 
     @Singleton
     @Provides
@@ -113,9 +121,15 @@ class AppModule {
         breedingDataSource: BreedingDataSource,
         milkDataSource: MilkDataSource,
         context: Context,
-        preferenceStorage: PreferenceStorage
+        preferenceStorageRepository: PreferenceStorageRepository
     ): DbLoader {
-        return DatabaseLoader(cattleDataSource, breedingDataSource, milkDataSource, context, preferenceStorage)
+        return DatabaseLoader(
+            cattleDataSource,
+            breedingDataSource,
+            milkDataSource,
+            context,
+            preferenceStorageRepository
+        )
     }
 
     @Singleton

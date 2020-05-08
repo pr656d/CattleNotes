@@ -6,11 +6,12 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
+import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
 import com.pr656d.cattlenotes.test.util.fakes.FakeProfileDelegate
 import com.pr656d.cattlenotes.test.util.fakes.FakeThemedActivityDelegate
 import com.pr656d.cattlenotes.test.util.fakes.FakeUserInfoRepository
 import com.pr656d.shared.data.db.updater.DbLoader
-import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.data.user.repository.UserInfoRepository
 import com.pr656d.shared.domain.data.LoadDataUseCase
 import com.pr656d.shared.domain.login.GetFirstTimeProfileSetupCompletedUseCase
@@ -41,10 +42,7 @@ class LoginViewModelTest {
     private val mockDbLoader: DbLoader = mock {}
 
     private fun createLoginViewModel(
-        preferenceStorage: PreferenceStorage = mock {
-            on { loginCompleted }.doReturn(false)
-            on { firstTimeProfileSetupCompleted }.doReturn(false)
-        },
+        preferenceStorageRepository: PreferenceStorageRepository = FakePreferenceStorageRepository(),
         userInfoRepository: UserInfoRepository = FakeUserInfoRepository(),
         networkHelper: NetworkHelper = mock {
             on { isNetworkConnected() }.doReturn(true)
@@ -57,10 +55,10 @@ class LoginViewModelTest {
                 networkHelper = networkHelper
             ),
             FakeThemedActivityDelegate(),
-            GetFirstTimeProfileSetupCompletedUseCase(preferenceStorage),
-            SetFirstTimeProfileSetupCompletedUseCase(preferenceStorage),
+            GetFirstTimeProfileSetupCompletedUseCase(preferenceStorageRepository),
+            SetFirstTimeProfileSetupCompletedUseCase(preferenceStorageRepository),
             networkHelper,
-            SetLoginCompletedUseCase(preferenceStorage),
+            SetLoginCompletedUseCase(preferenceStorageRepository),
             LoadDataUseCase(dbLoader)
         ).apply { observeUnobserved() }
     }
@@ -108,9 +106,10 @@ class LoginViewModelTest {
     @Test
     fun firstTimeProfileSetupNotCompletedButLoginCompleted_launchSetupProfileScreen() {
         val viewModel = createLoginViewModel(
-            preferenceStorage = mock {
-                on { loginCompleted }.doReturn(true)
-                on { firstTimeProfileSetupCompleted }.doReturn(false)
+            // Given that user is logged in and not completed first time profile setup.
+            object : FakePreferenceStorageRepository() {
+                override fun getLoginCompleted(): Boolean = true
+                override fun getFirstTimeProfileSetupCompleted(): Boolean = false
             }
         )
 

@@ -6,9 +6,10 @@ import com.nhaarman.mockito_kotlin.mock
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeMilkRepository
+import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
 import com.pr656d.model.Milk
 import com.pr656d.shared.data.milk.MilkRepository
-import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.domain.milk.LoadAllNewMilkFromSmsUseCase
 import com.pr656d.shared.domain.milk.LoadMilkListUseCase
 import com.pr656d.shared.domain.milk.sms.GetAvailableMilkSmsSourcesUseCase
@@ -35,15 +36,13 @@ class MilkingViewModelTest {
 
     private fun createMilkingViewModel(
         fakeMilkRepository: MilkRepository = FakeMilkRepository(),
-        preferenceStorage: PreferenceStorage = mock {
-            on { selectedMilkSmsSource }.doReturn(Milk.Source.Sms.BGAMAMCS.SENDER_ADDRESS)
-        }
+        preferenceStorageRepository: PreferenceStorageRepository = FakePreferenceStorageRepository()
     ): MilkingViewModel {
         return MilkingViewModel(
             loadMilkListUseCase = LoadMilkListUseCase(fakeMilkRepository),
             getAvailableMilkSmsSourcesUseCase = GetAvailableMilkSmsSourcesUseCase(),
-            getMilkSmsSourceUseCase = GetMilkSmsSourceUseCase(preferenceStorage),
-            setMilkSmsSourceUseCase = SetMilkSmsSourceUseCase(preferenceStorage),
+            getMilkSmsSourceUseCase = GetMilkSmsSourceUseCase(preferenceStorageRepository),
+            setMilkSmsSourceUseCase = SetMilkSmsSourceUseCase(preferenceStorageRepository),
             loadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(fakeMilkRepository)
         )
     }
@@ -137,11 +136,13 @@ class MilkingViewModelTest {
                 on { getAllMilkFromSms(actualSmsSource) }.doReturn(listOf(
                     TestData.milk1, TestData.milk2, TestData.milk3, TestData.milk4
                 ))
+            },
+            preferenceStorageRepository = object : FakePreferenceStorageRepository() {
+                override fun getSelectedMilkSmsSource(): Milk.Source.Sms? {
+                    return Milk.Source.Sms.BGAMAMCS
+                }
             }
         )
-
-        // Set sms source
-        viewModel.setSmsSource(actualSmsSource)
 
         // Call sync with messages  -   sms source is set.
         viewModel.syncWithSmsMessages()

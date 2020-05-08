@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 import com.pr656d.model.Milk
-import com.pr656d.shared.data.prefs.SharedPreferenceStorage
+import com.pr656d.shared.data.prefs.datasource.SharedPreferenceStorage
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import timber.log.Timber
 

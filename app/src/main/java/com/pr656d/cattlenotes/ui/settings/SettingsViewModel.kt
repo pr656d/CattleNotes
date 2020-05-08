@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.pr656d.model.Theme
-import com.pr656d.shared.data.prefs.SharedPreferenceStorage.Companion.DEFAULT_REMINDER_TIME
+import com.pr656d.shared.data.prefs.datasource.SharedPreferenceStorage.Companion.DEFAULT_REMINDER_TIME
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Success

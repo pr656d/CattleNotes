@@ -1,14 +1,14 @@
 package com.pr656d.shared.domain.settings
 
 import com.pr656d.model.Theme
-import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.domain.UseCase
 import javax.inject.Inject
 
 class SetThemeUseCase @Inject constructor(
-    private val preferenceStorage: PreferenceStorage
+    private val preferenceStorageRepository: PreferenceStorageRepository
 ) : UseCase<Theme, Unit>() {
     override fun execute(parameters: Theme) {
-        preferenceStorage.selectedTheme = parameters.storageKey
+        preferenceStorageRepository.setSelectedTheme(parameters)
     }
 }

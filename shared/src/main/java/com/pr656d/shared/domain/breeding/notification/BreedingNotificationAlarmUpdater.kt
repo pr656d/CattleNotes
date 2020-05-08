@@ -5,14 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.pr656d.model.Breeding
 import com.pr656d.shared.data.breeding.BreedingRepository
-import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.notifications.BreedingAlarmManager
-import com.pr656d.shared.utils.TimeUtils
 import org.threeten.bp.LocalTime
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.system.measureTimeMillis
 
 /**
  * Sets a notification for each breeding and observers for any changes and
@@ -34,13 +34,13 @@ interface BreedingNotificationAlarmUpdater {
 class BreedingNotificationAlarmUpdaterImp @Inject constructor(
     private val breedingAlarmManager: BreedingAlarmManager,
     private val breedingRepository: BreedingRepository,
-    private val preferenceStorage: PreferenceStorage
+    private val preferenceStorageRepository: PreferenceStorageRepository
 ) : BreedingNotificationAlarmUpdater {
     private var observerBreedingList: Observer<List<Breeding>>? = null
     private var breedingList: LiveData<List<Breeding>>? = null
 
-    private var observerPreferredTimeOfBreedingReminder: Observer<Long>? = null
-    private var preferredTimeOfBreedingReminder: LiveData<Long>? = null
+    private var observerPreferredTimeOfBreedingReminder: Observer<LocalTime>? = null
+    private var preferredTimeOfBreedingReminder: LiveData<LocalTime>? = null
 
     private var lastPreferredTimeForBreedingReminder: LocalTime? = null
 
@@ -49,9 +49,8 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
 
     init {
         DefaultScheduler.execute {
-            lastPreferredTimeForBreedingReminder = TimeUtils.toLocalTime(
-                preferenceStorage.preferredTimeOfBreedingReminder
-            )
+            lastPreferredTimeForBreedingReminder =
+                preferenceStorageRepository.getPreferredTimeOfBreedingReminder()
         }
     }
 
@@ -70,37 +69,37 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
         }
 
         // Observe for reminder time changes.
-        preferredTimeOfBreedingReminder = preferenceStorage.observePreferredTimeOfBreedingReminder.apply {
-            val newObserver = Observer<Long> {
-                val newTime = TimeUtils.toLocalTime(it)
+        preferredTimeOfBreedingReminder =
+            preferenceStorageRepository.getObservablePreferredTimeOfBreedingReminder().apply {
+                val newObserver = Observer<LocalTime> { newTime ->
 
-                Timber.d("PreferredTimeOfBreedingReminder changed to $newTime")
+                    Timber.d("PreferredTimeOfBreedingReminder changed to $newTime")
 
-                // Prevent loop
-                if (lastPreferredTimeForBreedingReminder != newTime) {
-                    updateAll(userId)
-                    Timber.d("Got new PreferredTimeOfBreedingReminder $newTime")
-                    lastPreferredTimeForBreedingReminder = newTime
+                    // Prevent loop
+                    if (lastPreferredTimeForBreedingReminder != newTime) {
+                        updateAll(userId)
+                        Timber.d("Got new PreferredTimeOfBreedingReminder $newTime")
+                        lastPreferredTimeForBreedingReminder = newTime
+                    }
                 }
+
+                DefaultScheduler.postToMainThread { observeForever(newObserver) }
+
+                observerPreferredTimeOfBreedingReminder = newObserver
             }
-
-            DefaultScheduler.postToMainThread { observeForever(newObserver) }
-
-            observerPreferredTimeOfBreedingReminder = newObserver
-        }
     }
 
     @WorkerThread
     private fun processBreedings(userId: String, breedingList: List<Breeding>) {
         Timber.d("Setting all the alarms of breeding for user : $userId")
 
-        val startWork = System.currentTimeMillis()
-
-        breedingList.forEach { breeding ->
-            breedingAlarmManager.setAlarmForBreeding(breeding)
+        val timeTaken = measureTimeMillis {
+            breedingList.forEach { breeding ->
+                breedingAlarmManager.setAlarmForBreeding(breeding)
+            }
         }
 
-        Timber.d("Work finished of setting all the alarms of breeding in ${System.currentTimeMillis() - startWork} ms")
+        Timber.d("Work finished of setting all the alarms of breeding in $timeTaken ms")
     }
 
     private fun clear() {

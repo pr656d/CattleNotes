@@ -7,6 +7,7 @@ import com.pr656d.model.Milk
 import com.pr656d.shared.data.db.Converters
 import com.pr656d.shared.sms.NotAMilkSmsException
 import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
 import org.threeten.bp.ZonedDateTime
 
 // region converters
@@ -48,7 +49,11 @@ fun ZonedDateTime.toEpochMilli(): Long = TimeUtils.toEpochMilli(this)
 // region Time
 fun Long.toLocalDate(): LocalDate = TimeUtils.toLocalDate(this)
 
+fun Long.toLocalTime(): LocalTime = TimeUtils.toLocalTime(this)
+
 fun LocalDate.toLong(): Long = TimeUtils.toLong(this)
+
+fun LocalTime.toLong(): Long = TimeUtils.toLong(this)
 
 fun Long.toZonedDateTime(): ZonedDateTime = TimeUtils.toZonedDateTime(this)
 // end region

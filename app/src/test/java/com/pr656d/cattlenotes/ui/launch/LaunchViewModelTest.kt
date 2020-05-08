@@ -1,12 +1,10 @@
 package com.pr656d.cattlenotes.ui.launch
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
+import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
-import com.pr656d.shared.data.prefs.PreferenceStorage
 import com.pr656d.shared.domain.login.GetLoginAndAllStepsCompletedUseCase
 import org.junit.Assert.assertThat
 import org.junit.Rule
@@ -29,12 +27,14 @@ class LaunchViewModelTest {
     @Test
     fun notCompletedLogIn_navigateToLoginActivity() {
         // Given that user is *not* logged in and *not* completed first time profile setup.
-        val prefs = mock<PreferenceStorage> {
-            on { loginCompleted }.doReturn(false)
-            on { firstTimeProfileSetupCompleted }.doReturn(false)
+        val preferenceStorageRepository = object : FakePreferenceStorageRepository() {
+            override fun getLoginCompleted(): Boolean = false
+            override fun getFirstTimeProfileSetupCompleted(): Boolean = false
         }
 
-        val getLoginAndAllStepsCompletedUseCase = GetLoginAndAllStepsCompletedUseCase(prefs)
+        val getLoginAndAllStepsCompletedUseCase =
+            GetLoginAndAllStepsCompletedUseCase(preferenceStorageRepository)
+
         val viewModel = LaunchViewModel(getLoginAndAllStepsCompletedUseCase)
 
         // When launchDestination is observed
@@ -46,12 +46,14 @@ class LaunchViewModelTest {
     @Test
     fun notCompletedFirstTimeSetupProfile_navigateToLoginActivity() {
         // Given that user is logged in and not completed first time profile setup.
-        val prefs = mock<PreferenceStorage> {
-            on { loginCompleted }.doReturn(true)
-            on { firstTimeProfileSetupCompleted }.doReturn(false)
+        val preferenceStorageRepository = object : FakePreferenceStorageRepository() {
+            override fun getLoginCompleted(): Boolean = true
+            override fun getFirstTimeProfileSetupCompleted(): Boolean = false
         }
 
-        val getLoginAndAllStepsCompletedUseCase = GetLoginAndAllStepsCompletedUseCase(prefs)
+        val getLoginAndAllStepsCompletedUseCase =
+            GetLoginAndAllStepsCompletedUseCase(preferenceStorageRepository)
+
         val viewModel = LaunchViewModel(getLoginAndAllStepsCompletedUseCase)
 
         // When launchDestination is observed

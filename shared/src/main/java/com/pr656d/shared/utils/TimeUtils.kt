@@ -117,6 +117,13 @@ object TimeUtils {
     }
 
     /**
+     * Return epoch day for [LocalTime].
+     */
+    fun toLong(localTime: LocalTime): Long {
+        return localTime.toNanoOfDay()
+    }
+
+    /**
      * Return epoch milli of [ZonedDateTime].
      */
     fun toEpochMilli(time: ZonedDateTime): Long {

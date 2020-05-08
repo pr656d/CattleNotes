@@ -11,13 +11,14 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.pr656d.shared.R
 import com.pr656d.shared.data.breeding.datasource.BreedingDataSource
 import com.pr656d.shared.data.cattle.datasource.CattleDataSource
 import com.pr656d.shared.data.milk.datasource.MilkDataSource
-import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import timber.log.Timber
 import javax.inject.Inject
@@ -53,16 +54,17 @@ class DatabaseLoader @Inject constructor(
     private val breedingDataSource: BreedingDataSource,
     private val milkDataSource: MilkDataSource,
     private val context: Context,
-    private val preferenceStorage: PreferenceStorage
+    private val preferenceStorageRepository: PreferenceStorageRepository
 ) : DbLoader {
 
     private var tasksCompletedCounter: MutableLiveData<Int>? = null
+    private var observableReloadData: LiveData<Boolean>? = null
 
     private val reloadObserver = Observer<Boolean> {
         if (it == true) {
             reload(onComplete = {
                 DefaultScheduler.execute {
-                    preferenceStorage.reloadData = false
+                    preferenceStorageRepository.setReloadData(false)
                 }
             })
         }
@@ -74,7 +76,9 @@ class DatabaseLoader @Inject constructor(
         tasksCompletedCounter = MutableLiveData(0)
 
         DefaultScheduler.postToMainThread {
-            preferenceStorage.observeReloadData.observeForever(reloadObserver)
+            observableReloadData = preferenceStorageRepository.getObservableReloadData().apply {
+                observeForever(reloadObserver)
+            }
         }
 
         Timber.d("Initialized DbLoader")
@@ -121,7 +125,8 @@ class DatabaseLoader @Inject constructor(
         Timber.d("Stopping DbLoader")
 
         tasksCompletedCounter = null
-        preferenceStorage.observeReloadData.removeObserver(reloadObserver)
+        observableReloadData?.removeObserver(reloadObserver)
+        observableReloadData = null
 
         Timber.d("Stopped DbLoader")
     }

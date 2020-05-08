@@ -16,7 +16,7 @@ import com.pr656d.shared.data.milk.datasource.FirestoreMilkDataSource
 import com.pr656d.shared.data.milk.datasource.MilkDataSource
 import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSms
 import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSmsImpl
-import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdaterImp
 import com.pr656d.shared.notifications.BreedingAlarmManager
@@ -66,10 +66,10 @@ class SharedModule {
     fun provideBreedingNotificationAlarmUpdater(
         breedingAlarmManager: BreedingAlarmManager,
         breedingRepository: BreedingRepository,
-        preferenceStorage: PreferenceStorage
+        preferenceStorageRepository: PreferenceStorageRepository
     ) : BreedingNotificationAlarmUpdater {
         return BreedingNotificationAlarmUpdaterImp(
-            breedingAlarmManager, breedingRepository, preferenceStorage
+            breedingAlarmManager, breedingRepository, preferenceStorageRepository
         )
     }
 

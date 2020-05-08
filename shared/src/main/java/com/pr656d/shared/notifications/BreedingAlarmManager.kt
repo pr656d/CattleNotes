@@ -9,7 +9,7 @@ import androidx.annotation.WorkerThread
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.getSystemService
 import com.pr656d.model.Breeding
-import com.pr656d.shared.data.prefs.PreferenceStorage
+import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.notifications.BreedingAlarmBroadcastReceiver.Companion.EXTRA_BREEDING_ID
 import com.pr656d.shared.utils.TimeUtils
 import com.pr656d.shared.utils.toEpochMilli
@@ -24,7 +24,7 @@ import javax.inject.Inject
  */
 open class BreedingAlarmManager @Inject constructor(val context: Context) {
 
-    @Inject lateinit var preferenceStorage: PreferenceStorage
+    @Inject lateinit var preferenceStorageRepository: PreferenceStorageRepository
 
     private val systemAlarmManager: AlarmManager? = context.getSystemService()
 
@@ -47,7 +47,7 @@ open class BreedingAlarmManager @Inject constructor(val context: Context) {
         }
 
         val preferredTimeForBreedingReminder =
-            TimeUtils.toLocalTime(preferenceStorage.preferredTimeOfBreedingReminder)
+            preferenceStorageRepository.getPreferredTimeOfBreedingReminder()
 
         val isPastBreedingEvent = TimeUtils
             .toZonedDateTime(breedingEvent.expectedOn, preferredTimeForBreedingReminder)
