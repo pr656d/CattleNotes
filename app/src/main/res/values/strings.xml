@@ -199,6 +199,13 @@
     <!-- Milking -->
     <string name="permissions_message_at_milking">SMS permission required to enable automatic milking collection feature.\nClick here to grant permission.</string>
     <string name="sms_permission_explanation_for_amc_feature">If you get SMS of milk you sell, we can handle it for you with the Automatic Milking Collection feature. This feature needs to read your SMS only from the sender you specify from which you get SMS and adds in your milking data automatically when a message arrives. If you do not want to allow for this permission also you can add milking information manually.\nCurrently this feature supports SMS by AMUL only.</string>
+    <string name="menu_item_sync_with_sms">Sync with SMS messages</string>
+    <string name="sms_source_title">Choose SMS sender</string>
+    <string name="milk_found">%1$d new milk found</string>
+    <string name="milking_empty">No milk added yet. Start adding by clicking + icon at bottom or import from SMS by clicking at top right corner icon.</string>
+
+    <!--  Sms sources  -->
+    <string name="bgamamcs">BGAMAMCS</string>
 
     <!--  Profile  -->
     <string name="farm_info">Farm info</string>

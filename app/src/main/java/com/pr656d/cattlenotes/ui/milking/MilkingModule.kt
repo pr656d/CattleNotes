@@ -31,4 +31,12 @@ internal abstract class MilkingModule {
     @IntoMap
     @ViewModelKey(MilkingViewModel::class)
     internal abstract fun bindMilkingViewModel(viewModel: MilkingViewModel): ViewModel
+
+
+    /**
+     * Generates an [AndroidInjector] for the [SelectMilkSmsSenderDialogFragment].
+     */
+    @FragmentScoped
+    @ContributesAndroidInjector
+    internal abstract fun contributeSelectMilkSmsSenderDialogFragment(): SelectMilkSmsSenderDialogFragment
 }

@@ -53,6 +53,8 @@ interface PreferenceStorage {
 
     var observePreferredTimeOfBreedingReminder: LiveData<Long>
 
+    var selectedMilkSmsSource: String?
+
     /**
      * Clear the shared preferences.
      */
@@ -160,6 +162,12 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         }
         set(_) = throw IllegalAccessException("This property can't be changed")
 
+    override var selectedMilkSmsSource: String? by StringPreference(
+        prefs,
+        PREF_MILK_SMS_SOURCE,
+        null
+    )
+
     override fun clear() {
         prefs.value.edit { clear() }
     }
@@ -172,6 +180,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         const val PREF_DARK_MODE_ENABLED = "pref_dark_mode"
         const val PREF_RELOAD_DATA = "reload_data"
         const val PREF_PREFERRED_TIME_OF_BREEDING_REMINDER = "preferred_time_of_breeding_reminder"
+        const val PREF_MILK_SMS_SOURCE = "milk_sms_source"
 
         // Default time for reminders will be 09:00 AM in nano day.
         val DEFAULT_REMINDER_TIME by lazy { LocalTime.of(9, 0).toNanoOfDay() }

@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentMilkingBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
@@ -44,6 +45,7 @@ class MilkingFragment : NavigationFragment() {
     override fun onResume() {
         super.onResume()
 
+        // Update if permission changed.
         model.setPermissionsGranted(isAllPermissionsGranted())
     }
 
@@ -64,6 +66,16 @@ class MilkingFragment : NavigationFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.toolbar.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.menu_item_sync_with_sms -> {
+                    model.syncWithSmsMessages()
+                    true
+                }
+                else -> false
+            }
+        }
+
         model.requestPermissions.observe(viewLifecycleOwner, EventObserver {
             requestPermission()
         })
@@ -76,6 +88,16 @@ class MilkingFragment : NavigationFragment() {
                     model.requestPermission()
                 }
                 .create()
+                .show()
+        })
+
+        model.navigateToSmsSourceSelector.observe(viewLifecycleOwner, EventObserver {
+            SelectMilkSmsSenderDialogFragment.newInstance()
+                .show(childFragmentManager, null)
+        })
+
+        model.showMilkFoundMessage.observe(viewLifecycleOwner, EventObserver {
+            Snackbar.make(requireView(), getString(R.string.milk_found, it), Snackbar.LENGTH_LONG)
                 .show()
         })
     }

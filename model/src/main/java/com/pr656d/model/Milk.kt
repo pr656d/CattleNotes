@@ -163,7 +163,7 @@ data class Milk(
              * All instances of [Source].
              */
             val INSTANCES: Map<String, Source> by lazy {
-                Sms.SENDERS + mapOf(
+                Sms.INSTANCES + mapOf(
                     Manual.SENDER_ADDRESS to Manual
                 )
             }
@@ -179,7 +179,7 @@ data class Milk(
                 /**
                  * All instances of [Source] extended by [Sms].
                  */
-                val SENDERS: Map<String, Source> by lazy {
+                val INSTANCES: Map<String, Sms> by lazy {
                     mapOf(
                         BGAMAMCS.SENDER_ADDRESS to BGAMAMCS
                     )

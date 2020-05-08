@@ -35,6 +35,10 @@ fun String.toMilkOf(): Milk.MilkOf = Converters().fromStringToMilkOf(this)
 
 fun String.toMilkSource(): Milk.Source = Converters().fromStringToMilkSource(this)
 
+fun String.toMilkSmsSource(): Milk.Source.Sms =
+    Converters().fromStringToMilkSource(this) as? Milk.Source.Sms
+        ?: throw IllegalArgumentException("Invalid String : Can not convert $this to Milk.Source.Sms")
+
 // end region
 
 // region ZonedDateTime
