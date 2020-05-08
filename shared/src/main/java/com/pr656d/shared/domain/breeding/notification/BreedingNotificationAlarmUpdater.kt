@@ -135,6 +135,7 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
                 Timber.d("Cancelled all the breeding alarm")
             }
             onComplete()
+            clear()
         }
 
         cancelBreedingList = breedingRepository.getAllBreeding().apply {
@@ -142,8 +143,6 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
         }
 
         cancelBreedingListObserver = newObserver
-
-        clear()
     }
 
     override fun cancelByCattleId(cattleId: String, onComplete: () -> Unit) {
