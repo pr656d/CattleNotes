@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="value"
+            type="String" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.CattleNOTES.Milking.ItemMilkingContentCardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/padding_normal"
+            android:gravity="center">
+
+            <TextView
+                style="@style/Widget.CattleNOTES.Milking.ItemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{title}"
+                tools:text="Quantitiy"/>
+
+            <TextView
+                style="@style/Widget.CattleNOTES.Milking.ItemValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:text="@{value}"
+                tools:text="38.02L"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

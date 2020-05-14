@@ -22,6 +22,7 @@ buildscript {
         debugDbVersion = '1.0.6'
         daggerVersion = '2.26'
         espressoVersion = '3.1.0'
+        flexboxVersion = '2.0.1'
         fragmentVersion = '1.2.4'
         firebaseAnalyticsVersion = '17.2.3'
         firebaseAuthVersion = '19.3.0'

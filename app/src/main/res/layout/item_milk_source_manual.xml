@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.pr656d.model.Milk" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        style="Widget.CattleNOTES.BreedingHistory.ItemMilkingMaterialCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/flexbox_content_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:flexWrap="wrap"
+                app:alignItems="center"
+                app:alignContent="center"
+                app:justifyContent="space_around"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:showIn="@layout/fragment_milking">
+
+                <include
+                    layout="@layout/layout_item_milk_content"
+                    bind:title="@{@string/quantity}"
+                    bind:value="@{String.valueOf(data.quantity)}" />
+
+                <include
+                    layout="@layout/layout_item_milk_content"
+                    bind:title="@{@string/fat}"
+                    bind:value="@{String.valueOf(data.fat)}" />
+
+                <include
+                    layout="@layout/layout_item_milk_content"
+                    bind:title="@{@string/amount}"
+                    bind:value="@{String.valueOf(data.amount)}" />
+
+            </com.google.android.flexbox.FlexboxLayout>
+
+            <include
+                android:id="@+id/include_footer"
+                layout="@layout/layout_item_milk_footer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                bind:time="@{ data.timestamp }"
+                bind:source="@{ data.source }"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/flexbox_content_container" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

@@ -102,11 +102,19 @@ object TimeUtils {
     }
 
     /**
-     * Return [LocalTime] as [String] in this [pattern].
+     * Return [LocalTime] as [String] in this [pattern] from [LocalTime].
      * Default return as 09:00 AM.
      */
     fun timeString(localTime: LocalTime, pattern: String = "h:mm a"): String {
         return localTime.format(DateTimeFormatter.ofPattern(pattern))
+    }
+
+    /**
+     * Return [LocalTime] as [String] in this [pattern] from [ZonedDateTime].
+     * Default return as 09:00 AM.
+     */
+    fun timeString(zonedDateTime: ZonedDateTime, pattern: String = "h:mm a"): String {
+        return zonedDateTime.format(DateTimeFormatter.ofPattern(pattern))
     }
 
     /**

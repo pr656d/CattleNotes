@@ -45,8 +45,10 @@
     <!--  AddEditCattle  -->
     <dimen name="parent_list_bottom_sheet_peek_height">@dimen/a11y_min_touch_target</dimen>
 
+    <dimen name="no_elevation">0dp</dimen>
+
     <dimen name="default_outlined_card_stroke_width">1dp</dimen>
-    <dimen name="default_outlined_card_elevation">0dp</dimen>
+    <dimen name="default_outlined_card_elevation">@dimen/no_elevation</dimen>
 
     <!--  Profile  -->
     <dimen name="profile_image_size">120dp</dimen>
@@ -55,4 +57,8 @@
     <dimen name="day_header_text_size">20sp</dimen>
     <dimen name="day_header_decor_width">300dp</dimen>
     <dimen name="day_header_decor_height">72dp</dimen>
+
+    <!--  Item Milking  -->
+    <dimen name="corner_radius_milking_content">6dp</dimen>
+
 </resources>

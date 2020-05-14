@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="com.pr656d.shared.utils.TimeUtils" />
+
+        <variable
+            name="source"
+            type="com.pr656d.model.Milk.Source" />
+
+        <variable
+            name="time"
+            type="org.threeten.bp.ZonedDateTime" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_normal">
+
+        <TextView
+            android:id="@+id/textViewTime"
+            style="@style/AppTheme.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{ TimeUtils.timeString(time) }"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="06:57 AM" />
+
+        <TextView
+            android:id="@+id/textViewSource"
+            style="?attr/hintTextAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:milkSourceText="@{ source }"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textViewTime"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="@string/sms_source_manual"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
