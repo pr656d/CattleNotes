@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.pr656d.shared.utils.TimeUtils" />
 
         <variable
             name="source"
@@ -23,23 +22,31 @@
 
         <TextView
             android:id="@+id/textViewTime"
-            style="@style/AppTheme.Body1"
+            style="@style/AppTheme.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{ TimeUtils.timeString(time) }"
+            android:maxWidth="170dp"
+            android:text="@{ time }"
+            app:layout_constraintEnd_toStartOf="@+id/textViewSource"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="06:57 AM" />
+            tools:text="22 Jun, 2020 06:57 AM" />
 
         <TextView
             android:id="@+id/textViewSource"
-            style="?attr/hintTextAppearance"
+            style="@style/AppTheme.Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:milkSourceText="@{ source }"
+            android:layout_marginStart="@dimen/margin_normal"
+            android:textAppearance="?attr/hintTextAppearance"
             app:layout_constraintBaseline_toBaselineOf="@+id/textViewTime"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:text="@string/sms_source_manual"/>
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textViewTime"
+            app:milkSourceText="@{ source }"
+            tools:text="@string/sms_source_manual" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

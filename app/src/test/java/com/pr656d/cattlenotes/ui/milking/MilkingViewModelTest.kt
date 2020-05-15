@@ -10,6 +10,8 @@ import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
 import com.pr656d.model.Milk
 import com.pr656d.shared.data.milk.MilkRepository
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.domain.milk.AddAllMilkUseCase
+import com.pr656d.shared.domain.milk.AddMilkUseCase
 import com.pr656d.shared.domain.milk.LoadAllNewMilkFromSmsUseCase
 import com.pr656d.shared.domain.milk.LoadMilkListUseCase
 import com.pr656d.shared.domain.milk.sms.GetAvailableMilkSmsSourcesUseCase
@@ -43,9 +45,15 @@ class MilkingViewModelTest {
             getAvailableMilkSmsSourcesUseCase = GetAvailableMilkSmsSourcesUseCase(),
             getMilkSmsSourceUseCase = GetMilkSmsSourceUseCase(preferenceStorageRepository),
             setMilkSmsSourceUseCase = SetMilkSmsSourceUseCase(preferenceStorageRepository),
-            loadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(fakeMilkRepository)
+            loadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(fakeMilkRepository),
+            addMilkUseCase = AddMilkUseCase(fakeMilkRepository),
+            addAllMilkUseCase = AddAllMilkUseCase(fakeMilkRepository)
         )
     }
+
+    /*private fun MilkingViewModel.observeUnobserved() {
+        loading.observeForever {  }
+    }*/
 
     @Test
     fun requestPermissionCalled_requestPermissions() {

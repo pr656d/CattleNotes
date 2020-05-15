@@ -1,7 +1,11 @@
 package com.pr656d.cattlenotes.ui.milking
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.*
+import com.pr656d.cattlenotes.R
 import com.pr656d.model.Milk
+import com.pr656d.shared.domain.milk.AddAllMilkUseCase
+import com.pr656d.shared.domain.milk.AddMilkUseCase
 import com.pr656d.shared.domain.milk.LoadAllNewMilkFromSmsUseCase
 import com.pr656d.shared.domain.milk.LoadMilkListUseCase
 import com.pr656d.shared.domain.milk.sms.GetAvailableMilkSmsSourcesUseCase
@@ -16,14 +20,18 @@ class MilkingViewModel @Inject constructor(
     getAvailableMilkSmsSourcesUseCase: GetAvailableMilkSmsSourcesUseCase,
     getMilkSmsSourceUseCase: GetMilkSmsSourceUseCase,
     private val setMilkSmsSourceUseCase: SetMilkSmsSourceUseCase,
-    private val loadAllNewMilkFromSmsUseCase: LoadAllNewMilkFromSmsUseCase
-) : ViewModel() {
+    private val loadAllNewMilkFromSmsUseCase: LoadAllNewMilkFromSmsUseCase,
+    private val addMilkUseCase: AddMilkUseCase,
+    private val addAllMilkUseCase: AddAllMilkUseCase
+) : ViewModel(), MilkingActionListener {
+
+    private val setMilkUseCaseResult = MutableLiveData<Result<Unit>>()
+    private val availableMilkSmsSourcesResult = MutableLiveData<Result<List<Milk.Source.Sms>>>()
 
     val milkList: LiveData<List<Milk>> = loadMilkListUseCase()
-
     val isEmpty: LiveData<Boolean>
 
-    private val _loading = MediatorLiveData<Boolean>().apply { value = true }
+    private val _loading = MediatorLiveData<Boolean>()
     val loading: LiveData<Boolean>
         get() = _loading
 
@@ -36,17 +44,16 @@ class MilkingViewModel @Inject constructor(
         get() = _requestPermissions
 
     private val _showPermissionExplanation = MutableLiveData<Event<Unit>>()
+
     val showPermissionExplanation: LiveData<Event<Unit>>
         get() = _showPermissionExplanation
-
-    private val availableMilkSmsSourcesResult = MutableLiveData<Result<List<Milk.Source.Sms>>>()
 
     val availableMilkSmsSources: LiveData<List<Milk.Source.Sms>>
         get() = availableMilkSmsSourcesResult.map {
             (it as? Result.Success)?.data ?: emptyList()
         }
-
     private val _smsSource = MutableLiveData<Milk.Source.Sms>()
+
     val smsSource: Milk.Source.Sms?
         get() = _smsSource.value
 
@@ -56,17 +63,21 @@ class MilkingViewModel @Inject constructor(
         get() = loadAllNewMilkFromSmsResult.map {
             (it as? Result.Success)?.data ?: emptyList()
         }
-
     private val _navigateToSmsSourceSelector = MutableLiveData<Event<Unit>>()
+
     val navigateToSmsSourceSelector: LiveData<Event<Unit>>
         get() = _navigateToSmsSourceSelector
 
     private var syncWithSmsMessagesAfterSmsSourceIsSet: Event<Unit>? = null
-
     // Int is count of data found.
-    private val _showMilkFoundMessage = MediatorLiveData<Event<Int>>()
-    val showMilkFoundMessage: LiveData<Event<Int>>
-        get() = _showMilkFoundMessage
+    private val _saveNewMilkDialog = MediatorLiveData<Event<List<Milk>>>()
+
+    val saveNewMilkDialog: LiveData<Event<List<Milk>>>
+        get() = _saveNewMilkDialog
+
+    private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
+    val showMessage: LiveData<Event<Int>>
+        get() = _showMessage
 
     init {
         getMilkSmsSourceUseCase.executeNow(Unit).let { result ->
@@ -77,8 +88,8 @@ class MilkingViewModel @Inject constructor(
 
         getAvailableMilkSmsSourcesUseCase(Unit, availableMilkSmsSourcesResult)
 
-        _showMilkFoundMessage.addSource(newMilkListFromSms) {
-            _showMilkFoundMessage.postValue(Event(it.size))
+        _saveNewMilkDialog.addSource(newMilkListFromSms) {
+            _saveNewMilkDialog.postValue(Event(it))
         }
 
         _loading.addSource(milkList) {
@@ -86,6 +97,12 @@ class MilkingViewModel @Inject constructor(
         }
 
         isEmpty = milkList.map { it.isNullOrEmpty() }
+
+        _showMessage.addSource(setMilkUseCaseResult) {
+            (it as? Result.Error)?.exception?.let {
+                _showMessage.postValue(Event(R.string.error_add_milk))
+            }
+        }
     }
 
     fun setPermissionsGranted(isGranted: Boolean) {
@@ -95,6 +112,10 @@ class MilkingViewModel @Inject constructor(
     fun requestPermission() = _requestPermissions.postValue(Event(Unit))
 
     fun showPermissionExplanation() = _showPermissionExplanation.postValue(Event(Unit))
+
+    fun addMilk() {
+        // TODO("Not yet implemented")
+    }
 
     fun syncWithSmsMessages() {
         if (smsSource == null) {
@@ -121,5 +142,23 @@ class MilkingViewModel @Inject constructor(
             syncWithSmsMessages()
             syncWithSmsMessagesAfterSmsSourceIsSet = null  // Reset to null
         }
+    }
+
+    fun saveMilk(milkList: List<Milk>) {
+        _loading.postValue(true)
+        addAllMilkUseCase(milkList, setMilkUseCaseResult)
+    }
+
+    fun saveMilk(milk: Milk) {
+        _loading.postValue(true)
+        addMilkUseCase(milk, setMilkUseCaseResult)
+    }
+
+    override fun edit(milk: Milk) {
+        // TODO("Not yet implemented")
+    }
+
+    override fun delete(milk: Milk) {
+        // TODO("Not yet implemented")
     }
 }

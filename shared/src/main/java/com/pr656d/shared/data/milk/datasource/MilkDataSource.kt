@@ -31,6 +31,11 @@ interface MilkDataSource {
     fun addMilk(milk: Milk)
 
     /**
+     * Add milk at remote data source.
+     */
+    fun addAllMilk(milkList: List<Milk>)
+
+    /**
      * Delete milk at remote data source.
      */
     fun deleteMilk(milk: Milk)
@@ -88,6 +93,35 @@ class FirestoreMilkDataSource @Inject constructor(
                 .set(milk.asHashMap())
                 .addOnFailureListener {
                     Timber.d("addMilk() failed : ${it.message}")
+                }
+        }
+    }
+
+    override fun addAllMilk(milkList: List<Milk>) {
+        /**
+         * Firestore has batch operation limit.
+         * Make chunks of list and perform batch commit.
+         */
+        val milkListBlocks = milkList.chunked(BATCH_OPERATION_LIMIT)
+
+        milkListBlocks.forEach { list ->
+            firestore
+                .runBatch { batch ->
+                    list.forEach { milk ->
+                        val docRef = firestore
+                            .collection(USERS_COLLECTION)
+                            .document(userId)
+                            .collection(MILK_COLLECTION)
+                            .document(milk.id)
+
+                        batch.set(docRef, milk.asHashMap())
+                    }
+                }
+                .addOnSuccessListener {
+                    Timber.d("addAllMilk() success.")
+                }
+                .addOnFailureListener {
+                    Timber.e(it, "addAllMilk() failed : ${it.message}")
                 }
         }
     }
@@ -154,6 +188,8 @@ class FirestoreMilkDataSource @Inject constructor(
     }
 
     companion object {
+        private const val BATCH_OPERATION_LIMIT = 500
+
         private const val USERS_COLLECTION = "users"
         private const val MILK_COLLECTION = "milkList"
         private const val KEY_SOURCE = "source"

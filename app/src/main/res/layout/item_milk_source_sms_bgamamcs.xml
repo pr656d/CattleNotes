@@ -13,7 +13,7 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        style="Widget.CattleNOTES.BreedingHistory.ItemMilkingMaterialCardView"
+        style="@style/Widget.CattleNOTES.BreedingHistory.ItemMilkingMaterialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_normal">
@@ -39,6 +39,7 @@
                 <include
                     layout="@layout/layout_item_milk_content"
                     bind:title="@{@string/quantity}"
+                    bind:unit="@{@string/liter}"
                     bind:value="@{String.valueOf(data.quantity)}" />
 
                 <include
@@ -49,16 +50,19 @@
                 <include
                     layout="@layout/layout_item_milk_content"
                     bind:title="@{@string/amount}"
+                    bind:unit="@{@string/rupee}"
                     bind:value="@{String.valueOf(data.amount)}" />
 
                 <include
                     layout="@layout/layout_item_milk_content"
                     bind:title="@{@string/total_quantity}"
+                    bind:unit="@{@string/liter}"
                     bind:value="@{String.valueOf(data.totalQuantity)}" />
 
                 <include
                     layout="@layout/layout_item_milk_content"
                     bind:title="@{@string/total_amount}"
+                    bind:unit="@{@string/rupee}"
                     bind:value="@{String.valueOf(data.totalAmount)}" />
 
             </com.google.android.flexbox.FlexboxLayout>

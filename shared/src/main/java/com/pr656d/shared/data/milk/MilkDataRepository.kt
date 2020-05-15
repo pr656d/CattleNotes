@@ -14,6 +14,8 @@ import javax.inject.Inject
 interface MilkRepository {
     fun addMilk(milk: Milk)
 
+    fun addAllMilk(milkList: List<Milk>): List<Long>
+
     fun getAllMilk(): LiveData<List<Milk>>
 
     fun getAllMilkUnobserved(): List<Milk>
@@ -35,6 +37,11 @@ class MilkDataRepository @Inject constructor(
     override fun addMilk(milk: Milk) {
         milkDao.insert(milk)
         milkDataSource.addMilk(milk)
+    }
+
+    override fun addAllMilk(milkList: List<Milk>): List<Long> {
+        milkDataSource.addAllMilk(milkList)
+        return milkDao.insertAll(milkList)
     }
 
     override fun getAllMilk(): LiveData<List<Milk>> {

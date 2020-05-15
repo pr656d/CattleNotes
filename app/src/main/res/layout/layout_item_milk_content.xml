@@ -9,6 +9,10 @@
             type="String" />
 
         <variable
+            name="unit"
+            type="String" />
+
+        <variable
             name="value"
             type="String" />
 
@@ -18,11 +22,15 @@
         style="@style/Widget.CattleNOTES.Milking.ItemMilkingContentCardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_normal">
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_normal">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="@dimen/item_content_min_width"
+            android:minHeight="@dimen/item_content_min_height"
             android:orientation="vertical"
             android:padding="@dimen/padding_normal"
             android:gravity="center">
@@ -31,8 +39,8 @@
                 style="@style/Widget.CattleNOTES.Milking.ItemTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{title}"
-                tools:text="Quantitiy"/>
+                android:text="@{ unit != null ? title + ' ' + `(` + unit + `)` : title }"
+                tools:text="Quantity (liter)"/>
 
             <TextView
                 style="@style/Widget.CattleNOTES.Milking.ItemValue"
@@ -40,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small"
                 android:text="@{value}"
-                tools:text="38.02L"/>
+                tools:text="38.02"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

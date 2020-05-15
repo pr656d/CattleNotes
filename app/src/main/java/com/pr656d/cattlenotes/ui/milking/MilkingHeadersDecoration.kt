@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.timeline
+package com.pr656d.cattlenotes.ui.milking
 
 import android.content.Context
 import android.graphics.Canvas
@@ -16,19 +16,19 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import androidx.recyclerview.widget.RecyclerView.State
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.utils.newStaticLayout
-import com.pr656d.model.BreedingWithCattle
+import com.pr656d.model.Milk
 import com.pr656d.shared.utils.TimeUtils
-import org.threeten.bp.LocalDate
+import org.threeten.bp.ZonedDateTime
 import kotlin.math.ceil
 import kotlin.math.max
 
 /**
  * A [RecyclerView.ItemDecoration] which draws sticky headers marking the days in a given list of
- * [BreedingWithCattle]s. It also inserts gaps between days.
+ * [Milk]s. It also inserts gaps between days.
  */
-class TimelineHeadersDecoration(
+class MilkingHeadersDecoration(
     context: Context,
-    blocks: List<BreedingWithCattle>
+    blocks: List<Milk>
 ) : ItemDecoration() {
 
     private val paint: TextPaint
@@ -66,7 +66,7 @@ class TimelineHeadersDecoration(
 
     // Get the block index:date and create header layouts for each
     private val daySlots: Map<Int, StaticLayout> =
-        indexTimelineHeaders(blocks).map {
+        indexMilkingHeaders(blocks).map {
             it.first to createHeader(context, it.second)
         }.toMap()
 
@@ -102,9 +102,9 @@ class TimelineHeadersDecoration(
      */
     private fun createHeader(
         context: Context,
-        time: LocalDate
+        time: ZonedDateTime
     ): StaticLayout {
-        val text = TimeUtils.getLabelForTimelineHeader(context, time)
+        val text = TimeUtils.getLabelForMilkingHeader(context, time)
         return newStaticLayout(text, paint, textWidth, ALIGN_CENTER, 1f, 0f, false)
     }
 }

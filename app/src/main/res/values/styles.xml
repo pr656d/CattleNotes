@@ -284,17 +284,19 @@
     <!--  Milking  -->
     <style name="Widget.CattleNOTES.Milking" />
 
-    <style name="Widget.CattleNOTES.Milking.ItemTitle" parent="AppTheme.Body1">
-        <item name="android:textSize">16sp</item>
+    <style name="Widget.CattleNOTES.Milking.ItemTitle" parent="AppTheme.Body2">
         <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
     <style name="Widget.CattleNOTES.Milking.ItemValue" parent="AppTheme.Headline6">
-        <item name="android:textSize">18sp</item>
         <item name="android:textColor">?attr/colorOnSecondary</item>
     </style>
 
-    <style name="Widget.CattleNOTES.BreedingHistory.ItemMilkingMaterialCardView" parent="Widget.CattleNOTES.Timeline.MaterialCardViewOutlined" />
+    <style name="Widget.CattleNOTES.BreedingHistory.ItemMilkingMaterialCardView" parent="Widget.CattleNOTES.Timeline.MaterialCardViewOutlined">
+        <item name="background">?selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
 
     <style name="Widget.CattleNOTES.Milking.ItemMilkingContentCardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardCornerRadius">@dimen/corner_radius_milking_content</item>

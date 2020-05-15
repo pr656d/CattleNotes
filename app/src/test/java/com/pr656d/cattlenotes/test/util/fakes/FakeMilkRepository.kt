@@ -13,6 +13,10 @@ open class FakeMilkRepository(
         return fakeAppDatabase.milkDao().insert(milk)
     }
 
+    override fun addAllMilk(milkList: List<Milk>): List<Long> {
+        return fakeAppDatabase.milkDao().insertAll(milkList)
+    }
+
     override fun getAllMilk(): LiveData<List<Milk>> {
         return fakeAppDatabase.milkDao().getAll()
     }

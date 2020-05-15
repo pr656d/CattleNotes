@@ -131,34 +131,36 @@ class FirestoreCattleDataSource @Inject constructor(
 
     @MainThread
     private fun deleteBreedingOfCattle(cattle: Cattle) {
-        /**
-         * There is not straight forward way to delete collection documents with where query.
-         *
-         * https://stackoverflow.com/a/50457901/8146210
-         */
-        firestore
-            .collection(USERS_COLLECTION)
-            .document(userId)
-            .collection(BREEDING_COLLECTION)
-            .whereEqualTo(KEY_BREEDING_CATTLE_ID, cattle.id)
-            .get()
-            .addOnSuccessListener { result ->
-                Timber.d("Deleting breeding data for cattle : ${cattle.id}")
+        val performBatchDeleteOnSuccess : (QuerySnapshot) -> Unit = { result ->
+            Timber.d("Deleting breeding data for cattle : ${cattle.id}")
 
-                val writeBatch = firestore.batch()
+            val resultChunks = result.chunked(BATCH_OPERATION_LIMIT)
 
-                // TODO("do multiple batch writes") : Batch write is limited to 500 writes only.
-                // Practically no cattle has 500 or more breeding.
-                result.forEach { writeBatch.delete(it.reference) }
-
-                writeBatch
-                    .commit()
+            resultChunks.forEach { list ->
+                firestore
+                    .runBatch { writeBatch ->
+                        list.forEach {
+                            writeBatch.delete(it.reference)
+                        }
+                    }
                     .addOnSuccessListener {
                         Timber.d("Deleted breeding data for cattle : ${cattle.id}")
                     }
                     .addOnFailureListener {
                         Timber.e("Failed to delete breeding data for cattle : ${cattle.id}")
                     }
+            }
+        }
+
+        firestore
+            .collection(USERS_COLLECTION)
+            .document(userId)
+            .collection(BREEDING_COLLECTION)
+            .whereEqualTo(KEY_BREEDING_CATTLE_ID, cattle.id)
+            .get()
+            .addOnSuccessListener(performBatchDeleteOnSuccess)
+            .addOnFailureListener {
+                Timber.e(it, "Failed to get breeding data for cattle ${cattle.id}")
             }
     }
 
@@ -198,6 +200,8 @@ class FirestoreCattleDataSource @Inject constructor(
     }
 
     companion object {
+        private const val BATCH_OPERATION_LIMIT = 500
+
         private const val USERS_COLLECTION = "users"
         private const val CATTLE_COLLECTION = "cattleList"
         private const val BREEDING_COLLECTION = "breedingList"

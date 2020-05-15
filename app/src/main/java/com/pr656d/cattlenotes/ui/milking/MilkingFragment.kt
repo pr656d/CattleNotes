@@ -13,7 +13,6 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentMilkingBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
@@ -72,6 +71,11 @@ class MilkingFragment : NavigationFragment() {
                     model.syncWithSmsMessages()
                     true
                 }
+
+                R.id.menu_item_add_milk -> {
+                    model.addMilk()
+                    true
+                }
                 else -> false
             }
         }
@@ -96,9 +100,23 @@ class MilkingFragment : NavigationFragment() {
                 .show(childFragmentManager, null)
         })
 
-        model.showMilkFoundMessage.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(requireView(), getString(R.string.milk_found, it), Snackbar.LENGTH_LONG)
-                .show()
+        model.saveNewMilkDialog.observe(viewLifecycleOwner, EventObserver {
+            val dialog = MaterialAlertDialogBuilder(requireContext())
+
+            if (it.isEmpty()) {
+                dialog
+                    .setTitle(R.string.no_milk_found)
+                    .setPositiveButton(R.string.ok, null)
+            } else {
+                dialog
+                    .setTitle(getString(R.string.milk_found, it.count()))
+                    .setPositiveButton(R.string.save) { _, _ ->
+                        model.saveMilk(it)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+            }
+
+            dialog.create().show()
         })
     }
 

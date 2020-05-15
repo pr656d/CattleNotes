@@ -18,6 +18,7 @@ import com.pr656d.cattlenotes.utils.CircularOutlineProvider
 import com.pr656d.shared.utils.TimeUtils
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
+import org.threeten.bp.ZonedDateTime
 import timber.log.Timber
 
 /** Set text on a [TextView] from a string resource. */
@@ -28,6 +29,30 @@ fun setText(view: TextView, @StringRes resId: Int) {
             text = null
         else
             setText(resId)
+    }
+}
+
+/** Set text on a [TextView] from a [LocalDate] resource. */
+@BindingAdapter("android:text")
+fun setText(view: TextView, date: LocalDate?) {
+    date?.let {
+        view.text = TimeUtils.dateString(it)
+    }
+}
+
+/** Set text on [TextView] from a [LocalTime] resource */
+@BindingAdapter("android:text")
+fun setText(view: TextView, time: LocalTime?) {
+    time?.let {
+        view.text = TimeUtils.timeString(it)
+    }
+}
+
+/** Set text on [TextView] from a [ZonedDateTime] resource */
+@BindingAdapter("android:text")
+fun setText(view: TextView, zonedDateTime: ZonedDateTime?) {
+    zonedDateTime?.let {
+        view.text = TimeUtils.dateTimeString(zonedDateTime)
     }
 }
 
@@ -53,22 +78,6 @@ fun errorText(view: TextInputLayout, @StringRes messageId: Int) {
             isErrorEnabled = true
             error = context.getString(messageId)
         }
-    }
-}
-
-/** Set text on a [TextView] from a [LocalDate] resource. */
-@BindingAdapter("android:text")
-fun setText(view: TextView, date: LocalDate?) {
-    date?.let {
-        view.text = TimeUtils.dateString(it)
-    }
-}
-
-/** Set text on [TextView] from a [LocalTime] resource */
-@BindingAdapter("android:text")
-fun setText(view: TextView, time: LocalTime?) {
-    time?.let {
-        view.text = TimeUtils.timeString(it)
     }
 }
 

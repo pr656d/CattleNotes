@@ -40,12 +40,6 @@ fun String.toMilkSmsSource(): Milk.Source.Sms =
     Converters().fromStringToMilkSource(this) as? Milk.Source.Sms
         ?: throw IllegalArgumentException("Invalid String : Can not convert $this to Milk.Source.Sms")
 
-// end region
-
-// region ZonedDateTime
-fun ZonedDateTime.toEpochMilli(): Long = TimeUtils.toEpochMilli(this)
-// end region
-
 // region Time
 fun Long.toLocalDate(): LocalDate = TimeUtils.toLocalDate(this)
 
@@ -54,6 +48,8 @@ fun Long.toLocalTime(): LocalTime = TimeUtils.toLocalTime(this)
 fun LocalDate.toLong(): Long = TimeUtils.toLong(this)
 
 fun LocalTime.toLong(): Long = TimeUtils.toLong(this)
+
+fun ZonedDateTime.toEpochMilli(): Long = TimeUtils.toEpochMilli(this)
 
 fun Long.toZonedDateTime(): ZonedDateTime = TimeUtils.toZonedDateTime(this)
 // end region
