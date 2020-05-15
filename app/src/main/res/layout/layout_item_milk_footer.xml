@@ -25,11 +25,10 @@
             style="@style/AppTheme.Subtitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="170dp"
             android:text="@{ time }"
             app:layout_constraintEnd_toStartOf="@+id/textViewSource"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="22 Jun, 2020 06:57 AM" />
@@ -37,16 +36,17 @@
         <TextView
             android:id="@+id/textViewSource"
             style="@style/AppTheme.Caption"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_normal"
+            android:textAlignment="textEnd"
             android:textAppearance="?attr/hintTextAppearance"
             app:layout_constraintBaseline_toBaselineOf="@+id/textViewTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/textViewTime"
             app:milkSourceText="@{ source }"
-            tools:text="@string/sms_source_manual" />
+            tools:text="Source SMS (BGAMAMCS)" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -60,7 +60,7 @@
 
     <!--  Item Milking  -->
     <dimen name="corner_radius_milking_content">6dp</dimen>
-    <dimen name="item_content_min_width">80dp</dimen>
-    <dimen name="item_content_min_height">80dp</dimen>
+    <dimen name="item_milk_content_min_width">80dp</dimen>
+    <dimen name="item_milk_content_min_height">80dp</dimen>
 
 </resources>

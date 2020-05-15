@@ -38,9 +38,9 @@ fun timelineItems(
 fun setTextFromMilkSource(view: TextView, source: Milk.Source) {
     val context = view.context ?: return
     view.text = when (source) {
-        Milk.Source.Manual -> context.getString(R.string.sms_source_manual)
+        Milk.Source.Manual -> context.getString(R.string.milk_source_manual)
         Milk.Source.Sms.BGAMAMCS -> context.getString(
-            R.string.sms_source_sms,
+            R.string.milk_source_sms,
             context.getString(R.string.bgamamcs)
         )
     }

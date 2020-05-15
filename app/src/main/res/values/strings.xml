@@ -217,8 +217,8 @@
     <string name="error_add_milk">Can not add milk data</string>
     <!--  Sms sources  -->
     <string name="bgamamcs">BGAMAMCS</string>
-    <string name="sms_source_manual">Source Manual</string>
-    <string name="sms_source_sms">Source SMS (%1$s)</string>
+    <string name="milk_source_manual">Source Manual</string>
+    <string name="milk_source_sms">Source SMS (%1$s)</string>
 
     <!--  Profile  -->
     <string name="farm_info">Farm info</string>
