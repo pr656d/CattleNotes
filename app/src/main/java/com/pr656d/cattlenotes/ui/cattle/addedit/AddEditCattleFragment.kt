@@ -22,6 +22,7 @@ import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
 import com.pr656d.shared.domain.result.EventObserver
+import org.threeten.bp.ZonedDateTime
 import javax.inject.Inject
 
 class AddEditCattleFragment : NavigationFragment() {
@@ -161,6 +162,20 @@ class AddEditCattleFragment : NavigationFragment() {
 fun setRequired(view: TextInputLayout, text: String?) {
     view.apply {
         if (text.isNullOrBlank()) {
+            isHelperTextEnabled = true
+            helperText = context.getString(R.string.required)
+        } else {
+            isHelperTextEnabled = false
+            helperText = null
+        }
+    }
+}
+
+/** Set helper text as [R.string.required] on [TextInputLayout] based on text provided. */
+@BindingAdapter("setRequired")
+fun setRequired(view: TextInputLayout, dateTime: ZonedDateTime?) {
+    view.apply {
+        if (dateTime == null) {
             isHelperTextEnabled = true
             helperText = context.getString(R.string.required)
         } else {

@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import com.pr656d.shared.R
 import com.pr656d.shared.data.breeding.datasource.BreedingDataSource
 import com.pr656d.shared.data.cattle.datasource.CattleDataSource
+import com.pr656d.shared.data.db.AppDatabaseDao
 import com.pr656d.shared.data.milk.datasource.MilkDataSource
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.domain.internal.DefaultScheduler
@@ -50,6 +51,7 @@ interface DbLoader {
 }
 
 class DatabaseLoader @Inject constructor(
+    private val appDatabaseDao: AppDatabaseDao,
     private val cattleDataSource: CattleDataSource,
     private val breedingDataSource: BreedingDataSource,
     private val milkDataSource: MilkDataSource,
@@ -92,33 +94,37 @@ class DatabaseLoader @Inject constructor(
         DefaultScheduler.execute {
             // Show progress in notification
             showProgressNotification(context)
-        }
 
-        /** Task 1 : Load cattle data */
-        cattleDataSource.load(onComplete = {
-            notifyTaskCompleted()
+            /** Task 1 : Load cattle data */
+            cattleDataSource.load(onComplete = {
+                notifyTaskCompleted()
+
+                /**
+                 * Task 2 : Load breeding data.
+                 * Breeding data has foreign key to cattle data so wait for cattle data to be completed.
+                 */
+                breedingDataSource.load(onComplete = {
+                    notifyTaskCompleted()
+                })
+            })
 
             /**
-             * Task 2 : Load breeding data.
-             * Breeding data has foreign key to cattle data so wait for cattle data to be completed.
+             * Task 3 : Load milk data.
              */
-            breedingDataSource.load(onComplete = {
+            milkDataSource.load(onComplete = {
                 notifyTaskCompleted()
             })
-        })
-
-        /**
-         * Task 3 : Load milk data.
-         */
-        milkDataSource.load(onComplete = {
-            notifyTaskCompleted()
-        })
+        }
     }
 
     override fun reload(onComplete: () -> Unit) {
         Timber.d("Executing DbLoader.reload()")
-
-        load(onComplete)
+        DefaultScheduler.execute {
+            // Clear local database.
+            appDatabaseDao.clear()
+            // Reload the data.
+            load(onComplete)
+        }
     }
 
     override fun stop() {

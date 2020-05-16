@@ -10,7 +10,7 @@ open class FakeMilkRepository(
     private val fakeMilkDataSourceFromSms: MilkDataSourceFromSms = FakeMilkDataSourceFromSms()
 ) : MilkRepository {
     override fun addMilk(milk: Milk) {
-        return fakeAppDatabase.milkDao().insert(milk)
+        fakeAppDatabase.milkDao().insert(milk)
     }
 
     override fun addAllMilk(milkList: List<Milk>): List<Long> {
@@ -30,11 +30,11 @@ open class FakeMilkRepository(
     }
 
     override fun deleteMilk(milk: Milk) {
-        return fakeAppDatabase.milkDao().delete(milk)
+        fakeAppDatabase.milkDao().delete(milk)
     }
 
     override fun updateMilk(milk: Milk) {
-        return fakeAppDatabase.milkDao().update(milk)
+        fakeAppDatabase.milkDao().update(milk)
     }
 
     override fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> {

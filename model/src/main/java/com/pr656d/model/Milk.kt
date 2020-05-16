@@ -28,13 +28,6 @@ data class Milk(
     val timestamp: ZonedDateTime,
 
     /**
-     * Shift in which milk was sold in a day.
-     */
-    @SerializedName("shift")
-    @ColumnInfo(name = "shift")
-    val shift: Shift,
-
-    /**
      * Holds whose milk is this (Animal type).
      */
     @SerializedName("milkOf")
@@ -60,7 +53,7 @@ data class Milk(
      */
     @SerializedName("amount")
     @ColumnInfo(name = "amount")
-    val amount: Float,
+    val amount: Float? = null,
 
     /**
      * The total quantity of milk so far.
@@ -101,28 +94,6 @@ data class Milk(
         } else {
             throw IllegalArgumentException("Milk id is blank")
         }
-
-    sealed class Shift(val displayName: String) {
-        companion object {
-            /**
-             * All instances of [Shift].
-             */
-            val INSTANCES: Map<String, Shift> by lazy {
-                mapOf(
-                    Morning.displayName to Morning,
-                    Evening.displayName to Evening
-                )
-            }
-        }
-
-        object Morning : Shift("Morning") {
-            override fun toString(): String = displayName
-        }
-
-        object Evening : Shift("Evening") {
-            override fun toString(): String = displayName
-        }
-    }
 
     sealed class MilkOf(val displayName: String) {
         abstract val firstCharacter: Char

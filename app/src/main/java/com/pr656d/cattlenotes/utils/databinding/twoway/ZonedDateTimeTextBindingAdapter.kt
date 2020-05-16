@@ -9,60 +9,60 @@ import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
-import com.pr656d.cattlenotes.utils.pickADate
+import com.pr656d.cattlenotes.utils.pickADateTime
 import com.pr656d.shared.utils.TimeUtils
-import org.threeten.bp.LocalDate
+import org.threeten.bp.ZonedDateTime
 
 /**
- * Custom two way data binding adapter for [LocalDate] used at [TextInputEditText] and
- * onClick : Opens date picker dialog by providing attribute value to true.
+ * Custom two way data binding adapter for [ZonedDateTime] used at [TextInputEditText] and
+ * onClick : Opens date time picker dialog by providing attribute value to true.
  * onLongClick : Opens dialog to remove text by providing attribute value to true.
  *
  * Example:
- *      app:dateText="@={ MutableLiveData<LocalDate>() }"
- *      app:onClickShowDatePicker="@{true}"
+ *      app:dateText="@={ MutableLiveData<ZonedDateTime>() }"
+ *      app:onClickShowDateTimePicker="@{true}"
  *      app:onLongClickRemoveText="@{true}"
  */
 
-@BindingAdapter("dateText")
-fun setDate(view: TextInputEditText, newDate: LocalDate?) {
+@BindingAdapter("dateTimeText")
+fun setDateTime(view: TextInputEditText, newDateTime: ZonedDateTime?) {
     view.text?.toString().let { text ->
         val date = if (!text.isNullOrEmpty())
-            TimeUtils.toLocalDate(text)
+            TimeUtils.toZonedDateTime(text)
         else
             null
 
-        if (date != newDate) {
+        if (date != newDateTime) {
             view.setText(
-                newDate?.let {
-                    TimeUtils.dateString(it)
+                newDateTime?.let {
+                    TimeUtils.dateTimeString(it)
                 }
             )
         }
     }
 }
 
-@InverseBindingAdapter(attribute = "dateText")
-fun getDate(view: TextInputEditText): LocalDate? {
+@InverseBindingAdapter(attribute = "dateTimeText")
+fun getDateTime(view: TextInputEditText): ZonedDateTime? {
     view.text?.toString().let {
         if (!it.isNullOrBlank())
-            return TimeUtils.toLocalDate(it)
+            return TimeUtils.toZonedDateTime(it)
     }
     return null
 }
 
 @BindingAdapter(
     value = [
-        "onClickShowDatePicker",
+        "onClickShowDateTimePicker",
         "onClickListener",
         "onLongClickRemoveText",
         "onLongClickListener",
-        "dateTextAttrChanged"
+        "dateTimeTextAttrChanged"
     ], requireAll = false
 )
-fun setDateListeners(
+fun setDateTimeListeners(
     view: TextInputEditText,
-    onClickShowDatePicker: Boolean = false,
+    onClickShowDateTimePicker: Boolean = false,
     onClickListener: View.OnClickListener?,
     onLongClickRemoveText: Boolean = false,
     onLongClickListener: View.OnLongClickListener?,
@@ -74,7 +74,7 @@ fun setDateListeners(
         view.setOnClickListener(onClickListener)
         view.setOnLongClickListener(onLongClickListener)
     } else {
-        if (onClickShowDatePicker)
+        if (onClickShowDateTimePicker)
             view.setOnClickListener { v ->
                 onClickListener?.onClick(v)
 
@@ -82,15 +82,16 @@ fun setDateListeners(
                 hideKeyboard(v)
                 // Take view in focus.
                 view.focus()
+
                 // Show dialog.
-                v.pickADate(
-                    onDateCancelled = {
+                v.pickADateTime(
+                    onDateTimeCancelled = {
                         view.isFocusableInTouchMode = false
                     },
-                    onDateSet = { _, dd, mm, yyyy ->
-                        // `Month + 1` as it's starting from 0 index and LocalDate index starts from 1.
-                        TimeUtils.toLocalDate(dd, mm + 1, yyyy).let {
-                            view.setText(TimeUtils.dateString(it))
+                    onDateTimeSet = { _, dd, mm, yyyy, hour, minute ->
+                        // `Month + 1` as it's starting from 0 index and ZonedDateTime index starts from 1.
+                        TimeUtils.toZonedDateTime(dd, mm + 1, yyyy, hour, minute).let {
+                            view.setText(TimeUtils.dateTimeString(it))
                             view.isFocusableInTouchMode = false
                             attrChange.onChange()
                         }
@@ -100,6 +101,7 @@ fun setDateListeners(
 
         if (onLongClickRemoveText)
             view.setOnLongClickListener { v ->
+
                 // Hide keyboard if visible.
                 hideKeyboard(v)
                 // Take view in focus.

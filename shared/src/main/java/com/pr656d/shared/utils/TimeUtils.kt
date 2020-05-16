@@ -26,6 +26,17 @@ object TimeUtils {
         LocalDate.parse(dateString, DateTimeFormatter.ofPattern(pattern))
 
     /**
+     * Return [ZonedDateTime] from string.
+     * @param dateString should be in dd MMM, yyyy h:mm a format.
+     */
+    fun toZonedDateTime(
+        dateString: String,
+        pattern: String = "dd MMM, yyyy h:mm a"
+    ): ZonedDateTime = toZonedDateTime(
+        LocalDateTime.parse(dateString, DateTimeFormatter.ofPattern(pattern))
+    )
+
+    /**
      * Return [ZonedDateTime] of [dayOfMonth], [month] and [year].
      */
     fun toZonedDateTime(
@@ -52,6 +63,14 @@ object TimeUtils {
      */
     fun toZonedDateTime(millis: Long, zoneId: ZoneId = ZoneId.systemDefault()): ZonedDateTime =
         ZonedDateTime.ofInstant(Instant.ofEpochMilli(millis), zoneId)
+
+    /**
+     * Returns [ZonedDateTime] from [LocalDateTime].
+     */
+    fun toZonedDateTime(
+        localDateTime: LocalDateTime,
+        zoneId: ZoneId = ZoneId.systemDefault()
+    ): ZonedDateTime = ZonedDateTime.of(localDateTime, zoneId)
 
     /**
      * Return [LocalTime] of [nanoOfDay].
@@ -159,5 +178,18 @@ object TimeUtils {
     /** Return a string to use for nearest date to given time */
     fun getLabelForMilkingHeader(context: Context, zonedDateTime: ZonedDateTime): String {
         return context.getString(R.string.day_itself, dateString(zonedDateTime, "MMM d, yyyy"))
+    }
+
+    /** Return a string part of day based on time */
+    fun getDayPartingString(context: Context, time: ZonedDateTime): String =
+        getDayPartingString(context, time.toLocalTime())
+
+    /** Return a string part of day based on time */
+    fun getDayPartingString(context: Context, time: LocalTime): String = when(time.hour) {
+        in 0..11 -> context.getString(R.string.morning)
+        in 12..15 -> context.getString(R.string.afternoon)
+        in 16..20 -> context.getString(R.string.evening)
+        in 21..23 -> context.getString(R.string.night)
+        else -> throw IllegalArgumentException("Time doesn't match any of the part")
     }
 }

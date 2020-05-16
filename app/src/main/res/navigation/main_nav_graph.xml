@@ -178,7 +178,7 @@
 
     <fragment
         android:id="@+id/milkingScreen"
-        android:name="com.pr656d.cattlenotes.ui.milking.MilkingFragment"
+        android:name="com.pr656d.cattlenotes.ui.milking.list.MilkingFragment"
         android:label="@string/milking"
         tools:layout="@layout/fragment_milking" />
 

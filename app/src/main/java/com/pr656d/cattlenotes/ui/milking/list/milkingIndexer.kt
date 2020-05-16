@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.milking
+package com.pr656d.cattlenotes.ui.milking.list
 
 import com.pr656d.model.Milk
 import org.threeten.bp.ZonedDateTime

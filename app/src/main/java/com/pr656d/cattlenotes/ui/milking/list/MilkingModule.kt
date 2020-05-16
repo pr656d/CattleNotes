@@ -1,6 +1,8 @@
-package com.pr656d.cattlenotes.ui.milking
+package com.pr656d.cattlenotes.ui.milking.list
 
 import androidx.lifecycle.ViewModel
+import com.pr656d.cattlenotes.ui.milking.add.AddEditMilkModule
+import com.pr656d.cattlenotes.ui.milking.sms.SelectMilkSmsSenderDialogFragment
 import com.pr656d.shared.di.FragmentScoped
 import com.pr656d.shared.di.ViewModelKey
 import dagger.Binds
@@ -20,7 +22,7 @@ internal abstract class MilkingModule {
      * Generates an [AndroidInjector] for the [MilkingFragment].
      */
     @FragmentScoped
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [AddEditMilkModule::class])
     internal abstract fun contributeMilkingFragment(): MilkingFragment
 
     /**

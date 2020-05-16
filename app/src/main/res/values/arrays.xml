@@ -94,5 +94,10 @@
         <item>@string/milking</item>
         <item>@string/dry</item>
     </string-array>
+
+    <string-array name="list_milk_of">
+        <item>@string/cow</item>
+        <item>@string/buffalo</item>
+    </string-array>
     
 </resources>

@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.milking
+package com.pr656d.cattlenotes.ui.milking.list
 
 import androidx.databinding.ViewDataBinding
 import androidx.databinding.library.baseAdapters.BR
@@ -21,10 +21,6 @@ sealed class MilkingViewHolder<T: ViewDataBinding> (
 
     fun onDeleteClick(milk: Milk) {
         listener.delete(milk)
-    }
-
-    fun onEditClick(milk: Milk) {
-        listener.edit(milk)
     }
 
     class MilkSourceManualViewHolder (

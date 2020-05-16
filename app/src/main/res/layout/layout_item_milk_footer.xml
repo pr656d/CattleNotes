@@ -22,16 +22,16 @@
 
         <TextView
             android:id="@+id/textViewTime"
-            style="@style/AppTheme.Subtitle2"
+            style="@style/AppTheme.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{ time }"
+            app:milkTimeText="@{ time }"
             app:layout_constraintEnd_toStartOf="@+id/textViewSource"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="22 Jun, 2020 06:57 AM" />
+            tools:text="Morning 06:57AM" />
 
         <TextView
             android:id="@+id/textViewSource"

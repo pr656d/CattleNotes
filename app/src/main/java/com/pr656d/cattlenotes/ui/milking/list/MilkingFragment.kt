@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.milking
+package com.pr656d.cattlenotes.ui.milking.list
 
 import android.Manifest
 import android.content.Intent
@@ -16,6 +16,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentMilkingBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
+import com.pr656d.cattlenotes.ui.milking.add.AddMilkDialogFragment
+import com.pr656d.cattlenotes.ui.milking.sms.SelectMilkSmsSenderDialogFragment
 import com.pr656d.cattlenotes.utils.isPermissionGranted
 import com.pr656d.shared.domain.result.EventObserver
 import javax.inject.Inject
@@ -100,7 +102,7 @@ class MilkingFragment : NavigationFragment() {
                 .show(childFragmentManager, null)
         })
 
-        model.saveNewMilkDialog.observe(viewLifecycleOwner, EventObserver {
+        model.saveNewMilkConfirmationDialog.observe(viewLifecycleOwner, EventObserver {
             val dialog = MaterialAlertDialogBuilder(requireContext())
 
             if (it.isEmpty()) {
@@ -117,6 +119,10 @@ class MilkingFragment : NavigationFragment() {
             }
 
             dialog.create().show()
+        })
+
+        model.navigateToAddMilk.observe(viewLifecycleOwner, EventObserver {
+            AddMilkDialogFragment().show(childFragmentManager, null)
         })
     }
 
@@ -149,7 +155,9 @@ class MilkingFragment : NavigationFragment() {
             if (it.isEmpty()) return
         }.toTypedArray()
 
-        requestPermissions(pendingPermissions, PERMISSION_REQUEST_AT_MILKING)
+        requestPermissions(pendingPermissions,
+            PERMISSION_REQUEST_AT_MILKING
+        )
     }
 
     /**
@@ -199,7 +207,7 @@ class MilkingFragment : NavigationFragment() {
              */
             val isGranted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
 
-            model.setPermissionsGranted(isGranted)
+            // Do not update permission from here. We update permission status onResume().
 
             /**
              * when [shouldShowPermissionRationale] returns

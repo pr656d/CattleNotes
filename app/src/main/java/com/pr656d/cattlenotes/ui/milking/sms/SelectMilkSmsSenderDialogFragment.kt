@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.milking
+package com.pr656d.cattlenotes.ui.milking.sms
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.ui.milking.list.MilkingViewModel
 import com.pr656d.cattlenotes.utils.parentViewModelProvider
 import com.pr656d.model.Milk
 import dagger.android.support.DaggerAppCompatDialogFragment
@@ -45,7 +46,10 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
         viewModel.availableMilkSmsSources.observe(this, Observer { sources ->
             listAdapter.clear()
             listAdapter.addAll(sources.map { source ->
-                SmsSourceHolder(source, getTitleForMilkSmsSource(source))
+                SmsSourceHolder(
+                    source,
+                    getTitleForMilkSmsSource(source)
+                )
             })
         })
 
@@ -64,7 +68,8 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
     }
 
     companion object {
-        fun newInstance() = SelectMilkSmsSenderDialogFragment()
+        fun newInstance() =
+            SelectMilkSmsSenderDialogFragment()
     }
 
     private data class SmsSourceHolder(val smsSource: Milk.Source.Sms, val title: String) {

@@ -16,17 +16,6 @@ fun String.toType(): AnimalType = Converters().fromStringToAnimalType(this)
 
 fun String.toGroup(): Cattle.Group? = Converters().fromStringToGroup(this)
 
-/**
- * Return the [Milk.Shift] for [Char]. Assuming [Char] matches to only one key's first letter of
- * [Milk.Shift.INSTANCES].
- */
-fun Char.toMilkShift(): Milk.Shift = Milk.Shift.INSTANCES.filterKeys {
-    // Compare with first letter of key.
-    it.first() == this
-}.values.first()    // Return the first match.
-
-fun String.toMilkShift(): Milk.Shift = Converters().fromStringToShift(this)
-
 fun Char.toMilkOf(): Milk.MilkOf = Milk.MilkOf.INSTANCES.filterKeys {
     // Compare with first letter of key.
     it.first() == this

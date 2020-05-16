@@ -5,7 +5,6 @@ import com.pr656d.model.Milk.Source.Sms.BGAMAMCS
 import com.pr656d.shared.utils.FirestoreUtil
 import com.pr656d.shared.utils.TimeUtils
 import com.pr656d.shared.utils.toMilkOf
-import com.pr656d.shared.utils.toMilkShift
 import org.threeten.bp.ZonedDateTime
 
 /**
@@ -31,9 +30,9 @@ object BGAMAMCSSmsParser : MilkSmsParser {
         // Divide message by lines.
         val parts = message.lines()
 
-        val (dairyCode, customerId) = getDairyCodeAndCustomerId(parts[0])
+        // val (dairyCode, customerId) = getDairyCodeAndCustomerId(parts[0])
         val timeStamp = getZonedDateTime(parts[1])
-        val shift = getShift(parts[2])
+        // val shift = getShift(parts[2])
         val milkOf = getMilkOf(parts[3])
         val qty = getQuantity(parts[4])
         val fat = getFat(parts[5])
@@ -42,7 +41,7 @@ object BGAMAMCSSmsParser : MilkSmsParser {
         val tAmt = getTotalAmount(parts[8])
         val link = getLink(parts[9])
 
-        return Milk(SOURCE, timeStamp, shift, milkOf, qty, fat, amt, tQty, tAmt, link).apply {
+        return Milk(SOURCE, timeStamp, milkOf, qty, fat, amt, tQty, tAmt, link).apply {
             // This milk is new, Assign new id.
             id = FirestoreUtil.autoId()
         }
@@ -79,11 +78,11 @@ object BGAMAMCSSmsParser : MilkSmsParser {
      * Parses `Shift-M or E` returns char.
      * Make it open for testing.
      */
-    fun getShift(str: String): Milk.Shift {
+    /*fun getShift(str: String): Milk.Shift {
         return SHIFT_REGEX.find(str)!!
             .destructured
             .let { (value) -> value.first().toMilkShift() }
-    }
+    }*/
 
     /**
      * Parses `Milk-C or B` returns char.

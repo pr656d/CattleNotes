@@ -49,13 +49,6 @@ class Converters {
         ?: throw IllegalArgumentException("Invalid String: Can not convert $value to Milk.MilkOf")
 
     @TypeConverter
-    fun fromShiftToString(value: Milk.Shift): String = value.displayName
-
-    @TypeConverter
-    fun fromStringToShift(value: String): Milk.Shift = Milk.Shift.INSTANCES[value]
-        ?: throw IllegalArgumentException("Invalid String: Can not convert $value to Milk.Shift")
-
-    @TypeConverter
     fun fromMilkSourceToString(value: Milk.Source): String = value.SENDER_ADDRESS
 
     @TypeConverter

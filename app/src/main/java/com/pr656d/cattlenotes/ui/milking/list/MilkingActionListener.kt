@@ -1,13 +1,8 @@
-package com.pr656d.cattlenotes.ui.milking
+package com.pr656d.cattlenotes.ui.milking.list
 
 import com.pr656d.model.Milk
 
 interface MilkingActionListener {
-    /**
-     * Edit this [milk].
-     */
-    fun edit(milk: Milk)
-
     /**
      * Delete this [milk].
      */

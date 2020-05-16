@@ -9,8 +9,8 @@ import com.pr656d.shared.data.db.MilkDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.utils.TimeUtils
+import com.pr656d.shared.utils.toEpochMilli
 import com.pr656d.shared.utils.toMilkOf
-import com.pr656d.shared.utils.toMilkShift
 import com.pr656d.shared.utils.toMilkSource
 import timber.log.Timber
 import javax.inject.Inject
@@ -157,14 +157,14 @@ class FirestoreMilkDataSource @Inject constructor(
     }
 
     private fun Milk.asHashMap(): HashMap<String, Any?> = hashMapOf<String, Any?>().apply {
-        put(KEY_TIMESTAMP, timestamp)
-        put(KEY_SHIFT, shift.displayName)
+        put(KEY_SOURCE, source.SENDER_ADDRESS)
+        put(KEY_TIMESTAMP, timestamp.toEpochMilli())
         put(KEY_MILK_OF, milkOf.displayName)
-        put(KEY_QUANTITY, quantity)
-        put(KEY_FAT, fat)
-        put(KEY_AMOUNT, amount)
-        put(KEY_TOTAL_QUANTITY, totalQuantity)
-        put(KEY_TOTAL_AMOUNT, totalAmount)
+        put(KEY_QUANTITY, quantity.toString())
+        put(KEY_FAT, fat.toString())
+        put(KEY_AMOUNT, amount?.toString())
+        put(KEY_TOTAL_QUANTITY, totalQuantity?.toString())
+        put(KEY_TOTAL_AMOUNT, totalAmount?.toString())
         put(KEY_LINK, link)
     }
 
@@ -175,15 +175,14 @@ class FirestoreMilkDataSource @Inject constructor(
                 timestamp = (get(KEY_TIMESTAMP) as Long).let {
                     TimeUtils.toZonedDateTime(it)
                 },
-                shift = (get(KEY_SHIFT) as String).toMilkShift(),
                 milkOf = (get(KEY_MILK_OF) as String).toMilkOf(),
-                quantity = get(KEY_QUANTITY) as Float,
-                fat = get(KEY_FAT) as Float,
-                amount = get(KEY_AMOUNT) as Float,
-                totalQuantity = get(KEY_TOTAL_QUANTITY) as Float,
-                totalAmount = get(KEY_TOTAL_AMOUNT) as Float,
-                link = get(KEY_LINK) as String
-            )
+                quantity = (get(KEY_QUANTITY) as String).toFloat(),
+                fat = (get(KEY_FAT) as String).toFloat(),
+                amount = (get(KEY_AMOUNT) as? String)?.toFloat(),
+                totalQuantity = (get(KEY_TOTAL_QUANTITY) as? String)?.toFloat(),
+                totalAmount = (get(KEY_TOTAL_AMOUNT) as? String)?.toFloat(),
+                link = get(KEY_LINK) as? String
+            ).apply { id = this@run.id }
         }
     }
 

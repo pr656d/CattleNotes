@@ -1,8 +1,11 @@
 package com.pr656d.cattlenotes.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Build
@@ -12,6 +15,7 @@ import android.text.TextPaint
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
+import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -22,7 +26,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
 import com.pr656d.model.Theme
-import java.util.*
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
+import timber.log.Timber
+
+// region context
+fun Context.activity(): Activity? = when (this) {
+    is Activity -> this
+    else -> (this as? ContextWrapper)?.baseContext?.activity()
+}
+// end region
 
 // region TextInputEditText
 
@@ -35,20 +48,31 @@ fun TextInputEditText.focus() {
 
 // end region
 
-// region Date
+// region Date picker
 fun View.pickADate(
     onDateCancelled: () -> Unit = {},
     onDateSet: (view: DatePicker, dd: Int, mm: Int, yyyy: Int) -> Unit
 ) {
+    /**
+     * Layout brakes if it's called in parent context of dialog.
+     * Always use Activity context to not break UI of picker.
+     */
+    val context = context.activity() ?: let {
+        Timber.d("Activity not found")
+        return
+    }
+
+    val currentDate = LocalDate.now()
+
     // Create date picker dialog.
     val dialog = DatePickerDialog(
         context, R.style.DatePicker,
         DatePickerDialog.OnDateSetListener { v, yyyy, mm, dd ->
             onDateSet(v, dd, mm, yyyy)
         },
-        Calendar.getInstance().get(Calendar.YEAR),
-        Calendar.getInstance().get(Calendar.MONTH),
-        Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        currentDate.year,
+        currentDate.monthValue,
+        currentDate.dayOfMonth
     )
 
     // Cancel button click handler.
@@ -67,6 +91,74 @@ fun View.pickADate(
     dialog.show()   // Show the dialog.
 }
 // end region
+
+// region time picker
+fun View.pickATime(
+    onTimeCancelled: () -> Unit = {},
+    onTimeSet: (view: TimePicker, hour: Int, minute: Int) -> Unit
+) {
+    /**
+     * Layout brakes if it's called in parent context of dialog.
+     * Always use Activity context to not break UI of picker.
+     */
+    val context = context.activity() ?: let {
+        Timber.d("Activity not found")
+        return
+    }
+
+    val currentTime = LocalTime.now()
+
+    // Create time picker dialog.
+    val dialog = TimePickerDialog(
+        context, R.style.TimePicker,
+        TimePickerDialog.OnTimeSetListener { v, hourOfDay, minute ->
+            onTimeSet(v, hourOfDay, minute)
+        },
+        currentTime.hour,
+        currentTime.minute,
+        false
+    )
+
+    // Cancel button click handler.
+    dialog.setButton(
+        DialogInterface.BUTTON_NEGATIVE,
+        context.getString(R.string.cancel)
+    ) { _, which ->
+        // Reset focus to false.
+        if (which == DialogInterface.BUTTON_NEGATIVE)
+            onTimeCancelled()
+    }
+
+    dialog.show()   // Show the dialog.
+}
+// end region
+
+// region date time
+fun View.pickADateTime(
+    onDateTimeCancelled: () -> Unit = {},
+    onDateTimeSet: (
+        view: View,
+        dd: Int, mm: Int, yyyy: Int,
+        hour: Int, minute: Int
+    ) -> Unit
+) {
+    pickADate(
+        onDateSet = { _, dd, mm, yyyy ->
+            pickATime(
+                onTimeSet = { _, hour, minute ->
+                    onDateTimeSet(this, dd, mm, yyyy, hour, minute)
+                },
+                onTimeCancelled = {
+                    onDateTimeCancelled()
+                }
+            )
+        },
+        onDateCancelled = {
+            onDateTimeCancelled()
+        }
+    )
+}
+// region end
 
 // region Soft input
 

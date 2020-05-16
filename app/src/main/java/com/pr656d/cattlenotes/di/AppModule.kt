@@ -117,6 +117,7 @@ class AppModule {
     @Singleton
     @Provides
     fun provideDbUpdater(
+        appDatabaseDao: AppDatabaseDao,
         cattleDataSource: CattleDataSource,
         breedingDataSource: BreedingDataSource,
         milkDataSource: MilkDataSource,
@@ -124,6 +125,7 @@ class AppModule {
         preferenceStorageRepository: PreferenceStorageRepository
     ): DbLoader {
         return DatabaseLoader(
+            appDatabaseDao,
             cattleDataSource,
             breedingDataSource,
             milkDataSource,

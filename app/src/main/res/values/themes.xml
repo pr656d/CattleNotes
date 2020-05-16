@@ -67,6 +67,8 @@
     </style>
 
     <style name="DatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <!--<item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>-->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryColor</item>
@@ -76,17 +78,6 @@
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/primaryColor</item>
-    </style>
-
-    <style name="AppTheme.FullScreenDialog" parent="Theme.MaterialComponents.DayNight">
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="background">?attr/colorSurface</item>g
-        <!--  Window decor  -->
-        <item name="android:windowLightStatusBar" tools:targetApi="m">@bool/use_light_status</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
     <style name="AppTheme.DialogAnim">

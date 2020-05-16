@@ -42,7 +42,7 @@ class BGAMAMCSSmsParserTest {
         assertThat(actualDateTime, isEqualTo(BGAMAMCSSmsParser.getZonedDateTime(str)))
     }
 
-    @Test
+    /*@Test
     fun getShiftTest() {
         val shiftM = Milk.Shift.Morning    // Valid
         val shiftE = Milk.Shift.Evening    // Valid
@@ -52,7 +52,7 @@ class BGAMAMCSSmsParserTest {
 
         val strE = "Shift-E"
         assertThat(shiftE, isEqualTo(BGAMAMCSSmsParser.getShift(strE)))
-    }
+    }*/
 
     @Test
     fun getMilkOfTest() {

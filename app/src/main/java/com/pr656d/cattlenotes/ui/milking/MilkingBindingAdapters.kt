@@ -5,8 +5,13 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pr656d.cattlenotes.R
+import com.pr656d.cattlenotes.ui.milking.list.MilkingAdapter
+import com.pr656d.cattlenotes.ui.milking.list.MilkingHeadersDecoration
+import com.pr656d.cattlenotes.ui.milking.list.MilkingViewModel
 import com.pr656d.cattlenotes.utils.clearDecorations
 import com.pr656d.model.Milk
+import com.pr656d.shared.utils.TimeUtils
+import org.threeten.bp.ZonedDateTime
 
 @BindingAdapter(value = ["milkingItems", "milkingViewModel"], requireAll = true)
 fun timelineItems(
@@ -15,7 +20,10 @@ fun timelineItems(
     milkingViewModel: MilkingViewModel
 ) {
     if (recyclerView.adapter == null) {
-        recyclerView.adapter = MilkingAdapter(milkingViewModel)
+        recyclerView.adapter =
+            MilkingAdapter(
+                milkingViewModel
+            )
     }
 
     if (list.isNullOrEmpty()) {
@@ -29,7 +37,10 @@ fun timelineItems(
     recyclerView.clearDecorations()
     if (!list.isNullOrEmpty()) {
         recyclerView.addItemDecoration(
-            MilkingHeadersDecoration(recyclerView.context, list)
+            MilkingHeadersDecoration(
+                recyclerView.context,
+                list
+            )
         )
     }
 }
@@ -43,5 +54,15 @@ fun setTextFromMilkSource(view: TextView, source: Milk.Source) {
             R.string.milk_source_sms,
             context.getString(R.string.bgamamcs)
         )
+    }
+}
+
+@BindingAdapter("milkTimeText")
+fun setMilkTimeText(view: TextView, time: ZonedDateTime) {
+    val context = view.context ?: return
+    view.text = buildString {
+        append(TimeUtils.getDayPartingString(context, time))
+        append(" ")
+        append(TimeUtils.timeString(time))
     }
 }

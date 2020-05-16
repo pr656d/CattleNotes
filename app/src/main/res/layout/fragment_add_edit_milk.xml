@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.text.InputType" />
+
+        <variable
+            name="viewModel"
+            type="com.pr656d.cattlenotes.ui.milking.add.AddMilkViewModel" />
+
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="?attr/dialogPreferredPadding">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutDate"
+                style="@style/Widget.CattleNOTES.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/date_and_time"
+                app:errorText="@{ viewModel.dateTimeErrorMessage }"
+                app:startIconDrawable="@drawable/ic_date"
+                app:setRequired="@{ viewModel.dateTime }">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextDate"
+                    style="@style/Widget.CattleNOTES.TextInputDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="@{ InputType.TYPE_NULL }"
+                    app:dateTimeText="@={ viewModel.dateTime }"
+                    app:onClickShowDateTimePicker="@{true}"
+                    app:onLongClickRemoveText="@{true}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutMilkOf"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:hint="@string/milk_of"
+                app:errorText="@{ viewModel.milkOfErrorMessage }"
+                app:setRequired="@{ viewModel.milkOf }">
+
+                <AutoCompleteTextView
+                    android:id="@+id/exposedDropDownMilkOf"
+                    style="@style/Widget.CattleNOTES.AutoCompleteTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dropDownList="@{ viewModel.milkOfList }"
+                    app:dropDownText="@={ viewModel.milkOf }"
+                    tools:ignore="LabelFor" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutQuantity"
+                style="@style/Widget.CattleNOTES.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                app:errorText="@{ viewModel.quantityErrorMessage }"
+                android:hint="@{@string/quantity + ' ' + `(` + @string/liter + `)` }"
+                app:setRequired="@{ viewModel.quantity }"
+                tools:hint="Quantity (Liter)">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextQuantity"
+                    style="@style/Widget.CattleNOTES.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@={ viewModel.quantity }" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutFat"
+                style="@style/Widget.CattleNOTES.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:hint="@string/fat"
+                app:errorText="@{ viewModel.fatErrorMessage }"
+                app:setRequired="@{ viewModel.fat }">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextFat"
+                    style="@style/Widget.CattleNOTES.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@={ viewModel.fat }" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layoutAmount"
+                style="@style/Widget.CattleNOTES.TextInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_small"
+                android:hint="@{@string/amount + ' ' + `(` + @string/rupee + `)` }"
+                tools:hint="Amount (\u20B9)">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editTextAmount"
+                    style="@style/Widget.CattleNOTES.TextInputEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:text="@={ viewModel.amount }" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</layout>

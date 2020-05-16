@@ -326,28 +326,28 @@ object TestData {
     val milk1 = Milk(
         Milk.Source.Sms.BGAMAMCS,
         ZonedDateTime.of(2020, 1, 16, 6, 41, 0, 0, ZoneId.systemDefault()),
-        Milk.Shift.Morning, Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
+        Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
         391.7f, 11282.60f, "https://goo.gl/UY1HAC"
     )
 
     val milk2 = Milk(
         Milk.Source.Sms.BGAMAMCS,
         ZonedDateTime.of(2020, 1, 16, 18, 32, 0, 0, ZoneId.systemDefault()),
-        Milk.Shift.Morning, Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
+        Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
         391.7f, 11282.60f, "https://goo.gl/UY1HAC"
     )
 
     val milk3 = Milk(
         Milk.Source.Sms.BGAMAMCS,
         ZonedDateTime.of(2020, 1, 17, 6, 47, 0, 0, ZoneId.systemDefault()),
-        Milk.Shift.Morning, Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
+        Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
         391.7f, 11282.60f, "https://goo.gl/UY1HAC"
     )
 
     val milk4 = Milk(
         Milk.Source.Sms.BGAMAMCS,
         ZonedDateTime.of(2020, 1, 17, 19, 15, 0, 0, ZoneId.systemDefault()),
-        Milk.Shift.Morning, Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
+        Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
         391.7f, 11282.60f, "https://goo.gl/UY1HAC"
     )
 

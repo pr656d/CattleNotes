@@ -1,4 +1,4 @@
-package com.pr656d.cattlenotes.ui.milking
+package com.pr656d.cattlenotes.ui.milking.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,13 +6,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.pr656d.cattlenotes.databinding.ItemMilkSourceManualBinding
 import com.pr656d.cattlenotes.databinding.ItemMilkSourceSmsBgamamcsBinding
-import com.pr656d.cattlenotes.ui.milking.MilkingViewHolder.MilkSourceManualViewHolder
-import com.pr656d.cattlenotes.ui.milking.MilkingViewHolder.MilkSourceSmsBgamamcsViewHolder
+import com.pr656d.cattlenotes.ui.milking.list.MilkingViewHolder.MilkSourceManualViewHolder
+import com.pr656d.cattlenotes.ui.milking.list.MilkingViewHolder.MilkSourceSmsBgamamcsViewHolder
 import com.pr656d.model.Milk
 
 class MilkingAdapter(
     private val milkingViewModel: MilkingViewModel
-) : ListAdapter<Milk, MilkingViewHolder<*>>(MilkDiff) {
+) : ListAdapter<Milk, MilkingViewHolder<*>>(
+    MilkDiff
+) {
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): MilkingViewHolder<*> =
         when(getItem(position).source) {
