@@ -13,7 +13,6 @@
 
     </data>
 
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -35,154 +34,177 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/settings_scroll"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:scrollbarStyle="insideOverlay"
-            android:scrollbars="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
-                android:id="@+id/layoutSettings"
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/settings_scroll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/padding_normal"
-                android:paddingBottom="@dimen/padding_normal">
-
-                <TextView
-                    style="@style/Widget.CattleNOTES.Settings.Button"
-                    android:id="@+id/textViewChooseTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:onClick="@{ () -> viewModel.onThemeSettingClicked() }"
-                    android:text="@string/theme_title"/>
+                android:clipToPadding="false"
+                android:scrollbarStyle="insideOverlay"
+                android:scrollbars="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
-                    style="@style/Widget.CattleNOTES.Settings.Button"
+                    android:id="@+id/layoutSettings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:baselineAligned="true"
-                    android:onClick="@{ () -> viewModel.onBreedingReminderClicked() }">
+                    android:orientation="vertical"
+                    android:paddingTop="@dimen/padding_normal"
+                    android:paddingBottom="@dimen/padding_normal">
 
                     <TextView
-                        style="@style/Widget.CattleNOTES.Settings.ButtonText"
-                        android:id="@+id/textViewChooseBreedingReminderTime"
-                        android:layout_width="0dp"
+                        android:id="@+id/textViewChooseTheme"
+                        style="@style/Widget.CattleNOTES.Settings.Button"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
-                        android:text="@string/reminder_notification_time_title" />
+                        android:focusable="true"
+                        android:onClick="@{ () -> viewModel.onThemeSettingClicked() }"
+                        android:text="@string/theme_title" />
+
+                    <LinearLayout
+                        style="@style/Widget.CattleNOTES.Settings.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="true"
+                        android:onClick="@{ () -> viewModel.onBreedingReminderClicked() }"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textViewChooseBreedingReminderTime"
+                            style="@style/Widget.CattleNOTES.Settings.ButtonText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="3"
+                            android:text="@string/reminder_notification_time_title" />
+
+                        <TextView
+                            android:id="@+id/textViewBreedingReminderTime"
+                            style="@style/Widget.CattleNOTES.Settings.ButtonText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLength="8"
+                            android:text="@{viewModel.preferredTimeOfBreedingReminder}"
+                            android:textAlignment="textEnd"
+                            tools:text="09:00 AM" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        style="@style/Widget.CattleNOTES.Settings.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:baselineAligned="true"
+                        android:onClick="@{ () -> viewModel.onMilkSmsSenderClicked() }"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textViewChooseSmsSender"
+                            style="@style/Widget.CattleNOTES.Settings.ButtonText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="@string/milk_sms_sender_title" />
+
+                        <TextView
+                            android:id="@+id/textViewSmsSender"
+                            style="@style/Widget.CattleNOTES.Settings.ButtonText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:maxLength="10"
+                            android:text="@{ viewModel.milkSmsSender }"
+                            android:textAlignment="textEnd"
+                            tools:text="BGAMAMCS" />
+                    </LinearLayout>
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        style="@style/Widget.CattleNOTES.Settings.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:checked="@{ viewModel.automaticMilkingCollection }"
+                        android:onCheckedChanged="@{(view, checked) -> viewModel.toggleAutomaticMilkCollection(checked)}"
+                        android:text="@string/automatic_milking_collection" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="?android:dividerHorizontal" />
 
                     <TextView
-                        style="@style/Widget.CattleNOTES.Settings.ButtonText"
-                        android:id="@+id/textViewBreedingReminderTime"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textAlignment="textEnd"
-                        android:maxLength="8"
-                        android:text="@{viewModel.preferredTimeOfBreedingReminder}"
-                        tools:text="09:00 AM"/>
+                        android:layout_marginLeft="@dimen/margin_normal"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:layout_marginRight="@dimen/margin_normal"
+                        android:layout_marginBottom="@dimen/margin_normal"
+                        android:text="@string/about"
+                        android:textAppearance="@style/TextAppearance.CattleNOTES.Overline" />
+
+                    <TextView
+                        android:id="@+id/see_credits"
+                        style="@style/Widget.CattleNOTES.About.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{ () -> viewModel.creditsClicked() }"
+                        android:text="@string/see_credits" />
+
+                    <TextView
+                        android:id="@+id/open_source_license"
+                        style="@style/Widget.CattleNOTES.About.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{ () -> viewModel.openSourceLicensesClicked() }"
+                        android:text="@string/open_source_licences" />
+
+                    <TextView
+                        android:id="@+id/version_build_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start|center_vertical"
+                        android:minHeight="48dp"
+                        android:padding="@dimen/margin_normal"
+                        android:textAppearance="?textAppearanceBody2"
+                        app:versionName="@{BuildConfig.VERSION_NAME}"
+                        tools:text="Version 1.0.0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:drawableStart="@drawable/ic_logo_components"
+                        android:drawablePadding="@dimen/margin_small"
+                        android:gravity="center"
+                        android:paddingStart="@dimen/margin_normal"
+                        android:paddingEnd="@dimen/margin_normal"
+                        android:text="@string/built_with_material_components"
+                        android:textAppearance="?attr/textAppearanceBody1" />
+
                 </LinearLayout>
 
-                <LinearLayout
-                    style="@style/Widget.CattleNOTES.Settings.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:baselineAligned="true"
-                    android:onClick="@{ () -> viewModel.onMilkSmsSenderClicked() }">
+            </androidx.core.widget.NestedScrollView>
 
-                    <TextView
-                        style="@style/Widget.CattleNOTES.Settings.ButtonText"
-                        android:id="@+id/textViewChooseSmsSender"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="@string/milk_sms_sender_title" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_large"
+                android:text="@string/made_in_india"
+                android:textAppearance="@style/AppTheme.Headline6"
+                android:gravity="center"
+                android:drawableStart="@drawable/ic_flag_india"
+                android:drawablePadding="@dimen/padding_normal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-                    <TextView
-                        style="@style/Widget.CattleNOTES.Settings.ButtonText"
-                        android:id="@+id/textViewSmsSender"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textAlignment="textEnd"
-                        android:maxLength="10"
-                        android:text="@{ viewModel.milkSmsSender }"
-                        tools:text="BGAMAMCS"/>
-                </LinearLayout>
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    style="@style/Widget.CattleNOTES.Settings.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/automatic_milking_collection"
-                    android:checked="@{ viewModel.automaticMilkingCollection }"
-                    android:onCheckedChanged="@{(view, checked) -> viewModel.toggleAutomaticMilkCollection(checked)}"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="?android:dividerHorizontal" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_normal"
-                    android:layout_marginLeft="@dimen/margin_normal"
-                    android:layout_marginRight="@dimen/margin_normal"
-                    android:layout_marginTop="@dimen/margin_large"
-                    android:textAppearance="@style/TextAppearance.CattleNOTES.Overline"
-                    android:text="@string/about" />
-
-                <TextView
-                    android:id="@+id/see_credits"
-                    style="@style/Widget.CattleNOTES.About.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/see_credits"
-                    android:onClick="@{ () -> viewModel.creditsClicked() }"/>
-
-                <TextView
-                    android:id="@+id/open_source_license"
-                    style="@style/Widget.CattleNOTES.About.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/open_source_licences"
-                    android:onClick="@{ () -> viewModel.openSourceLicensesClicked() }"/>
-
-                <TextView
-                    android:id="@+id/version_build_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="start|center_vertical"
-                    android:minHeight="48dp"
-                    android:padding="@dimen/margin_normal"
-                    android:textAppearance="?textAppearanceBody2"
-                    app:versionName="@{BuildConfig.VERSION_NAME}"
-                    tools:text="Version 1.0.0"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    android:drawablePadding="@dimen/margin_small"
-                    android:drawableStart="@drawable/ic_logo_components"
-                    android:gravity="center"
-                    android:paddingEnd="@dimen/margin_normal"
-                    android:paddingStart="@dimen/margin_normal"
-                    android:text="@string/built_with_material_components"
-                    android:textAppearance="?attr/textAppearanceBody1" />
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
