@@ -57,10 +57,13 @@ class MilkingViewModelTest {
     private fun MilkingViewModel.observeUnobserved() {
         loading.observeForever { }
         milkList.observeForever { }
+        smsSource.observeForever {  }
         newMilkListFromSms.observeForever { }
         permissionsGranted.observeForever { }
         showPermissionExplanation.observeForever { }
         availableMilkSmsSources.observeForever { }
+        navigateToAddMilk.observeForever {  }
+        navigateToSmsSourceSelector.observeForever {  }
     }
 
     @Test
