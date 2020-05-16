@@ -119,6 +119,23 @@ open class FakePreferenceStorageRepository(
          */
     }
 
+    override fun getObservableSelectedMilkSmsSource(): LiveData<Milk.Source.Sms> {
+        return preferenceStorage.observableSelectedMilkSmsSource.map {
+            it.toMilkSmsSource()
+        }
+    }
+
+    override fun getAutomaticMilkingCollection(): Boolean {
+        return preferenceStorage.automaticMilkingCollection
+    }
+
+    override fun setAutomaticMilkingCollection(enabled: Boolean) {
+        /**
+         * Do nothing [PreferenceStorage] does not have getter setter functions.
+         * It has variables which setter can not be mocked.
+         */
+    }
+
     override fun clear(fromRemote: Boolean) {
         /**
          * We don't have to do anything.

@@ -52,8 +52,9 @@ class MilkingViewModel @Inject constructor(
             (it as? Result.Success)?.data ?: emptyList()
         }
 
-    private val _smsSource = MutableLiveData<Milk.Source.Sms>()
-    val smsSource: LiveData<Milk.Source.Sms> = _smsSource
+    private val _smsSource = MediatorLiveData<Milk.Source.Sms>()
+    val smsSource: LiveData<Milk.Source.Sms>
+        get() = _smsSource
 
     val newMilkListFromSms: LiveData<List<Milk>>
         get() = loadAllNewMilkFromSmsResult.map {
@@ -80,8 +81,8 @@ class MilkingViewModel @Inject constructor(
         get() = _navigateToAddMilk
 
     init {
-        getMilkSmsSourceUseCase.executeNow(Unit).let { result ->
-            (result as? Result.Success)?.data?.let {
+        _smsSource.addSource(getMilkSmsSourceUseCase(Unit)) { result ->
+            (result as? Result.Success)?.data.let {
                 _smsSource.value = it
             }
         }

@@ -213,17 +213,16 @@
         <item name="android:paddingTop">@dimen/padding_normal</item>
         <item name="android:textAlignment">viewStart</item>
         <item name="android:textAppearance">?textAppearanceBody2</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 
-    <style name="Widget.CattleNOTES.Settings.NotificationButton">
+    <style name="Widget.CattleNOTES.Settings.ButtonText">
         <item name="android:gravity">start|center_vertical</item>
-        <item name="android:minHeight">?listPreferredItemHeightSmall</item>
-        <item name="android:paddingBottom">@dimen/padding_normal</item>
-        <item name="android:paddingRight">?listPreferredItemPaddingEnd</item>
-        <item name="android:paddingStart">?listPreferredItemPaddingStart</item>
-        <item name="android:paddingTop">@dimen/padding_normal</item>
         <item name="android:textAlignment">viewStart</item>
         <item name="android:textAppearance">?textAppearanceBody2</item>
+        <item name="android:clickable">false</item>
+        <item name="android:focusable">false</item>
     </style>
 
     <style name="Widget.CattleNOTES.About" />

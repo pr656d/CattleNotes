@@ -4,22 +4,25 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import com.pr656d.cattlenotes.utils.getStringId
 import com.pr656d.model.Theme
-import com.pr656d.shared.data.prefs.datasource.SharedPreferenceStorage.Companion.DEFAULT_REMINDER_TIME
+import com.pr656d.shared.domain.milk.sms.ObserveMilkSmsSourceUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Success
 import com.pr656d.shared.domain.settings.*
-import com.pr656d.shared.utils.TimeUtils
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
     getThemeUseCase: GetThemeUseCase,
     getAvailableThemesUseCase: GetAvailableThemesUseCase,
-    observePreferredTimeOfBreedingReminderUseCase: ObservePreferredTimeOfBreedingReminderUseCase,
+    getAutomaticMilkingCollectionUseCase: GetAutomaticMilkingCollectionUseCase,
+    private val observePreferredTimeOfBreedingReminderUseCase: ObservePreferredTimeOfBreedingReminderUseCase,
+    private val observeMilkSmsSourceUseCase: ObserveMilkSmsSourceUseCase,
     private val setThemeUseCase: SetThemeUseCase,
-    private val setPreferredTimeOfBreedingReminderUseCase: SetPreferredTimeOfBreedingReminderUseCase
+    private val setPreferredTimeOfBreedingReminderUseCase: SetPreferredTimeOfBreedingReminderUseCase,
+    private val setAutomaticMilkingCollectionUseCase: SetAutomaticMilkingCollectionUseCase
 ) : ViewModel() {
 
     // Theme setting
@@ -38,15 +41,27 @@ class SettingsViewModel @Inject constructor(
     val navigateToBreedingReminderTimeSelector: LiveData<Event<Unit>>
         get() = _navigateToBreedingReminderTimeSelector
 
-    private val _launchCredits = MutableLiveData<Event<Unit>>()
-    val launchCredits: LiveData<Event<Unit>>
-        get() = _launchCredits
+    private val _navigateToCredits = MutableLiveData<Event<Unit>>()
+    val navigateToCredits: LiveData<Event<Unit>>
+        get() = _navigateToCredits
 
-    private val _launchOpenSourceLicense = MutableLiveData<Event<Unit>>()
-    val launchOpenSourceLicense: LiveData<Event<Unit>>
-        get() = _launchOpenSourceLicense
+    private val _navigateToOpenSourceLicenses = MutableLiveData<Event<Unit>>()
+    val navigateToOpenSourceLicenses: LiveData<Event<Unit>>
+        get() = _navigateToOpenSourceLicenses
 
     val preferredTimeOfBreedingReminder: LiveData<LocalTime>
+        get() = observePreferredTimeOfBreedingReminderUseCase()
+
+    val milkSmsSender: LiveData<Int>
+        get() = observeMilkSmsSourceUseCase().map { it.getStringId() }
+
+    private val _navigateToSmsSourceSelector = MutableLiveData<Event<Unit>>()
+    val navigateToSmsSourceSelector: LiveData<Event<Unit>>
+        get() = _navigateToSmsSourceSelector
+
+    private val automaticMilkingCollectionResult = MutableLiveData<Result<Boolean>>()
+
+    val automaticMilkingCollection: LiveData<Boolean>
 
     init {
         getThemeUseCase(Unit, themeResult)
@@ -59,9 +74,9 @@ class SettingsViewModel @Inject constructor(
             (it as? Success<List<Theme>>)?.data ?: emptyList()
         }
 
-        observePreferredTimeOfBreedingReminderUseCase.execute(Unit)
-        preferredTimeOfBreedingReminder = observePreferredTimeOfBreedingReminderUseCase.observe().map {
-            (it as? Success<LocalTime>)?.data ?: TimeUtils.toLocalTime(DEFAULT_REMINDER_TIME)
+        getAutomaticMilkingCollectionUseCase(Unit, automaticMilkingCollectionResult)
+        automaticMilkingCollection = automaticMilkingCollectionResult.map {
+            (it as? Success)?.data ?: true
         }
     }
 
@@ -74,18 +89,26 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun onBreedingReminderClicked() {
-        _navigateToBreedingReminderTimeSelector.postValue(Event(Unit))
+        _navigateToBreedingReminderTimeSelector.value = Event(Unit)
+    }
+
+    fun onMilkSmsSenderClicked() {
+        _navigateToSmsSourceSelector.value = Event(Unit)
     }
 
     fun setBreedingReminderTime(time: LocalTime) {
         setPreferredTimeOfBreedingReminderUseCase(time)
     }
 
-    fun openCredits() {
-        _launchCredits.postValue(Event(Unit))
+    fun toggleAutomaticMilkCollection(checked: Boolean) {
+        setAutomaticMilkingCollectionUseCase(checked, automaticMilkingCollectionResult)
     }
 
-    fun openOpenSourceLicense() {
-        _launchOpenSourceLicense.postValue(Event(Unit))
+    fun creditsClicked() {
+        _navigateToCredits.value = Event(Unit)
+    }
+
+    fun openSourceLicensesClicked() {
+        _navigateToOpenSourceLicenses.value = Event(Unit)
     }
 }

@@ -55,6 +55,10 @@ interface PreferenceStorage {
 
     var selectedMilkSmsSource: String?
 
+    var observableSelectedMilkSmsSource: LiveData<String>
+
+    var automaticMilkingCollection: Boolean
+
     /**
      * Clear the shared preferences.
      */
@@ -84,13 +88,20 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
 
     private val observePreferredTimeOfBreedingReminderResult = MutableLiveData<Long>()
 
+    private val observeSelectedMilkSmsSourceResult = MutableLiveData<String>()
+
     private val changeListener = OnSharedPreferenceChangeListener { _, key ->
         when (key) {
             PREF_DARK_MODE_ENABLED -> observableSelectedThemeResult.value = selectedTheme
+
             PREF_LOG_IN -> observableLoginCompletedResult.value = loginCompleted
+
             PREF_RELOAD_DATA -> observeReloadDataResult.value = reloadData
+
             PREF_PREFERRED_TIME_OF_BREEDING_REMINDER ->
                 observePreferredTimeOfBreedingReminderResult.value = preferredTimeOfBreedingReminder
+
+            PREF_MILK_SMS_SOURCE -> observeSelectedMilkSmsSourceResult.value = selectedMilkSmsSource
         }
     }
 
@@ -168,6 +179,19 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         null
     )
 
+    override var observableSelectedMilkSmsSource: LiveData<String>
+        get() {
+            observeSelectedMilkSmsSourceResult.value = selectedMilkSmsSource
+            return observeSelectedMilkSmsSourceResult
+        }
+        set(_) = throw IllegalAccessException("This property can't be changed")
+
+    override var automaticMilkingCollection: Boolean by BooleanPreference(
+        prefs,
+        PREF_AUTOMATIC_MILKING_COLLECTION,
+        true
+    )
+
     override fun clear() {
         prefs.value.edit { clear() }
     }
@@ -181,6 +205,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         const val PREF_RELOAD_DATA = "reload_data"
         const val PREF_PREFERRED_TIME_OF_BREEDING_REMINDER = "preferred_time_of_breeding_reminder"
         const val PREF_MILK_SMS_SOURCE = "milk_sms_source"
+        const val PREF_AUTOMATIC_MILKING_COLLECTION = "automatic_milking_collection"
 
         // Default time for reminders will be 09:00 AM in nano day.
         val DEFAULT_REMINDER_TIME by lazy { LocalTime.of(9, 0).toNanoOfDay() }

@@ -20,6 +20,7 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private lateinit var viewModel: MilkingViewModel
+
     private lateinit var listAdapter: ArrayAdapter<SmsSourceHolder>
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -51,6 +52,10 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
                     getTitleForMilkSmsSource(source)
                 )
             })
+
+            viewModel.smsSource.value?.let {
+                updateSelectedItem(it)
+            }
         })
 
         viewModel.smsSource.observe(this, Observer(::updateSelectedItem))

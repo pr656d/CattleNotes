@@ -15,6 +15,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentSettingsBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
+import com.pr656d.cattlenotes.ui.milking.sms.SelectMilkSmsSenderDialogFragment
 import com.pr656d.cattlenotes.ui.settings.SettingsFragmentDirections.Companion.toCredits
 import com.pr656d.shared.domain.result.EventObserver
 import com.pr656d.shared.utils.TimeUtils
@@ -54,11 +55,16 @@ class SettingsFragment : NavigationFragment() {
                 .show(parentFragmentManager, null)
         })
 
-        model.launchCredits.observe(viewLifecycleOwner, EventObserver {
+        model.navigateToSmsSourceSelector.observe(viewLifecycleOwner, EventObserver {
+            SelectMilkSmsSenderDialogFragment.newInstance()
+                .show(childFragmentManager, null)
+        })
+
+        model.navigateToCredits.observe(viewLifecycleOwner, EventObserver {
             findNavController().navigate(toCredits())
         })
 
-        model.launchOpenSourceLicense.observe(viewLifecycleOwner, EventObserver {
+        model.navigateToOpenSourceLicenses.observe(viewLifecycleOwner, EventObserver {
             startActivity(
                 Intent(requireContext(), OssLicensesMenuActivity::class.java)
             )

@@ -16,6 +16,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.DatePicker
 import android.widget.TimePicker
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -25,6 +26,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.textfield.TextInputEditText
 import com.pr656d.cattlenotes.R
+import com.pr656d.model.Milk
 import com.pr656d.model.Theme
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime
@@ -240,3 +242,10 @@ fun newStaticLayout(
         (StaticLayout(source, paint, width, alignment, spacingmult, spacingadd, includepad))
     }
 }
+
+// region milk sms source
+@StringRes
+fun Milk.Source.Sms.getStringId(): Int = when(this) {
+    Milk.Source.Sms.BGAMAMCS -> R.string.bgamamcs
+}
+// end region

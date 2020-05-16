@@ -62,34 +62,68 @@
                     android:text="@string/theme_title"/>
 
                 <LinearLayout
+                    style="@style/Widget.CattleNOTES.Settings.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:baselineAligned="true"
-                    android:focusable="true"
-                    android:clickable="true"
-                    android:background="?attr/selectableItemBackground"
                     android:onClick="@{ () -> viewModel.onBreedingReminderClicked() }">
 
                     <TextView
-                        style="@style/Widget.CattleNOTES.Settings.NotificationButton"
+                        style="@style/Widget.CattleNOTES.Settings.ButtonText"
                         android:id="@+id/textViewChooseBreedingReminderTime"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="3"
                         android:text="@string/reminder_notification_time_title" />
 
                     <TextView
-                        style="@style/Widget.CattleNOTES.Settings.NotificationButton"
+                        style="@style/Widget.CattleNOTES.Settings.ButtonText"
                         android:id="@+id/textViewBreedingReminderTime"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textAlignment="textEnd"
                         android:maxLength="8"
                         android:text="@{viewModel.preferredTimeOfBreedingReminder}"
                         tools:text="09:00 AM"/>
                 </LinearLayout>
+
+                <LinearLayout
+                    style="@style/Widget.CattleNOTES.Settings.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:baselineAligned="true"
+                    android:onClick="@{ () -> viewModel.onMilkSmsSenderClicked() }">
+
+                    <TextView
+                        style="@style/Widget.CattleNOTES.Settings.ButtonText"
+                        android:id="@+id/textViewChooseSmsSender"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="@string/milk_sms_sender_title" />
+
+                    <TextView
+                        style="@style/Widget.CattleNOTES.Settings.ButtonText"
+                        android:id="@+id/textViewSmsSender"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAlignment="textEnd"
+                        android:maxLength="10"
+                        android:text="@{ viewModel.milkSmsSender }"
+                        tools:text="BGAMAMCS"/>
+                </LinearLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    style="@style/Widget.CattleNOTES.Settings.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/automatic_milking_collection"
+                    android:checked="@{ viewModel.automaticMilkingCollection }"
+                    android:onCheckedChanged="@{(view, checked) -> viewModel.toggleAutomaticMilkCollection(checked)}"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -112,7 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/see_credits"
-                    android:onClick="@{ () -> viewModel.openCredits() }"/>
+                    android:onClick="@{ () -> viewModel.creditsClicked() }"/>
 
                 <TextView
                     android:id="@+id/open_source_license"
@@ -120,7 +154,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/open_source_licences"
-                    android:onClick="@{ () -> viewModel.openOpenSourceLicense() }"/>
+                    android:onClick="@{ () -> viewModel.openSourceLicensesClicked() }"/>
 
                 <TextView
                     android:id="@+id/version_build_number"

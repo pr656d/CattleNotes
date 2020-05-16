@@ -115,6 +115,21 @@ interface PreferenceStorageRepository {
     fun setSelectedMilkSmsSource(selectedMilkSmsSource: Milk.Source.Sms?)
 
     /**
+     * Get [PreferenceStorage.observableSelectedMilkSmsSource]
+     */
+    fun getObservableSelectedMilkSmsSource(): LiveData<Milk.Source.Sms>
+
+    /**
+     * Get [PreferenceStorage.automaticMilkingCollection].
+     */
+    fun getAutomaticMilkingCollection(): Boolean
+
+    /**
+     * Set [PreferenceStorage.automaticMilkingCollection].
+     */
+    fun setAutomaticMilkingCollection(enabled: Boolean)
+
+    /**
      * Clear the shared preferences.
      * @param fromRemote Pass true if you want to clear from remote source.
      */
@@ -204,6 +219,20 @@ class SharedPreferenceStorageRepository @Inject constructor(
 
     override fun setSelectedMilkSmsSource(selectedMilkSmsSource: Milk.Source.Sms?) {
         preferenceStorage.selectedMilkSmsSource = selectedMilkSmsSource?.SENDER_ADDRESS
+    }
+
+    override fun getObservableSelectedMilkSmsSource(): LiveData<Milk.Source.Sms> {
+        return Transformations.map(preferenceStorage.observableSelectedMilkSmsSource) {
+            it?.toMilkSmsSource()
+        }
+    }
+
+    override fun getAutomaticMilkingCollection(): Boolean {
+        return preferenceStorage.automaticMilkingCollection
+    }
+
+    override fun setAutomaticMilkingCollection(enabled: Boolean) {
+        preferenceStorage.automaticMilkingCollection = enabled
     }
 
     override fun clear(fromRemote: Boolean) {
