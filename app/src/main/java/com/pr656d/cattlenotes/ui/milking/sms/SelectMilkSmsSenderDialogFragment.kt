@@ -53,7 +53,7 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
             })
         })
 
-        viewModel.smsSource?.let { updateSelectedItem(it) }
+        viewModel.smsSource.observe(this, Observer(::updateSelectedItem))
     }
 
     private fun updateSelectedItem(selected: Milk.Source.Sms) {

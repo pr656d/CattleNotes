@@ -250,7 +250,7 @@ class MilkingViewModelTest {
         viewModel.setSmsSource(actualSmsSource)
 
         // Verify smsSource is correct.
-        val smsSource = viewModel.smsSource
+        val smsSource = LiveDataTestUtil.getValue(viewModel.smsSource)
         assertThat(actualSmsSource, isEqualTo(smsSource))
 
         val newMilkListFromSms = LiveDataTestUtil.getValue(viewModel.newMilkListFromSms)
@@ -291,10 +291,22 @@ class MilkingViewModelTest {
         viewModel.syncWithSmsMessages()
 
         // Verify smsSource is correct.
-        val smsSource = viewModel.smsSource
+        val smsSource = LiveDataTestUtil.getValue(viewModel.smsSource)
         assertThat(actualSmsSource, isEqualTo(smsSource))
 
         val newMilkListFromSms = LiveDataTestUtil.getValue(viewModel.newMilkListFromSms)
         assertThat(actualNewMilkListFromSms, isEqualTo(newMilkListFromSms))
+    }
+
+    @Test
+    fun changeSmsSourceCalled_navigateToSmsSourceSelector() {
+        val viewModel = createMilkingViewModel()
+
+        // Call change sms source
+        viewModel.changeSmsSource()
+
+        val navigateToSmsSourceSelector =
+            LiveDataTestUtil.getValue(viewModel.navigateToSmsSourceSelector)
+        assertThat(Unit, isEqualTo(navigateToSmsSourceSelector?.getContentIfNotHandled()))
     }
 }

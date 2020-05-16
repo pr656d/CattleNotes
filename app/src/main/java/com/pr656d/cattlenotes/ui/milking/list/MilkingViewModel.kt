@@ -53,8 +53,7 @@ class MilkingViewModel @Inject constructor(
         }
 
     private val _smsSource = MutableLiveData<Milk.Source.Sms>()
-    val smsSource: Milk.Source.Sms?
-        get() = _smsSource.value
+    val smsSource: LiveData<Milk.Source.Sms> = _smsSource
 
     val newMilkListFromSms: LiveData<List<Milk>>
         get() = loadAllNewMilkFromSmsResult.map {
@@ -124,6 +123,10 @@ class MilkingViewModel @Inject constructor(
             syncWithSmsMessages()
     }
 
+    fun changeSmsSource() {
+        _navigateToSmsSourceSelector.value = Event(Unit)
+    }
+
     fun requestPermission() {
         _requestPermissions.value = Event(Unit)
     }
@@ -142,7 +145,7 @@ class MilkingViewModel @Inject constructor(
             return
         }
 
-        if (smsSource == null) {
+        if (_smsSource.value == null) {
             /** Set event so that when sms source is set we can start syncing right after that. */
             syncWithSmsMessagesAfterSmsSourceIsSet = Event(Unit)
             // Sms sender not available.
@@ -151,7 +154,7 @@ class MilkingViewModel @Inject constructor(
         }
 
         // Sms sender available.
-        loadAllNewMilkFromSmsUseCase(smsSource!!, loadAllNewMilkFromSmsResult)
+        loadAllNewMilkFromSmsUseCase(_smsSource.value!!, loadAllNewMilkFromSmsResult)
     }
 
     fun setSmsSource(smsSource: Milk.Source.Sms) {

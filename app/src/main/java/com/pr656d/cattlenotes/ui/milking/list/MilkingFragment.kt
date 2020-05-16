@@ -78,6 +78,12 @@ class MilkingFragment : NavigationFragment() {
                     model.addMilk()
                     true
                 }
+
+                R.id.menu_item_change_sms_source -> {
+                    model.changeSmsSource()
+                    true
+                }
+
                 else -> false
             }
         }
