@@ -53,9 +53,9 @@ interface PreferenceStorage {
 
     var observablePreferredTimeOfBreedingReminder: LiveData<Long>
 
-    var selectedMilkSmsSource: String?
+    var preferredMilkSmsSource: String?
 
-    var observableSelectedMilkSmsSource: LiveData<String>
+    var observablePreferredMilkSmsSource: LiveData<String>
 
     var automaticMilkingCollection: Boolean
 
@@ -88,7 +88,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
 
     private val observePreferredTimeOfBreedingReminderResult = MutableLiveData<Long>()
 
-    private val observeSelectedMilkSmsSourceResult = MutableLiveData<String>()
+    private val observePreferredMilkSmsSourceResult = MutableLiveData<String>()
 
     private val changeListener = OnSharedPreferenceChangeListener { _, key ->
         when (key) {
@@ -101,7 +101,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
             PREF_PREFERRED_TIME_OF_BREEDING_REMINDER ->
                 observePreferredTimeOfBreedingReminderResult.value = preferredTimeOfBreedingReminder
 
-            PREF_MILK_SMS_SOURCE -> observeSelectedMilkSmsSourceResult.value = selectedMilkSmsSource
+            PREF_MILK_SMS_SOURCE -> observePreferredMilkSmsSourceResult.value = preferredMilkSmsSource
         }
     }
 
@@ -173,16 +173,16 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         }
         set(_) = throw IllegalAccessException("This property can't be changed")
 
-    override var selectedMilkSmsSource: String? by StringPreference(
+    override var preferredMilkSmsSource: String? by StringPreference(
         prefs,
         PREF_MILK_SMS_SOURCE,
         null
     )
 
-    override var observableSelectedMilkSmsSource: LiveData<String>
+    override var observablePreferredMilkSmsSource: LiveData<String>
         get() {
-            observeSelectedMilkSmsSourceResult.value = selectedMilkSmsSource
-            return observeSelectedMilkSmsSourceResult
+            observePreferredMilkSmsSourceResult.value = preferredMilkSmsSource
+            return observePreferredMilkSmsSourceResult
         }
         set(_) = throw IllegalAccessException("This property can't be changed")
 

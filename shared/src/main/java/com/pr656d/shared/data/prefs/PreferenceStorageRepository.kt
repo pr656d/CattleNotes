@@ -105,19 +105,19 @@ interface PreferenceStorageRepository {
     fun getObservablePreferredTimeOfBreedingReminder(): LiveData<LocalTime>
 
     /**
-     * Get [PreferenceStorage.selectedMilkSmsSource].
+     * Get [PreferenceStorage.preferredMilkSmsSource].
      */
-    fun getSelectedMilkSmsSource(): Milk.Source.Sms?
+    fun getPreferredMilkSmsSource(): Milk.Source.Sms?
 
     /**
-     * Set [PreferenceStorage.selectedMilkSmsSource].
+     * Set [PreferenceStorage.preferredMilkSmsSource].
      */
-    fun setSelectedMilkSmsSource(selectedMilkSmsSource: Milk.Source.Sms?)
+    fun setPreferredMilkSmsSource(selectedMilkSmsSource: Milk.Source.Sms?)
 
     /**
-     * Get [PreferenceStorage.observableSelectedMilkSmsSource]
+     * Get [PreferenceStorage.observablePreferredMilkSmsSource]
      */
-    fun getObservableSelectedMilkSmsSource(): LiveData<Milk.Source.Sms>
+    fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms>
 
     /**
      * Get [PreferenceStorage.automaticMilkingCollection].
@@ -213,16 +213,16 @@ class SharedPreferenceStorageRepository @Inject constructor(
         }
     }
 
-    override fun getSelectedMilkSmsSource(): Milk.Source.Sms? {
-        return preferenceStorage.selectedMilkSmsSource?.toMilkSmsSource()
+    override fun getPreferredMilkSmsSource(): Milk.Source.Sms? {
+        return preferenceStorage.preferredMilkSmsSource?.toMilkSmsSource()
     }
 
-    override fun setSelectedMilkSmsSource(selectedMilkSmsSource: Milk.Source.Sms?) {
-        preferenceStorage.selectedMilkSmsSource = selectedMilkSmsSource?.SENDER_ADDRESS
+    override fun setPreferredMilkSmsSource(selectedMilkSmsSource: Milk.Source.Sms?) {
+        preferenceStorage.preferredMilkSmsSource = selectedMilkSmsSource?.SENDER_ADDRESS
     }
 
-    override fun getObservableSelectedMilkSmsSource(): LiveData<Milk.Source.Sms> {
-        return Transformations.map(preferenceStorage.observableSelectedMilkSmsSource) {
+    override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms> {
+        return Transformations.map(preferenceStorage.observablePreferredMilkSmsSource) {
             it?.toMilkSmsSource()
         }
     }

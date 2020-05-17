@@ -9,6 +9,6 @@ open class GetMilkSmsSourceUseCase @Inject constructor(
     private val preferenceStorageRepository: PreferenceStorageRepository
 ) : UseCase<Unit, Milk.Source.Sms?>() {
     override fun execute(parameters: Unit): Milk.Source.Sms? {
-        return preferenceStorageRepository.getSelectedMilkSmsSource()
+        return preferenceStorageRepository.getPreferredMilkSmsSource()
     }
 }

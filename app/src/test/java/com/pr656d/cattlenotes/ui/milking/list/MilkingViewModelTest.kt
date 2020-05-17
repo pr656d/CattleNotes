@@ -280,7 +280,7 @@ class MilkingViewModelTest {
         )
 
         val fakePreferenceStorageRepository = object : FakePreferenceStorageRepository() {
-            override fun getSelectedMilkSmsSource(): Milk.Source.Sms? {
+            override fun getPreferredMilkSmsSource(): Milk.Source.Sms? {
                 return Milk.Source.Sms.BGAMAMCS
             }
         }

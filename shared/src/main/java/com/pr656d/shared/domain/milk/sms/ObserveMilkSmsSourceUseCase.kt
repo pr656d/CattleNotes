@@ -9,6 +9,6 @@ open class ObserveMilkSmsSourceUseCase @Inject constructor(
     private val preferenceStorageRepository: PreferenceStorageRepository
 ) {
     operator fun invoke(): LiveData<Milk.Source.Sms> {
-        return preferenceStorageRepository.getObservableSelectedMilkSmsSource()
+        return preferenceStorageRepository.getObservablePreferredMilkSmsSource()
     }
 }

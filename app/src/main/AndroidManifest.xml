@@ -72,8 +72,10 @@
         <receiver
             android:name="com.pr656d.shared.sms.SmsBroadcastReceiver"
             android:enabled="true"
-            android:permission="android.permission.BROADCAST_SMS">
-            <intent-filter>
+            android:permission="android.permission.BROADCAST_SMS"
+            android:exported="true">
+            <intent-filter
+                android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>

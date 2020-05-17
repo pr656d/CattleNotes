@@ -108,19 +108,19 @@ open class FakePreferenceStorageRepository(
         }
     }
 
-    override fun getSelectedMilkSmsSource(): Milk.Source.Sms? {
-        return preferenceStorage.selectedMilkSmsSource?.toMilkSmsSource()
+    override fun getPreferredMilkSmsSource(): Milk.Source.Sms? {
+        return preferenceStorage.preferredMilkSmsSource?.toMilkSmsSource()
     }
 
-    override fun setSelectedMilkSmsSource(selectedMilkSmsSource: Milk.Source.Sms?) {
+    override fun setPreferredMilkSmsSource(selectedMilkSmsSource: Milk.Source.Sms?) {
         /**
          * Do nothing [PreferenceStorage] does not have getter setter functions.
          * It has variables which setter can not be mocked.
          */
     }
 
-    override fun getObservableSelectedMilkSmsSource(): LiveData<Milk.Source.Sms> {
-        return preferenceStorage.observableSelectedMilkSmsSource.map {
+    override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms> {
+        return preferenceStorage.observablePreferredMilkSmsSource.map {
             it.toMilkSmsSource()
         }
     }
