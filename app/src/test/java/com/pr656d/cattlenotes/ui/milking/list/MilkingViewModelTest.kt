@@ -30,8 +30,8 @@ import com.pr656d.shared.domain.milk.AddAllMilkUseCase
 import com.pr656d.shared.domain.milk.LoadAllNewMilkFromSmsUseCase
 import com.pr656d.shared.domain.milk.LoadMilkListUseCase
 import com.pr656d.shared.domain.milk.sms.GetAvailableMilkSmsSourcesUseCase
-import com.pr656d.shared.domain.milk.sms.GetMilkSmsSourceUseCase
-import com.pr656d.shared.domain.milk.sms.SetMilkSmsSourceUseCase
+import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
+import com.pr656d.shared.domain.milk.sms.SetPreferredMilkSmsSourceUseCase
 import com.pr656d.test.TestData
 import org.junit.Assert.*
 import org.junit.Rule
@@ -63,8 +63,8 @@ class MilkingViewModelTest {
         return MilkingViewModel(
             loadMilkListUseCase = LoadMilkListUseCase(fakeMilkRepository),
             getAvailableMilkSmsSourcesUseCase = GetAvailableMilkSmsSourcesUseCase(),
-            getMilkSmsSourceUseCase = GetMilkSmsSourceUseCase(fakePreferenceStorageRepository),
-            setMilkSmsSourceUseCase = SetMilkSmsSourceUseCase(fakePreferenceStorageRepository),
+            getPreferredMilkSmsSourceUseCase = GetPreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository),
+            setPreferredMilkSmsSourceUseCase = SetPreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository),
             loadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(fakeMilkRepository),
             addAllMilkUseCase = AddAllMilkUseCase(fakeMilkRepository)
         ).apply { observeUnobserved() }

@@ -24,7 +24,7 @@ import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
 import com.pr656d.model.Milk
 import com.pr656d.model.Theme
-import com.pr656d.shared.domain.milk.sms.ObserveMilkSmsSourceUseCase
+import com.pr656d.shared.domain.milk.sms.ObservePreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.settings.*
 import org.junit.Assert.assertThat
 import org.junit.Rule
@@ -65,7 +65,7 @@ class SettingsViewModelTest {
             GetAvailableThemesUseCase(),
             GetAutomaticMilkingCollectionUseCase(fakePreferenceStorageRepository),
             ObservePreferredTimeOfBreedingReminderUseCase(fakePreferenceStorageRepository),
-            ObserveMilkSmsSourceUseCase(fakePreferenceStorageRepository),
+            ObservePreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository),
             SetThemeUseCase(fakePreferenceStorageRepository),
             SetPreferredTimeOfBreedingReminderUseCase(fakePreferenceStorageRepository),
             SetAutomaticMilkingCollectionUseCase(fakePreferenceStorageRepository)

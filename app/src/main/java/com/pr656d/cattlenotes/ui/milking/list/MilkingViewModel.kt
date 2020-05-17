@@ -24,8 +24,8 @@ import com.pr656d.shared.domain.milk.AddAllMilkUseCase
 import com.pr656d.shared.domain.milk.LoadAllNewMilkFromSmsUseCase
 import com.pr656d.shared.domain.milk.LoadMilkListUseCase
 import com.pr656d.shared.domain.milk.sms.GetAvailableMilkSmsSourcesUseCase
-import com.pr656d.shared.domain.milk.sms.GetMilkSmsSourceUseCase
-import com.pr656d.shared.domain.milk.sms.SetMilkSmsSourceUseCase
+import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
+import com.pr656d.shared.domain.milk.sms.SetPreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import javax.inject.Inject
@@ -33,8 +33,8 @@ import javax.inject.Inject
 class MilkingViewModel @Inject constructor(
     loadMilkListUseCase: LoadMilkListUseCase,
     getAvailableMilkSmsSourcesUseCase: GetAvailableMilkSmsSourcesUseCase,
-    getMilkSmsSourceUseCase: GetMilkSmsSourceUseCase,
-    private val setMilkSmsSourceUseCase: SetMilkSmsSourceUseCase,
+    getPreferredMilkSmsSourceUseCase: GetPreferredMilkSmsSourceUseCase,
+    private val setPreferredMilkSmsSourceUseCase: SetPreferredMilkSmsSourceUseCase,
     private val loadAllNewMilkFromSmsUseCase: LoadAllNewMilkFromSmsUseCase,
     private val addAllMilkUseCase: AddAllMilkUseCase
 ) : ViewModel(), MilkingActionListener {
@@ -97,7 +97,7 @@ class MilkingViewModel @Inject constructor(
         get() = _navigateToAddMilk
 
     init {
-        _smsSource.addSource(getMilkSmsSourceUseCase(Unit)) { result ->
+        _smsSource.addSource(getPreferredMilkSmsSourceUseCase(Unit)) { result ->
             (result as? Result.Success)?.data.let {
                 _smsSource.value = it
             }
@@ -175,7 +175,7 @@ class MilkingViewModel @Inject constructor(
     }
 
     fun setSmsSource(smsSource: Milk.Source.Sms) {
-        setMilkSmsSourceUseCase(smsSource)
+        setPreferredMilkSmsSourceUseCase(smsSource)
         _smsSource.value = smsSource
         checkAndSyncWithSmsMessagesAfterSmsSourceIsSet()
     }

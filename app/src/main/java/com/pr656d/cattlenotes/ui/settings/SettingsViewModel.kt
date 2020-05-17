@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.pr656d.cattlenotes.utils.getStringId
 import com.pr656d.model.Theme
-import com.pr656d.shared.domain.milk.sms.ObserveMilkSmsSourceUseCase
+import com.pr656d.shared.domain.milk.sms.ObservePreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.result.Result.Success
@@ -35,7 +35,7 @@ class SettingsViewModel @Inject constructor(
     getAvailableThemesUseCase: GetAvailableThemesUseCase,
     getAutomaticMilkingCollectionUseCase: GetAutomaticMilkingCollectionUseCase,
     private val observePreferredTimeOfBreedingReminderUseCase: ObservePreferredTimeOfBreedingReminderUseCase,
-    private val observeMilkSmsSourceUseCase: ObserveMilkSmsSourceUseCase,
+    private val observePreferredMilkSmsSourceUseCase: ObservePreferredMilkSmsSourceUseCase,
     private val setThemeUseCase: SetThemeUseCase,
     private val setPreferredTimeOfBreedingReminderUseCase: SetPreferredTimeOfBreedingReminderUseCase,
     private val setAutomaticMilkingCollectionUseCase: SetAutomaticMilkingCollectionUseCase
@@ -69,7 +69,7 @@ class SettingsViewModel @Inject constructor(
         get() = observePreferredTimeOfBreedingReminderUseCase()
 
     val milkSmsSender: LiveData<Int>
-        get() = observeMilkSmsSourceUseCase().map { it.getStringId() }
+        get() = observePreferredMilkSmsSourceUseCase().map { it.getStringId() }
 
     private val _navigateToSmsSourceSelector = MutableLiveData<Event<Unit>>()
     val navigateToSmsSourceSelector: LiveData<Event<Unit>>

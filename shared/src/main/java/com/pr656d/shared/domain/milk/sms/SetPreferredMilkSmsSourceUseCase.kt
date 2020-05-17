@@ -21,10 +21,10 @@ import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.domain.UseCase
 import javax.inject.Inject
 
-open class GetMilkSmsSourceUseCase @Inject constructor(
+open class SetPreferredMilkSmsSourceUseCase @Inject constructor(
     private val preferenceStorageRepository: PreferenceStorageRepository
-) : UseCase<Unit, Milk.Source.Sms?>() {
-    override fun execute(parameters: Unit): Milk.Source.Sms? {
-        return preferenceStorageRepository.getPreferredMilkSmsSource()
+) : UseCase<Milk.Source.Sms, Unit>() {
+    override fun execute(parameters: Milk.Source.Sms) {
+        preferenceStorageRepository.setPreferredMilkSmsSource(parameters)
     }
 }
