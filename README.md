@@ -1,4 +1,7 @@
-# Cattle NOTES
+# Cattle Notes
+Provides an all-in-one-place for efficient monitoring of a cattle farm, and assists farmers to easily
+track the breeding activities of their cattle. The app auto-records as well as allows the user to
+manually add the milk details.
 
 # Copyright
 
