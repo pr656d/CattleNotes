@@ -65,7 +65,7 @@ fun Cattle.nameOrTagNumber(): String = if (!this.name.isNullOrBlank()) name!! el
 
 // region SMS
 @Throws(NotAMilkSmsException::class)
-fun SmsMessage.getSmsSenderTypeOrThrow(): Milk.Source.Sms {
+fun SmsMessage.getSmsSourceOrThrow(): Milk.Source.Sms {
     return when (this.originatingAddress) {
         Milk.Source.Sms.BGAMAMCS.SENDER_ADDRESS -> Milk.Source.Sms.BGAMAMCS
         else -> throw NotAMilkSmsException(this)

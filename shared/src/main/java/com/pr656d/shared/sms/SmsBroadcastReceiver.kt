@@ -19,13 +19,21 @@ package com.pr656d.shared.sms
 import android.content.Context
 import android.content.Intent
 import android.provider.Telephony
-import com.pr656d.shared.data.milk.MilkRepository
+import android.telephony.SmsMessage
+import androidx.annotation.WorkerThread
 import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSms
-import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.domain.milk.AddMilkUseCase
+import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
+import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.settings.GetAutomaticMilkingCollectionUseCase
+import com.pr656d.shared.utils.getSmsSourceOrThrow
 import dagger.android.DaggerBroadcastReceiver
 import timber.log.Timber
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
 /**
  * Handles new SMS arrival.
@@ -34,63 +42,90 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
 
     @Inject lateinit var milkDataSourceFromSms: MilkDataSourceFromSms
 
-    @Inject lateinit var milkRepository: MilkRepository
+    @Inject lateinit var getPreferredAutomaticMilkingCollectionUseCase: GetAutomaticMilkingCollectionUseCase
 
-    @Inject lateinit var preferenceStorageRepository: PreferenceStorageRepository
+    @Inject lateinit var preferredMilkSmsSourceUseCase: GetPreferredMilkSmsSourceUseCase
 
+    @Inject lateinit var addMilkUseCase: AddMilkUseCase
+
+    /**
+     * Only run short running tasks.
+     * TODO("This execution should be done by WorkManager or JobScheduler")
+     */
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
-        DefaultScheduler.execute {
-            if (intent.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
-                Timber.d("Received SMS")
+        if (intent.action == Telephony.Sms.Intents.SMS_RECEIVED_ACTION) {
+            Timber.d("Received SMS")
 
-                val isAutomaticMilkingCollectionEnabled by lazy {
-                    preferenceStorageRepository.getAutomaticMilkingCollection()
+            val countDownLatch = CountDownLatch(1)
+
+            DefaultScheduler.execute {
+                measureTimeMillis {
+                    val smsMessages = getMessagesFromIntent(intent)
+                    addMilk(smsMessages)
+                    countDownLatch.countDown()
+                }.also {
+                    Timber.d("Time taken to add milk at SmsBroadcastReceiver : $it ms")
+                }
+            }
+
+            try {
+                countDownLatch.await(2000, TimeUnit.SECONDS)
+            } catch (e: InterruptedException) {
+                Timber.d(e)
+            }
+        }
+    }
+
+    @WorkerThread
+    private fun addMilk(smsMessages: List<SmsMessage>) {
+        val isAutomaticMilkingCollectionEnabled =
+            getPreferredAutomaticMilkingCollectionUseCase.executeNow(Unit).let {
+                (it as? Result.Success)?.data ?: false
+            }
+
+        val preferredMilkSmsSource =
+            preferredMilkSmsSourceUseCase.executeNow(Unit).let {
+                (it as? Result.Success)?.data
+            }
+
+        for (smsMessage in smsMessages) {
+            // Check if message has message body.
+            // If it doesn't continue work.
+            smsMessage.displayMessageBody ?: continue
+
+            try {
+                // Get as milk sms source if possible.
+                val smsSource = smsMessage.getSmsSourceOrThrow()
+
+                // Check if milk sms source matches preferred milk sms source.
+                if (smsSource != preferredMilkSmsSource) {
+                    Timber.d("Found milk source $smsSource but preferred milk source is $preferredMilkSmsSource.")
+                    continue
                 }
 
-                val preferredMilkSmsSource by lazy {
-                    preferenceStorageRepository.getPreferredMilkSmsSource()
+                // Try to parse message as milk data.
+                val milk = milkDataSourceFromSms.getMilk(smsMessage)
+
+                /**
+                 *  Message is milk message.
+                 */
+
+                // Check if AMC feature is disabled.
+                if (!isAutomaticMilkingCollectionEnabled) {
+                    Timber.d("Milk found but Automatic milking collection feature is disabled.")
+                    continue
                 }
 
-                val smsMessages = getMessagesFromIntent(intent)
-
-                for (smsMessage in smsMessages) {
-                    // Check if message has message body.
-                    // If it doesn't continue work.
-                    smsMessage.displayMessageBody ?: continue
-
-                    try {
-                        // Try to parse message as milk data.
-                        val milk = milkDataSourceFromSms.getMilk(smsMessage)
-
-                        /**
-                         *  Message is milk message.
-                         */
-
-                         // Check if AMC feature is disabled.
-                        if (!isAutomaticMilkingCollectionEnabled) {
-                            Timber.d("Milk found but Automatic milking collection feature is disabled.")
-                            continue
-                        }
-
-                        // Check if milk source matches preferred milk sms source.
-                        if (milk.source != preferredMilkSmsSource) {
-                            Timber.d("Found milk source ${milk.source} but preferred milk source is $preferredMilkSmsSource.")
-                            continue
-                        }
-
-                        // Add milk
-                        milkRepository.addMilk(milk)
-
-                        Timber.d("Milk added ${milk.id}")
-                    } catch (e: NotAMilkSmsException) {
-                        // Ignore, it's not a milking message.
-                        continue
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
-                }
+                // Add milk
+                addMilkUseCase.executeNow(milk)
+                Timber.d("Milk added ${milk.id}")
+            } catch (e: NotAMilkSmsException) {
+                // Ignore, it's not a milking message.
+                continue
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
     }

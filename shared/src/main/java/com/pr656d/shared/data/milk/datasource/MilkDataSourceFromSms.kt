@@ -24,7 +24,7 @@ import com.pr656d.model.Milk
 import com.pr656d.shared.sms.parser.BGAMAMCSSmsParser
 import com.pr656d.shared.utils.FirestoreUtil
 import com.pr656d.shared.utils.getDisplayMessageBodyOrThrow
-import com.pr656d.shared.utils.getSmsSenderTypeOrThrow
+import com.pr656d.shared.utils.getSmsSourceOrThrow
 import javax.inject.Inject
 
 interface MilkDataSourceFromSms {
@@ -56,7 +56,7 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
      * Return [Milk] from [SmsMessage].
      */
     override fun getMilk(smsMessage: SmsMessage): Milk {
-        val milkSmsSender = smsMessage.getSmsSenderTypeOrThrow()
+        val milkSmsSender = smsMessage.getSmsSourceOrThrow()
         val messageBody = smsMessage.getDisplayMessageBodyOrThrow()
 
         return getMilk(milkSmsSender, messageBody).apply {

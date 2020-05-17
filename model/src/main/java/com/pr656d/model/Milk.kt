@@ -144,7 +144,10 @@ data class Milk(
     /**
      * The source of [Milk] data.
      */
-    sealed class Source(open val SENDER_ADDRESS: String) {
+    sealed class Source(
+        @SerializedName("sourceSenderAddress")
+        open val SENDER_ADDRESS: String
+    ) {
         companion object {
             /**
              * All instances of [Source].
@@ -157,7 +160,10 @@ data class Milk(
         }
 
         /** The source of the milk data is SMS. */
-        sealed class Sms(override val SENDER_ADDRESS: String) : Source(SENDER_ADDRESS) {
+        sealed class Sms(
+            @SerializedName("smsSourceSenderAddress")
+            override val SENDER_ADDRESS: String
+        ) : Source(SENDER_ADDRESS) {
             /**
              * Valid milk SMS sender address list.
              * Register new parser here.

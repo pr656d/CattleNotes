@@ -344,28 +344,28 @@ object TestData {
         ZonedDateTime.of(2020, 1, 16, 6, 41, 0, 0, ZoneId.systemDefault()),
         Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
         391.7f, 11282.60f, "https://goo.gl/UY1HAC"
-    )
+    ).apply { id = UUID.randomUUID().toString() }
 
     val milk2 = Milk(
         Milk.Source.Sms.BGAMAMCS,
         ZonedDateTime.of(2020, 1, 16, 18, 32, 0, 0, ZoneId.systemDefault()),
         Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
         391.7f, 11282.60f, "https://goo.gl/UY1HAC"
-    )
+    ).apply { id = UUID.randomUUID().toString() }
 
     val milk3 = Milk(
         Milk.Source.Sms.BGAMAMCS,
         ZonedDateTime.of(2020, 1, 17, 6, 47, 0, 0, ZoneId.systemDefault()),
         Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
         391.7f, 11282.60f, "https://goo.gl/UY1HAC"
-    )
+    ).apply { id = UUID.randomUUID().toString() }
 
     val milk4 = Milk(
         Milk.Source.Sms.BGAMAMCS,
         ZonedDateTime.of(2020, 1, 17, 19, 15, 0, 0, ZoneId.systemDefault()),
         Milk.MilkOf.Cow, 36.5f, 3.8f, 1057.09f,
         391.7f, 11282.60f, "https://goo.gl/UY1HAC"
-    )
+    ).apply { id = UUID.randomUUID().toString() }
 
     val milkList = listOf(milk1, milk2, milk3, milk4)
 }
