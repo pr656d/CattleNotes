@@ -77,7 +77,7 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
         viewModel.smsSource.observe(this, Observer(::updateSelectedItem))
     }
 
-    private fun updateSelectedItem(selected: Milk.Source.Sms) {
+    private fun updateSelectedItem(selected: Milk.Source.Sms?) {
         val selectedPosition = (0 until listAdapter.count).indexOfFirst { index ->
             listAdapter.getItem(index)?.smsSource == selected
         }

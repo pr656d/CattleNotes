@@ -119,8 +119,15 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
                 }
 
                 // Add milk
-                addMilkUseCase.executeNow(milk)
-                Timber.d("Milk added ${milk.id}")
+                val result = addMilkUseCase.executeNow(milk)
+
+                (result as? Result.Success)?.data.let {
+                    Timber.d("Milk added ${milk.id}")
+                }
+
+                (result as? Result.Error)?.exception?.let {
+                    Timber.d(it, "Failed to add milk : ${it.message}")
+                }
             } catch (e: NotAMilkSmsException) {
                 // Ignore, it's not a milking message.
                 continue
