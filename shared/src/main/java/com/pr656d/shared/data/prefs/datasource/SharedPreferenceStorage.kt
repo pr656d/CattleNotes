@@ -71,7 +71,7 @@ interface PreferenceStorage {
 
     var preferredMilkSmsSource: String?
 
-    var observablePreferredMilkSmsSource: LiveData<String>
+    var observablePreferredMilkSmsSource: LiveData<String?>
 
     var automaticMilkingCollection: Boolean
 
@@ -104,7 +104,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
 
     private val observePreferredTimeOfBreedingReminderResult = MutableLiveData<Long>()
 
-    private val observePreferredMilkSmsSourceResult = MutableLiveData<String>()
+    private val observePreferredMilkSmsSourceResult = MutableLiveData<String?>()
 
     private val changeListener = OnSharedPreferenceChangeListener { _, key ->
         when (key) {
@@ -195,7 +195,7 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         null
     )
 
-    override var observablePreferredMilkSmsSource: LiveData<String>
+    override var observablePreferredMilkSmsSource: LiveData<String?>
         get() {
             observePreferredMilkSmsSourceResult.value = preferredMilkSmsSource
             return observePreferredMilkSmsSourceResult

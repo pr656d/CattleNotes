@@ -68,8 +68,8 @@ class SettingsViewModel @Inject constructor(
     val preferredTimeOfBreedingReminder: LiveData<LocalTime>
         get() = observePreferredTimeOfBreedingReminderUseCase()
 
-    val milkSmsSender: LiveData<Int>
-        get() = observePreferredMilkSmsSourceUseCase().map { it.getStringId() }
+    val milkSmsSender: LiveData<Int?>
+        get() = observePreferredMilkSmsSourceUseCase().map { it?.getStringId() }
 
     private val _navigateToSmsSourceSelector = MutableLiveData<Event<Unit>>()
     val navigateToSmsSourceSelector: LiveData<Event<Unit>>

@@ -24,7 +24,7 @@ import javax.inject.Inject
 open class ObservePreferredMilkSmsSourceUseCase @Inject constructor(
     private val preferenceStorageRepository: PreferenceStorageRepository
 ) {
-    operator fun invoke(): LiveData<Milk.Source.Sms> {
+    operator fun invoke(): LiveData<Milk.Source.Sms?> {
         return preferenceStorageRepository.getObservablePreferredMilkSmsSource()
     }
 }

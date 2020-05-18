@@ -133,7 +133,7 @@ interface PreferenceStorageRepository {
     /**
      * Get [PreferenceStorage.observablePreferredMilkSmsSource]
      */
-    fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms>
+    fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms?>
 
     /**
      * Get [PreferenceStorage.automaticMilkingCollection].
@@ -237,7 +237,7 @@ class SharedPreferenceStorageRepository @Inject constructor(
         preferenceStorage.preferredMilkSmsSource = selectedMilkSmsSource?.SENDER_ADDRESS
     }
 
-    override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms> {
+    override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms?> {
         return Transformations.map(preferenceStorage.observablePreferredMilkSmsSource) {
             it?.toMilkSmsSource()
         }
