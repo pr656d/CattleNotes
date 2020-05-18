@@ -27,6 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pr656d.cattlenotes.R
@@ -145,6 +146,10 @@ class MilkingFragment : NavigationFragment() {
 
         model.navigateToAddMilk.observe(viewLifecycleOwner, EventObserver {
             AddMilkDialogFragment().show(childFragmentManager, null)
+        })
+
+        model.smsSource.observe(viewLifecycleOwner, Observer {
+            // Just observe so that value can be updated.
         })
     }
 
