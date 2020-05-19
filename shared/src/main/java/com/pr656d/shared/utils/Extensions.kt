@@ -64,16 +64,16 @@ fun Cattle.nameOrTagNumber(): String = if (!this.name.isNullOrBlank()) name!! el
 // end region
 
 // region SMS
+
+/**
+ * Returns [Milk.Source.Sms] on bases of [SmsMessage.getOriginatingAddress].
+ */
 @Throws(NotAMilkSmsException::class)
-fun SmsMessage.getSmsSourceOrThrow(): Milk.Source.Sms {
-    return when (this.originatingAddress) {
-        Milk.Source.Sms.BGAMAMCS.SENDER_ADDRESS -> Milk.Source.Sms.BGAMAMCS
-        else -> throw NotAMilkSmsException(this)
-    }
-}
+fun SmsMessage.getSmsSourceOrThrow() = Milk.Source.Sms.INSTANCES.values.find {
+    it.ORIGINATING_ADDRESS == originatingAddress
+} ?: throw NotAMilkSmsException(this)
 
 @Throws(Exception::class)
-fun SmsMessage.getDisplayMessageBodyOrThrow(): String {
-    return this.displayMessageBody ?: throw Exception("Message body not found")
-}
+fun SmsMessage.getDisplayMessageBodyOrThrow(): String =
+    displayMessageBody ?: throw Exception("Message body not found")
 // end region

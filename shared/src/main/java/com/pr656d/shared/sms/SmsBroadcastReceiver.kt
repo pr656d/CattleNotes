@@ -27,7 +27,7 @@ import com.pr656d.shared.domain.milk.AddMilkUseCase
 import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.settings.GetAutomaticMilkingCollectionUseCase
-import com.pr656d.shared.sms.parser.BGAMAMCSSmsParser
+import com.pr656d.shared.utils.getSmsSourceOrThrow
 import dagger.android.DaggerBroadcastReceiver
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
@@ -61,13 +61,13 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
             val countDownLatch = CountDownLatch(1)
 
             DefaultScheduler.execute {
-                measureTimeMillis {
+                val timeTaken = measureTimeMillis {
                     val smsMessages = getMessagesFromIntent(intent)
                     addMilk(smsMessages)
                     countDownLatch.countDown()
-                }.also {
-                    Timber.d("Time taken to add milk at SmsBroadcastReceiver : $it ms")
                 }
+
+                Timber.d("Time taken to add milk at SmsBroadcastReceiver : $timeTaken ms")
             }
 
             try {
@@ -93,34 +93,30 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
         for (smsMessage in smsMessages) {
             // Check if message has message body.
             // If it doesn't continue work.
-            val messageBody = smsMessage.displayMessageBody ?: continue
-
-            Timber.d("Got SMS from ${smsMessage.originatingAddress}")
+            smsMessage.displayMessageBody ?: continue
 
             try {
-                // Get as milk sms source if possible.
-                // val smsSource = smsMessage.getSmsSourceOrThrow()
+                // Get milk sms source if possible.
+                val smsSource = smsMessage.getSmsSourceOrThrow()
+
+                // Check if AMC feature is disabled.
+                if (!isAutomaticMilkingCollectionEnabled) {
+                    Timber.d("Milk found but Automatic milking collection feature is disabled.")
+                    continue
+                }
 
                 // Check if milk sms source matches preferred milk sms source.
-                /*if (smsSource != preferredMilkSmsSource) {
+                if (smsSource != preferredMilkSmsSource) {
                     Timber.d("Found milk source $smsSource but preferred milk source is $preferredMilkSmsSource.")
                     continue
-                }*/
+                }
 
                 // Try to parse message as milk data.
-                // val milk = milkDataSourceFromSms.getMilk(smsMessage)
-
-                val milk = BGAMAMCSSmsParser.getMilk(messageBody)
+                val milk = milkDataSourceFromSms.getMilk(smsMessage)
 
                 /**
                  *  Message is milk message.
                  */
-
-                // Check if AMC feature is disabled.
-                /*if (!isAutomaticMilkingCollectionEnabled) {
-                    Timber.d("Milk found but Automatic milking collection feature is disabled.")
-                    continue
-                }*/
 
                 // Add milk
                 val result = addMilkUseCase.executeNow(milk)
@@ -133,11 +129,11 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
                     Timber.d(it, "Failed to add milk : ${it.message}")
                 }
             } catch (e: NotAMilkSmsException) {
-                Timber.d("Not a milking SMS")
+                Timber.d("Not a milking SMS ${smsMessage.originatingAddress}")
                 // Ignore, it's not a milking message.
                 continue
             } catch (e: Exception) {
-                Timber.e(e)
+                Timber.e(e, "Could not add milk.")
             }
         }
     }

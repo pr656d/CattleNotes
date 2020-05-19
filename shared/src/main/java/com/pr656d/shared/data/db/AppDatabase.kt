@@ -47,7 +47,9 @@ import timber.log.Timber
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun cattleDao(): CattleDao
+
     abstract fun breedingDao(): BreedingDao
+
     abstract fun milkDao(): MilkDao
 
     companion object {

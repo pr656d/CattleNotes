@@ -105,15 +105,18 @@ data class Milk(
     @PrimaryKey
     @SerializedName("id")
     var id: String = ""
-        set(value) = if (!value.isBlank()) {
-            field = value
-        } else {
-            throw IllegalArgumentException("Milk id is blank")
-        }
+        get() =
+            if (field.isNotBlank())
+                field
+            else
+                throw IllegalArgumentException("Milk id is blank")
+        set(value) =
+            if (value.isNotBlank())
+                field = value
+            else
+                throw IllegalArgumentException("Milk id is blank")
 
     sealed class MilkOf(val displayName: String) {
-        abstract val firstCharacter: Char
-
         companion object {
             /**
              * All sources of [MilkOf].
@@ -127,16 +130,10 @@ data class Milk(
         }
 
         object Cow : MilkOf("Cow") {
-            override val firstCharacter: Char
-                get() = displayName.first()
-
             override fun toString(): String = displayName
         }
 
         object Buffalo : MilkOf("Buffalo") {
-            override val firstCharacter: Char
-                get() = displayName.first()
-
             override fun toString(): String = displayName
         }
     }
@@ -161,8 +158,11 @@ data class Milk(
 
         /** The source of the milk data is SMS. */
         sealed class Sms(
-            @SerializedName("smsSourceSenderAddress")
-            override val SENDER_ADDRESS: String
+            @SerializedName("smsSenderAddress")
+            override val SENDER_ADDRESS: String,
+
+            @SerializedName("smsOriginatingAddress")
+            val ORIGINATING_ADDRESS: String
         ) : Source(SENDER_ADDRESS) {
             /**
              * Valid milk SMS sender address list.
@@ -179,7 +179,7 @@ data class Milk(
                 }
             }
 
-            object BGAMAMCS : Sms("BGAMAMCS")
+            object BGAMAMCS : Sms("BGAMAMCS", "BG-AMAMCS")
         }
 
         /** The source of the milk data manual. */
