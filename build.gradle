@@ -18,8 +18,8 @@
 buildscript {
     ext {
         // App version
-        versionName = '0.3.4'   // X.Y.Z; X = Major, Y = minor, Z = Patch level
-        versionCode = 304 // XYYZZ
+        versionName = '0.3.5'   // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 305 // XYYZZ
 
         // SDK and tools
         compileSdkVersion = 29
