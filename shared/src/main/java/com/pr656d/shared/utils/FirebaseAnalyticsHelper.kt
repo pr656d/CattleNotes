@@ -27,7 +27,7 @@ class FirebaseAnalyticsHelper(
     context: Context
 ) : AnalyticsHelper {
 
-    private var analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+    private val analytics: FirebaseAnalytics = FirebaseAnalytics.getInstance(context)
 
     init {
         analytics.setAnalyticsCollectionEnabled(true)

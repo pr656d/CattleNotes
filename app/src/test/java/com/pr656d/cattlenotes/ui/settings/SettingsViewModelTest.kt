@@ -52,7 +52,7 @@ class SettingsViewModelTest {
                 return MutableLiveData(LocalTime.now())
             }
 
-            override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms> {
+            override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms?> {
                 return MutableLiveData(Milk.Source.Sms.BGAMAMCS)
             }
         }

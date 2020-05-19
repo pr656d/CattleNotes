@@ -36,7 +36,9 @@ import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.data.prefs.SharedPreferenceStorageRepository
 import com.pr656d.shared.data.prefs.datasource.PreferenceStorage
 import com.pr656d.shared.data.prefs.datasource.SharedPreferenceStorage
+import com.pr656d.shared.performance.PerformanceHelper
 import com.pr656d.shared.utils.FirebaseAnalyticsHelper
+import com.pr656d.shared.utils.FirebasePerformanceHelper
 import com.pr656d.shared.utils.NetworkHelper
 import com.pr656d.shared.utils.NetworkHelperImpl
 import dagger.Module
@@ -73,6 +75,10 @@ class AppModule {
     fun provideFirebaseAnalyticsHelper(
         context: Context
     ): AnalyticsHelper = FirebaseAnalyticsHelper(context)
+
+    @Singleton
+    @Provides
+    fun providePerformanceHelper(): PerformanceHelper = FirebasePerformanceHelper()
 
     @Singleton
     @Provides

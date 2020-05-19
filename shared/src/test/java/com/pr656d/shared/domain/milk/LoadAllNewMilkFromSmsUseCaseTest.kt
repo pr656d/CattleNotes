@@ -21,6 +21,7 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.pr656d.model.Milk
 import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.test.util.fakes.FakePerformanceHelper
 import com.pr656d.test.TestData
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
@@ -34,10 +35,13 @@ class LoadAllNewMilkFromSmsUseCaseTest {
 
     @Test
     fun bothDataSourceHasNoData_returnEmptyList() {
-        val useCase = LoadAllNewMilkFromSmsUseCase(mock {
-            on { getAllMilkUnobserved() }.doReturn(emptyList<Milk>())
-            on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(emptyList<Milk>())
-        })
+        val useCase = LoadAllNewMilkFromSmsUseCase(
+            mock {
+                on { getAllMilkUnobserved() }.doReturn(emptyList<Milk>())
+                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(emptyList<Milk>())
+            },
+            FakePerformanceHelper()
+        )
 
         val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
 
@@ -46,10 +50,13 @@ class LoadAllNewMilkFromSmsUseCaseTest {
 
     @Test
     fun localDbHasNoDataSmsSourceHasData_returnSmsList() {
-        val useCase = LoadAllNewMilkFromSmsUseCase(mock {
-            on { getAllMilkUnobserved() }.doReturn(emptyList<Milk>())
-            on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(TestData.milkList)
-        })
+        val useCase = LoadAllNewMilkFromSmsUseCase(
+            mock {
+                on { getAllMilkUnobserved() }.doReturn(emptyList<Milk>())
+                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(TestData.milkList)
+            },
+            FakePerformanceHelper()
+        )
 
         val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
 
@@ -58,10 +65,13 @@ class LoadAllNewMilkFromSmsUseCaseTest {
 
     @Test
     fun localDbHasDataAndSmsSourceHasNoData_returnEmptyList() {
-        val useCase = LoadAllNewMilkFromSmsUseCase(mock {
-            on { getAllMilkUnobserved() }.doReturn(TestData.milkList)
-            on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(emptyList<Milk>())
-        })
+        val useCase = LoadAllNewMilkFromSmsUseCase(
+            mock {
+                on { getAllMilkUnobserved() }.doReturn(TestData.milkList)
+                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(emptyList<Milk>())
+            },
+            FakePerformanceHelper()
+        )
 
         val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
 
@@ -78,10 +88,13 @@ class LoadAllNewMilkFromSmsUseCaseTest {
             TestData.milk3, TestData.milk4
         )
 
-        val useCase = LoadAllNewMilkFromSmsUseCase(mock {
-            on { getAllMilkUnobserved() }.doReturn(listFromLocalDbSource)
-            on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(listFromSmsSource)
-        })
+        val useCase = LoadAllNewMilkFromSmsUseCase(
+            mock {
+                on { getAllMilkUnobserved() }.doReturn(listFromLocalDbSource)
+                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(listFromSmsSource)
+            },
+            FakePerformanceHelper()
+        )
 
         val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
 
@@ -98,10 +111,13 @@ class LoadAllNewMilkFromSmsUseCaseTest {
             TestData.milk1, TestData.milk2
         )
 
-        val useCase = LoadAllNewMilkFromSmsUseCase(mock {
-            on { getAllMilkUnobserved() }.doReturn(listFromLocalDbSource)
-            on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(listFromSmsSource)
-        })
+        val useCase = LoadAllNewMilkFromSmsUseCase(
+            mock {
+                on { getAllMilkUnobserved() }.doReturn(listFromLocalDbSource)
+                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(listFromSmsSource)
+            },
+            FakePerformanceHelper()
+        )
 
         val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
 
@@ -118,10 +134,13 @@ class LoadAllNewMilkFromSmsUseCaseTest {
             TestData.milk1, TestData.milk4
         )
 
-        val useCase = LoadAllNewMilkFromSmsUseCase(mock {
-            on { getAllMilkUnobserved() }.doReturn(listFromLocalDbSource)
-            on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(listFromSmsSource)
-        })
+        val useCase = LoadAllNewMilkFromSmsUseCase(
+            mock {
+                on { getAllMilkUnobserved() }.doReturn(listFromLocalDbSource)
+                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(listFromSmsSource)
+            },
+            FakePerformanceHelper()
+        )
 
         val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
 

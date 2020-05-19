@@ -22,6 +22,7 @@ import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakeMilkRepository
+import com.pr656d.cattlenotes.test.util.fakes.FakePerformanceHelper
 import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
 import com.pr656d.model.Milk
 import com.pr656d.shared.data.milk.MilkRepository
@@ -65,19 +66,19 @@ class MilkingViewModelTest {
             getAvailableMilkSmsSourcesUseCase = GetAvailableMilkSmsSourcesUseCase(),
             getPreferredMilkSmsSourceUseCase = GetPreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository),
             setPreferredMilkSmsSourceUseCase = SetPreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository),
-            loadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(fakeMilkRepository),
+            loadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(fakeMilkRepository, FakePerformanceHelper()),
             addAllMilkUseCase = AddAllMilkUseCase(fakeMilkRepository)
         ).apply { observeUnobserved() }
     }
 
     private fun MilkingViewModel.observeUnobserved() {
-        loading.observeForever { }
-        milkList.observeForever { }
+        loading.observeForever {  }
+        milkList.observeForever {  }
         smsSource.observeForever {  }
-        newMilkListFromSms.observeForever { }
-        permissionsGranted.observeForever { }
-        showPermissionExplanation.observeForever { }
-        availableMilkSmsSources.observeForever { }
+        newMilkListFromSms.observeForever {  }
+        permissionsGranted.observeForever {  }
+        showPermissionExplanation.observeForever {  }
+        availableMilkSmsSources.observeForever {  }
         navigateToAddMilk.observeForever {  }
         navigateToSmsSourceSelector.observeForever {  }
     }

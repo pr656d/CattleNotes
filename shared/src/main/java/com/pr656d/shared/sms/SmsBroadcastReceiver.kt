@@ -27,6 +27,7 @@ import com.pr656d.shared.domain.milk.AddMilkUseCase
 import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.domain.settings.GetAutomaticMilkingCollectionUseCase
+import com.pr656d.shared.performance.PerformanceHelper
 import com.pr656d.shared.utils.getSmsSourceOrThrow
 import dagger.android.DaggerBroadcastReceiver
 import timber.log.Timber
@@ -48,6 +49,8 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
 
     @Inject lateinit var addMilkUseCase: AddMilkUseCase
 
+    @Inject lateinit var performanceHelper: PerformanceHelper
+
     /**
      * Only run short running tasks.
      * TODO("This execution should be done by WorkManager or JobScheduler")
@@ -61,13 +64,18 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
             val countDownLatch = CountDownLatch(1)
 
             DefaultScheduler.execute {
+                performanceHelper.startTrace(TRACE_KEY_ADD_MILK_ON_RECEIVE)
+
                 val timeTaken = measureTimeMillis {
                     val smsMessages = getMessagesFromIntent(intent)
                     addMilk(smsMessages)
-                    countDownLatch.countDown()
                 }
 
+                performanceHelper.stopTrace(TRACE_KEY_ADD_MILK_ON_RECEIVE)
+
                 Timber.d("Time taken to add milk at SmsBroadcastReceiver : $timeTaken ms")
+
+                countDownLatch.countDown()
             }
 
             try {
@@ -140,4 +148,8 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
 
     private fun getMessagesFromIntent(intent: Intent) =
         Telephony.Sms.Intents.getMessagesFromIntent(intent).toList()
+
+    companion object {
+        private const val TRACE_KEY_ADD_MILK_ON_RECEIVE = "add_milk_from_received_sms"
+    }
 }

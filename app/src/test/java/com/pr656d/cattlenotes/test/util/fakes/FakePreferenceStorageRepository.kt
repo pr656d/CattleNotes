@@ -135,9 +135,9 @@ open class FakePreferenceStorageRepository(
          */
     }
 
-    override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms> {
+    override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms?> {
         return preferenceStorage.observablePreferredMilkSmsSource.map {
-            it.toMilkSmsSource()
+            it?.toMilkSmsSource()
         }
     }
 
