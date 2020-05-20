@@ -20,8 +20,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
-import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
+import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination
 import com.pr656d.shared.domain.login.GetLoginAndAllStepsCompletedUseCase
+import com.pr656d.test.MainCoroutineRule
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -30,6 +33,7 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for the [LaunchViewModel].
  */
+@ExperimentalCoroutinesApi
 class LaunchViewModelTest {
 
     // Executes tasks in the Architecture Components in the same thread
@@ -40,8 +44,12 @@ class LaunchViewModelTest {
     @get:Rule
     var syncTaskExecutorRule = SyncTaskExecutorRule()
 
+    // Overrides Dispatchers.Main used in Coroutines
+    @get:Rule
+    var coroutineRule = MainCoroutineRule()
+
     @Test
-    fun notCompletedLogIn_navigateToLoginActivity() {
+    fun notCompletedLogIn_navigateToLoginActivity() = coroutineRule.runBlockingTest {
         // Given that user is *not* logged in and *not* completed first time profile setup.
         val preferenceStorageRepository = object : FakePreferenceStorageRepository() {
             override fun getLoginCompleted(): Boolean = false
@@ -49,32 +57,70 @@ class LaunchViewModelTest {
         }
 
         val getLoginAndAllStepsCompletedUseCase =
-            GetLoginAndAllStepsCompletedUseCase(preferenceStorageRepository)
+            GetLoginAndAllStepsCompletedUseCase(
+                preferenceStorageRepository,
+                coroutineRule.testDispatcher
+            )
 
         val viewModel = LaunchViewModel(getLoginAndAllStepsCompletedUseCase)
 
         // When launchDestination is observed
         // Then verify user is navigated to the login activity
         val navigateEvent = LiveDataTestUtil.getValue(viewModel.launchDestination)
-        assertThat(LOGIN_ACTIVITY, isEqualTo(navigateEvent?.getContentIfNotHandled()))
+        assertThat(
+            LaunchDestination.LoginActivity,
+            isEqualTo(navigateEvent?.getContentIfNotHandled())
+        )
     }
 
     @Test
-    fun notCompletedFirstTimeSetupProfile_navigateToLoginActivity() {
-        // Given that user is logged in and not completed first time profile setup.
+    fun completedLogInAndFirstTimeProfileSetup_navigateToMainActivity() = coroutineRule.runBlockingTest {
+        // Given that user is *not* logged in and *not* completed first time profile setup.
         val preferenceStorageRepository = object : FakePreferenceStorageRepository() {
             override fun getLoginCompleted(): Boolean = true
-            override fun getFirstTimeProfileSetupCompleted(): Boolean = false
+            override fun getFirstTimeProfileSetupCompleted(): Boolean = true
         }
 
         val getLoginAndAllStepsCompletedUseCase =
-            GetLoginAndAllStepsCompletedUseCase(preferenceStorageRepository)
+            GetLoginAndAllStepsCompletedUseCase(
+                preferenceStorageRepository,
+                coroutineRule.testDispatcher
+            )
 
         val viewModel = LaunchViewModel(getLoginAndAllStepsCompletedUseCase)
 
         // When launchDestination is observed
         // Then verify user is navigated to the login activity
         val navigateEvent = LiveDataTestUtil.getValue(viewModel.launchDestination)
-        assertThat(LOGIN_ACTIVITY, isEqualTo(navigateEvent?.getContentIfNotHandled()))
+        assertThat(
+            LaunchDestination.MainActivity,
+            isEqualTo(navigateEvent?.getContentIfNotHandled())
+        )
     }
+
+    @Test
+    fun notCompletedFirstTimeSetupProfileSetup_navigateToLoginActivity() =
+        coroutineRule.runBlockingTest {
+            // Given that user is logged in and not completed first time profile setup.
+            val preferenceStorageRepository = object : FakePreferenceStorageRepository() {
+                override fun getLoginCompleted(): Boolean = true
+                override fun getFirstTimeProfileSetupCompleted(): Boolean = false
+            }
+
+            val getLoginAndAllStepsCompletedUseCase =
+                GetLoginAndAllStepsCompletedUseCase(
+                    preferenceStorageRepository,
+                    coroutineRule.testDispatcher
+                )
+
+            val viewModel = LaunchViewModel(getLoginAndAllStepsCompletedUseCase)
+
+            // When launchDestination is observed
+            // Then verify user is navigated to the login activity
+            val navigateEvent = LiveDataTestUtil.getValue(viewModel.launchDestination)
+            assertThat(
+                LaunchDestination.LoginActivity,
+                isEqualTo(navigateEvent?.getContentIfNotHandled())
+            )
+        }
 }

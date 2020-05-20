@@ -40,12 +40,13 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AndroidSupportInjectionModule::class,
+        AppModule::class,
+        SharedModule::class,
         ViewModelModule::class,
+        CoroutinesModule::class,
         ActivityBindingModule::class,
         BroadcastReceiverBindingModule::class,
         ServiceBindingModule::class,
-        AppModule::class,
-        SharedModule::class,
         LoginModule::class,
         ThemedActivityDelegateModule::class,
         ProfileDelegateModule::class

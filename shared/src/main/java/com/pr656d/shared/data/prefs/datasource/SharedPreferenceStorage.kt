@@ -41,13 +41,6 @@ interface PreferenceStorage {
 
     var firstTimeProfileSetupCompleted: Boolean
 
-    /**
-     * Login and it's first steps after login are completed.
-     *
-     * First user experience.
-     */
-    val loginAndAllStepsCompleted: Boolean
-
     var onboardingCompleted: Boolean
 
     var selectedTheme: String?
@@ -159,9 +152,6 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         PREF_FIRST_TIME_PROFILE_SETUP,
         false
     )
-
-    override val loginAndAllStepsCompleted: Boolean
-        get() = loginCompleted && firstTimeProfileSetupCompleted
 
     override var reloadData by BooleanPreference(
         prefs,

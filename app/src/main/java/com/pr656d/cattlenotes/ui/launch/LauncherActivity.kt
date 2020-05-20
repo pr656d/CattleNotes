@@ -20,8 +20,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.pr656d.cattlenotes.ui.MainActivity
-import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LOGIN_ACTIVITY
-import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MAIN_ACTIVITY
+import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination
 import com.pr656d.cattlenotes.ui.login.LoginActivity
 import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
@@ -40,10 +39,11 @@ class LauncherActivity : DaggerAppCompatActivity() {
         val viewModel by viewModels<LaunchViewModel> { viewModelFactory }
 
         viewModel.launchDestination.observe(this, EventObserver { destination ->
-            when (destination) {
-                MAIN_ACTIVITY -> startActivity(Intent(this, MainActivity::class.java))
-                LOGIN_ACTIVITY -> startActivity(Intent(this, LoginActivity::class.java))
+            val intent = when (destination) {
+                LaunchDestination.MainActivity -> Intent(this, MainActivity::class.java)
+                LaunchDestination.LoginActivity -> Intent(this, LoginActivity::class.java)
             }
+            startActivity(intent)
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         })

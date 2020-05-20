@@ -19,3 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Firebase
+-dontwarn retrofit2.Call
+
+# Gson throws Assertion Error on Enum types.
+-keepclassmembers class com.pr656d.model.** { <fields>; }
+
+# Coroutines bug https://github.com/Kotlin/kotlinx.coroutines/issues/1270
+-dontwarn kotlinx.coroutines.flow.**

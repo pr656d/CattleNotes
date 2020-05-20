@@ -31,14 +31,8 @@
 # A resource is loaded with a relative path so the package of this class must be preserved.
 -keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
-# Firebase
--dontwarn retrofit2.Call
-
 # Databinding CardViewBindingAdapter
 -dontwarn androidx.cardview.widget.CardView
-
-# Gson throws Assertion Error on Enum types.
--keepclassmembers class com.pr656d.model.** { <fields>; }
 
 # Glide
 -keep public class * implements com.bumptech.glide.module.GlideModule
@@ -53,3 +47,11 @@
 
 # https://github.com/firebase/FirebaseUI-Android/issues/1429
 -keep class com.firebase.ui.auth.** { * ; }
+
+# Coroutines
+-dontwarn **$$inlined$map**
+-dontwarn **$$inlined$collect**
+-dontwarn **$$inlined$transform**
+
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**

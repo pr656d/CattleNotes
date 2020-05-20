@@ -61,7 +61,7 @@ interface PreferenceStorageRepository {
     fun setFirstTimeProfileSetupCompleted(firstTimeProfileSetupCompleted: Boolean)
 
     /**
-     * Get [PreferenceStorage.loginAndAllStepsCompleted].
+     * Get whether login and all steps completed or not.
      */
     fun getLoginAndAllStepsCompleted(): Boolean
 
@@ -178,7 +178,7 @@ class SharedPreferenceStorageRepository @Inject constructor(
     }
 
     override fun getLoginAndAllStepsCompleted(): Boolean {
-        return preferenceStorage.loginAndAllStepsCompleted
+        return getLoginCompleted() && getFirstTimeProfileSetupCompleted()
     }
 
     override fun getOnboardingCompleted(): Boolean {
@@ -253,8 +253,8 @@ class SharedPreferenceStorageRepository @Inject constructor(
 
     override fun clear(fromRemote: Boolean) {
         preferenceStorage.clear()
-        if (fromRemote) {
+        //if (fromRemote) {
             // TODO("Clear from remote source also.") : If remote source available and asked explicitly to clear from remote source.
-        }
+        //}
     }
 }

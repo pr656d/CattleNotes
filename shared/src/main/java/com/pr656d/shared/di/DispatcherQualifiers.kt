@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+package com.pr656d.shared.di
 
-dependencies {
-    implementation project(":model")
+import javax.inject.Qualifier
 
-    // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class DefaultDispatcher
 
-    // ThreeTenBP for the shared module only. Date and time API for Java.
-    testImplementation "org.threeten:threetenbp:$rootProject.threetenbpVersion"
-    compileOnly "org.threeten:threetenbp:$rootProject.threetenbpVersion:no-tzdb"
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class IoDispatcher
 
-    implementation "junit:junit:$rootProject.junitVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesVersion"
-}
+@Retention(AnnotationRetention.BINARY)
+@Qualifier
+annotation class MainDispatcher

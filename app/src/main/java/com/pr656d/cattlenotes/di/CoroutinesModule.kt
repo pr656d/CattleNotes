@@ -14,18 +14,30 @@
  * limitations under the License.
  */
 
-package com.pr656d.shared.domain.login
+package com.pr656d.cattlenotes.di
 
-import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.di.DefaultDispatcher
-import com.pr656d.shared.domain.NewUseCase
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.di.MainDispatcher
+import dagger.Module
+import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
-import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
 
-open class GetLoginAndAllStepsCompletedUseCase @Inject constructor(
-    private val preferenceStorageRepository: PreferenceStorageRepository,
-    @DefaultDispatcher coroutineDispatcher: CoroutineDispatcher
-) : NewUseCase<Unit, Boolean>(coroutineDispatcher) {
-    override fun execute(parameters: Unit): Boolean =
-        preferenceStorageRepository.getLoginAndAllStepsCompleted()
+@Module
+object CoroutinesModule {
+    @DefaultDispatcher
+    @JvmStatic
+    @Provides
+    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @IoDispatcher
+    @JvmStatic
+    @Provides
+    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @MainDispatcher
+    @JvmStatic
+    @Provides
+    fun providesMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 }

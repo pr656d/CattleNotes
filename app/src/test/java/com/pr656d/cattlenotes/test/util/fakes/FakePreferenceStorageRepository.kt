@@ -59,7 +59,7 @@ open class FakePreferenceStorageRepository(
     }
 
     override fun getLoginAndAllStepsCompleted(): Boolean {
-        return preferenceStorage.loginAndAllStepsCompleted
+        return getLoginCompleted() && getFirstTimeProfileSetupCompleted()
     }
 
     override fun getOnboardingCompleted(): Boolean {
