@@ -51,6 +51,16 @@ android {
             minifyEnabled true  // To enable proguard
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        staging {
+            initWith debug
+            versionNameSuffix = '-staging'
+
+            // Specifies a sorted list of fallback build types that the
+            // plugin should try to use when a dependency does not include a
+            // "staging" build type.
+            // Used with :test-shared, which doesn't have a staging variant.
+            matchingFallbacks = ['debug']
+        }
     }
 
     compileOptions {
