@@ -17,20 +17,22 @@
 package com.pr656d.cattlenotes.ui.cattle.detail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
+import com.pr656d.cattlenotes.test.fakes.data.cattle.FakeCattleRepository
 import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.domain.cattle.addedit.DeleteCattleUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
-import com.pr656d.shared.domain.cattle.detail.GetParentCattleUseCase
+import com.pr656d.test.MainCoroutineRule
 import com.pr656d.test.TestData
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.*
 import org.junit.Rule
@@ -40,42 +42,39 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for the [CattleDetailViewModel]
  */
+@ExperimentalCoroutinesApi
 class CattleDetailViewModelTest {
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private val cattleRepository = object : FakeCattleRepository() {
-        override fun getCattleById(id: String): LiveData<Cattle?> {
-            return MutableLiveData<Cattle?>().apply {
-                value = TestData.cattleList.firstOrNull { it.id == id }
+        override fun getCattleById(id: String): Flow<Cattle?> {
+            return flow {
+                emit(TestData.cattleList.firstOrNull { it.id == id })
             }
         }
 
-        override fun getCattleByTagNumber(tagNumber: Long): LiveData<Cattle?> {
-            return MutableLiveData<Cattle?>().apply {
-                value = TestData.cattleList.firstOrNull { it.tagNumber == tagNumber }
+        override fun getCattleByTagNumber(tagNumber: Long): Flow<Cattle?> {
+            return flow {
+                emit(TestData.cattleList.firstOrNull { it.tagNumber == tagNumber })
             }
         }
     }
 
     private fun createCattleDetailViewModel(
-        repository: CattleRepository = cattleRepository,
-        getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(repository),
-        getParentCattleUseCase: GetParentCattleUseCase = GetParentCattleUseCase(repository),
-        deleteCattleUseCase: DeleteCattleUseCase = DeleteCattleUseCase(repository, mock())
+        repository: CattleRepository = cattleRepository
     ): CattleDetailViewModel {
+        val coroutineDispatcher = coroutineRule.testDispatcher
+
         return CattleDetailViewModel(
-            getCattleByIdUseCase,
-            getParentCattleUseCase,
-            deleteCattleUseCase
-        ).apply {
-            observeUnobserved()
-        }
+            GetCattleByIdUseCase(repository, coroutineDispatcher),
+            DeleteCattleUseCase(repository, mock(), coroutineDispatcher)
+        ).apply { observeUnobserved() }
     }
 
     private fun CattleDetailViewModel.observeUnobserved() {
@@ -84,7 +83,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun fetchCattleIsCalledWithAvailableCattle_setCattle() {
+    fun fetchCattleIsCalledWithAvailableCattle_setCattle() = coroutineRule.runBlockingTest {
         // Every time test runs we will get any random value from list
         val actualCattle = TestData.cattleList.random()
 
@@ -98,7 +97,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun cattleIsModified_fetchCattleShouldUpdateCattle() {
+    fun cattleIsModified_fetchCattleShouldUpdateCattle() = coroutineRule.runBlockingTest {
         // We have cattle already
         val oldCattle = TestData.cattle1
 
@@ -108,7 +107,7 @@ class CattleDetailViewModelTest {
         val viewModel = createCattleDetailViewModel(cattleRepository)
 
         // Return cattle which will be modified later
-        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(MutableLiveData(oldCattle))
+        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(flowOf(oldCattle))
 
         // First call for the method
         viewModel.fetchCattle(oldCattle.id)
@@ -129,7 +128,7 @@ class CattleDetailViewModelTest {
         )
 
         // Returns new updated cattle
-        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(MutableLiveData(newCattle))
+        whenever(cattleRepository.getCattleById(oldCattle.id)).thenReturn(flowOf(newCattle))
 
         /**
          * Second call for the method
@@ -142,7 +141,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun deleteCattleIsCalledWithDeleteConfirmationIsFalse_launchDeleteConfirmation() {
+    fun deleteCattleIsCalledWithDeleteConfirmationIsFalse_launchDeleteConfirmation() = coroutineRule.runBlockingTest {
         val viewModel = createCattleDetailViewModel()
 
         // Delete cattle confirmation called
@@ -153,7 +152,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun deleteCattleIsCalledWithDeleteConfirmationIsTrue_navigateUpOnSuccess() {
+    fun deleteCattleIsCalledWithDeleteConfirmationIsTrue_navigateUpOnSuccess() = coroutineRule.runBlockingTest {
         // Returns any random cattle from the list
         val cattle = TestData.cattleList.random()
 
@@ -170,7 +169,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun showAllBreedingIsCalled_launchAllBreeding() {
+    fun showAllBreedingIsCalled_launchAllBreeding() = coroutineRule.runBlockingTest {
         val cattle = TestData.cattle1
 
         val viewModel = createCattleDetailViewModel()
@@ -186,7 +185,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun addNewBreedingIsCalled_launchAddNewBreeding() {
+    fun addNewBreedingIsCalled_launchAddNewBreeding() = coroutineRule.runBlockingTest {
         val cattle = TestData.cattle1
 
         val viewModel = createCattleDetailViewModel()
@@ -202,7 +201,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun cattleTypeIsBull_doNotLaunchAddBreeding() {
+    fun cattleTypeIsBull_doNotLaunchAddBreeding() = coroutineRule.runBlockingTest {
         val cattle = TestData.cattleBull
 
         val viewModel = createCattleDetailViewModel()
@@ -218,7 +217,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun cattleTypeIsBull_doNotShowAllBreeding() {
+    fun cattleTypeIsBull_doNotShowAllBreeding() = coroutineRule.runBlockingTest {
         val cattle = TestData.cattleBull
 
         val viewModel = createCattleDetailViewModel()
@@ -234,7 +233,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun editCattleIsCalled_launchEditCattle() {
+    fun editCattleIsCalled_launchEditCattle() = coroutineRule.runBlockingTest {
         // Returns any random cattle from the list
         val cattle = TestData.cattleList.random()
 
@@ -250,19 +249,14 @@ class CattleDetailViewModelTest {
         assertThat(cattle, isEqualTo(launchEditCattle?.getContentIfNotHandled()))
     }
 
-    /**
-     * Use case that always returns an error when executed.
-     */
-    private object FailingDeleteCattleUseCase : DeleteCattleUseCase(FakeCattleRepository(), mock()) {
-        override fun execute(parameters: Cattle) {
-            throw Exception("Error!")
-        }
-    }
-
     @Test
-    fun deleteCattleIsCalled_showMessageOnError() {
+    fun deleteCattleIsCalled_showMessageOnError() = coroutineRule.runBlockingTest {
         val viewModel = createCattleDetailViewModel(
-            deleteCattleUseCase = FailingDeleteCattleUseCase
+            object : FakeCattleRepository() {
+                override suspend fun deleteCattle(cattle: Cattle) {
+                    throw Exception("Error!")
+                }
+            }
         )
 
         val cattle = TestData.cattle1
@@ -277,12 +271,12 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun fetchCattleIsCalled_cattleNotFound_showMessageOnError() {
+    fun fetchCattleIsCalled_cattleNotFound_showMessageOnError() = coroutineRule.runBlockingTest {
         val cattle = TestData.cattle1
 
         val viewModel = createCattleDetailViewModel(
             repository = mock {
-                on { getCattleById(cattle.id) }.doReturn(MutableLiveData<Cattle?>(null))
+                on { getCattleById(cattle.id) }.doReturn(flowOf(null))
             }
         )
 
@@ -294,7 +288,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun cattleIsLoaded_hasParentThenFetchParentDetail() {
+    fun cattleIsLoaded_hasParentThenFetchParentDetail() = coroutineRule.runBlockingTest {
         val viewModel = createCattleDetailViewModel()
 
         val cattle = TestData.cattle2
@@ -308,7 +302,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun cattleHasPrentAndParentHasParent_fetchData() {
+    fun cattleHasPrentAndParentHasParent_fetchData() = coroutineRule.runBlockingTest {
         val viewModel = createCattleDetailViewModel()
 
         val cattle = TestData.cattle5
@@ -326,7 +320,7 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun cattleTypeIsBull_isCattleTypeBullIsTrue() {
+    fun cattleTypeIsBull_isCattleTypeBullIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createCattleDetailViewModel()
 
         val cattle = TestData.cattleBull

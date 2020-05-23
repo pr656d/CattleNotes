@@ -38,6 +38,7 @@ import com.pr656d.cattlenotes.ui.NavigationFragment
 import com.pr656d.cattlenotes.utils.focus
 import com.pr656d.cattlenotes.utils.hideKeyboard
 import com.pr656d.shared.domain.result.EventObserver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.threeten.bp.ZonedDateTime
 import javax.inject.Inject
 
@@ -57,6 +58,7 @@ class AddEditCattleFragment : NavigationFragment() {
 
     private val args by navArgs<AddEditCattleFragmentArgs>()
 
+    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -83,6 +85,7 @@ class AddEditCattleFragment : NavigationFragment() {
         return binding.root
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -144,10 +147,13 @@ class AddEditCattleFragment : NavigationFragment() {
 
         model.showMessage.observe(viewLifecycleOwner, EventObserver {
             hideKeyboard(requireView())
-            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
+                .setAnchorView(binding.fabButtonSaveCattle)
+                .show()
         })
     }
 
+    @ExperimentalCoroutinesApi
     private fun onBackPressed(): Boolean {
         if (::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state == STATE_EXPANDED) {
             // collapse or hide the sheet

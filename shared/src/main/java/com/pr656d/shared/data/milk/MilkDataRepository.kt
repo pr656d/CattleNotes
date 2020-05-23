@@ -16,11 +16,11 @@
 
 package com.pr656d.shared.data.milk
 
-import androidx.lifecycle.LiveData
 import com.pr656d.model.Milk
-import com.pr656d.shared.data.db.MilkDao
+import com.pr656d.shared.data.db.dao.MilkDao
 import com.pr656d.shared.data.milk.datasource.MilkDataSource
 import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSms
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
@@ -28,21 +28,26 @@ import javax.inject.Inject
  * Single point of access for [Milk] data for the presentation layer.
  */
 interface MilkRepository {
-    fun addMilk(milk: Milk)
 
-    fun addAllMilk(milkList: List<Milk>): List<Long>
+    suspend fun addMilk(milk: Milk): Long
 
-    fun getAllMilk(): LiveData<List<Milk>>
+    suspend fun addAllMilk(milkList: List<Milk>): List<Long>
 
-    fun getAllMilkUnobserved(): List<Milk>
+    /**
+     * Load from data source and save into db.
+     */
+    suspend fun load()
 
-    fun getMilkById(id: String): LiveData<Milk?>
+    fun getAllMilk(): Flow<List<Milk>>
 
-    fun deleteMilk(milk: Milk)
+    fun getMilkById(id: String): Flow<Milk?>
 
-    fun updateMilk(milk: Milk)
+    suspend fun updateMilk(milk: Milk)
 
-    fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk>
+    suspend fun deleteMilk(milk: Milk)
+
+    /**  Provides milk list from SMS data source.  */
+    suspend fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk>
 }
 
 class MilkDataRepository @Inject constructor(
@@ -50,39 +55,41 @@ class MilkDataRepository @Inject constructor(
     private val milkDataSource: MilkDataSource,
     private val milkDataSourceFromSms: MilkDataSourceFromSms
 ) : MilkRepository {
-    override fun addMilk(milk: Milk) {
-        milkDao.insert(milk)
+
+    override suspend fun addMilk(milk: Milk): Long {
         milkDataSource.addMilk(milk)
+        return milkDao.insert(milk)
     }
 
-    override fun addAllMilk(milkList: List<Milk>): List<Long> {
+    override suspend fun addAllMilk(milkList: List<Milk>): List<Long> {
         milkDataSource.addAllMilk(milkList)
         return milkDao.insertAll(milkList)
     }
 
-    override fun getAllMilk(): LiveData<List<Milk>> {
+    override suspend fun load() {
+        val list = milkDataSource.load()
+        milkDao.insertAll(list)
+    }
+
+    override fun getAllMilk(): Flow<List<Milk>> {
         return milkDao.getAll()
     }
 
-    override fun getAllMilkUnobserved(): List<Milk> {
-        return milkDao.getAllUnobserved()
-    }
-
-    override fun getMilkById(id: String): LiveData<Milk?> {
+    override fun getMilkById(id: String): Flow<Milk?> {
         return milkDao.getById(id)
     }
 
-    override fun deleteMilk(milk: Milk) {
-        milkDao.delete(milk)
-        milkDataSource.deleteMilk(milk)
-    }
-
-    override fun updateMilk(milk: Milk) {
-        milkDao.update(milk)
+    override suspend fun updateMilk(milk: Milk) {
         milkDataSource.updateMilk(milk)
+        return milkDao.update(milk)
     }
 
-    override fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> {
+    override suspend fun deleteMilk(milk: Milk) {
+        milkDataSource.deleteMilk(milk)
+        return milkDao.delete(milk)
+    }
+
+    override suspend fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> {
         return milkDataSourceFromSms.getAllMilk(smsSource)
     }
 }

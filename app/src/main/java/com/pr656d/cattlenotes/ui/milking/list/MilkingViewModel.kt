@@ -20,6 +20,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.model.Milk
+import com.pr656d.shared.domain.invoke
 import com.pr656d.shared.domain.milk.AddAllMilkUseCase
 import com.pr656d.shared.domain.milk.LoadAllNewMilkFromSmsUseCase
 import com.pr656d.shared.domain.milk.LoadMilkListUseCase
@@ -28,8 +29,13 @@ import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.milk.sms.SetPreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.successOr
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class MilkingViewModel @Inject constructor(
     loadMilkListUseCase: LoadMilkListUseCase,
     getAvailableMilkSmsSourcesUseCase: GetAvailableMilkSmsSourcesUseCase,
@@ -39,13 +45,11 @@ class MilkingViewModel @Inject constructor(
     private val addAllMilkUseCase: AddAllMilkUseCase
 ) : ViewModel(), MilkingActionListener {
 
-    private val addMilkUseCaseResult = MutableLiveData<Result<Unit>>()
-    private val loadAllNewMilkFromSmsResult = MutableLiveData<Result<List<Milk>>>()
-    private val availableMilkSmsSourcesResult = MutableLiveData<Result<List<Milk.Source.Sms>>>()
+    val milkList: LiveData<List<Milk>> = loadMilkListUseCase(Unit)
+        .map { it.successOr(emptyList()) }
+        .asLiveData()
 
-    val milkList: LiveData<List<Milk>> = loadMilkListUseCase()
-
-    val isEmpty: LiveData<Boolean>
+    val isEmpty: LiveData<Boolean> = milkList.map { it.isNullOrEmpty() }
 
     private val _loading = MediatorLiveData<Boolean>()
     val loading: LiveData<Boolean>
@@ -63,19 +67,15 @@ class MilkingViewModel @Inject constructor(
     val showPermissionExplanation: LiveData<Event<Unit>>
         get() = _showPermissionExplanation
 
-    val availableMilkSmsSources: LiveData<List<Milk.Source.Sms>>
-        get() = availableMilkSmsSourcesResult.map {
-            (it as? Result.Success)?.data ?: emptyList()
+    val availableMilkSmsSources: LiveData<List<Milk.Source.Sms>> = liveData {
+        getAvailableMilkSmsSourcesUseCase().successOr(null)?.let {
+            emit(it)
         }
+    }
 
-    private val _smsSource = MediatorLiveData<Milk.Source.Sms>()
+    private val _smsSource = MutableLiveData<Milk.Source.Sms>()
     val smsSource: LiveData<Milk.Source.Sms>
         get() = _smsSource
-
-    val newMilkListFromSms: LiveData<List<Milk>>
-        get() = loadAllNewMilkFromSmsResult.map {
-            (it as? Result.Success)?.data ?: emptyList()
-        }
 
     private val _navigateToSmsSourceSelector = MutableLiveData<Event<Unit>>()
     val navigateToSmsSourceSelector: LiveData<Event<Unit>>
@@ -84,11 +84,11 @@ class MilkingViewModel @Inject constructor(
     // Flag to start sync with sms messages right after sms source is set.
     private var syncWithSmsMessagesAfterSmsSourceIsSet: Event<Unit>? = null
 
-    private val _saveNewMilkConfirmationDialog = MediatorLiveData<Event<List<Milk>>>()
+    private val _saveNewMilkConfirmationDialog = MutableLiveData<Event<List<Milk>>>()
     val saveNewMilkConfirmationDialog: LiveData<Event<List<Milk>>>
         get() = _saveNewMilkConfirmationDialog
 
-    private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
+    private val _showMessage = MutableLiveData<Event<@StringRes Int>>()
     val showMessage: LiveData<Event<Int>>
         get() = _showMessage
 
@@ -97,32 +97,14 @@ class MilkingViewModel @Inject constructor(
         get() = _navigateToAddMilk
 
     init {
-        _smsSource.addSource(getPreferredMilkSmsSourceUseCase(Unit)) { result ->
-            (result as? Result.Success)?.data.let {
-                _smsSource.value = it
+        viewModelScope.launch {
+            getPreferredMilkSmsSourceUseCase().successOr(null)?.let {
+                _smsSource.postValue(it)
             }
-        }
-
-        getAvailableMilkSmsSourcesUseCase(Unit, availableMilkSmsSourcesResult)
-
-        _saveNewMilkConfirmationDialog.addSource(newMilkListFromSms) {
-            _saveNewMilkConfirmationDialog.value = Event(it)
         }
 
         _loading.addSource(milkList) {
             _loading.value = false
-        }
-
-        _loading.addSource(addMilkUseCaseResult) {
-            _loading.value = false
-        }
-
-        isEmpty = milkList.map { it.isNullOrEmpty() }
-
-        _showMessage.addSource(addMilkUseCaseResult) {
-            (it as? Result.Error)?.exception?.let {
-                _showMessage.value = Event(R.string.error_add_milk)
-            }
         }
     }
 
@@ -170,12 +152,24 @@ class MilkingViewModel @Inject constructor(
             return
         }
 
-        // Sms sender available.
-        loadAllNewMilkFromSmsUseCase(_smsSource.value!!, loadAllNewMilkFromSmsResult)
+        viewModelScope.launch {
+            // Sms sender available.
+            loadAllNewMilkFromSmsUseCase(_smsSource.value!!).let { result ->
+                (result as? Result.Success)?.data?.let {
+                    _saveNewMilkConfirmationDialog.postValue(Event(result.data))
+                }
+
+                (result as? Result.Error)?.exception?.let {
+                    _showMessage.postValue(Event(R.string.error_unknown))
+                }
+            }
+        }
     }
 
     fun setSmsSource(smsSource: Milk.Source.Sms) {
-        setPreferredMilkSmsSourceUseCase(smsSource)
+        viewModelScope.launch {
+            setPreferredMilkSmsSourceUseCase(smsSource)
+        }
         _smsSource.value = smsSource
         checkAndSyncWithSmsMessagesAfterSmsSourceIsSet()
     }
@@ -193,8 +187,16 @@ class MilkingViewModel @Inject constructor(
     private fun isPermissionGranted() = _permissionsGranted.value == true
 
     fun saveMilk(milkList: List<Milk>) {
-        _loading.value = true
-        addAllMilkUseCase(milkList, addMilkUseCaseResult)
+        viewModelScope.launch {
+            _loading.postValue(true)
+
+            val result = addAllMilkUseCase(milkList)
+
+            if (result is Result.Error)
+                _showMessage.postValue(Event(R.string.error_add_milk))
+
+            _loading.postValue(false)
+        }
     }
 
     override fun delete(milk: Milk) {

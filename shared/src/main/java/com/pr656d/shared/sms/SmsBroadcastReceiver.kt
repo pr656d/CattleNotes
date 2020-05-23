@@ -22,7 +22,7 @@ import android.provider.Telephony
 import android.telephony.SmsMessage
 import androidx.annotation.WorkerThread
 import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSms
-import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.domain.milk.AddMilkUseCase
 import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.result.Result
@@ -30,6 +30,9 @@ import com.pr656d.shared.domain.settings.GetAutomaticMilkingCollectionUseCase
 import com.pr656d.shared.performance.PerformanceHelper
 import com.pr656d.shared.utils.getSmsSourceOrThrow
 import dagger.android.DaggerBroadcastReceiver
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -51,6 +54,8 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
 
     @Inject lateinit var performanceHelper: PerformanceHelper
 
+    @Inject @DefaultDispatcher lateinit var defaultDispatcher: CoroutineDispatcher
+
     /**
      * Only run short running tasks.
      * TODO("This execution should be done by WorkManager or JobScheduler")
@@ -63,7 +68,7 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
 
             val countDownLatch = CountDownLatch(1)
 
-            DefaultScheduler.execute {
+            CoroutineScope(defaultDispatcher).launch {
                 performanceHelper.startTrace(TRACE_KEY_ADD_MILK_ON_RECEIVE)
 
                 val timeTaken = measureTimeMillis {
@@ -87,14 +92,14 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
     }
 
     @WorkerThread
-    private fun addMilk(smsMessages: List<SmsMessage>) {
+    private suspend fun addMilk(smsMessages: List<SmsMessage>) {
         val isAutomaticMilkingCollectionEnabled =
-            getPreferredAutomaticMilkingCollectionUseCase.executeNow(Unit).let {
+            getPreferredAutomaticMilkingCollectionUseCase(Unit).let {
                 (it as? Result.Success)?.data ?: false
             }
 
         val preferredMilkSmsSource =
-            preferredMilkSmsSourceUseCase.executeNow(Unit).let {
+            preferredMilkSmsSourceUseCase(Unit).let {
                 (it as? Result.Success)?.data
             }
 
@@ -127,7 +132,7 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
                  */
 
                 // Add milk
-                val result = addMilkUseCase.executeNow(milk)
+                val result = addMilkUseCase(milk)
 
                 (result as? Result.Success)?.data.let {
                     Timber.d("Milk added ${milk.id}")

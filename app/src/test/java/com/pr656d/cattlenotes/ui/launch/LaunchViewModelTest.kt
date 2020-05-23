@@ -18,8 +18,7 @@ package com.pr656d.cattlenotes.ui.launch
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
+import com.pr656d.cattlenotes.test.fakes.data.prefs.FakePreferenceStorageRepository
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination
 import com.pr656d.shared.domain.login.GetLoginAndAllStepsCompletedUseCase
 import com.pr656d.test.MainCoroutineRule
@@ -39,10 +38,6 @@ class LaunchViewModelTest {
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    // Executes tasks in a synchronous [TaskScheduler]
-    @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
 
     // Overrides Dispatchers.Main used in Coroutines
     @get:Rule

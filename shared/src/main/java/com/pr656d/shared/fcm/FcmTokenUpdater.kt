@@ -20,14 +20,20 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.iid.FirebaseInstanceId
-import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.di.MainDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 /**
  * Saves the FCM ID tokens in Firestore.
  */
-class FcmTokenUpdater @Inject constructor(private val firestore: FirebaseFirestore) {
+class FcmTokenUpdater @Inject constructor(
+    private val firestore: FirebaseFirestore,
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
+) {
 
     fun updateTokenForUser(userId: String) {
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener { instanceIdResult ->
@@ -40,13 +46,14 @@ class FcmTokenUpdater @Inject constructor(private val firestore: FirebaseFiresto
             )
 
             // All Firestore operations start from the main thread to avoid concurrency issues.
-            DefaultScheduler.postToMainThread {
+            CoroutineScope(mainDispatcher).launch {
                 firestore
                     .collection(USERS_COLLECTION)
                     .document(userId)
                     .collection(FCM_IDS_COLLECTION)
                     .document(token.take(TOKEN_ID_LENGTH))
-                    .set(tokenInfo, SetOptions.merge()).addOnCompleteListener {
+                    .set(tokenInfo, SetOptions.merge())
+                    .addOnCompleteListener {
                         if (it.isSuccessful) {
                             Timber.d("FCM ID token successfully uploaded for user $userId\"")
                         } else {

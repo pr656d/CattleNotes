@@ -62,8 +62,7 @@ class LoginActivity : DaggerAppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Update for Dark Mode straight away
-        updateForTheme(model.currentTheme)
+        model.theme.observe(this, Observer(::updateForTheme))
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
         binding.lifecycleOwner = this
@@ -78,8 +77,6 @@ class LoginActivity : DaggerAppCompatActivity() {
             val destinationLabel = destination.label.toString()
             analyticsHelper.setScreenView(destinationLabel, this)
         }
-
-        model.theme.observe(this, Observer(::updateForTheme))
 
         model.launchSetupProfileScreen.observe(this, EventObserver {
             navigateTo(toSetupProfile())

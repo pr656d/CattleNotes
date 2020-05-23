@@ -30,9 +30,9 @@
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
-                app:goneUnless="@{viewModel.saving}"
+                app:goneUnless="@{viewModel.loading}"
                 app:layout_anchor="@id/appBarLayout"
                 app:layout_anchorGravity="bottom" />
         </com.google.android.material.appbar.AppBarLayout>

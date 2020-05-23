@@ -16,15 +16,22 @@
 
 package com.pr656d.shared.domain.cattle.detail
 
-import androidx.lifecycle.LiveData
 import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.CattleRepository
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.FlowUseCase
+import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 open class GetCattleByTagNumberUseCase @Inject constructor(
-    private val cattleRepository: CattleRepository
-) {
-    operator fun invoke(tagNumber: Long): LiveData<Cattle?> {
-        return cattleRepository.getCattleByTagNumber(tagNumber)
-    }
+    private val cattleRepository: CattleRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : FlowUseCase<Long, Cattle?>(ioDispatcher) {
+
+    override fun execute(parameters: Long): Flow<Result<Cattle?>> =
+        cattleRepository.getCattleByTagNumber(parameters).map { Result.Success(it) }
+
 }

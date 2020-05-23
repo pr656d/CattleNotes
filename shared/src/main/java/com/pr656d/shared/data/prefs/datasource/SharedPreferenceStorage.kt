@@ -21,9 +21,12 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.annotation.WorkerThread
 import androidx.core.content.edit
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.pr656d.model.Theme
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,7 +40,7 @@ import kotlin.reflect.KProperty
 interface PreferenceStorage {
     var loginCompleted: Boolean
 
-    var observableLoginCompleted: LiveData<Boolean>
+    var observableLoginCompleted: Flow<Boolean>
 
     var firstTimeProfileSetupCompleted: Boolean
 
@@ -45,14 +48,14 @@ interface PreferenceStorage {
 
     var selectedTheme: String?
 
-    var observableSelectedTheme: LiveData<String>
+    var observableSelectedTheme: Flow<String?>
 
     /**
      * Reload user data from data source.
      */
     var reloadData: Boolean
 
-    var observableReloadData: LiveData<Boolean>
+    var observableReloadData: Flow<Boolean>
 
     /**
      * Hold preferred time for breeding event reminder.
@@ -60,11 +63,9 @@ interface PreferenceStorage {
      */
     var preferredTimeOfBreedingReminder: Long
 
-    var observablePreferredTimeOfBreedingReminder: LiveData<Long>
+    var observablePreferredTimeOfBreedingReminder: Flow<Long>
 
     var preferredMilkSmsSource: String?
-
-    var observablePreferredMilkSmsSource: LiveData<String?>
 
     var automaticMilkingCollection: Boolean
 
@@ -77,9 +78,35 @@ interface PreferenceStorage {
 /**
  * [PreferenceStorage] impl backed by [android.content.SharedPreferences].
  */
+@ExperimentalCoroutinesApi
+@FlowPreview
 @Singleton
 class SharedPreferenceStorage @Inject constructor(context: Context)
     : PreferenceStorage {
+
+    private val selectedThemeChannel: ConflatedBroadcastChannel<String?> by lazy {
+        ConflatedBroadcastChannel<String?>().apply {
+            offer(selectedTheme)
+        }
+    }
+
+    private val loginCompletedChannel: ConflatedBroadcastChannel<Boolean> by lazy {
+        ConflatedBroadcastChannel<Boolean>().apply {
+            offer(loginCompleted)
+        }
+    }
+
+    private val reloadDataChannel: ConflatedBroadcastChannel<Boolean> by lazy {
+        ConflatedBroadcastChannel<Boolean>().apply {
+            offer(reloadData)
+        }
+    }
+
+    private val preferredTimeOfBreedingReminderChannel: ConflatedBroadcastChannel<Long> by lazy {
+        ConflatedBroadcastChannel<Long>().apply {
+            offer(preferredTimeOfBreedingReminder)
+        }
+    }
 
     private val prefs: Lazy<SharedPreferences> = lazy { // Lazy to prevent IO access to main thread.
         context.applicationContext.getSharedPreferences(
@@ -89,28 +116,16 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         }
     }
 
-    private val observableLoginCompletedResult = MutableLiveData<Boolean>()
-
-    private val observableSelectedThemeResult = MutableLiveData<String>()
-
-    private val observeReloadDataResult = MutableLiveData<Boolean>()
-
-    private val observePreferredTimeOfBreedingReminderResult = MutableLiveData<Long>()
-
-    private val observePreferredMilkSmsSourceResult = MutableLiveData<String?>()
-
     private val changeListener = OnSharedPreferenceChangeListener { _, key ->
         when (key) {
-            PREF_DARK_MODE_ENABLED -> observableSelectedThemeResult.value = selectedTheme
+            PREF_DARK_MODE_ENABLED -> selectedThemeChannel.offer(selectedTheme)
 
-            PREF_LOG_IN -> observableLoginCompletedResult.value = loginCompleted
+            PREF_LOG_IN -> loginCompletedChannel.offer(loginCompleted)
 
-            PREF_RELOAD_DATA -> observeReloadDataResult.value = reloadData
+            PREF_RELOAD_DATA -> reloadDataChannel.offer(reloadData)
 
             PREF_PREFERRED_TIME_OF_BREEDING_REMINDER ->
-                observePreferredTimeOfBreedingReminderResult.value = preferredTimeOfBreedingReminder
-
-            PREF_MILK_SMS_SOURCE -> observePreferredMilkSmsSourceResult.value = preferredMilkSmsSource
+                preferredTimeOfBreedingReminderChannel.offer(preferredTimeOfBreedingReminder)
         }
     }
 
@@ -120,11 +135,8 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         false
     )
 
-    override var observableLoginCompleted: LiveData<Boolean>
-        get() {
-            observableLoginCompletedResult.value = loginCompleted
-            return observableLoginCompletedResult
-        }
+    override var observableLoginCompleted: Flow<Boolean>
+        get() = loginCompletedChannel.asFlow()
         set(_) = throw IllegalAccessException("This property can't be changed")
 
 
@@ -140,11 +152,8 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         Theme.SYSTEM.storageKey
     )
 
-    override var observableSelectedTheme: LiveData<String>
-        get() {
-            observableSelectedThemeResult.value = selectedTheme
-            return observableSelectedThemeResult
-        }
+    override var observableSelectedTheme: Flow<String?>
+        get() = selectedThemeChannel.asFlow()
         set(_) = throw IllegalAccessException("This property can't be changed")
 
     override var firstTimeProfileSetupCompleted by BooleanPreference(
@@ -159,11 +168,8 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         false
     )
 
-    override var observableReloadData: LiveData<Boolean>
-        get() {
-            observeReloadDataResult.value = reloadData
-            return observeReloadDataResult
-        }
+    override var observableReloadData: Flow<Boolean>
+        get() = reloadDataChannel.asFlow()
         set(_) = throw IllegalAccessException("This property can't be changed")
 
     override var preferredTimeOfBreedingReminder: Long by LongPreference(
@@ -172,11 +178,8 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         DEFAULT_REMINDER_TIME
     )
 
-    override var observablePreferredTimeOfBreedingReminder: LiveData<Long>
-        get() {
-            observePreferredTimeOfBreedingReminderResult.value = preferredTimeOfBreedingReminder
-            return observePreferredTimeOfBreedingReminderResult
-        }
+    override var observablePreferredTimeOfBreedingReminder: Flow<Long>
+        get() = preferredTimeOfBreedingReminderChannel.asFlow()
         set(_) = throw IllegalAccessException("This property can't be changed")
 
     override var preferredMilkSmsSource: String? by StringPreference(
@@ -184,13 +187,6 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
         PREF_MILK_SMS_SOURCE,
         null
     )
-
-    override var observablePreferredMilkSmsSource: LiveData<String?>
-        get() {
-            observePreferredMilkSmsSourceResult.value = preferredMilkSmsSource
-            return observePreferredMilkSmsSourceResult
-        }
-        set(_) = throw IllegalAccessException("This property can't be changed")
 
     override var automaticMilkingCollection: Boolean by BooleanPreference(
         prefs,

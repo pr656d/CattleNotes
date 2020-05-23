@@ -18,29 +18,34 @@ package com.pr656d.cattlenotes.ui.profile
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeProfileDelegate
+import com.pr656d.cattlenotes.test.fakes.FakeProfileDelegate
+import com.pr656d.test.MainCoroutineRule
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.hamcrest.Matchers.equalTo as isEqualTo
 
+@ExperimentalCoroutinesApi
 class ProfileViewModelTest {
 
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private fun createProfileViewModel() : ProfileViewModel {
-        return ProfileViewModel(FakeProfileDelegate())
+        return ProfileViewModel(
+            FakeProfileDelegate(coroutineDispatcher = coroutineRule.testDispatcher)
+        )
     }
 
     @Test
-    fun logoutCalled_showLogoutConfirmation() {
+    fun logoutCalled_showLogoutConfirmation() = coroutineRule.runBlockingTest {
         val viewModel = createProfileViewModel()
 
         // Call logout
@@ -51,7 +56,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun logoutCalledAndLogoutConfirmationIsTrue_launchLogout() {
+    fun logoutCalledAndLogoutConfirmationIsTrue_launchLogout() = coroutineRule.runBlockingTest {
         val viewModel = createProfileViewModel()
 
         // Call logout
@@ -62,7 +67,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun editProfileCalled_launchEditProfile() {
+    fun editProfileCalled_launchEditProfile() = coroutineRule.runBlockingTest {
         val viewModel = createProfileViewModel()
 
         // Call edit profile

@@ -16,82 +16,73 @@
 
 package com.pr656d.shared.data.user.info.datasources
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.ListenerRegistration
+import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.user.info.FirestoreUserInfo
-import com.pr656d.shared.domain.internal.DefaultScheduler
-import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import timber.log.Timber
 import javax.inject.Inject
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class ObserveFirestoreUserInfoDataSourceImpl @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val authIdDataSource: AuthIdDataSource
 ) : ObserveFirestoreUserInfoDataSource {
 
-    companion object {
-        private const val USERS_COLLECTION = "users"
-        private const val FARM_NAME_KEY = "farmName"
-        private const val FARM_ADDRESS_KEY = "farmAddress"
-        private const val GENDER_KEY = "gender"
-        private const val DOB_KEY = "dateOfBirth"
-        private const val ADDRESS_KEY = "address"
-        private const val DAIRY_CODE = "dairyCode"
-        private const val DAIRY_CUSTOMER_ID = "dairyCustomerId"
-    }
+    // Channel that keeps track of Firestore user info.
+    private val channel = ConflatedBroadcastChannel<FirestoreUserInfo?>()
 
     private var userInfoChangedListenerSubscription: ListenerRegistration? = null
 
-    // Result can contain a null value (not processed) or a null result (not available).
-    private val result = MutableLiveData<Result<FirestoreUserInfo?>?>()
-
-    // Keeping the last observed user ID, to avoid unnecessary calls
-    private var lastUserId: String? = null
-
-    override fun listenToUserChanges(userId: String) {
-        val newUserId = if (lastUserId != userId) {
-            userId
-        } else {
-            // User id update not needed.
-            return
-        }
-
+    override fun getFirebaseUserInfo(): Flow<FirestoreUserInfo?> {
         // Remove previous subscriptions, if exists.
         userInfoChangedListenerSubscription?.remove()
 
-        result.postValue(null)  // Reset result
+        val userId = authIdDataSource.getUserId()
 
-        val userInfoChangedListener =
-            { snapshot: DocumentSnapshot?, _: FirebaseFirestoreException? ->
-                DefaultScheduler.execute {
+        if (userId == null) {
+            Timber.d("User id not found")
+            channel.offer(null)
+        } else {
+            val userInfoChangedListener: (DocumentSnapshot?, FirebaseFirestoreException?) -> Unit =
+                { snapshot: DocumentSnapshot?, _: FirebaseFirestoreException? ->
                     if (snapshot == null || !snapshot.exists()) {
                         // When the account signs in for the first time the document doesn't exist.
-                        Timber.d("Document for snapshot $newUserId doesn't exist")
-                        result.postValue(Result.Success(null))
-                        return@execute
+                        Timber.d("Document for snapshot $userId doesn't exist")
+                        if (!channel.isClosedForSend)
+                            channel.offer(null)
                     }
 
-                    val userInfo = getFirestoreUserInfo(snapshot)
+                    snapshot?.let {
+                        val userInfo = getFirestoreUserInfo(snapshot)
 
-                    // Only emit a value if it's a new value or a value change.
-                    if (result.value == null ||
-                        (result.value as? Result.Success)?.data != userInfo
-                    ) {
-                        Timber.d("Received firestore user info")
-                        result.postValue(Result.Success(userInfo))
+                        if (!channel.isClosedForSend) {
+                            channel.offer(userInfo)
+                        } else {
+                            removeUser()
+                        }
                     }
                 }
-            }
-        DefaultScheduler.postToMainThread {
+
             userInfoChangedListenerSubscription = firestore
                 .collection(USERS_COLLECTION)
-                .document(newUserId)
+                .document(userId)
                 .addSnapshotListener(userInfoChangedListener)
         }
-        lastUserId = newUserId
+
+        return channel.asFlow()
+    }
+
+    private fun removeUser() {
+        userInfoChangedListenerSubscription?.remove()
     }
 
     private fun getFirestoreUserInfo(snapshot: DocumentSnapshot): FirestoreUserInfo {
@@ -126,13 +117,14 @@ class ObserveFirestoreUserInfoDataSourceImpl @Inject constructor(
         }
     }
 
-    override fun observeFirestoreUserInfo(): LiveData<Result<FirestoreUserInfo?>?> {
-        return result
-    }
-
-    override fun removeUser() {
-        userInfoChangedListenerSubscription?.remove()
-        lastUserId = null
-        result.postValue(Result.Success(null))
+    companion object {
+        private const val USERS_COLLECTION = "users"
+        private const val FARM_NAME_KEY = "farmName"
+        private const val FARM_ADDRESS_KEY = "farmAddress"
+        private const val GENDER_KEY = "gender"
+        private const val DOB_KEY = "dateOfBirth"
+        private const val ADDRESS_KEY = "address"
+        private const val DAIRY_CODE = "dairyCode"
+        private const val DAIRY_CUSTOMER_ID = "dairyCustomerId"
     }
 }

@@ -21,6 +21,8 @@ import com.pr656d.model.Milk.Source.Sms.BGAMAMCS
 import com.pr656d.shared.utils.FirestoreUtil
 import com.pr656d.shared.utils.TimeUtils
 import com.pr656d.shared.utils.toMilkOf
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import org.threeten.bp.ZonedDateTime
 
 /**
@@ -42,22 +44,25 @@ object BGAMAMCSSmsParser : MilkSmsParser {
 
     override val SOURCE = BGAMAMCS
 
-    override fun getMilk(message: String): Milk {
+    override suspend fun getMilk(message: String): Milk = coroutineScope {
         // Divide message by lines.
         val parts = message.lines()
 
-        // val (dairyCode, customerId) = getDairyCodeAndCustomerId(parts[0])
-        val timeStamp = getZonedDateTime(parts[1])
-        // val shift = getShift(parts[2])
-        val milkOf = getMilkOf(parts[3])
-        val qty = getQuantity(parts[4])
-        val fat = getFat(parts[5])
-        val amt = getAmount(parts[6])
-        val tQty = getTotalQuantity(parts[7])
-        val tAmt = getTotalAmount(parts[8])
-        val link = getLink(parts[9])
+        // val (dairyCode, customerId) = async { getDairyCodeAndCustomerId(parts[0]) }
+        val timeStamp = async { getZonedDateTime(parts[1]) }
+        // val shift = async { getShift(parts[2]) }
+        val milkOf = async { getMilkOf(parts[3]) }
+        val qty = async { getQuantity(parts[4]) }
+        val fat = async { getFat(parts[5]) }
+        val amt = async { getAmount(parts[6]) }
+        val tQty = async { getTotalQuantity(parts[7]) }
+        val tAmt = async { getTotalAmount(parts[8]) }
+        val link = async { getLink(parts[9]) }
 
-        return Milk(SOURCE, timeStamp, milkOf, qty, fat, amt, tQty, tAmt, link).apply {
+        Milk(
+            SOURCE, timeStamp.await(), milkOf.await(), qty.await(), fat.await(),
+            amt.await(), tQty.await(), tAmt.await(), link.await()
+        ).apply {
             // This milk is new, Assign new id.
             id = FirestoreUtil.autoId()
         }
@@ -171,7 +176,8 @@ object BGAMAMCSSmsParser : MilkSmsParser {
     }
 
     private val CODE_REGEX = "Code-\\((\\d+)\\) (\\d+)".toRegex()
-    private val DATE_TIME_REGEX = "Date-(\\d{1,2})/(\\d{1,2})/(\\d{4}) (\\d{1,2}):(\\d{1,2})".toRegex()
+    private val DATE_TIME_REGEX =
+        "Date-(\\d{1,2})/(\\d{1,2})/(\\d{4}) (\\d{1,2}):(\\d{1,2})".toRegex()
     private val SHIFT_REGEX = "Shift-([ME])".toRegex()
     private val MILK_REGEX = "Milk-(\\S)".toRegex()
     private val QTY_REGEX = "Qty-(\\d+(\\.\\d{1,2})?)".toRegex()

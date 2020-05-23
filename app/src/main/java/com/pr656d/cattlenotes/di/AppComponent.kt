@@ -47,7 +47,6 @@ import javax.inject.Singleton
         ActivityBindingModule::class,
         BroadcastReceiverBindingModule::class,
         ServiceBindingModule::class,
-        LoginModule::class,
         ThemedActivityDelegateModule::class,
         ProfileDelegateModule::class
     ]

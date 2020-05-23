@@ -16,15 +16,22 @@
 
 package com.pr656d.shared.domain.cattle.list
 
-import androidx.lifecycle.LiveData
 import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.CattleRepository
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.FlowUseCase
+import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 open class LoadCattleListUseCase @Inject constructor(
-    private val cattleRepository: CattleRepository
-) {
-    operator fun invoke(): LiveData<List<Cattle>> {
-        return cattleRepository.getAllCattle()
-    }
+    private val cattleRepository: CattleRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : FlowUseCase<Unit, List<Cattle>>(ioDispatcher) {
+
+    override fun execute(parameters: Unit): Flow<Result<List<Cattle>>> =
+        cattleRepository.getAllCattle().map { Result.Success(it) }
+
 }

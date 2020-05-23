@@ -63,7 +63,7 @@ buildscript {
         liveDataKtxVersion = '2.2.0'
         materialVersion = '1.1.0'
         multidexVersion = '2.0.1'
-        mockitoVersion = '2.7.1'
+        mockitoVersion = '3.0.0'
         mockitoKotlinVersion = "1.5.0"
         navigationControllerVersion = '2.2.2'
         okhttpVersion = '3.11.0'

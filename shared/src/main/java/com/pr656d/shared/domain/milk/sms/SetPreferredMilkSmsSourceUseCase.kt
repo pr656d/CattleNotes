@@ -18,13 +18,22 @@ package com.pr656d.shared.domain.milk.sms
 
 import com.pr656d.model.Milk
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.domain.UseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
+/**
+ * Sets the value and returns the updated value.
+ */
 open class SetPreferredMilkSmsSourceUseCase @Inject constructor(
-    private val preferenceStorageRepository: PreferenceStorageRepository
-) : UseCase<Milk.Source.Sms, Unit>() {
-    override fun execute(parameters: Milk.Source.Sms) {
+    private val preferenceStorageRepository: PreferenceStorageRepository,
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+) : UseCase<Milk.Source.Sms?, Milk.Source.Sms?>(defaultDispatcher) {
+
+    override fun execute(parameters: Milk.Source.Sms?): Milk.Source.Sms? {
         preferenceStorageRepository.setPreferredMilkSmsSource(parameters)
+        return preferenceStorageRepository.getPreferredMilkSmsSource()
     }
+
 }

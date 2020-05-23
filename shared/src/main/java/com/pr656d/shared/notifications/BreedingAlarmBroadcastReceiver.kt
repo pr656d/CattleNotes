@@ -26,14 +26,15 @@ import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
-import androidx.lifecycle.Observer
 import com.pr656d.model.Breeding.BreedingEvent.*
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.R
 import com.pr656d.shared.domain.breeding.detail.GetBreedingWithCattleByIdUseCase
-import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.utils.nameOrTagNumber
 import dagger.android.DaggerBroadcastReceiver
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,8 +42,13 @@ import javax.inject.Inject
  * Receives broadcast intents with information for breeding notifications.
  */
 class BreedingAlarmBroadcastReceiver : DaggerBroadcastReceiver() {
-    @Inject lateinit var loadBreedingWithCattleByIdUseCase: GetBreedingWithCattleByIdUseCase
 
+    @Inject
+    lateinit var loadBreedingWithCattleByIdUseCase: GetBreedingWithCattleByIdUseCase
+
+    private val alarmScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+    @ExperimentalCoroutinesApi
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
@@ -50,29 +56,29 @@ class BreedingAlarmBroadcastReceiver : DaggerBroadcastReceiver() {
 
         val breedingId = intent.getStringExtra(EXTRA_BREEDING_ID) ?: return
 
-        loadBreedingWithCattleByIdUseCase(breedingId).let {
-            val observer = object : Observer<BreedingWithCattle?> {
-                override fun onChanged(breedingWithCattle: BreedingWithCattle?) {
-                    it.removeObserver(this)
-
-                    breedingWithCattle ?: run {
-                        Timber.d("BreedingWithCattle not found for breeding id $breedingId")
-                        return
-                    }
-
-                    DefaultScheduler.execute {
-                        try {
-                            showBreedingReminderNotification(context, breedingWithCattle)
-                        } catch (e: Exception) {
-                            Timber.e(e)
-                            return@execute
-                        }
-                    }
+        alarmScope.launch {
+            val breedingWithCattle =
+                getBreedingWithCattle(breedingId) ?: run {
+                    Timber.d("BreedingWithCattle not found for breeding id $breedingId")
+                    return@launch
                 }
-            }
 
-            it.observeForever(observer)
+            try {
+                showBreedingReminderNotification(context, breedingWithCattle)
+            } catch (e: Exception) {
+                Timber.e(e)
+                return@launch
+            }
         }
+    }
+
+    @ExperimentalCoroutinesApi
+    private suspend fun getBreedingWithCattle(breedingId: String): BreedingWithCattle? {
+        return loadBreedingWithCattleByIdUseCase(breedingId)
+            .firstOrNull()
+            ?.let {
+                (it as? Result.Success)?.data
+            }
     }
 
     @WorkerThread

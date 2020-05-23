@@ -16,15 +16,25 @@
 
 package com.pr656d.shared.domain.cattle.detail
 
-import androidx.lifecycle.LiveData
 import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.CattleRepository
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.SuspendUseCase
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
+/**
+ * Return parent cattle of the cattle.
+ */
 open class GetParentCattleUseCase @Inject constructor(
-    private val cattleRepository: CattleRepository
-) {
-    operator fun invoke(cattleId: String): LiveData<Cattle?> {
-        return cattleRepository.getCattleById(cattleId)
+    private val cattleRepository: CattleRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : SuspendUseCase<Cattle, Cattle?>(ioDispatcher) {
+
+    override suspend fun execute(parameters: Cattle): Cattle? {
+        val parentId = parameters.parent ?: return null
+        return cattleRepository.getCattleById(parentId).first()
     }
+
 }

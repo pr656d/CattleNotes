@@ -17,12 +17,15 @@
 package com.pr656d.shared.domain.data
 
 import com.pr656d.shared.data.db.updater.DbLoader
+import com.pr656d.shared.di.IoDispatcher
 import com.pr656d.shared.domain.UseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 open class LoadDataUseCase @Inject constructor(
-    private val dbLoader: DbLoader
-) : UseCase<Unit, Unit>() {
+    private val dbLoader: DbLoader,
+    @IoDispatcher ioDispatcher: CoroutineDispatcher
+) : UseCase<Unit, Unit>(ioDispatcher) {
     override fun execute(parameters: Unit) {
         dbLoader.load()
     }

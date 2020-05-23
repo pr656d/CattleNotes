@@ -17,55 +17,37 @@
 package com.pr656d.shared.domain.cattle.validator
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.MutableLiveData
 import com.pr656d.shared.R
-import com.pr656d.shared.domain.MediatorUseCase
+import com.pr656d.shared.di.DefaultDispatcher
+import com.pr656d.shared.domain.SuspendUseCase
 import com.pr656d.shared.domain.cattle.addedit.IsCattleExistWithTagNumberUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleValidator.VALID_FIELD
-import com.pr656d.shared.domain.internal.DefaultScheduler
 import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class CattleTagNumberValidatorUseCase @Inject constructor(
-    private val isCattleExistWithTagNumberUseCase: IsCattleExistWithTagNumberUseCase
-) : MediatorUseCase<Pair<String?, Long?>, @StringRes Int>() {
-    private val isCattleExistResult = MutableLiveData<Result<Boolean>>()
+    private val isCattleExistWithTagNumberUseCase: IsCattleExistWithTagNumberUseCase,
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
+) : SuspendUseCase<Pair<String?, Long?>, @StringRes Int>(defaultDispatcher) {
 
-    init {
-        result.addSource(isCattleExistResult) {
-            if (it is Result.Success) {
-                result.postValue(
-                    Result.Success(
-                        if (it.data)
-                            R.string.error_already_exists
-                        else
-                            VALID_FIELD
-                    )
-                )
-            }
-        }
-    }
+    override suspend fun execute(parameters: Pair<String?, Long?>): Int {
+        val (tagNumber, oldTagNumber) = parameters
 
-    override fun execute(parameters: Pair<String?, Long?>) {
-        DefaultScheduler.execute {
-            val (tagNumber, oldTagNumber) = parameters
+        return when {
+            tagNumber.isNullOrEmpty() -> R.string.error_empty_field
 
-            when {
-                tagNumber.isNullOrEmpty() -> {
-                    result.postValue(Result.Success(R.string.error_empty_field))
-                }
-                tagNumber.count() > 19 -> {
-                    result.postValue(Result.Success(R.string.error_length_exceed))
-                }
-                tagNumber.toLongOrNull() == null -> {
-                    result.postValue(Result.Success(R.string.error_contain_digits_only))
-                }
-                tagNumber.toLongOrNull() == oldTagNumber -> {
-                    result.postValue(Result.Success(VALID_FIELD))
-                }
-                else -> {
-                    isCattleExistWithTagNumberUseCase(tagNumber.toLong(), isCattleExistResult)
-                }
+            tagNumber.count() > 19 -> R.string.error_length_exceed
+
+            tagNumber.toLongOrNull() == null -> R.string.error_contain_digits_only
+
+            tagNumber.toLongOrNull() == oldTagNumber -> VALID_FIELD
+
+            else -> isCattleExistWithTagNumberUseCase(tagNumber.toLong()).let {
+                if ((it as? Result.Success)?.data == true)
+                    R.string.error_already_exists
+                else
+                    VALID_FIELD
             }
         }
     }

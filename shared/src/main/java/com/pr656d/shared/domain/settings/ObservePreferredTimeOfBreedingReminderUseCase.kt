@@ -16,15 +16,23 @@
 
 package com.pr656d.shared.domain.settings
 
-import androidx.lifecycle.LiveData
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.di.DefaultDispatcher
+import com.pr656d.shared.domain.FlowUseCase
+import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
-class ObservePreferredTimeOfBreedingReminderUseCase @Inject constructor(
-    private val preferenceStorageRepository: PreferenceStorageRepository
-) {
-    operator fun invoke(): LiveData<LocalTime> {
-        return preferenceStorageRepository.getObservablePreferredTimeOfBreedingReminder()
-    }
+open class ObservePreferredTimeOfBreedingReminderUseCase @Inject constructor(
+    private val preferenceStorageRepository: PreferenceStorageRepository,
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+) : FlowUseCase<Unit, LocalTime>(defaultDispatcher) {
+
+    override fun execute(parameters: Unit): Flow<Result<LocalTime>> =
+        preferenceStorageRepository.getObservablePreferredTimeOfBreedingReminder()
+            .map { Result.Success(it) }
+
 }

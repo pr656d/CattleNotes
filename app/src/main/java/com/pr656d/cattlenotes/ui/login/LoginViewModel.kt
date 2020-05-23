@@ -16,11 +16,7 @@
 
 package com.pr656d.cattlenotes.ui.login
 
-import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.profile.ProfileDelegate
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate
@@ -31,7 +27,9 @@ import com.pr656d.shared.domain.login.SetFirstTimeProfileSetupCompletedUseCase
 import com.pr656d.shared.domain.login.SetLoginCompletedUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.successOr
 import com.pr656d.shared.utils.NetworkHelper
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
@@ -49,10 +47,10 @@ class LoginViewModel @Inject constructor(
     private val _launchFirebaseLoginUI = MediatorLiveData<Event<Unit>>()
     val launchFirebaseAuthUI: LiveData<Event<Unit>> = _launchFirebaseLoginUI
 
-    private val _loginStatus = MutableLiveData<@StringRes Int>(R.string.login_message)
+    private val _loginStatus = MutableLiveData(R.string.login_message)
     val loginStatus: LiveData<Int> = _loginStatus
 
-    private val _logginIn = MutableLiveData<Boolean>(false)
+    private val _logginIn = MutableLiveData(false)
     val logginIn: LiveData<Boolean> = _logginIn
 
     private val _launchSetupProfileScreen = MediatorLiveData<Event<Unit>>()
@@ -73,22 +71,6 @@ class LoginViewModel @Inject constructor(
          *      1. If not logged in.
          *      2. If new user and not completed setup profile.
          *
-         * Setup profile screen will be launched with 2nd scenario.
-         */
-        _launchSetupProfileScreen.addSource(getFirstTimeProfileSetupCompletedUseCase.invoke()) { result ->
-            (result as? Result.Success)?.data?.let { isProfileSetupCompleted ->
-                val isUserSignedIn = currentUserInfo.value?.isSignedIn() ?: false
-
-                if (isUserSignedIn && !isProfileSetupCompleted)
-                    _launchSetupProfileScreen.postValue(Event(Unit))
-            }
-        }
-
-        /**
-         * User will be here for two reasons.
-         *      1. If not logged in.
-         *      2. If new user and not completed setup profile.
-         *
          * Login screen will be launched with 1st scenario.
          */
         _launchLoginScreen.addSource(currentUserInfo) { user ->
@@ -101,18 +83,17 @@ class LoginViewModel @Inject constructor(
          *      1. If not logged in.
          *      2. If new user and not completed setup profile.
          *
-         * After profile is updated, launch main screen. There is nothing to do anymore for login.
+         * Setup profile screen will be launched with 2nd scenario.
          */
-        _launchMainScreen.addSource(updateUserInfoDetailedResult) { result ->
-            _loading.postValue(true)
+        _launchSetupProfileScreen.addSource(currentUserInfo) { user ->
+            viewModelScope.launch {
+                val isProfileSetupCompleted =
+                    getFirstTimeProfileSetupCompletedUseCase().successOr(false)
 
-            (result as? Result.Success)?.data?.getContentIfNotHandled()?.let {
-                if (it.first is Result.Success && it.second is Result.Success) {
-                    setFirstTimeProfileSetupCompletedUseCase(true)
-                    _launchMainScreen.postValue(Event(Unit))
-                } else {
-                    _loading.postValue(false)
-                }
+                val isUserSignedIn = user?.isSignedIn() == true
+
+                if (isUserSignedIn && !isProfileSetupCompleted)
+                    _launchSetupProfileScreen.postValue(Event(Unit))
             }
         }
 
@@ -125,36 +106,60 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun save() {
+        viewModelScope.launch {
+            val result = saveProfile()
+
+            _loading.postValue(true)
+
+            result.successOr(null)?.getContentIfNotHandled()?.let {
+                if (it.first is Result.Success && it.second is Result.Success) {
+                    setFirstTimeProfileSetupCompletedUseCase(true)
+                    _launchMainScreen.postValue(Event(Unit))
+                } else {
+                    _loading.postValue(false)
+                }
+            }
+        }
+    }
+
     fun onLoginClick() {
         if (networkHelper.isNetworkConnected()) {
-            _logginIn.postValue(true)
-            _loginStatus.postValue(R.string.logging_in)
-            _launchFirebaseLoginUI.postValue(Event(Unit))
+            _logginIn.value = true
+            _loginStatus.value = R.string.logging_in
+            _launchFirebaseLoginUI.value = Event(Unit)
         } else {
-            _loginStatus.postValue(R.string.network_not_available)
+            _loginStatus.value = R.string.network_not_available
         }
     }
 
     fun onLoginSuccess(isNewUser: Boolean) {
-        setLoginCompletedUseCase(true)
-        _loginStatus.postValue(R.string.login_complete)
+        viewModelScope.launch { setLoginCompletedUseCase(true) }
+
+        _loginStatus.value = R.string.login_complete
 
         // New user
         if (isNewUser) {
             // Launch setup profile screen.
-            _launchSetupProfileScreen.postValue(Event(Unit))
+            _launchSetupProfileScreen.value = Event(Unit)
             return
         }
 
         // Existing user.
-        loadDataUseCase.invoke()    // Start fetching data.
-        setFirstTimeProfileSetupCompletedUseCase(true)
-        _launchMainScreen.postValue(Event(Unit))
+        viewModelScope.launch {
+            loadDataUseCase()    // Start fetching data.
+        }
+
+        viewModelScope.launch {
+            setFirstTimeProfileSetupCompletedUseCase(true)
+        }
+
+        _launchMainScreen.value = Event(Unit)
     }
 
     fun onLoginFail() {
-        setLoginCompletedUseCase(false)
-        _loginStatus.postValue(R.string.try_login_again_text)
-        _logginIn.postValue(false)
+        viewModelScope.launch { setLoginCompletedUseCase(false) }
+        _loginStatus.value = R.string.try_login_again_text
+        _logginIn.value = false
     }
 }

@@ -18,19 +18,23 @@ package com.pr656d.shared.data.breeding.datasource
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInsemination
 import com.pr656d.model.Breeding.BreedingEvent
-import com.pr656d.shared.data.db.BreedingDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
-import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.di.MainDispatcher
+import com.pr656d.shared.utils.FirestoreUtil.BATCH_OPERATION_LIMIT
 import com.pr656d.shared.utils.toLocalDate
 import com.pr656d.shared.utils.toLong
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * Remote data source for [Breeding].
@@ -38,32 +42,38 @@ import javax.inject.Singleton
  */
 interface BreedingDataSource {
     /**
-    * Load breeding list from data source and save to local db.
+    * Load breeding list from data source.
     */
-    fun load(onComplete: () -> Unit = {})
+    suspend fun load(): List<Breeding>
 
     /**
      * Add breeding at remote data source.
      */
-    fun addBreeding(breeding: Breeding)
+    suspend fun addBreeding(breeding: Breeding)
+
+    /**
+     * Add all breeding at remote data source.
+     */
+    suspend fun addAllBreeding(breedingList: List<Breeding>)
 
     /**
      * Delete breeding at remote data source.
      */
-    fun deleteBreeding(breeding: Breeding)
+    suspend fun deleteBreeding(breeding: Breeding)
 
     /**
      * Update breeding at remote data source.
      */
-    fun updateBreeding(breeding: Breeding)
+    suspend fun updateBreeding(breeding: Breeding)
 }
 
 @Singleton
 class FirestoreBreedingDataSource @Inject constructor(
     authIdDataSource: AuthIdDataSource,
     private val firestore: FirebaseFirestore,
-    private val breedingDao: BreedingDao
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : BreedingDataSource {
+
     private val userId by lazy {
         authIdDataSource.getUserId() ?: run {
             Timber.e("User Id not found at cattle data source")
@@ -71,69 +81,99 @@ class FirestoreBreedingDataSource @Inject constructor(
         }
     }
 
-    override fun load(onComplete: () -> Unit) {
-        val onSuccessListener: (QuerySnapshot) -> Unit = { snapshot ->
-            DefaultScheduler.execute {
-                val breedingList = snapshot.documents.map { getBreeding(it) }
-                breedingDao.insertAll(breedingList).also {
-                    onComplete()
-                }
-            }
-        }
-
+    override suspend fun load(): List<Breeding> = withContext(mainDispatcher) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        suspendCancellableCoroutine<List<Breeding>> { continuation ->
             firestore
                 .collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(BREEDING_COLLECTION)
                 .get()
-                .addOnSuccessListener(onSuccessListener)
+                .addOnSuccessListener { snapshot ->
+                    if (!continuation.isActive) return@addOnSuccessListener
+
+                    val list = snapshot.documents.map { getBreeding(it) }
+                    continuation.resume(list)
+                }
                 .addOnFailureListener {
                     Timber.d("load() failed at breeding data source : ${it.message}")
+
+                    if(!continuation.isActive) return@addOnFailureListener
+
+                    continuation.resumeWithException(it)
                 }
         }
     }
 
-    override fun addBreeding(breeding: Breeding) {
+    override suspend fun addBreeding(breeding: Breeding) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        withContext(mainDispatcher) {
             firestore
                 .collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(BREEDING_COLLECTION)
                 .document(breeding.id)
                 .set(breeding.asHashMap())
+                .addOnSuccessListener {
+                    Timber.d("Breeding : ${breeding.id} added successfully")
+                }
                 .addOnFailureListener {
                     Timber.d("addBreeding() failed : ${it.message}")
                 }
         }
     }
 
-    override fun deleteBreeding(breeding: Breeding) {
+    override suspend fun addAllBreeding(breedingList: List<Breeding>) {
+        val chunks = breedingList.chunked(BATCH_OPERATION_LIMIT)
+
+        chunks.forEach { chunk ->
+            firestore
+                .runBatch { writeBatch ->
+                    chunk.forEach { breeding ->
+                        val ref = firestore
+                            .collection("$USERS_COLLECTION/$userId/$BREEDING_COLLECTION")
+                            .document(breeding.id)
+
+                        writeBatch.set(ref, breeding.asHashMap(), SetOptions.merge())
+                    }
+                }.addOnSuccessListener {
+                    Timber.d("All ${breedingList.count()} added successfully")
+                }.addOnFailureListener {
+                    Timber.d("addAllCattle() failed : ${it.message}")
+                }
+        }
+    }
+
+    override suspend fun deleteBreeding(breeding: Breeding) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        withContext(mainDispatcher) {
             firestore
                 .collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(BREEDING_COLLECTION)
                 .document(breeding.id)
                 .delete()
+                .addOnSuccessListener {
+                    Timber.d("Breeding : ${breeding.id} deleted successfully")
+                }
                 .addOnFailureListener {
                     Timber.d("deleteBreeding() failed : ${it.message}")
                 }
         }
     }
 
-    override fun updateBreeding(breeding: Breeding) {
+    override suspend fun updateBreeding(breeding: Breeding) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        withContext(mainDispatcher) {
             firestore
                 .collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(BREEDING_COLLECTION)
                 .document(breeding.id)
                 .set(breeding.asHashMap(), SetOptions.merge())
+                .addOnSuccessListener {
+                    Timber.d("Breeding : ${breeding.id} updated successfully")
+                }
                 .addOnFailureListener {
                     Timber.d("updateBreeding() failed : ${it.message}")
                 }

@@ -16,61 +16,34 @@
 
 package com.pr656d.shared.domain
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.pr656d.shared.domain.internal.DefaultScheduler
-import com.pr656d.shared.domain.internal.Scheduler
 import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 /**
- * Executes business logic synchronously or asynchronously using a [Scheduler].
+ * Executes business logic synchronously or asynchronously using Coroutines.
  */
-abstract class UseCase<in P, R> {
-    protected var taskScheduler: Scheduler = DefaultScheduler
+abstract class UseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher) {
 
-    /** Executes the use case asynchronously and places the [Result] in a MutableLiveData
+    /** Executes the use case asynchronously and returns a [Result].
+     *
+     * @return a [Result].
      *
      * @param parameters the input parameters to run the use case with
-     * @param result the MutableLiveData where the result is posted to
-     *
      */
-    operator fun invoke(parameters: P, result: MutableLiveData<Result<R>>) {
-        // result.value = Result.Loading TODO: add data to Loading to avoid glitches
-        try {
-            taskScheduler.execute {
-                try {
-                    execute(parameters).let { useCaseResult ->
-                        result.postValue(Result.Success(useCaseResult))
-                    }
-                } catch (e: Exception) {
-                    Timber.e(e)
-                    result.postValue(Result.Error(e))
+    suspend operator fun invoke(parameters: P): Result<R> {
+        return try {
+            // Moving all use case's executions to the injected dispatcher
+            // In production code, this is usually the Default dispatcher (background thread)
+            // In tests, this becomes a TestCoroutineDispatcher
+            withContext(coroutineDispatcher) {
+                execute(parameters).let {
+                    Result.Success(it)
                 }
             }
         } catch (e: Exception) {
             Timber.d(e)
-            result.postValue(Result.Error(e))
-        }
-    }
-
-    /** Executes the use case asynchronously and returns a [Result] in a new LiveData object.
-     *
-     * @return an observable [LiveData] with a [Result].
-     *
-     * @param parameters the input parameters to run the use case with
-     */
-    operator fun invoke(parameters: P): LiveData<Result<R>> {
-        val liveCallback: MutableLiveData<Result<R>> = MutableLiveData()
-        this(parameters, liveCallback)
-        return liveCallback
-    }
-
-    /** Executes the use case synchronously  */
-    fun executeNow(parameters: P): Result<R> {
-        return try {
-            Result.Success(execute(parameters))
-        } catch (e: Exception) {
             Result.Error(e)
         }
     }
@@ -82,5 +55,4 @@ abstract class UseCase<in P, R> {
     protected abstract fun execute(parameters: P): R
 }
 
-operator fun <R> UseCase<Unit, R>.invoke(): LiveData<Result<R>> = this(Unit)
-operator fun <R> UseCase<Unit, R>.invoke(result: MutableLiveData<Result<R>>) = this(Unit, result)
+suspend operator fun <R> UseCase<Unit, R>.invoke(): Result<R> = this(Unit)

@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.LoginActivity
 import com.pr656d.cattlenotes.ui.launch.LaunchViewModel.LaunchDestination.MainActivity
+import com.pr656d.shared.domain.invoke
 import com.pr656d.shared.domain.login.GetLoginAndAllStepsCompletedUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result.Success
@@ -31,8 +32,8 @@ class LaunchViewModel @Inject constructor(
 ) : ViewModel() {
 
     val launchDestination: LiveData<Event<LaunchDestination>> = liveData {
-        val isLoginAndAllStepsCompleted = loginAndAllStepsCompletedUseCase(Unit).let {
-            (it as? Success)?.data ?: false
+        val isLoginAndAllStepsCompleted = loginAndAllStepsCompletedUseCase().let {
+            (it as? Success)?.data == true
         }
 
         emit(

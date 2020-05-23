@@ -17,20 +17,22 @@
 package com.pr656d.cattlenotes.ui.timeline
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.MutableLiveData
-import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeBreedingRepository
+import com.pr656d.cattlenotes.test.fakes.data.breeding.FakeBreedingRepository
 import com.pr656d.model.Breeding
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.data.breeding.BreedingRepository
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
 import com.pr656d.shared.domain.timeline.LoadTimelineUseCase
+import com.pr656d.test.MainCoroutineRule
 import com.pr656d.test.TestData
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
@@ -40,53 +42,45 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for [TimelineViewModel].
  */
+@ExperimentalCoroutinesApi
 class TimelineViewModelTest {
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private fun createTimelineViewModel(
-        loadTimelineUseCase: LoadTimelineUseCase = LoadTimelineUseCase(
-            mock {
-                on { getAllBreedingWithCattle() }
-                    .doReturn(MutableLiveData(TestData.breedingWithCattleList))
-            }
-        ),
-        updateBreedingUseCase: UpdateBreedingUseCase = UpdateBreedingUseCase(FakeBreedingRepository())
+        breedingRepository: BreedingRepository = object : FakeBreedingRepository() {
+            override fun getAllBreedingWithCattle(): Flow<List<BreedingWithCattle>> =
+                flowOf(TestData.breedingWithCattleList)
+        }
     ): TimelineViewModel {
+        val coroutineDispatcher = coroutineRule.testDispatcher
+
         return TimelineViewModel(
-            loadTimelineUseCase = loadTimelineUseCase,
-            updateBreedingUseCase = updateBreedingUseCase
+            loadTimelineUseCase = LoadTimelineUseCase(breedingRepository, coroutineDispatcher),
+            updateBreedingUseCase = UpdateBreedingUseCase(breedingRepository, coroutineDispatcher)
         )
     }
 
     @Test
-    fun validateTimelineList() {
+    fun validateTimelineList() = coroutineRule.runBlockingTest {
         val viewModel = createTimelineViewModel()
 
         val breedingWithCattleList = LiveDataTestUtil.getValue(viewModel.timelineList)
         assertThat(TestData.validTimelineList, isEqualTo(breedingWithCattleList))
     }
 
-    object FailingUpdateBreedingUseCase : UpdateBreedingUseCase(FakeBreedingRepository()) {
-        override fun execute(parameters: Breeding) {
-            throw Exception("Error!")
-        }
-    }
-
     @Test
-    fun saveBreedingCalled_verifySaved() {
+    fun saveBreedingCalled_verifySaved() = coroutineRule.runBlockingTest {
         val newBreeding = TestData.breedingRHNegativePregnancyCheckNone
 
         val mockBreedingRepository = mock<BreedingRepository> {}
 
-        val viewModel = createTimelineViewModel(
-            updateBreedingUseCase = UpdateBreedingUseCase(mockBreedingRepository)
-        )
+        val viewModel = createTimelineViewModel(mockBreedingRepository)
 
         val selectedData = TimelineActionListener.ItemTimelineData(
             BreedingWithCattle(
@@ -104,11 +98,18 @@ class TimelineViewModelTest {
     }
 
     @Test
-    fun saveBreedingCalled_showMessageOnError() {
+    fun saveBreedingCalled_showMessageOnError() = coroutineRule.runBlockingTest {
         val newBreeding = TestData.breedingRHNegativePregnancyCheckNone
 
         val viewModel = createTimelineViewModel(
-            updateBreedingUseCase = FailingUpdateBreedingUseCase
+            object : FakeBreedingRepository() {
+                override fun getAllBreedingWithCattle(): Flow<List<BreedingWithCattle>> =
+                    flowOf(TestData.breedingWithCattleList)
+
+                override suspend fun updateBreeding(breeding: Breeding) {
+                    throw Exception("Error!")
+                }
+            }
         )
 
         val selectedData = TimelineActionListener.ItemTimelineData(
@@ -127,7 +128,7 @@ class TimelineViewModelTest {
     }
 
     @Test
-    fun saveBreedingCalledWithAddNewCattle_launchAddNewCattleOnSuccess() {
+    fun saveBreedingCalledWithAddNewCattle_launchAddNewCattleOnSuccess() = coroutineRule.runBlockingTest {
         val viewModel = createTimelineViewModel()
 
         val cattle = TestData.breedingWithCattle1.cattle

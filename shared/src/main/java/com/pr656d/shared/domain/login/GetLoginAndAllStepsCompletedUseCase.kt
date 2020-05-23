@@ -18,14 +18,16 @@ package com.pr656d.shared.domain.login
 
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.di.DefaultDispatcher
-import com.pr656d.shared.domain.NewUseCase
+import com.pr656d.shared.domain.UseCase
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 open class GetLoginAndAllStepsCompletedUseCase @Inject constructor(
     private val preferenceStorageRepository: PreferenceStorageRepository,
-    @DefaultDispatcher coroutineDispatcher: CoroutineDispatcher
-) : NewUseCase<Unit, Boolean>(coroutineDispatcher) {
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+) : UseCase<Unit, Boolean>(defaultDispatcher) {
+
     override fun execute(parameters: Unit): Boolean =
         preferenceStorageRepository.getLoginAndAllStepsCompleted()
+
 }

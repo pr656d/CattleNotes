@@ -27,9 +27,14 @@ import com.pr656d.shared.domain.breeding.history.LoadBreedingByCattleIdUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.successOr
 import com.pr656d.shared.utils.nameOrTagNumber
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class BreedingHistoryOfCattleViewModel @Inject constructor(
     private val loadBreedingByCattleIdUseCase: LoadBreedingByCattleIdUseCase,
     private val deleteBreedingUseCase: DeleteBreedingUseCase,
@@ -38,15 +43,24 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
 
     private val cattleId = MutableLiveData<String>()
 
-    val cattle = cattleId.switchMap { getCattleByIdUseCase(it) }
+    val cattle: LiveData<Cattle?> = cattleId.switchMap { id ->
+        getCattleByIdUseCase(id)
+            .map { it.successOr(null) }
+            .asLiveData()
+    }
 
     val nameOrTagNumber = cattle.map { it?.nameOrTagNumber() }
 
-    private val deleteBreedingResult = MutableLiveData<Result<Unit>>()
+    val breedingList: LiveData<List<Breeding>> = cattleId.switchMap { id ->
+        loadBreedingByCattleIdUseCase(id)
+            .map {
+                _loading.postValue(false)
+                it.successOr(emptyList())
+            }
+            .asLiveData()
+    }
 
-    val breedingList = cattleId.switchMap { loadBreedingByCattleIdUseCase(it) }
-
-    private val _loading = MediatorLiveData<Boolean>().apply { value = true }
+    private val _loading = MutableLiveData(true)
     val loading: LiveData<Boolean>
         get() = _loading
 
@@ -65,18 +79,6 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
     val launchEditBreeding: LiveData<Event<Pair<Cattle, Breeding>>>
         get() = _launchEditBreeding
 
-    init {
-        _loading.addSource(breedingList) {
-            _loading.value = false
-        }
-
-        _showMessage.addSource(deleteBreedingResult) {
-            (it as? Result.Error)?.exception?.let {
-                _showMessage.postValue(Event(R.string.error_unknown))
-            }
-        }
-    }
-
     fun setCattle(id: String) = cattleId.postValue(id)
 
     override fun editBreeding(breeding: Breeding) {
@@ -85,7 +87,13 @@ class BreedingHistoryOfCattleViewModel @Inject constructor(
 
     override fun deleteBreeding(breeding: Breeding, deleteConfirmation: Boolean) {
         if (deleteConfirmation)
-            deleteBreedingUseCase(breeding, deleteBreedingResult)
+            viewModelScope.launch {
+                deleteBreedingUseCase(breeding).let { result ->
+                    (result as? Result.Error)?.exception?.let {
+                        _showMessage.postValue(Event(R.string.error_unknown))
+                    }
+                }
+            }
         else
             deleteBreedingConfirmation(breeding)
     }

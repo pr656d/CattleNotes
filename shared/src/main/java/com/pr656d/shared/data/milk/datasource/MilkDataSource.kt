@@ -18,18 +18,22 @@ package com.pr656d.shared.data.milk.datasource
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.pr656d.model.Milk
-import com.pr656d.shared.data.db.MilkDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
-import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.di.MainDispatcher
+import com.pr656d.shared.utils.FirestoreUtil.BATCH_OPERATION_LIMIT
 import com.pr656d.shared.utils.TimeUtils
 import com.pr656d.shared.utils.toEpochMilli
 import com.pr656d.shared.utils.toMilkOf
 import com.pr656d.shared.utils.toMilkSource
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * Remote data source for [Milk].
@@ -37,35 +41,35 @@ import javax.inject.Inject
  */
 interface MilkDataSource {
     /**
-     * Load milk list from data source and save to local db.
+     * Load milk list from data source.
      */
-    fun load(onComplete: () -> Unit = {})
+    suspend fun load(): List<Milk>
 
     /**
      * Add milk at remote data source.
      */
-    fun addMilk(milk: Milk)
+    suspend fun addMilk(milk: Milk)
 
     /**
      * Add milk at remote data source.
      */
-    fun addAllMilk(milkList: List<Milk>)
-
-    /**
-     * Delete milk at remote data source.
-     */
-    fun deleteMilk(milk: Milk)
+    suspend fun addAllMilk(milkList: List<Milk>)
 
     /**
      * Update milk at remote data source.
      */
-    fun updateMilk(milk : Milk)
+    suspend fun updateMilk(milk : Milk)
+
+    /**
+     * Delete milk at remote data source.
+     */
+    suspend fun deleteMilk(milk: Milk)
 }
 
 class FirestoreMilkDataSource @Inject constructor(
     authIdDataSource: AuthIdDataSource,
     private val firestore: FirebaseFirestore,
-    private val milkDao: MilkDao
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : MilkDataSource {
     private val userId by lazy {
         authIdDataSource.getUserId() ?: run {
@@ -74,67 +78,63 @@ class FirestoreMilkDataSource @Inject constructor(
         }
     }
 
-    override fun load(onComplete: () -> Unit) {
-        val onSuccessListener: (QuerySnapshot) -> Unit = { snapshot ->
-            DefaultScheduler.execute {
-                val milkList = snapshot.documents.map { getMilk(it) }
-                milkDao.insertAll(milkList).also {
-                    onComplete()
-                }
-            }
-        }
-
+    override suspend fun load(): List<Milk> = withContext(mainDispatcher) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        suspendCancellableCoroutine<List<Milk>> { continuation ->
             firestore
                 .collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(MILK_COLLECTION)
                 .get()
-                .addOnSuccessListener(onSuccessListener)
+                .addOnSuccessListener { snapshot ->
+                    if (!continuation.isActive) return@addOnSuccessListener
+
+                    val list = snapshot.documents.map { getMilk(it) }
+                    continuation.resume(list)
+                }
                 .addOnFailureListener {
                     Timber.d("load() failed at milk data source : ${it.message}")
+                    continuation.resumeWithException(it)
                 }
         }
     }
 
-    override fun addMilk(milk: Milk) {
+    override suspend fun addMilk(milk: Milk) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        withContext(mainDispatcher) {
             firestore
                 .collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(MILK_COLLECTION)
                 .document(milk.id)
                 .set(milk.asHashMap())
+                .addOnSuccessListener {
+                    Timber.d("Milk : ${milk.id} added successfully")
+                }
                 .addOnFailureListener {
                     Timber.d("addMilk() failed : ${it.message}")
                 }
         }
     }
 
-    override fun addAllMilk(milkList: List<Milk>) {
-        /**
-         * Firestore has batch operation limit.
-         * Make chunks of list and perform batch commit.
-         */
-        val milkListBlocks = milkList.chunked(BATCH_OPERATION_LIMIT)
+    override suspend fun addAllMilk(milkList: List<Milk>) {
+        val chunks = milkList.chunked(BATCH_OPERATION_LIMIT)
 
-        milkListBlocks.forEach { list ->
+        chunks.forEach { chunk ->
             firestore
                 .runBatch { batch ->
-                    list.forEach { milk ->
+                    chunk.forEach { milk ->
                         val docRef = firestore
                             .collection(USERS_COLLECTION)
                             .document(userId)
                             .collection(MILK_COLLECTION)
                             .document(milk.id)
 
-                        batch.set(docRef, milk.asHashMap())
+                        batch.set(docRef, milk.asHashMap(), SetOptions.merge())
                     }
                 }
                 .addOnSuccessListener {
-                    Timber.d("addAllMilk() success.")
+                    Timber.d("All ${milkList.count()} added successfully")
                 }
                 .addOnFailureListener {
                     Timber.e(it, "addAllMilk() failed : ${it.message}")
@@ -142,24 +142,27 @@ class FirestoreMilkDataSource @Inject constructor(
         }
     }
 
-    override fun deleteMilk(milk: Milk) {
+    override suspend fun deleteMilk(milk: Milk) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        withContext(mainDispatcher) {
             firestore
                 .collection(USERS_COLLECTION)
                 .document(userId)
                 .collection(MILK_COLLECTION)
                 .document(milk.id)
                 .delete()
+                .addOnSuccessListener {
+                    Timber.d("Milk : ${milk.id} deleted successfully")
+                }
                 .addOnFailureListener {
                     Timber.d("deleteMilk() failed : ${it.message}")
                 }
         }
     }
 
-    override fun updateMilk(milk: Milk) {
-        // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+    override suspend fun updateMilk(milk: Milk) {
+        withContext(mainDispatcher) {
+            // All Firestore operations start from the main thread to avoid concurrency issues.
             firestore
                 .collection(USERS_COLLECTION)
                 .document(userId)
@@ -203,8 +206,6 @@ class FirestoreMilkDataSource @Inject constructor(
     }
 
     companion object {
-        private const val BATCH_OPERATION_LIMIT = 500
-
         private const val USERS_COLLECTION = "users"
         private const val MILK_COLLECTION = "milkList"
         private const val KEY_SOURCE = "source"

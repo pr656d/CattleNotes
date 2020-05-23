@@ -17,19 +17,23 @@
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeBreedingRepository
-import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
+import com.pr656d.cattlenotes.test.fakes.data.breeding.FakeBreedingRepository
+import com.pr656d.cattlenotes.test.fakes.data.cattle.FakeCattleRepository
 import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
+import com.pr656d.shared.data.breeding.BreedingRepository
+import com.pr656d.shared.data.cattle.CattleRepository
 import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
 import com.pr656d.shared.domain.breeding.detail.GetBreedingByIdUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
+import com.pr656d.test.MainCoroutineRule
 import com.pr656d.test.TestData
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
@@ -39,49 +43,51 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for [AddEditBreedingViewModel].
  */
+@ExperimentalCoroutinesApi
 class AddEditBreedingViewModelTest {
 
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
-    private fun getBreedingBehaviour(): BreedingBehaviour =
-        BreedingBehaviourImpl(
-            BreedingUiImplDelegate(
-                GetCattleByIdUseCase(cattleRepository),
-                GetBreedingByIdUseCase(breedingRepository)
-            ) as BreedingUiDelegate
-        )
-
-    private val cattleRepository = object : FakeCattleRepository() {
-        override fun getCattleById(id: String): LiveData<Cattle?> {
-            return MutableLiveData<Cattle?>().apply {
-                value = TestData.cattleList.firstOrNull { it.id == id }
-            }
-        }
+    private val fakeCattleRepository = object : FakeCattleRepository() {
+        override fun getCattleById(id: String): Flow<Cattle?> =
+            flowOf(TestData.cattleList.firstOrNull { it.id == id })
     }
 
-    private val breedingRepository = object : FakeBreedingRepository() {
-        override fun getBreeding(breedingId: String): LiveData<Breeding?> {
-            return MutableLiveData<Breeding?>().apply {
-                value = TestData.breedingList.firstOrNull { it.id == breedingId }
-            }
-        }
+    private val fakeBreedingRepository = object : FakeBreedingRepository() {
+        override fun getBreedingById(breedingId: String): Flow<Breeding?> =
+            flowOf(TestData.breedingList.firstOrNull { it.id == breedingId })
+    }
+
+    private fun getBreedingBehaviour(
+        breedingRepository: BreedingRepository,
+        cattleRepository: CattleRepository
+    ): BreedingBehaviour {
+        val coroutineDispatcher = coroutineRule.testDispatcher
+
+        return BreedingBehaviourImpl(
+            BreedingUiImplDelegate(
+                GetCattleByIdUseCase(cattleRepository, coroutineDispatcher),
+                GetBreedingByIdUseCase(breedingRepository, coroutineDispatcher)
+            ) as BreedingUiDelegate
+        )
     }
 
     private fun createAddEditBreedingViewModel(
-        breedingBehaviour: BreedingBehaviour = getBreedingBehaviour(),
-        addBreedingUseCase: AddBreedingUseCase = AddBreedingUseCase(FakeBreedingRepository()),
-        updateBreedingUseCase: UpdateBreedingUseCase = UpdateBreedingUseCase(FakeBreedingRepository())
+        breedingRepository: BreedingRepository = fakeBreedingRepository,
+        cattleRepository: CattleRepository = fakeCattleRepository
     ): AddEditBreedingViewModel {
+        val coroutineDispatcher = coroutineRule.testDispatcher
+
         return AddEditBreedingViewModel(
-            breedingBehaviour = breedingBehaviour,
-            addBreedingUseCase = addBreedingUseCase,
-            updateBreedingUseCase = updateBreedingUseCase
+            breedingBehaviour = getBreedingBehaviour(breedingRepository, cattleRepository),
+            addBreedingUseCase = AddBreedingUseCase(breedingRepository, coroutineDispatcher),
+            updateBreedingUseCase = UpdateBreedingUseCase(breedingRepository, coroutineDispatcher)
         ).apply {
             initializeLiveData()
             observeUnobserved()
@@ -139,32 +145,32 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun saveCalledButAiDateNotAvailable_hasAiDateFalse() {
+    fun saveCalledButAiDateNotAvailable_hasAiDateFalse() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
-
-        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
-        assertFalse(hasAiDate)
 
         // Call save
         viewModel.save()
+
+        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+        assertFalse(hasAiDate)
     }
 
     @Test
-    fun saveCalledWithAiDateIsAvailable_hasAiDateTrue() {
+    fun saveCalledWithAiDateIsAvailable_hasAiDateTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set AI date
         viewModel.aiDate.value = LocalDate.now()
 
-        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
-        assertTrue(hasAiDate)
-
         // Call save
         viewModel.save()
+
+        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+        assertTrue(hasAiDate)
     }
 
     @Test
-    fun saveCalled_navigateUpOnSuccess() {
+    fun saveCalled_navigateUpOnSuccess() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
@@ -184,7 +190,7 @@ class AddEditBreedingViewModelTest {
      * When aiDate is not set and back is pressed. Navigate up with out back confirmation.
      */
     @Test
-    fun onBackPressedCalledAiDateNotSet_navigateUp() {
+    fun onBackPressedCalledAiDateNotSet_navigateUp() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Call onBackPressed
@@ -198,7 +204,7 @@ class AddEditBreedingViewModelTest {
      * When aiDate is set and back is pressed. Navigate up with back confirmation.
      */
     @Test
-    fun onBackPressedCalledAiDateIsSet_showBackConfirmation() {
+    fun onBackPressedCalledAiDateIsSet_showBackConfirmation() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -220,7 +226,7 @@ class AddEditBreedingViewModelTest {
      * When aiDate is set and back is pressed with back confirmation as true navigate up.
      */
     @Test
-    fun onBackPressedCalledAiDateIsSetAndBackConfirmationIsTrue_navigateUp() {
+    fun onBackPressedCalledAiDateIsSetAndBackConfirmationIsTrue_navigateUp() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -245,16 +251,20 @@ class AddEditBreedingViewModelTest {
         assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
     }
 
-    private object FailingAddBreedingUseCase : AddBreedingUseCase(FakeBreedingRepository()) {
-        override fun execute(parameters: Breeding) {
-            throw Exception("Error!")
-        }
-    }
-
     @Test
-    fun saveCalled_showMessageOnError() {
+    fun saveCalled_showMessageOnError() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel(
-            addBreedingUseCase = FailingAddBreedingUseCase
+            object : FakeBreedingRepository() {
+                override fun getBreedingById(breedingId: String): Flow<Breeding?> =
+                    flowOf(TestData.breedingList.firstOrNull { it.id == breedingId })
+
+                override suspend fun addBreeding(breeding: Breeding): Long {
+                    throw Exception("Error!")
+                }
+                override suspend fun updateBreeding(breeding: Breeding) {
+                    throw Exception("Error!")
+                }
+            }
         )
 
         // Set cattle
@@ -283,7 +293,7 @@ class AddEditBreedingViewModelTest {
     /* Edit breeding */
 
     @Test
-    fun oldBreedingIsAvailable_editingIsTrue() {
+    fun oldBreedingIsAvailable_editingIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set old breeding
@@ -294,7 +304,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun editingExistingBreedingCycleBindDataCalled_verifyBindingOfData() {
+    fun editingExistingBreedingCycleBindDataCalled_verifyBindingOfData() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         val actualOldBreedingCycle = TestData.breedingInitial
@@ -354,7 +364,7 @@ class AddEditBreedingViewModelTest {
      * When editing existing breeding back pressed without saving. Show back confirmation.
      */
     @Test
-    fun onBackPressedWhileEditingExistingBreeding_showBackPressed() {
+    fun onBackPressedWhileEditingExistingBreeding_showBackPressed() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set breeding cycle
@@ -382,7 +392,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun initialBreedingView() {
+    fun initialBreedingView() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Make sure we don't have aiDate.
@@ -481,7 +491,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun aiDateIsSet() {
+    fun aiDateIsSet() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -583,7 +593,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun repeatHeatStatusIsNone() {
+    fun repeatHeatStatusIsNone() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -689,7 +699,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun repeatHeatStatusIsPositive() {
+    fun repeatHeatStatusIsPositive() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -786,7 +796,7 @@ class AddEditBreedingViewModelTest {
      *  When repeat heat status is positive and save called, show breeding completed dialog.
      */
     @Test
-    fun saveCalledAndRepeatHeatStatusPositive_showBreedingCompletedDialog() {
+    fun saveCalledAndRepeatHeatStatusPositive_showBreedingCompletedDialog() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
@@ -814,7 +824,7 @@ class AddEditBreedingViewModelTest {
      *  and save called, show breeding completed dialog.
      */
     @Test
-    fun saveCalledAndPregnancyCheckStatusNegative_showBreedingCompletedDialog() {
+    fun saveCalledAndPregnancyCheckStatusNegative_showBreedingCompletedDialog() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
@@ -841,7 +851,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun saveCalledWithCalvingStatusIsTrue_showSaveAndAddNewCattleDialog() {
+    fun saveCalledWithCalvingStatusIsTrue_showSaveAndAddNewCattleDialog() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
@@ -879,7 +889,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun saveCalledAndBreedingCompletedConfirmationIsTrue_navigateUpOnSuccess() {
+    fun saveCalledAndBreedingCompletedConfirmationIsTrue_navigateUpOnSuccess() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle
@@ -917,7 +927,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun repeatHeatStatusIsNegative() {
+    fun repeatHeatStatusIsNegative() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -1025,7 +1035,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun pregnancyCheckStatusIsNone() {
+    fun pregnancyCheckStatusIsNone() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -1137,7 +1147,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun pregnancyCheckStatusIsPositive() {
+    fun pregnancyCheckStatusIsPositive() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -1249,7 +1259,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun pregnancyCheckStatusIsNegative() {
+    fun pregnancyCheckStatusIsNegative() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -1361,7 +1371,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun dryOffStatusIsNone() {
+    fun dryOffStatusIsNone() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -1483,7 +1493,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun dryOffStatusIsPositive() {
+    fun dryOffStatusIsPositive() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -1604,7 +1614,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun dryOffStatusIsNegative() {
+    fun dryOffStatusIsNegative() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -1726,7 +1736,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun calvingStatusIsNone() {
+    fun calvingStatusIsNone() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -1852,7 +1862,7 @@ class AddEditBreedingViewModelTest {
      *  Everything else will be hidden
      */
     @Test
-    fun calvingStatusIsPositive() {
+    fun calvingStatusIsPositive() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -1960,7 +1970,7 @@ class AddEditBreedingViewModelTest {
      *          -> dry off positive -> Repeat heat none
      */
     @Test
-    fun whenAiDateIsSetRepeatHeatIsNegativePregnancyCheckIsPositiveDryOffIsPositiveAndRepeatHeatIsNone() {
+    fun whenAiDateIsSetRepeatHeatIsNegativePregnancyCheckIsPositiveDryOffIsPositiveAndRepeatHeatIsNone() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2063,7 +2073,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun aiDateIsRemoved_resetEveryThing() {
+    fun aiDateIsRemoved_resetEveryThing() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2193,7 +2203,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun repeatHeatStatusIsNoneFromPositive_resetRepeatHeatDateActualIsTrue() {
+    fun repeatHeatStatusIsNoneFromPositive_resetRepeatHeatDateActualIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2214,7 +2224,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun repeatHeatStatusIsNegativeFromNone_resetRepeatHeatDateActualIsTrue() {
+    fun repeatHeatStatusIsNegativeFromNone_resetRepeatHeatDateActualIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2235,7 +2245,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun pregnancyCheckStatusIsNoneFromPositive_resetPregnancyCheckDateActualIsTrue() {
+    fun pregnancyCheckStatusIsNoneFromPositive_resetPregnancyCheckDateActualIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2262,7 +2272,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun pregnancyCheckStatusIsNoneFromNegative_resetPregnancyCheckDateActualIsTrue() {
+    fun pregnancyCheckStatusIsNoneFromNegative_resetPregnancyCheckDateActualIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2289,7 +2299,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun dryOffStatusIsNoneFromPositive_resetDryOffDateActualIsTrue() {
+    fun dryOffStatusIsNoneFromPositive_resetDryOffDateActualIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2319,7 +2329,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun calvingIsNoneFromPositive_resetCalvingDateActualIsTrue() {
+    fun calvingIsNoneFromPositive_resetCalvingDateActualIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2360,7 +2370,7 @@ class AddEditBreedingViewModelTest {
      * Visibility of pregnancy check, dry off and calving should be false.
      */
     @Test
-    fun reachedToCalvingIsPositive_repeatHeatChangedToPositive() {
+    fun reachedToCalvingIsPositive_repeatHeatChangedToPositive() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2478,7 +2488,7 @@ class AddEditBreedingViewModelTest {
      * Visibility of dry off and calving should be false.
      */
     @Test
-    fun reachedToCalvingIsPositive_pregnancyCheckChangedToNegative() {
+    fun reachedToCalvingIsPositive_pregnancyCheckChangedToNegative() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set aiDate
@@ -2590,7 +2600,7 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun saveCalledForSaveAndAddNewCattle_launchAddNewCattleOnSuccess() {
+    fun saveCalledForSaveAndAddNewCattle_launchAddNewCattleOnSuccess() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditBreedingViewModel()
 
         // Set cattle

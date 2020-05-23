@@ -18,8 +18,9 @@ package com.pr656d.cattlenotes.ui.profile.addedit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeProfileDelegate
+import com.pr656d.cattlenotes.test.fakes.FakeProfileDelegate
+import com.pr656d.test.MainCoroutineRule
+import com.pr656d.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -33,12 +34,14 @@ class AddEditProfileViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private fun createAddEditProfileViewModel(): AddEditProfileViewModel {
-        return AddEditProfileViewModel(FakeProfileDelegate()).apply { observeUnobserved() }
+        return AddEditProfileViewModel(
+            FakeProfileDelegate(coroutineDispatcher = coroutineRule.testDispatcher)
+        ).apply { observeUnobserved() }
     }
 
     private fun AddEditProfileViewModel.observeUnobserved() {
@@ -57,11 +60,11 @@ class AddEditProfileViewModelTest {
     }
 
     @Test
-    fun saveProfileCalled_navigateUpOnSuccess() {
+    fun saveProfileCalled_navigateUpOnSuccess() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditProfileViewModel()
 
         // Call save profile
-        viewModel.saveProfile()
+        viewModel.save()
 
         val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
         assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))

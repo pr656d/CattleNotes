@@ -18,9 +18,7 @@ package com.pr656d.cattlenotes.ui.profile
 
 import android.net.Uri
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import com.google.firebase.auth.UserInfo
 import com.pr656d.cattlenotes.R
 import com.pr656d.shared.data.user.info.FirebaseUserInfoDetailed
@@ -29,11 +27,14 @@ import com.pr656d.shared.data.user.info.UserInfoBasic
 import com.pr656d.shared.data.user.info.UserInfoDetailed
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.successOr
 import com.pr656d.shared.domain.user.info.ObserveUserInfoDetailed
 import com.pr656d.shared.domain.user.info.UpdateUserInfoDetailedUseCase
 import com.pr656d.shared.utils.NetworkHelper
 import com.pr656d.shared.utils.toLocalDate
 import com.pr656d.shared.utils.toLong
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
@@ -51,10 +52,7 @@ import javax.inject.Inject
  * ```
  */
 interface ProfileDelegate {
-
-    /**
-     * Provide current user info.
-     */
+    /**  Provide current user info.  */
     val currentUserInfo: LiveData<UserInfoDetailed?>
 
     val farmName: MediatorLiveData<String>
@@ -85,29 +83,26 @@ interface ProfileDelegate {
 
     val address: MediatorLiveData<String>
 
-    val updateUserInfoDetailedResult: LiveData<Result<Event<Pair<Result<Unit>, Result<Unit>>>>>
-
     val updateErrorMessage: LiveData<Int>
 
     /**
      * Convenience member holds saving state.
      */
-    val savingProfile: MediatorLiveData<Boolean>
+    val savingProfile: MutableLiveData<Boolean>
 
-    fun saveProfile()
+    suspend fun saveProfile(): Result<Event<Pair<Result<Unit>, Result<Unit>>>>
 }
 
+@ExperimentalCoroutinesApi
 class ProfileDelegateImp @Inject constructor(
     observeUserInfoDetailed: ObserveUserInfoDetailed,
     private val updateUserInfoDetailedUseCase: UpdateUserInfoDetailedUseCase,
     private val networkHelper: NetworkHelper
 ) : ProfileDelegate {
 
-    private val currentUserInfoResult = observeUserInfoDetailed.observe()
-
-    override val currentUserInfo = currentUserInfoResult.map {
-        (it as? Result.Success)?.data
-    }
+    override val currentUserInfo = observeUserInfoDetailed(Unit)
+        .map { it.successOr(null) }
+        .asLiveData()
 
     override val farmName: MediatorLiveData<String> = MediatorLiveData()
 
@@ -122,14 +117,10 @@ class ProfileDelegateImp @Inject constructor(
     override val name: MediatorLiveData<String> = MediatorLiveData()
 
     override val email: LiveData<String?>
-        get() = currentUserInfo.map {
-            it?.getEmail()
-        }
+        get() = currentUserInfo.map { it?.getEmail() }
 
     override val phoneNumber: LiveData<String?>
-        get() = currentUserInfo.map {
-            it?.getPhoneNumber()
-        }
+        get() = currentUserInfo.map { it?.getPhoneNumber() }
 
     override val selectedGenderId: MediatorLiveData<Int?> = MediatorLiveData<Int?>()
 
@@ -137,19 +128,13 @@ class ProfileDelegateImp @Inject constructor(
 
     override val address: MediatorLiveData<String> = MediatorLiveData()
 
-    override val updateUserInfoDetailedResult: LiveData<Result<Event<Pair<Result<Unit>, Result<Unit>>>>> =
-        updateUserInfoDetailedUseCase.observe()
+    override val savingProfile = MutableLiveData(false)
 
-    override val savingProfile =
-        MediatorLiveData<Boolean>().apply { postValue(false) }
-
-    private val _updateErrorMessage = MediatorLiveData<@StringRes Int>()
+    private val _updateErrorMessage = MutableLiveData<@StringRes Int>()
     override val updateErrorMessage: LiveData<Int>
         get() = _updateErrorMessage
 
     init {
-        observeUserInfoDetailed.execute(Any())
-
         farmName.addSource(currentUserInfo) { user ->
             farmName.postValue(user?.getFarmName())
         }
@@ -189,38 +174,43 @@ class ProfileDelegateImp @Inject constructor(
         name.addSource(currentUserInfo) { user ->
             name.postValue(user?.getDisplayName())
         }
-
-        savingProfile.addSource(updateUserInfoDetailedResult) {
-            if (it is Result.Success || it is Result.Error)
-                savingProfile.postValue(false)
-        }
-
-        _updateErrorMessage.addSource(updateUserInfoDetailedResult) { result ->
-            (result as? Result.Success)?.data?.peekContent()?.let {
-                if (it.first is Result.Error && it.second is Result.Error)
-                    _updateErrorMessage.postValue(R.string.error_profile_change_not_saved)
-                else if (it.first is Result.Error)
-                    _updateErrorMessage.postValue(R.string.error_profile_change_incomplete)
-                else if (it.second is Result.Error)
-                    _updateErrorMessage.postValue(R.string.error_profile_change_incomplete)
-            }
-            (result as? Result.Error)?.exception?.let {
-                _updateErrorMessage.postValue(R.string.error_unknown)
-            }
-        }
     }
 
-    override fun saveProfile() {
-        if (networkHelper.isNetworkConnected()) {
-            updateUserInfoDetailedUseCase.execute(
+    override suspend fun saveProfile(): Result<Event<Pair<Result<Unit>, Result<Unit>>>> {
+        return if (networkHelper.isNetworkConnected()) {
+            savingProfile.postValue(true)
+
+            val result = updateUserInfoDetailedUseCase(
                 FirebaseUserInfoDetailed(
                     getFirebaseUserInfo(),
                     getUserInfoOnFirestore()
                 )
             )
-            savingProfile.postValue(true)
+
+            result.updateErrorMessage()
+
+            savingProfile.postValue(false)
+
+            result
         } else {
             _updateErrorMessage.postValue(R.string.network_not_available)
+            Result.Error(Exception("No internet"))
+        }
+    }
+
+    private fun Result<Event<Pair<Result<Unit>, Result<Unit>>>>.updateErrorMessage() {
+        // Handle the event but dont consume it. Leave it for caller.
+        successOr(null)?.peekContent()?.let {
+            if (it.first is Result.Error && it.second is Result.Error)
+                _updateErrorMessage.value = R.string.error_profile_change_not_saved
+            else if (it.first is Result.Error)
+                _updateErrorMessage.value = R.string.error_profile_change_incomplete
+            else if (it.second is Result.Error)
+                _updateErrorMessage.value = R.string.error_profile_change_incomplete
+        }
+
+        (this as? Result.Error)?.exception?.let {
+            _updateErrorMessage.value = R.string.error_unknown
         }
     }
 

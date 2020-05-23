@@ -16,9 +16,8 @@
 
 package com.pr656d.shared.data.login.datasources
 
-import androidx.lifecycle.LiveData
 import com.pr656d.shared.data.user.info.UserInfoBasic
-import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Listens to an Authentication state data source that emits updates on the current user.
@@ -26,19 +25,9 @@ import com.pr656d.shared.domain.result.Result
  */
 interface AuthStateUserDataSource : ReloadFirebaseUserInfo {
     /**
-     * Listens to changes in the authentication-related user info.
-     */
-    fun startListening()
-
-    /**
      * Returns an observable of the [UserInfoBasic].
      */
-    fun getBasicUserInfo(): LiveData<Result<UserInfoBasic?>>
-
-    /**
-     * Call this method to clear listeners to avoid leaks.
-     */
-    fun clearListener()
+    fun getBasicUserInfo(): Flow<UserInfoBasic?>
 }
 
 /**

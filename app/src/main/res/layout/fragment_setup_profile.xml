@@ -268,7 +268,7 @@
             android:layout_gravity="bottom|center"
             android:layout_margin="@dimen/margin_normal"
             android:clickable="@{ !viewModel.savingProfile }"
-            android:onClick="@{ () -> viewModel.saveProfile() }"
+            android:onClick="@{ () -> viewModel.save() }"
             app:srcCompat="@drawable/ic_check" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

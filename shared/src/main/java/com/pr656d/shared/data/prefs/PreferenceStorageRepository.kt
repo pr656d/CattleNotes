@@ -16,8 +16,7 @@
 
 package com.pr656d.shared.data.prefs
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import android.os.Build
 import com.pr656d.model.Milk
 import com.pr656d.model.Theme
 import com.pr656d.model.themeFromStorageKey
@@ -25,6 +24,8 @@ import com.pr656d.shared.data.prefs.datasource.PreferenceStorage
 import com.pr656d.shared.utils.toLocalTime
 import com.pr656d.shared.utils.toLong
 import com.pr656d.shared.utils.toMilkSmsSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -48,7 +49,7 @@ interface PreferenceStorageRepository {
     /**
      * Get [PreferenceStorage.observableLoginCompleted].
      */
-    fun getObservableLoginCompleted(): LiveData<Boolean>
+    fun getObservableLoginCompleted(): Flow<Boolean>
 
     /**
      * Get [PreferenceStorage.firstTimeProfileSetupCompleted].
@@ -63,7 +64,9 @@ interface PreferenceStorageRepository {
     /**
      * Get whether login and all steps completed or not.
      */
-    fun getLoginAndAllStepsCompleted(): Boolean
+    fun getLoginAndAllStepsCompleted(): Boolean {
+        return getLoginCompleted() && getFirstTimeProfileSetupCompleted()
+    }
 
     /**
      * Get [PreferenceStorage.onboardingCompleted].
@@ -88,7 +91,7 @@ interface PreferenceStorageRepository {
     /**
      * Get [PreferenceStorage.observableSelectedTheme].
      */
-    fun getObservableSelectedTheme(): LiveData<Theme>
+    fun getObservableSelectedTheme(): Flow<Theme>
 
     /**
      * Get [PreferenceStorage.reloadData].
@@ -103,7 +106,7 @@ interface PreferenceStorageRepository {
     /**
      * Get [PreferenceStorage.observableReloadData].
      */
-    fun getObservableReloadData(): LiveData<Boolean>
+    fun getObservableReloadData(): Flow<Boolean>
 
     /**
      * Get [PreferenceStorage.preferredTimeOfBreedingReminder].
@@ -118,7 +121,7 @@ interface PreferenceStorageRepository {
     /**
      * Get [PreferenceStorage.observablePreferredTimeOfBreedingReminder].
      */
-    fun getObservablePreferredTimeOfBreedingReminder(): LiveData<LocalTime>
+    fun getObservablePreferredTimeOfBreedingReminder(): Flow<LocalTime>
 
     /**
      * Get [PreferenceStorage.preferredMilkSmsSource].
@@ -129,11 +132,6 @@ interface PreferenceStorageRepository {
      * Set [PreferenceStorage.preferredMilkSmsSource].
      */
     fun setPreferredMilkSmsSource(selectedMilkSmsSource: Milk.Source.Sms?)
-
-    /**
-     * Get [PreferenceStorage.observablePreferredMilkSmsSource]
-     */
-    fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms?>
 
     /**
      * Get [PreferenceStorage.automaticMilkingCollection].
@@ -147,9 +145,8 @@ interface PreferenceStorageRepository {
 
     /**
      * Clear the shared preferences.
-     * @param fromRemote Pass true if you want to clear from remote source.
      */
-    fun clear(fromRemote: Boolean = false)
+    fun clear()
 }
 
 @Singleton
@@ -165,7 +162,7 @@ class SharedPreferenceStorageRepository @Inject constructor(
         preferenceStorage.loginCompleted = loginCompleted
     }
 
-    override fun getObservableLoginCompleted(): LiveData<Boolean> {
+    override fun getObservableLoginCompleted(): Flow<Boolean> {
         return preferenceStorage.observableLoginCompleted
     }
 
@@ -175,10 +172,6 @@ class SharedPreferenceStorageRepository @Inject constructor(
 
     override fun setFirstTimeProfileSetupCompleted(firstTimeProfileSetupCompleted: Boolean) {
         preferenceStorage.firstTimeProfileSetupCompleted = firstTimeProfileSetupCompleted
-    }
-
-    override fun getLoginAndAllStepsCompleted(): Boolean {
-        return getLoginCompleted() && getFirstTimeProfileSetupCompleted()
     }
 
     override fun getOnboardingCompleted(): Boolean {
@@ -197,9 +190,14 @@ class SharedPreferenceStorageRepository @Inject constructor(
         preferenceStorage.selectedTheme = selectedTheme?.storageKey
     }
 
-    override fun getObservableSelectedTheme(): LiveData<Theme> {
-        return Transformations.map(preferenceStorage.observableSelectedTheme) {
+    override fun getObservableSelectedTheme(): Flow<Theme> {
+        return preferenceStorage.observableSelectedTheme.map {
             it?.let { themeFromStorageKey(it) }
+                ?: if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    Theme.SYSTEM
+                } else {
+                    Theme.BATTERY_SAVER
+                }
         }
     }
 
@@ -211,7 +209,7 @@ class SharedPreferenceStorageRepository @Inject constructor(
         preferenceStorage.reloadData = reloadData
     }
 
-    override fun getObservableReloadData(): LiveData<Boolean> {
+    override fun getObservableReloadData(): Flow<Boolean> {
         return preferenceStorage.observableReloadData
     }
 
@@ -223,8 +221,8 @@ class SharedPreferenceStorageRepository @Inject constructor(
         preferenceStorage.preferredTimeOfBreedingReminder = preferredTimeOfBreedingReminder.toLong()
     }
 
-    override fun getObservablePreferredTimeOfBreedingReminder(): LiveData<LocalTime> {
-        return Transformations.map(preferenceStorage.observablePreferredTimeOfBreedingReminder) {
+    override fun getObservablePreferredTimeOfBreedingReminder(): Flow<LocalTime> {
+        return preferenceStorage.observablePreferredTimeOfBreedingReminder.map {
             it.toLocalTime()
         }
     }
@@ -237,12 +235,6 @@ class SharedPreferenceStorageRepository @Inject constructor(
         preferenceStorage.preferredMilkSmsSource = selectedMilkSmsSource?.SENDER_ADDRESS
     }
 
-    override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms?> {
-        return Transformations.map(preferenceStorage.observablePreferredMilkSmsSource) {
-            it?.toMilkSmsSource()
-        }
-    }
-
     override fun getAutomaticMilkingCollection(): Boolean {
         return preferenceStorage.automaticMilkingCollection
     }
@@ -251,10 +243,7 @@ class SharedPreferenceStorageRepository @Inject constructor(
         preferenceStorage.automaticMilkingCollection = enabled
     }
 
-    override fun clear(fromRemote: Boolean) {
+    override fun clear() {
         preferenceStorage.clear()
-        //if (fromRemote) {
-            // TODO("Clear from remote source also.") : If remote source available and asked explicitly to clear from remote source.
-        //}
     }
 }

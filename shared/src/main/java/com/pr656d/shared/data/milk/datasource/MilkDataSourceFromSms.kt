@@ -25,24 +25,27 @@ import com.pr656d.shared.sms.parser.BGAMAMCSSmsParser
 import com.pr656d.shared.utils.FirestoreUtil
 import com.pr656d.shared.utils.getDisplayMessageBodyOrThrow
 import com.pr656d.shared.utils.getSmsSourceOrThrow
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 interface MilkDataSourceFromSms {
     /**
      * Return [Milk] from [SmsMessage].
      */
-    fun getMilk(smsMessage: SmsMessage): Milk
+    suspend fun getMilk(smsMessage: SmsMessage): Milk
 
     /**
      * Return [Milk] by parsing [messageBody] for [smsSource].
      */
-    fun getMilk(smsSource: Milk.Source.Sms, messageBody: String): Milk
+    suspend fun getMilk(smsSource: Milk.Source.Sms, messageBody: String): Milk
 
     /**
      * This function reads all SMS of [Milk.Source.Sms] and parses each message into [Milk] and
      * @return list of Milk.
      */
-    fun getAllMilk(smsSource: Milk.Source.Sms): List<Milk>
+    suspend fun getAllMilk(smsSource: Milk.Source.Sms): List<Milk>
 }
 
 /**
@@ -55,7 +58,7 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
     /**
      * Return [Milk] from [SmsMessage].
      */
-    override fun getMilk(smsMessage: SmsMessage): Milk {
+    override suspend fun getMilk(smsMessage: SmsMessage): Milk {
         val milkSmsSender = smsMessage.getSmsSourceOrThrow()
         val messageBody = smsMessage.getDisplayMessageBodyOrThrow()
 
@@ -68,10 +71,8 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
     /**
      * Return [Milk] by parsing [messageBody] for [smsSource].
      */
-    override fun getMilk(smsSource: Milk.Source.Sms, messageBody: String): Milk {
-        /**
-         * Add new branch for new parser.
-         */
+    override suspend fun getMilk(smsSource: Milk.Source.Sms, messageBody: String): Milk {
+        /**  Add new branch for new parser.  */
         return when(smsSource) {
             Milk.Source.Sms.BGAMAMCS -> BGAMAMCSSmsParser.getMilk(messageBody)
         }
@@ -81,16 +82,18 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
      * This function reads all SMS of [Milk.Source.Sms] and parses each message into [Milk] and
      * @return list of Milk.
      */
-    override fun getAllMilk(smsSource: Milk.Source.Sms): List<Milk> {
-        val cursor = createSmsCursor(smsSource) ?: return emptyList()
-
-        val list = generateSequence { if (cursor.moveToNext()) cursor else null }
-            .map { getMilk(smsSource, it.getString(it.getColumnIndex(BODY))) }
-            .toList()
-
-        cursor.close()
-
-        return list
+    @ExperimentalStdlibApi
+    override suspend fun getAllMilk(smsSource: Milk.Source.Sms): List<Milk> = coroutineScope {
+        createSmsCursor(smsSource)
+            ?.use { cursor ->
+                buildList {
+                    while (cursor.moveToNext()) {
+                        add(async {
+                            getMilk(smsSource, cursor.getString(cursor.getColumnIndex(BODY)))
+                        })
+                    }
+                }.awaitAll()
+            } ?: emptyList()
     }
 
     /**

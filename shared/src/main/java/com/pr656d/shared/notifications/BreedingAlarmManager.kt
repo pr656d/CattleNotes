@@ -21,14 +21,16 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
-import androidx.annotation.WorkerThread
 import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.getSystemService
 import com.pr656d.model.Breeding
-import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.data.prefs.datasource.SharedPreferenceStorage.Companion.DEFAULT_REMINDER_TIME
+import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.settings.GetPreferredTimeOfBreedingReminderUseCase
 import com.pr656d.shared.notifications.BreedingAlarmBroadcastReceiver.Companion.EXTRA_BREEDING_ID
 import com.pr656d.shared.utils.TimeUtils
 import com.pr656d.shared.utils.toEpochMilli
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZonedDateTime
@@ -40,15 +42,14 @@ import javax.inject.Inject
  */
 open class BreedingAlarmManager @Inject constructor(val context: Context) {
 
-    @Inject lateinit var preferenceStorageRepository: PreferenceStorageRepository
+    @Inject lateinit var getPreferredTimeOfBreedingReminderUseCase: GetPreferredTimeOfBreedingReminderUseCase
 
     private val systemAlarmManager: AlarmManager? = context.getSystemService()
 
     /**
      * Schedule an alarm for a breeding.
      */
-    @WorkerThread
-    fun setAlarmForBreeding(breeding: Breeding) {
+    suspend fun setAlarmForBreeding(breeding: Breeding) {
         val breedingEvent = breeding.nextBreedingEvent
 
         // Cancel alarm if any.
@@ -62,8 +63,7 @@ open class BreedingAlarmManager @Inject constructor(val context: Context) {
             return
         }
 
-        val preferredTimeForBreedingReminder =
-            preferenceStorageRepository.getPreferredTimeOfBreedingReminder()
+        val preferredTimeForBreedingReminder = getPreferredTimeOfBreedingReminder()
 
         val isPastBreedingEvent = TimeUtils
             .toZonedDateTime(breedingEvent.expectedOn, preferredTimeForBreedingReminder)
@@ -76,6 +76,13 @@ open class BreedingAlarmManager @Inject constructor(val context: Context) {
 
         makePendingIntent(breeding.id)?.let {
             scheduleAlarmForBreeding(it, breeding, preferredTimeForBreedingReminder)
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    private suspend fun getPreferredTimeOfBreedingReminder(): LocalTime {
+        return getPreferredTimeOfBreedingReminderUseCase(Unit).let {
+            (it as? Result.Success)?.data ?: TimeUtils.toLocalTime(DEFAULT_REMINDER_TIME)
         }
     }
 

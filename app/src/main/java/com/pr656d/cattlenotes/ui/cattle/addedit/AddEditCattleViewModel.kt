@@ -31,30 +31,45 @@ import com.pr656d.shared.domain.cattle.validator.CattleTagNumberValidatorUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleValidator
 import com.pr656d.shared.domain.cattle.validator.CattleValidator.VALID_FIELD
 import com.pr656d.shared.domain.result.Event
-import com.pr656d.shared.domain.result.Result
-import com.pr656d.shared.domain.result.Result.Error
 import com.pr656d.shared.domain.result.Result.Success
+import com.pr656d.shared.domain.result.succeeded
+import com.pr656d.shared.domain.result.successOr
+import com.pr656d.shared.domain.result.updateOnSuccess
 import com.pr656d.shared.utils.FirestoreUtil
 import com.pr656d.shared.utils.nameOrTagNumber
 import com.pr656d.shared.utils.toGroup
 import com.pr656d.shared.utils.toType
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class AddEditCattleViewModel @Inject constructor(
     private val addCattleUseCase: AddCattleUseCase,
     private val updateCattleUseCase: UpdateCattleUseCase,
     private val getParentListUseCase: GetParentListUseCase,
-    getCattleByIdUseCase: GetCattleByIdUseCase,
+    private val getCattleByIdUseCase: GetCattleByIdUseCase,
     getParentCattleUseCase: GetParentCattleUseCase,
-    cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase
+    private val cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase
 ) : ViewModel(), ParentActionListener {
     private val cattleId = MutableLiveData<String>()
 
     // Make it open to test
-    val oldCattle: LiveData<Cattle?> = cattleId.switchMap { getCattleByIdUseCase(it) }
+    val oldCattle: LiveData<Cattle?> = cattleId.switchMap { id ->
+        _loading.postValue(true)
 
-    private val _editing = MutableLiveData<Boolean>(false)
+        getCattleByIdUseCase(id)
+            .map {
+                _loading.postValue(false)
+                it.successOr(null)
+            }
+            .asLiveData()
+    }
+
+    private val _editing = MutableLiveData(false)
     val editing: LiveData<Boolean>
         get() = _editing
 
@@ -85,11 +100,7 @@ class AddEditCattleViewModel @Inject constructor(
         if (oldCattle.value?.type?.displayName == it)
             breed.postValue(oldCattle.value?.breed)
 
-        when (it.toType()) {
-            AnimalType.Cow -> R.array.list_breed_cow
-            AnimalType.Buffalo -> R.array.list_breed_buffalo
-            AnimalType.Bull -> R.array.list_breed_bull
-        }
+        it.toType().getBreedList()
     }
 
     val group = MediatorLiveData<String?>()
@@ -104,11 +115,8 @@ class AddEditCattleViewModel @Inject constructor(
 
     val dob = MediatorLiveData<LocalDate>()
 
-    private val parentId = MediatorLiveData<String?>()
-
-    val parentCattle: LiveData<Cattle?> = parentId.switchMap { id ->
-        id?.let { getParentCattleUseCase(id) } ?: MutableLiveData<Cattle?>(null)
-    }
+    // Make it open to test
+    val parentCattle = MediatorLiveData<Cattle?>()
 
     val parent:LiveData<String?> = parentCattle.map { it?.nameOrTagNumber() }
 
@@ -118,7 +126,7 @@ class AddEditCattleViewModel @Inject constructor(
 
     val purchaseDate = MediatorLiveData<LocalDate>()
 
-    private val _selectingParent = MutableLiveData<Boolean>(false)
+    private val _selectingParent = MutableLiveData(false)
     val selectingParent: LiveData<Boolean>
         get() = _selectingParent
 
@@ -126,13 +134,13 @@ class AddEditCattleViewModel @Inject constructor(
     val showBackConfirmationDialog: LiveData<Event<Unit>>
         get() = _showBackConfirmationDialog
 
-    private val _navigateUp = MediatorLiveData<Event<Unit>>()
+    private val _navigateUp = MutableLiveData<Event<Unit>>()
     val navigateUp: LiveData<Event<Unit>>
         get() = _navigateUp
 
-    private val _saving = MediatorLiveData<Boolean>().apply { value = false }
-    val saving: LiveData<Boolean>
-        get() = _saving
+    private val _loading = MutableLiveData(false)
+    val loading: LiveData<Boolean>
+        get() = _loading
 
     private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
     val showMessage: LiveData<Event<Int>>
@@ -149,10 +157,6 @@ class AddEditCattleViewModel @Inject constructor(
     private val _isEmptyParentList = MediatorLiveData<Boolean>()
     val isEmptyParentList: LiveData<Boolean>
         get() = _isEmptyParentList
-
-    private val parentListResult = getParentListUseCase.observe()
-
-    private val addUpdateCattleResult = MutableLiveData<Result<Unit>>()
 
     init {
         tagNumber.addSource(oldCattle) {
@@ -201,8 +205,12 @@ class AddEditCattleViewModel @Inject constructor(
             dob.postValue(it?.dateOfBirth)
         }
 
-        parentId.addSource(oldCattle) {
-            parentId.postValue(it?.parent)
+        parentCattle.addSource(oldCattle) {
+            it ?: return@addSource
+
+            viewModelScope.launch {
+                getParentCattleUseCase(it).updateOnSuccess(parentCattle)
+            }
         }
 
         homeBorn.addSource(oldCattle) {
@@ -218,47 +226,28 @@ class AddEditCattleViewModel @Inject constructor(
         }
 
         _tagNumberErrorMessage.addSource(tagNumber) {
-            cattleTagNumberValidatorUseCase.execute(it to oldCattle.value?.tagNumber)
-        }
-
-        _tagNumberErrorMessage.addSource(cattleTagNumberValidatorUseCase.observe()) { result ->
-            (result as? Success)?.data?.let {
-                _tagNumberErrorMessage.value = it
+            viewModelScope.launch {
+                cattleTagNumberValidatorUseCase(it to oldCattle.value?.tagNumber)
+                    .updateOnSuccess(_tagNumberErrorMessage)
             }
-        }
-
-        _navigateUp.addSource(addUpdateCattleResult) {
-            (it as? Success)?.let {
-                navigateUp()
-            }
-        }
-
-        _showMessage.addSource(addUpdateCattleResult) {
-            (it as? Error)?.exception?.let {
-                _showMessage.value = Event(R.string.retry)
-            }
-        }
-
-        _saving.addSource(addUpdateCattleResult) {
-            _saving.value = false
         }
 
         _parentList.addSource(tagNumber) {
             it.toLongOrNull()?.let { tagNumber ->
-                _loadingParentList.postValue(true)
-                getParentListUseCase.execute(tagNumber)
+                viewModelScope.launch {
+                    _loadingParentList.postValue(true)
+
+                    getParentListUseCase(tagNumber).let { result ->
+                        _parentList.postValue((result as? Success)?.data)
+                    }
+
+                    _loadingParentList.postValue(false)
+                }
             }
         }
 
         _isEmptyParentList.addSource(parentList) {
             _isEmptyParentList.value = it.isNullOrEmpty()
-        }
-
-        _parentList.addSource(parentListResult) {
-            (it as? Success)?.data?.let { list ->
-                _parentList.postValue(list)
-                _loadingParentList.postValue(false)
-            }
         }
     }
 
@@ -267,13 +256,22 @@ class AddEditCattleViewModel @Inject constructor(
             val newCattle = getCattle()
 
             if (oldCattle.value != newCattle) {
-                _saving.value = true
+                viewModelScope.launch {
+                    _loading.postValue(true)
 
-                if (oldCattle.value != null)
-                    updateCattleUseCase(newCattle, addUpdateCattleResult)
-                else
-                    addCattleUseCase(newCattle, addUpdateCattleResult)
+                    val result = if (oldCattle.value != null)
+                        updateCattleUseCase(newCattle)
+                    else
+                        addCattleUseCase(newCattle)
 
+                    if (result.succeeded) {
+                        navigateUp()
+                    } else {
+                        _showMessage.postValue(Event(R.string.retry))
+                    }
+
+                    _loading.postValue(false)
+                }
             } else {
                 navigateUp()
             }
@@ -288,7 +286,11 @@ class AddEditCattleViewModel @Inject constructor(
     }
 
     fun setParent(id: String) {
-        parentId.postValue(id)
+        viewModelScope.launch {
+            getCattleByIdUseCase(id)
+                .firstOrNull()
+                ?.updateOnSuccess(parentCattle)
+        }
     }
 
     private fun getCattle(): Cattle =
@@ -305,7 +307,7 @@ class AddEditCattleViewModel @Inject constructor(
             purchaseAmount.value?.toLongOrNull(),
             purchaseDate.value,
             dob.value,
-            parentId.value
+            parentCattle.value?.id
         )
 
     private fun isAllFieldsValid(): Boolean {
@@ -331,7 +333,7 @@ class AddEditCattleViewModel @Inject constructor(
     }
 
     override fun parentSelected(cattle: Cattle) {
-        parentId.postValue(cattle.id)
+        parentCattle.postValue(cattle)
         _selectingParent.postValue(false)
     }
 
@@ -359,6 +361,13 @@ class AddEditCattleViewModel @Inject constructor(
     }
 
     private fun navigateUp() {
-        _navigateUp.value = Event(Unit)
+        _navigateUp.postValue(Event(Unit))
+    }
+
+    @StringRes
+    private fun AnimalType.getBreedList(): Int = when (this) {
+        AnimalType.Cow -> R.array.list_breed_cow
+        AnimalType.Buffalo -> R.array.list_breed_buffalo
+        AnimalType.Bull -> R.array.list_breed_bull
     }
 }

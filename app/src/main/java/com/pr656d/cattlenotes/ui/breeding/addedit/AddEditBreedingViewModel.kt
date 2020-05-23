@@ -17,10 +17,7 @@
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.pr656d.cattlenotes.R
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInsemination
@@ -29,10 +26,9 @@ import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.addedit.AddBreedingUseCase
 import com.pr656d.shared.domain.breeding.addedit.UpdateBreedingUseCase
 import com.pr656d.shared.domain.result.Event
-import com.pr656d.shared.domain.result.Result
-import com.pr656d.shared.domain.result.Result.Error
-import com.pr656d.shared.domain.result.Result.Success
+import com.pr656d.shared.domain.result.succeeded
 import com.pr656d.shared.utils.FirestoreUtil
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AddEditBreedingViewModel @Inject constructor(
@@ -42,13 +38,10 @@ class AddEditBreedingViewModel @Inject constructor(
 ) : ViewModel(), BreedingBehaviour by breedingBehaviour {
 
     private val _editing = MutableLiveData(false)
-
     val editing: LiveData<Boolean>
         get() = _editing
 
-    private val addUpdateBreedingResult = MutableLiveData<Result<Unit>>()
-
-    private val _saving = MediatorLiveData<Boolean>().apply { value = false }
+    private val _saving = MutableLiveData(false)
     val saving: LiveData<Boolean> = _saving
 
     private val _showMessage = MediatorLiveData<Event<@StringRes Int>>()
@@ -59,7 +52,7 @@ class AddEditBreedingViewModel @Inject constructor(
     val showBackConfirmationDialog: LiveData<Event<Unit>>
         get() = _showBackConfirmationDialog
 
-    private val _navigateUp = MediatorLiveData<Event<Unit>>()
+    private val _navigateUp = MutableLiveData<Event<Unit>>()
     val navigateUp: LiveData<Event<Unit>>
         get() = _navigateUp
 
@@ -71,39 +64,13 @@ class AddEditBreedingViewModel @Inject constructor(
     val showBreedingCompletedDialogWithAddCattleOption: LiveData<Event<Unit>>
         get() = _showBreedingCompletedDialogWithAddCattleOption
 
-    private var launchAddNewCattleWhenSaveCompleted = false
-
-    private val _launchAddNewCattleScreen = MediatorLiveData<Event<Cattle>>()
+    private val _launchAddNewCattleScreen = MutableLiveData<Event<Cattle>>()
     val launchAddNewCattleScreen: LiveData<Event<Cattle>>
         get() = _launchAddNewCattleScreen
 
     init {
-        _saving.addSource(addUpdateBreedingResult) {
-            _saving.value = false
-        }
-
-        _navigateUp.addSource(addUpdateBreedingResult) {
-            if (!launchAddNewCattleWhenSaveCompleted)
-                (it as? Success)?.let {
-                    navigateUp()
-                }
-        }
-
-        _launchAddNewCattleScreen.addSource(addUpdateBreedingResult) {
-            if (launchAddNewCattleWhenSaveCompleted)
-                (it as? Success)?.let {
-                    _launchAddNewCattleScreen.postValue(Event(cattle.value!!))
-                }
-        }
-
         _showMessage.addSource(cattle) {
             if (it == null) _showMessage.postValue(Event(R.string.error_cattle_not_found))
-        }
-
-        _showMessage.addSource(addUpdateBreedingResult) {
-            (it as? Error)?.let {
-                _showMessage.value = Event(R.string.retry)
-            }
         }
     }
 
@@ -127,23 +94,32 @@ class AddEditBreedingViewModel @Inject constructor(
                 return
             }
 
-            if (saveAndAddNewCattle)
-                launchAddNewCattleWhenSaveCompleted = true
-
             if (oldBreeding.value != newBreedingCycle) {
-                _saving.value = true
+                viewModelScope.launch {
+                    _saving.postValue(true)
 
-                if (oldBreeding.value == null)
-                    addBreedingUseCase(newBreedingCycle, addUpdateBreedingResult)
-                else
-                    updateBreedingUseCase(newBreedingCycle, addUpdateBreedingResult)
+                    val result = if (oldBreeding.value == null)
+                        addBreedingUseCase(newBreedingCycle)
+                    else
+                        updateBreedingUseCase(newBreedingCycle)
 
+                    if (result.succeeded)
+                        if (saveAndAddNewCattle) launchAddNewCattle(cattle) else navigateUp()
+                    else
+                        _showMessage.postValue(Event(R.string.retry))
+
+                    _saving.postValue(false)
+                }
             } else {
                 navigateUp()
             }
         } else {
             _showMessage.value = Event(R.string.provide_ai_date)
         }
+    }
+
+    private fun launchAddNewCattle(cattle: Cattle) {
+        _launchAddNewCattleScreen.postValue(Event(cattle))
     }
 
     private fun showBreedingCompletedScreen() {
@@ -202,6 +178,6 @@ class AddEditBreedingViewModel @Inject constructor(
     }
 
     private fun navigateUp() {
-        _navigateUp.value = Event(Unit)
+        _navigateUp.postValue(Event(Unit))
     }
 }

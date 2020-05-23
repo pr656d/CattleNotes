@@ -16,38 +16,44 @@
 
 package com.pr656d.cattlenotes.ui.settings
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
+import androidx.lifecycle.*
 import com.pr656d.cattlenotes.utils.getStringId
 import com.pr656d.model.Theme
-import com.pr656d.shared.domain.milk.sms.ObservePreferredMilkSmsSourceUseCase
+import com.pr656d.shared.domain.invoke
+import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.result.Event
-import com.pr656d.shared.domain.result.Result
-import com.pr656d.shared.domain.result.Result.Success
+import com.pr656d.shared.domain.result.successOr
+import com.pr656d.shared.domain.result.updateOnSuccess
 import com.pr656d.shared.domain.settings.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalTime
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
     getThemeUseCase: GetThemeUseCase,
+    private val setThemeUseCase: SetThemeUseCase,
     getAvailableThemesUseCase: GetAvailableThemesUseCase,
     getAutomaticMilkingCollectionUseCase: GetAutomaticMilkingCollectionUseCase,
+    private val setAutomaticMilkingCollectionUseCase: SetAutomaticMilkingCollectionUseCase,
     private val observePreferredTimeOfBreedingReminderUseCase: ObservePreferredTimeOfBreedingReminderUseCase,
-    private val observePreferredMilkSmsSourceUseCase: ObservePreferredMilkSmsSourceUseCase,
-    private val setThemeUseCase: SetThemeUseCase,
-    private val setPreferredTimeOfBreedingReminderUseCase: SetPreferredTimeOfBreedingReminderUseCase,
-    private val setAutomaticMilkingCollectionUseCase: SetAutomaticMilkingCollectionUseCase
+    private val getPreferredMilkSmsSourceUseCase: GetPreferredMilkSmsSourceUseCase,
+    private val setPreferredTimeOfBreedingReminderUseCase: SetPreferredTimeOfBreedingReminderUseCase
 ) : ViewModel() {
 
     // Theme setting
-    private val themeResult = MutableLiveData<Result<Theme>>()
-    val theme: LiveData<Theme>
+    val theme: LiveData<Theme> = liveData {
+        getThemeUseCase().successOr(null)?.let { emit(it) }
+    }
 
     // Theme setting
-    private val availableThemesResult = MutableLiveData<Result<List<Theme>>>()
-    val availableThemes: LiveData<List<Theme>>
+    val availableThemes: LiveData<List<Theme>> = liveData {
+        getAvailableThemesUseCase().successOr(null)?.let {
+            emit(it)
+        }
+    }
 
     private val _navigateToThemeSelector = MutableLiveData<Event<Unit>>()
     val navigateToThemeSelector: LiveData<Event<Unit>>
@@ -65,39 +71,37 @@ class SettingsViewModel @Inject constructor(
     val navigateToOpenSourceLicenses: LiveData<Event<Unit>>
         get() = _navigateToOpenSourceLicenses
 
+    @ExperimentalCoroutinesApi
     val preferredTimeOfBreedingReminder: LiveData<LocalTime>
-        get() = observePreferredTimeOfBreedingReminderUseCase()
+        get() = liveData {
+            observePreferredTimeOfBreedingReminderUseCase(Unit)
+                .map { it.successOr(null) }
+                .collect { it?.let { emit(it) } }
+        }
 
     val milkSmsSender: LiveData<Int?>
-        get() = observePreferredMilkSmsSourceUseCase().map { it?.getStringId() }
+        get() = liveData {
+            emit(getPreferredMilkSmsSourceUseCase().successOr(null)?.getStringId())
+        }
 
     private val _navigateToSmsSourceSelector = MutableLiveData<Event<Unit>>()
     val navigateToSmsSourceSelector: LiveData<Event<Unit>>
         get() = _navigateToSmsSourceSelector
 
-    private val automaticMilkingCollectionResult = MutableLiveData<Result<Boolean>>()
-
-    val automaticMilkingCollection: LiveData<Boolean>
+    val automaticMilkingCollection = MutableLiveData<Boolean>()
 
     init {
-        getThemeUseCase(Unit, themeResult)
-        theme = themeResult.map {
-            (it as? Success<Theme>)?.data ?: Theme.SYSTEM
-        }
-
-        getAvailableThemesUseCase(Unit, availableThemesResult)
-        availableThemes = availableThemesResult.map {
-            (it as? Success<List<Theme>>)?.data ?: emptyList()
-        }
-
-        getAutomaticMilkingCollectionUseCase(Unit, automaticMilkingCollectionResult)
-        automaticMilkingCollection = automaticMilkingCollectionResult.map {
-            (it as? Success)?.data ?: true
+        viewModelScope.launch {
+            getAutomaticMilkingCollectionUseCase().successOr(null).let {
+                automaticMilkingCollection.postValue(it ?: true)
+            }
         }
     }
 
     fun setTheme(theme: Theme) {
-        setThemeUseCase(theme)
+        viewModelScope.launch {
+            setThemeUseCase(theme)
+        }
     }
 
     fun onThemeSettingClicked() {
@@ -113,11 +117,16 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun setBreedingReminderTime(time: LocalTime) {
-        setPreferredTimeOfBreedingReminderUseCase(time)
+        viewModelScope.launch {
+            setPreferredTimeOfBreedingReminderUseCase(time)
+        }
     }
 
     fun toggleAutomaticMilkCollection(checked: Boolean) {
-        setAutomaticMilkingCollectionUseCase(checked, automaticMilkingCollectionResult)
+        viewModelScope.launch {
+            val result = setAutomaticMilkingCollectionUseCase(checked)
+            result.updateOnSuccess(automaticMilkingCollection)
+        }
     }
 
     fun creditsClicked() {

@@ -18,26 +18,36 @@ package com.pr656d.shared.domain.milk
 
 import com.pr656d.model.Milk
 import com.pr656d.shared.data.milk.MilkRepository
-import com.pr656d.shared.domain.UseCase
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.SuspendUseCase
 import com.pr656d.shared.performance.PerformanceHelper
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
 open class LoadAllNewMilkFromSmsUseCase @Inject constructor(
     private val milkRepository: MilkRepository,
-    private val performanceHelper: PerformanceHelper
-) : UseCase<Milk.Source.Sms, List<Milk>>() {
+    private val performanceHelper: PerformanceHelper,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : SuspendUseCase<Milk.Source.Sms, List<Milk>>(ioDispatcher) {
+
     companion object {
         private const val TRACE_KEY_LOAD_ALL_NEW_MILK_FROM_SMS = "load_all_new_milk_from_sms"
     }
 
-    override fun execute(parameters: Milk.Source.Sms): List<Milk> {
+    override suspend fun execute(parameters: Milk.Source.Sms): List<Milk> = coroutineScope {
         performanceHelper.startTrace(TRACE_KEY_LOAD_ALL_NEW_MILK_FROM_SMS)
 
-        val dbMilkList = milkRepository.getAllMilkUnobserved()
-        val smsMilkList = milkRepository.getAllMilkFromSms(parameters)
+        val dbMilkList = async {
+            milkRepository.getAllMilk().firstOrNull() ?: emptyList()
+        }
 
-        /**  Remove elements exist in db from [smsMilkList]. */
-        val list = smsMilkList.minus(dbMilkList)
+        val smsMilkList = async { milkRepository.getAllMilkFromSms(parameters) }
+
+        /**  Remove elements exist in db from smsMilkList. */
+        val list = smsMilkList.await().minus(dbMilkList.await())
 
         performanceHelper.putAttribute(
             TRACE_KEY_LOAD_ALL_NEW_MILK_FROM_SMS,
@@ -46,6 +56,6 @@ open class LoadAllNewMilkFromSmsUseCase @Inject constructor(
 
         performanceHelper.stopTrace(TRACE_KEY_LOAD_ALL_NEW_MILK_FROM_SMS)
 
-        return list
+        list
     }
 }

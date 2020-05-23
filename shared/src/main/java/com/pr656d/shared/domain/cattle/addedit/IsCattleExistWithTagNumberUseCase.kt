@@ -17,13 +17,17 @@
 package com.pr656d.shared.domain.cattle.addedit
 
 import com.pr656d.shared.data.cattle.CattleRepository
-import com.pr656d.shared.domain.UseCase
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.SuspendUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class IsCattleExistWithTagNumberUseCase @Inject constructor(
-    private val cattleRepository: CattleRepository
-) : UseCase<Long, Boolean>() {
-    override fun execute(parameters: Long): Boolean {
-        return cattleRepository.isCattleExistByTagNumber(parameters)
-    }
+    private val cattleRepository: CattleRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : SuspendUseCase<Long, Boolean>(ioDispatcher) {
+
+    override suspend fun execute(parameters: Long): Boolean =
+        cattleRepository.isCattleExistByTagNumber(parameters)
+
 }

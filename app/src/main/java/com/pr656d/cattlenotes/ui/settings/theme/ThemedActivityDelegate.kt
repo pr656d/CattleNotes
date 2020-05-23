@@ -17,13 +17,13 @@
 package com.pr656d.cattlenotes.ui.settings.theme
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.map
-import com.pr656d.cattlenotes.ui.settings.ObserveThemeModeUseCase
+import androidx.lifecycle.liveData
 import com.pr656d.model.Theme
-import com.pr656d.shared.domain.result.Result.Success
-import com.pr656d.shared.domain.settings.GetThemeUseCase
+import com.pr656d.shared.domain.result.successOr
+import com.pr656d.shared.domain.settings.ObserveThemeModeUseCase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
-import kotlin.LazyThreadSafetyMode.NONE
 
 /**
  * Interface to implement activity theming via a ViewModel.
@@ -43,30 +43,17 @@ interface ThemedActivityDelegate {
      * Allows observing of the current theme
      */
     val theme: LiveData<Theme>
-
-    /**
-     * Allows querying of the current theme synchronously
-     */
-    val currentTheme: Theme
 }
 
 class ThemedActivityDelegateImpl @Inject constructor(
-    private val observeThemeUseCase: ObserveThemeModeUseCase,
-    private val getThemeUseCase: GetThemeUseCase
+    private val observeThemeUseCase: ObserveThemeModeUseCase
 ) : ThemedActivityDelegate {
-    override val theme: LiveData<Theme> by lazy(NONE) {
-        observeThemeUseCase.observe().map {
-            if (it is Success) it.data else Theme.SYSTEM
+
+    @ExperimentalCoroutinesApi
+    override val theme: LiveData<Theme> = liveData {
+        observeThemeUseCase(Unit).collect {
+            emit(it.successOr(Theme.SYSTEM))
         }
     }
 
-    override val currentTheme: Theme
-        get() = getThemeUseCase.executeNow(Unit).let {
-            if (it is Success) it.data else Theme.SYSTEM
-        }
-
-    init {
-        // Observe updates in dark mode setting
-        observeThemeUseCase.execute(Unit)
-    }
 }

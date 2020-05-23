@@ -18,26 +18,24 @@ package com.pr656d.shared.domain.timeline
 
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.data.breeding.BreedingRepository
-import com.pr656d.shared.domain.MediatorUseCase
-import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.FlowUseCase
 import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 open class LoadTimelineUseCase @Inject constructor(
-    private val breedingRepository: BreedingRepository
-) : MediatorUseCase<Unit, List<BreedingWithCattle>>() {
-    override fun execute(parameters: Unit) {
-        result.addSource(breedingRepository.getAllBreedingWithCattle()) { list ->
-            DefaultScheduler.execute {
-                val filteredList = list
-                    .filter {
-                        // We need only incomplete breeding
-                        !it.breeding.breedingCompleted
-                    }
-                    .sortedBy { it.breeding.nextBreedingEvent?.expectedOn }
+    private val breedingRepository: BreedingRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : FlowUseCase<Unit, List<BreedingWithCattle>>(ioDispatcher) {
 
-                result.postValue(Result.Success(filteredList))
-            }
+    override fun execute(parameters: Unit): Flow<Result<List<BreedingWithCattle>>> =
+        breedingRepository.getAllBreedingWithCattle().map { list ->
+            Result.Success(
+                list.filter { !it.breeding.breedingCompleted }
+                    .sortedBy { it.breeding.nextBreedingEvent?.expectedOn }
+            )
         }
-    }
 }

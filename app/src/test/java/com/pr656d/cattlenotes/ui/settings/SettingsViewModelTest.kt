@@ -17,30 +17,32 @@
 package com.pr656d.cattlenotes.ui.settings
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
-import com.pr656d.model.Milk
+import com.pr656d.cattlenotes.test.fakes.data.prefs.FakePreferenceStorageRepository
 import com.pr656d.model.Theme
-import com.pr656d.shared.domain.milk.sms.ObservePreferredMilkSmsSourceUseCase
+import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.settings.*
+import com.pr656d.test.MainCoroutineRule
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.threeten.bp.LocalTime
 import org.hamcrest.Matchers.equalTo as isEqualTo
 
+@ExperimentalCoroutinesApi
 class SettingsViewModelTest {
 
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private val preferenceStorageRepository =
         object : FakePreferenceStorageRepository() {
@@ -48,32 +50,42 @@ class SettingsViewModelTest {
 
             override fun getAutomaticMilkingCollection(): Boolean = true
 
-            override fun getObservablePreferredTimeOfBreedingReminder(): LiveData<LocalTime> {
-                return MutableLiveData(LocalTime.now())
-            }
-
-            override fun getObservablePreferredMilkSmsSource(): LiveData<Milk.Source.Sms?> {
-                return MutableLiveData(Milk.Source.Sms.BGAMAMCS)
+            override fun getObservablePreferredTimeOfBreedingReminder(): Flow<LocalTime> {
+                return flowOf(LocalTime.now())
             }
         }
 
     private fun createSettingsViewModel(
         fakePreferenceStorageRepository: FakePreferenceStorageRepository = preferenceStorageRepository
     ): SettingsViewModel {
+        val coroutineDispatcher = coroutineRule.testDispatcher
+
         return SettingsViewModel(
-            GetThemeUseCase(fakePreferenceStorageRepository),
-            GetAvailableThemesUseCase(),
-            GetAutomaticMilkingCollectionUseCase(fakePreferenceStorageRepository),
-            ObservePreferredTimeOfBreedingReminderUseCase(fakePreferenceStorageRepository),
-            ObservePreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository),
-            SetThemeUseCase(fakePreferenceStorageRepository),
-            SetPreferredTimeOfBreedingReminderUseCase(fakePreferenceStorageRepository),
-            SetAutomaticMilkingCollectionUseCase(fakePreferenceStorageRepository)
+            GetThemeUseCase(fakePreferenceStorageRepository, coroutineDispatcher),
+            SetThemeUseCase(fakePreferenceStorageRepository, coroutineDispatcher),
+            GetAvailableThemesUseCase(coroutineDispatcher),
+            GetAutomaticMilkingCollectionUseCase(
+                fakePreferenceStorageRepository,
+                coroutineDispatcher
+            ),
+            SetAutomaticMilkingCollectionUseCase(
+                fakePreferenceStorageRepository,
+                coroutineDispatcher
+            ),
+            ObservePreferredTimeOfBreedingReminderUseCase(
+                fakePreferenceStorageRepository,
+                coroutineDispatcher
+            ),
+            GetPreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository, coroutineDispatcher),
+            SetPreferredTimeOfBreedingReminderUseCase(
+                fakePreferenceStorageRepository,
+                coroutineDispatcher
+            )
         )
     }
 
     @Test
-    fun onThemeSettingCalled_navigateToThemeSelector() {
+    fun onThemeSettingCalled_navigateToThemeSelector() = coroutineRule.runBlockingTest {
         val viewModel = createSettingsViewModel()
 
         // Call onThemeSettingClicked
@@ -84,7 +96,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun onBreedingReminderClicked_navigateToBreedingReminderTimeSelector() {
+    fun onBreedingReminderClicked_navigateToBreedingReminderTimeSelector() = coroutineRule.runBlockingTest {
         val viewModel = createSettingsViewModel()
 
         // Call onBreedingReminderClicked
@@ -100,7 +112,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun onMilkSmsSenderClicked_navigateToSmsSourceSelector() {
+    fun onMilkSmsSenderClicked_navigateToSmsSourceSelector() = coroutineRule.runBlockingTest {
         val viewModel = createSettingsViewModel()
 
         // Call onMilkSmsSenderClicked
@@ -113,7 +125,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun toggleAutomaticMilkCollectionCalled_setAutomaticMilkingCollection() {
+    fun toggleAutomaticMilkCollectionCalled_setAutomaticMilkingCollection() = coroutineRule.runBlockingTest {
         val viewModel = createSettingsViewModel()
 
         // Call toggleAutomaticMilkCollection
@@ -126,7 +138,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun creditsClicked_navigateToCredits() {
+    fun creditsClicked_navigateToCredits() = coroutineRule.runBlockingTest {
         val viewModel = createSettingsViewModel()
 
         // Call creditsClicked
@@ -138,13 +150,14 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun openSourceLicensesClicked_navigateToOpenSourceLicenses() {
+    fun openSourceLicensesClicked_navigateToOpenSourceLicenses() = coroutineRule.runBlockingTest {
         val viewModel = createSettingsViewModel()
 
         // Call openSourceLicensesClicked
         viewModel.openSourceLicensesClicked()
 
-        val navigateToOpenSourceLicenses = LiveDataTestUtil.getValue(viewModel.navigateToOpenSourceLicenses)
+        val navigateToOpenSourceLicenses =
+            LiveDataTestUtil.getValue(viewModel.navigateToOpenSourceLicenses)
 
         assertThat(Unit, isEqualTo(navigateToOpenSourceLicenses?.getContentIfNotHandled()))
     }

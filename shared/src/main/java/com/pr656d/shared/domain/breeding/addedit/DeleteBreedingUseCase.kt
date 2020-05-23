@@ -18,16 +18,19 @@ package com.pr656d.shared.domain.breeding.addedit
 
 import com.pr656d.model.Breeding
 import com.pr656d.shared.data.breeding.BreedingRepository
-import com.pr656d.shared.domain.UseCase
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.SuspendUseCase
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 open class DeleteBreedingUseCase @Inject constructor(
     private val breedingRepository: BreedingRepository,
-    private val breedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater
-) : UseCase<Breeding, Unit>() {
-    override fun execute(parameters: Breeding) {
-        breedingRepository.deleteBreeding(parameters)
+    private val breedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : SuspendUseCase<Breeding, Unit>(ioDispatcher) {
+    override suspend fun execute(parameters: Breeding) {
         breedingNotificationAlarmUpdater.cancelByBreedingId(parameters.id)
+        breedingRepository.deleteBreeding(parameters)
     }
 }

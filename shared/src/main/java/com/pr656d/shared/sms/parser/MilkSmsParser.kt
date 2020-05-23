@@ -26,7 +26,7 @@ interface MilkSmsParser {
     /**
      * Convert [SmsMessage.getDisplayMessageBody] into [Milk].
      */
-    fun getMilk(message: String): Milk
+    suspend fun getMilk(message: String): Milk
 
     /**
      * Holds [SmsMessage.getDisplayOriginatingAddress].

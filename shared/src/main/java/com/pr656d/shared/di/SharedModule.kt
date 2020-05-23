@@ -24,9 +24,6 @@ import com.pr656d.shared.data.breeding.datasource.BreedingDataSource
 import com.pr656d.shared.data.breeding.datasource.FirestoreBreedingDataSource
 import com.pr656d.shared.data.cattle.datasource.CattleDataSource
 import com.pr656d.shared.data.cattle.datasource.FirestoreCattleDataSource
-import com.pr656d.shared.data.db.BreedingDao
-import com.pr656d.shared.data.db.CattleDao
-import com.pr656d.shared.data.db.MilkDao
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.milk.datasource.FirestoreMilkDataSource
 import com.pr656d.shared.data.milk.datasource.MilkDataSource
@@ -38,6 +35,7 @@ import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmU
 import com.pr656d.shared.notifications.BreedingAlarmManager
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Singleton
 
 /**
@@ -62,48 +60,44 @@ class SharedModule {
     fun provideCattleDataSource(
         authIdDataSource: AuthIdDataSource,
         firestore: FirebaseFirestore,
-        cattleDao: CattleDao
-    ): CattleDataSource {
-        return FirestoreCattleDataSource(authIdDataSource, firestore, cattleDao)
-    }
+        breedingRepository: BreedingRepository,
+        @DefaultDispatcher coroutineDispatcher: CoroutineDispatcher
+    ): CattleDataSource = FirestoreCattleDataSource(
+        authIdDataSource, firestore, breedingRepository, coroutineDispatcher
+    )
 
     @Singleton
     @Provides
     fun provideBreedingDataSource(
         authIdDataSource: AuthIdDataSource,
         firestore: FirebaseFirestore,
-        breedingDao: BreedingDao
-    ) : BreedingDataSource {
-        return FirestoreBreedingDataSource(authIdDataSource, firestore, breedingDao)
-    }
+        @MainDispatcher mainDispatcher: CoroutineDispatcher
+    ) : BreedingDataSource = FirestoreBreedingDataSource(authIdDataSource, firestore, mainDispatcher)
 
     @Singleton
     @Provides
     fun provideBreedingNotificationAlarmUpdater(
         breedingAlarmManager: BreedingAlarmManager,
         breedingRepository: BreedingRepository,
-        preferenceStorageRepository: PreferenceStorageRepository
-    ) : BreedingNotificationAlarmUpdater {
-        return BreedingNotificationAlarmUpdaterImp(
-            breedingAlarmManager, breedingRepository, preferenceStorageRepository
-        )
-    }
+        preferenceStorageRepository: PreferenceStorageRepository,
+        @DefaultDispatcher defaultDispatcher: CoroutineDispatcher,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ) : BreedingNotificationAlarmUpdater = BreedingNotificationAlarmUpdaterImp(
+        breedingAlarmManager, breedingRepository, preferenceStorageRepository,
+        defaultDispatcher, ioDispatcher
+    )
 
     @Singleton
     @Provides
     fun provideMilkDataSource(
         authIdDataSource: AuthIdDataSource,
         firestore: FirebaseFirestore,
-        milkDao: MilkDao
-    ) : MilkDataSource {
-        return FirestoreMilkDataSource(authIdDataSource, firestore, milkDao)
-    }
+        @MainDispatcher mainDispatcher: CoroutineDispatcher
+    ) : MilkDataSource = FirestoreMilkDataSource(authIdDataSource, firestore, mainDispatcher)
 
     @Singleton
     @Provides
     fun provideMilkDataSourceFromSms(
         context: Context
-    ) : MilkDataSourceFromSms {
-        return MilkDataSourceFromSmsImpl(context)
-    }
+    ) : MilkDataSourceFromSms = MilkDataSourceFromSmsImpl(context)
 }

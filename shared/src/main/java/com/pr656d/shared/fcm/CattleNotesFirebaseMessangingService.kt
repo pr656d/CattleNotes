@@ -23,6 +23,7 @@ import timber.log.Timber
  * Receives firebase cloud messages.
  */
 class CattleNotesFirebaseMessagingService: DaggerFirebaseMessagingService() {
+
     override fun onNewToken(newToken: String) {
         super.onNewToken(newToken)
         Timber.d("New firebase token $newToken")

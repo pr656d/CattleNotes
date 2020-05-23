@@ -18,13 +18,18 @@ package com.pr656d.shared.domain.settings
 
 import com.pr656d.model.Theme
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.domain.UseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class SetThemeUseCase @Inject constructor(
-    private val preferenceStorageRepository: PreferenceStorageRepository
-) : UseCase<Theme, Unit>() {
+    private val preferenceStorageRepository: PreferenceStorageRepository,
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+) : UseCase<Theme, Unit>(defaultDispatcher) {
+
     override fun execute(parameters: Theme) {
         preferenceStorageRepository.setSelectedTheme(parameters)
     }
+
 }

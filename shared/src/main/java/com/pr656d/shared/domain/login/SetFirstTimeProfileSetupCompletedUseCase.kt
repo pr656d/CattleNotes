@@ -17,13 +17,17 @@
 package com.pr656d.shared.domain.login
 
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.domain.UseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 open class SetFirstTimeProfileSetupCompletedUseCase @Inject constructor(
-    private val preferenceStorageRepository: PreferenceStorageRepository
-) : UseCase<Boolean, Unit>() {
-    override fun execute(parameters: Boolean) {
+    private val preferenceStorageRepository: PreferenceStorageRepository,
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+) : UseCase<Boolean, Unit>(defaultDispatcher) {
+
+    override fun execute(parameters: Boolean) =
         preferenceStorageRepository.setFirstTimeProfileSetupCompleted(parameters)
-    }
+
 }

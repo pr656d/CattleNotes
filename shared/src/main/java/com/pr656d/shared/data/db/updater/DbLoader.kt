@@ -22,21 +22,18 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
-import androidx.annotation.MainThread
 import androidx.annotation.RequiresApi
-import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import com.pr656d.shared.R
-import com.pr656d.shared.data.breeding.datasource.BreedingDataSource
-import com.pr656d.shared.data.cattle.datasource.CattleDataSource
-import com.pr656d.shared.data.db.AppDatabaseDao
-import com.pr656d.shared.data.milk.datasource.MilkDataSource
+import com.pr656d.shared.data.breeding.BreedingRepository
+import com.pr656d.shared.data.cattle.CattleRepository
+import com.pr656d.shared.data.db.dao.AppDatabaseDao
+import com.pr656d.shared.data.milk.MilkRepository
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
-import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.di.IoDispatcher
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -50,139 +47,81 @@ interface DbLoader {
      */
     fun initialize()
 
-    /**
-     * Load data.
-     */
-    fun load(onComplete: () -> Unit = {})
+    /**  Load data.  */
+    fun load()
 
-    /**
-     * Name convenience wrapper over load.
-     */
-    fun reload(onComplete: () -> Unit = {})
-
-    /**
-     * Stop db loader.
-     */
-    fun stop()
+    /**  Reload clears the local database and reloads from the data source.  */
+    fun reload()
 }
 
 class DatabaseLoader @Inject constructor(
-    private val appDatabaseDao: AppDatabaseDao,
-    private val cattleDataSource: CattleDataSource,
-    private val breedingDataSource: BreedingDataSource,
-    private val milkDataSource: MilkDataSource,
     private val context: Context,
-    private val preferenceStorageRepository: PreferenceStorageRepository
+    private val appDatabaseDao: AppDatabaseDao,
+    private val cattleRepository: CattleRepository,
+    private val breedingRepository: BreedingRepository,
+    private val milkRepository: MilkRepository,
+    private val preferenceStorageRepository: PreferenceStorageRepository,
+    @IoDispatcher ioDispatcher: CoroutineDispatcher
 ) : DbLoader {
 
-    private var tasksCompletedCounter: MutableLiveData<Int>? = null
-    private var observableReloadData: LiveData<Boolean>? = null
-
-    private val reloadObserver = Observer<Boolean> {
-        if (it == true) {
-            reload(onComplete = {
-                DefaultScheduler.execute {
-                    preferenceStorageRepository.setReloadData(false)
-                }
-            })
-        }
-    }
+    private val dbLoaderScope = CoroutineScope(ioDispatcher + Job())
 
     override fun initialize() {
-        Timber.d("Initializing DbLoader")
+        dbLoaderScope.launch {
+            Timber.d("Initializing DbLoader")
 
-        tasksCompletedCounter = MutableLiveData(0)
+            preferenceStorageRepository
+                .getObservableReloadData()
+                .collect {
+                    if (it) {
+                        reload()
+                        preferenceStorageRepository.setReloadData(false)
+                    }
+                }
 
-        DefaultScheduler.postToMainThread {
-            observableReloadData = preferenceStorageRepository.getObservableReloadData().apply {
-                observeForever(reloadObserver)
-            }
+            Timber.d("Initialized DbLoader")
         }
-
-        Timber.d("Initialized DbLoader")
     }
 
-    override fun load(onComplete: () -> Unit) {
-        DefaultScheduler.postToMainThread {
-            initializeTaskCompletedTracker(onComplete)
-        }
-
-        DefaultScheduler.execute {
+    override fun load() {
+        dbLoaderScope.launch {
             // Show progress in notification
             showProgressNotification(context)
 
-            /** Task 1 : Load cattle data */
-            cattleDataSource.load(onComplete = {
-                notifyTaskCompleted()
+            val task1And2 = async {
+                /** Task 1 : Load cattle data */
+                cattleRepository.load()
 
                 /**
                  * Task 2 : Load breeding data.
                  * Breeding data has foreign key to cattle data so wait for cattle data to be completed.
                  */
-                breedingDataSource.load(onComplete = {
-                    notifyTaskCompleted()
-                })
-            })
+                breedingRepository.load()
+            }
 
-            /**
-             * Task 3 : Load milk data.
-             */
-            milkDataSource.load(onComplete = {
-                notifyTaskCompleted()
-            })
+            val task3 = async {
+                /**  Task 3 : Load milk data.  */
+                milkRepository.load()
+            }
+
+            task1And2.await()
+            task3.await()
+
+            // Cancel progress notification
+            cancelProgressNotification(context)
         }
     }
 
-    override fun reload(onComplete: () -> Unit) {
-        Timber.d("Executing DbLoader.reload()")
-        DefaultScheduler.execute {
+    override fun reload() {
+        dbLoaderScope.launch {
+            Timber.d("Executing DbLoader.reload()")
             // Clear local database.
             appDatabaseDao.clear()
             // Reload the data.
-            load(onComplete)
+            load()
         }
     }
 
-    override fun stop() {
-        Timber.d("Stopping DbLoader")
-
-        tasksCompletedCounter = null
-        observableReloadData?.removeObserver(reloadObserver)
-        observableReloadData = null
-
-        Timber.d("Stopped DbLoader")
-    }
-
-    @MainThread
-    private fun initializeTaskCompletedTracker(onComplete: () -> Unit) {
-        tasksCompletedCounter?.observeForever(
-            object : Observer<Int> {
-                override fun onChanged(count: Int?) {
-                    Timber.d("DbLoader tasks completed : $count")
-
-                    /** When task count reaches to [TOTAL_TASKS] all tasks are completed. */
-                    if (count ?: 0 == TOTAL_TASKS) {
-                        DefaultScheduler.execute {
-                            // Execute on complete tasks.
-                            onComplete()
-                            // Cancel progress notification.
-                            cancelProgressNotification(context)
-                        }
-                        // Reset counter
-                        resetTaskCompleteCounter()
-                        // Remove observer
-                        tasksCompletedCounter?.removeObserver(this)
-                    }
-                }
-            }
-        )
-    }
-
-    private fun notifyTaskCompleted() {
-        tasksCompletedCounter?.postValue(tasksCompletedCounter?.value?.plus(1))
-    }
-
-    @WorkerThread
     private fun showProgressNotification(context: Context) {
         Timber.d("Showing loading notification")
 
@@ -204,7 +143,6 @@ class DatabaseLoader @Inject constructor(
         notificationManager.notify(PROGRESS_NOTIFICATION_ID, notification)
     }
 
-    @WorkerThread
     private fun cancelProgressNotification(context: Context) {
         Timber.d("Cancelling progress notification")
 
@@ -236,20 +174,8 @@ class DatabaseLoader @Inject constructor(
         )
     }
 
-    private fun resetTaskCompleteCounter() {
-        tasksCompletedCounter?.postValue(0)
-    }
-
     companion object {
         private const val CHANNEL_ID_RESTORING_DATA_PROGRESS = "restoring_data_progress_channel_id"
         private const val PROGRESS_NOTIFICATION_ID = 2
-
-        /**
-         * Total tasks to complete.
-         *      1. Load cattle data
-         *      2. Load Breeding data
-         *      3. Load Milk data
-         */
-        private const val TOTAL_TASKS: Int = 3
     }
 }

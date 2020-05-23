@@ -20,18 +20,21 @@ import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES.Q
 import com.pr656d.model.Theme
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.domain.UseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class GetThemeUseCase @Inject constructor(
-    private val preferenceStorageRepository: PreferenceStorageRepository
-) : UseCase<Unit, Theme>() {
-    override fun execute(parameters: Unit): Theme {
-        return preferenceStorageRepository.getSelectedTheme()
-            ?: when {
-                // If we get here, we don't currently have a theme set, so we need to provide a default
-                VERSION.SDK_INT >= Q -> Theme.SYSTEM
-                else -> Theme.BATTERY_SAVER
-            }
-    }
+    private val preferenceStorageRepository: PreferenceStorageRepository,
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+) : UseCase<Unit, Theme>(defaultDispatcher) {
+
+    override fun execute(parameters: Unit): Theme = preferenceStorageRepository.getSelectedTheme()
+        // If we get here, we don't currently have a theme set, so we need to provide a default
+        ?: when {
+            VERSION.SDK_INT >= Q -> Theme.SYSTEM
+            else -> Theme.BATTERY_SAVER
+        }
+
 }

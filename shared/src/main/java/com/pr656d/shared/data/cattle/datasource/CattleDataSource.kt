@@ -16,22 +16,25 @@
 
 package com.pr656d.shared.data.cattle.datasource
 
-import androidx.annotation.MainThread
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
 import com.pr656d.model.Cattle
-import com.pr656d.shared.data.db.CattleDao
+import com.pr656d.shared.data.breeding.BreedingRepository
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
-import com.pr656d.shared.domain.internal.DefaultScheduler
+import com.pr656d.shared.di.DefaultDispatcher
+import com.pr656d.shared.utils.FirestoreUtil.BATCH_OPERATION_LIMIT
 import com.pr656d.shared.utils.toGroup
 import com.pr656d.shared.utils.toLocalDate
 import com.pr656d.shared.utils.toLong
 import com.pr656d.shared.utils.toType
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * Remote data source for [Cattle].
@@ -39,32 +42,43 @@ import javax.inject.Singleton
  */
 interface CattleDataSource {
     /**
-     * Load cattle list from data source and save to local db.
+     * Load cattle list from data source.
      */
-    fun load(onComplete: () -> Unit = {})
+    suspend fun load(): List<Cattle>
 
     /**
      * Add cattle at remote data source.
      */
-    fun addCattle(cattle: Cattle)
+    suspend fun addCattle(cattle: Cattle)
+
+    /**
+     * Add all cattle at remote data source.
+     */
+    suspend fun addAllCattle(cattleList: List<Cattle>)
 
     /**
      * Delete cattle at remote data source.
      */
-    fun deleteCattle(cattle: Cattle)
+    suspend fun deleteCattle(cattle: Cattle)
 
     /**
      * Update cattle at remote data source.
      */
-    fun updateCattle(cattle: Cattle)
+    suspend fun updateCattle(cattle: Cattle)
 }
 
 @Singleton
 class FirestoreCattleDataSource @Inject constructor(
     authIdDataSource: AuthIdDataSource,
     private val firestore: FirebaseFirestore,
-    private val cattleDao: CattleDao
+    private val breedingRepository: BreedingRepository,
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
 ) : CattleDataSource {
+
+    private val mainDispatcher = Dispatchers.Main
+
+    private val scope = CoroutineScope(defaultDispatcher + SupervisorJob())
+
     private val userId by lazy {
         authIdDataSource.getUserId() ?: run {
             Timber.e("User Id not found at cattle data source")
@@ -72,112 +86,129 @@ class FirestoreCattleDataSource @Inject constructor(
         }
     }
 
-    override fun load(onComplete: () -> Unit) {
-        val onSuccessListener: (QuerySnapshot) -> Unit = { snapshot ->
-            DefaultScheduler.execute {
-                val cattleList = snapshot.documents.map { getCattle(it) }
-                cattleDao.insertAll(cattleList).also {
-                    onComplete()
-                }
-            }
-        }
-
-        // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+    override suspend fun load(): List<Cattle> = withContext(mainDispatcher) {
+        suspendCancellableCoroutine<List<Cattle>> { continuation ->
+            // All Firestore operations start from the main thread to avoid concurrency issues.
             firestore
-                .collection(USERS_COLLECTION)
-                .document(userId)
-                .collection(CATTLE_COLLECTION)
+                .collection("$USERS_COLLECTION/$userId/$CATTLE_COLLECTION")
                 .get()
-                .addOnSuccessListener(onSuccessListener)
+                .addOnSuccessListener { snapshot ->
+                    if (!continuation.isActive) return@addOnSuccessListener
+
+                    val cattleList = snapshot.documents.map { getCattle(it) }
+                    continuation.resume(cattleList)
+                }
                 .addOnFailureListener {
-                    Timber.d("load() failed at cattle data source : ${it.localizedMessage}")
+                    Timber.d("load() failed at cattle data source : ${it.message}")
+                    if (!continuation.isActive) return@addOnFailureListener
+                    continuation.resumeWithException(it)
                 }
         }
     }
 
-    override fun addCattle(cattle: Cattle) {
+    override suspend fun addCattle(cattle: Cattle) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        withContext(mainDispatcher) {
             firestore
-                .collection(USERS_COLLECTION)
-                .document(userId)
-                .collection(CATTLE_COLLECTION)
+                .collection("$USERS_COLLECTION/$userId/$CATTLE_COLLECTION")
                 .document(cattle.id)
                 .set(cattle.asHashMap())
+                .addOnSuccessListener {
+                    Timber.d("Cattle : ${cattle.id} added successfully")
+                }
                 .addOnFailureListener {
-                    Timber.d("addCattle() failed : ${it.localizedMessage}")
+                    Timber.d("addCattle() failed : ${it.message}")
                 }
         }
     }
 
-    override fun deleteCattle(cattle: Cattle) {
+    override suspend fun addAllCattle(cattleList: List<Cattle>) {
+        val chunks = cattleList.chunked(BATCH_OPERATION_LIMIT)
+
+        chunks.forEach { list ->
+            firestore.runBatch { writeBatch ->
+                list.forEach { cattle ->
+                    val ref = firestore
+                        .collection("$USERS_COLLECTION/$userId/$CATTLE_COLLECTION")
+                        .document(cattle.id)
+
+                    writeBatch.set(ref, cattle.asHashMap(), SetOptions.merge())
+                }
+            }.addOnSuccessListener {
+                Timber.d("All ${cattleList.count()} added successfully")
+            }.addOnFailureListener {
+                Timber.d("addAllCattle() failed : ${it.message}")
+            }
+        }
+    }
+
+    override suspend fun deleteCattle(cattle: Cattle) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        withContext(mainDispatcher) {
             firestore
-                .collection(USERS_COLLECTION)
-                .document(userId)
-                .collection(CATTLE_COLLECTION)
+                .collection("$USERS_COLLECTION/$userId/$CATTLE_COLLECTION")
                 .document(cattle.id)
                 .delete()
                 .addOnSuccessListener {
                     Timber.d("Cattle : ${cattle.id} deleted successfully")
-                    deleteBreedingOfCattle(cattle)
+                    scope.launch {
+                        deleteBreedingOfCattle(cattle)
+                    }
                 }
                 .addOnFailureListener {
-                    Timber.d("deleteCattle() failed : ${it.localizedMessage}")
+                    Timber.d("deleteCattle() failed : ${it.message}")
                 }
         }
     }
 
-    override fun updateCattle(cattle: Cattle) {
+    override suspend fun updateCattle(cattle: Cattle) {
         // All Firestore operations start from the main thread to avoid concurrency issues.
-        DefaultScheduler.postToMainThread {
+        withContext(mainDispatcher) {
             firestore
-                .collection(USERS_COLLECTION)
-                .document(userId)
-                .collection(CATTLE_COLLECTION)
+                .collection("$USERS_COLLECTION/$userId/$CATTLE_COLLECTION")
                 .document(cattle.id)
                 .set(cattle.asHashMap(), SetOptions.merge())
+                .addOnSuccessListener {
+                    Timber.d("Cattle : ${cattle.id} updated successfully")
+                }
                 .addOnFailureListener {
-                    Timber.d("updateCattle() failed : ${it.localizedMessage}")
+                    Timber.d("updateCattle() failed : ${it.message}")
                 }
         }
     }
 
-    @MainThread
-    private fun deleteBreedingOfCattle(cattle: Cattle) {
-        val performBatchDeleteOnSuccess : (QuerySnapshot) -> Unit = { result ->
-            Timber.d("Deleting breeding data for cattle : ${cattle.id}")
+    private suspend fun deleteBreedingOfCattle(cattle: Cattle) {
+        Timber.d("Deleting breeding data for cattle : ${cattle.id}")
 
-            val resultChunks = result.chunked(BATCH_OPERATION_LIMIT)
-
-            resultChunks.forEach { list ->
+        val list = breedingRepository
+            .getAllBreedingByCattleId(cattle.id)
+            .firstOrNull()
+            ?.map {
                 firestore
-                    .runBatch { writeBatch ->
-                        list.forEach {
-                            writeBatch.delete(it.reference)
-                        }
+                    .collection(USERS_COLLECTION)
+                    .document(userId)
+                    .collection(BREEDING_COLLECTION)
+                    .document(it.id)
+            } ?: return
+
+        // Make chunks
+        val chunks = list.chunked(BATCH_OPERATION_LIMIT)
+
+        chunks.forEach { chunk ->
+            firestore
+                .runBatch { writeBatch ->
+                    chunk.forEach { ref ->
+                        writeBatch.delete(ref)
                     }
-                    .addOnSuccessListener {
-                        Timber.d("Deleted breeding data for cattle : ${cattle.id}")
-                    }
-                    .addOnFailureListener {
-                        Timber.e("Failed to delete breeding data for cattle : ${cattle.id}")
-                    }
-            }
+                }
+                .addOnSuccessListener {
+                    Timber.d("Deleted breeding data for cattle : ${cattle.id}")
+                }
+                .addOnFailureListener {
+                    Timber.e("Failed to delete breeding data for cattle : ${cattle.id}")
+                }
         }
 
-        firestore
-            .collection(USERS_COLLECTION)
-            .document(userId)
-            .collection(BREEDING_COLLECTION)
-            .whereEqualTo(KEY_BREEDING_CATTLE_ID, cattle.id)
-            .get()
-            .addOnSuccessListener(performBatchDeleteOnSuccess)
-            .addOnFailureListener {
-                Timber.e(it, "Failed to get breeding data for cattle ${cattle.id}")
-            }
     }
 
     private fun getCattle(doc: DocumentSnapshot): Cattle {
@@ -216,8 +247,6 @@ class FirestoreCattleDataSource @Inject constructor(
     }
 
     companion object {
-        private const val BATCH_OPERATION_LIMIT = 500
-
         private const val USERS_COLLECTION = "users"
         private const val CATTLE_COLLECTION = "cattleList"
         private const val BREEDING_COLLECTION = "breedingList"

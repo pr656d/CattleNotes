@@ -18,14 +18,14 @@ package com.pr656d.shared.domain.settings
 
 import android.os.Build
 import com.pr656d.model.Theme
+import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.domain.UseCase
-import com.pr656d.shared.domain.internal.SyncScheduler
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
-class GetAvailableThemesUseCase @Inject constructor() : UseCase<Unit, List<Theme>>() {
-    init {
-        taskScheduler = SyncScheduler
-    }
+class GetAvailableThemesUseCase @Inject constructor(
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+) : UseCase<Unit, List<Theme>>(defaultDispatcher) {
 
     override fun execute(parameters: Unit): List<Theme> = when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> {

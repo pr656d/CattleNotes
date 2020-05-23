@@ -21,6 +21,8 @@ import kotlin.random.Random
 import kotlin.random.asKotlinRandom
 
 object FirestoreUtil {
+    const val BATCH_OPERATION_LIMIT = 500
+
     private const val AUTO_ID_LENGTH = 20
     private const val AUTO_ID_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     private val rand: Random = SecureRandom().asKotlinRandom()

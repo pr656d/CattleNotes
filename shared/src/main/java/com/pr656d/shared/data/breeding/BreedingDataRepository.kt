@@ -16,11 +16,11 @@
 
 package com.pr656d.shared.data.breeding
 
-import androidx.lifecycle.LiveData
 import com.pr656d.model.Breeding
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.data.breeding.datasource.BreedingDataSource
-import com.pr656d.shared.data.db.BreedingDao
+import com.pr656d.shared.data.db.dao.BreedingDao
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,23 +31,30 @@ import javax.inject.Singleton
  * Local DB as well as at data source to optimise operation count.
  */
 interface BreedingRepository {
-    fun addBreeding(breeding: Breeding)
+    suspend fun addBreeding(breeding: Breeding): Long
 
-    fun getBreeding(breedingId: String): LiveData<Breeding?>
+    suspend fun addAllBreeding(breedingList: List<Breeding>): List<Long>
 
-    fun getAllBreeding(): LiveData<List<Breeding>>
+    /**
+     * Loads data from data source and saves into db.
+     */
+    suspend fun load()
 
-    fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>>
+    fun getAllBreeding(): Flow<List<Breeding>>
 
-    fun getBreedingWithCattle(breedingId: String): LiveData<BreedingWithCattle?>
+    fun getBreedingById(breedingId: String): Flow<Breeding?>
 
-    fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>>
+    fun getAllBreedingByCattleId(cattleId: String): Flow<List<Breeding>>
 
-    fun getAllBreedingWithCattleByCattleId(cattleId: String): LiveData<List<BreedingWithCattle>>
+    fun getAllBreedingWithCattle(): Flow<List<BreedingWithCattle>>
 
-    fun deleteBreeding(breeding: Breeding)
+    fun getBreedingWithCattle(breedingId: String): Flow<BreedingWithCattle?>
 
-    fun updateBreeding(breeding: Breeding)
+    fun getAllBreedingWithCattleByCattleId(cattleId: String): Flow<List<BreedingWithCattle>>
+
+    suspend fun updateBreeding(breeding: Breeding)
+
+    suspend fun deleteBreeding(breeding: Breeding)
 }
 
 @Singleton
@@ -55,52 +62,52 @@ open class BreedingDataRepository @Inject constructor(
     private val breedingDao: BreedingDao,
     private val breedingDataSource: BreedingDataSource
 ) : BreedingRepository {
-
-    /**
-     * Add breeding at Local DB and at data source also. To optimise CRUD operations count.
-     */
-    override fun addBreeding(breeding: Breeding) {
-        breedingDao.insert(breeding)
+    override suspend fun addBreeding(breeding: Breeding): Long {
         breedingDataSource.addBreeding(breeding)
+        return breedingDao.insert(breeding)
     }
 
-    override fun getBreeding(breedingId: String): LiveData<Breeding?> {
-        return breedingDao.get(breedingId)
+    override suspend fun addAllBreeding(breedingList: List<Breeding>): List<Long> {
+        breedingDataSource.addAllBreeding(breedingList)
+        return breedingDao.insertAll(breedingList)
     }
 
-    override fun getAllBreeding(): LiveData<List<Breeding>> {
+    override suspend fun load() {
+        val list = breedingDataSource.load()
+        breedingDao.insertAll(list)
+    }
+
+    override fun getAllBreeding(): Flow<List<Breeding>> {
         return breedingDao.getAll()
     }
 
-    override fun getAllBreedingWithCattle(): LiveData<List<BreedingWithCattle>> {
-        return breedingDao.getAllBreedingWithCattle()
+    override fun getBreedingById(breedingId: String): Flow<Breeding?> {
+        return breedingDao.getById(breedingId)
     }
 
-    override fun getAllBreedingByCattleId(cattleId: String): LiveData<List<Breeding>> {
+    override fun getAllBreedingByCattleId(cattleId: String): Flow<List<Breeding>> {
         return breedingDao.getAllByCattleId(cattleId)
     }
 
-    override fun getBreedingWithCattle(breedingId: String): LiveData<BreedingWithCattle?> {
+    override fun getAllBreedingWithCattle(): Flow<List<BreedingWithCattle>> {
+        return breedingDao.getAllBreedingWithCattle()
+    }
+
+    override fun getBreedingWithCattle(breedingId: String): Flow<BreedingWithCattle?> {
         return breedingDao.getBreedingWithCattle(breedingId)
     }
 
-    override fun getAllBreedingWithCattleByCattleId(cattleId: String): LiveData<List<BreedingWithCattle>> {
+    override fun getAllBreedingWithCattleByCattleId(cattleId: String): Flow<List<BreedingWithCattle>> {
         return breedingDao.getAllBreedingWithCattleByCattleId(cattleId)
     }
 
-    /**
-     * Delete breeding at Local DB and at data source also. To optimise CRUD operations count.
-     */
-    override fun deleteBreeding(breeding: Breeding) {
-        breedingDao.delete(breeding)
-        breedingDataSource.deleteBreeding(breeding)
+    override suspend fun updateBreeding(breeding: Breeding) {
+        breedingDataSource.updateBreeding(breeding)
+        return breedingDao.update(breeding)
     }
 
-    /**
-     * Update breeding at Local DB and at data source also. To optimise CRUD operations count.
-     */
-    override fun updateBreeding(breeding: Breeding) {
-        breedingDao.update(breeding)
-        breedingDataSource.updateBreeding(breeding)
+    override suspend fun deleteBreeding(breeding: Breeding) {
+        breedingDataSource.deleteBreeding(breeding)
+        return breedingDao.delete(breeding)
     }
 }

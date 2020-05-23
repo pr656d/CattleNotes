@@ -17,7 +17,6 @@
 package com.pr656d.shared.data.db
 
 import android.content.Context
-import androidx.annotation.WorkerThread
 import androidx.core.content.edit
 import androidx.room.Database
 import androidx.room.Room
@@ -27,8 +26,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 import com.pr656d.model.Milk
+import com.pr656d.shared.data.db.dao.BreedingDao
+import com.pr656d.shared.data.db.dao.CattleDao
+import com.pr656d.shared.data.db.dao.MilkDao
 import com.pr656d.shared.data.prefs.datasource.SharedPreferenceStorage
-import com.pr656d.shared.domain.internal.DefaultScheduler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 /**
@@ -69,14 +73,13 @@ abstract class AppDatabase : RoomDatabase() {
 
                         Timber.d("falling back to destructive migration")
 
-                        DefaultScheduler.execute {
+                        CoroutineScope(Dispatchers.Default).launch {
                             notifyAboutDestructiveMigration(context)
                         }
                     }
                 })
                 .build()
 
-        @WorkerThread
         private fun notifyAboutDestructiveMigration(context: Context) {
             Timber.d("Notifying about destructive migration")
 

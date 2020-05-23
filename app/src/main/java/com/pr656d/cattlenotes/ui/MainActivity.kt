@@ -39,6 +39,7 @@ import com.pr656d.cattlenotes.utils.updateForTheme
 import com.pr656d.shared.analytics.AnalyticsHelper
 import com.pr656d.shared.domain.result.EventObserver
 import dagger.android.support.DaggerAppCompatActivity
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 class MainActivity : DaggerAppCompatActivity(), NavigationHost {
@@ -75,15 +76,18 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
 
     private var currentNavId = NAV_ID_NONE
 
+    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Update for Dark Mode straight away
-        updateForTheme(model.currentTheme)
+        model.theme.observe(this, Observer(::updateForTheme))
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
         binding.lifecycleOwner = this
+
         drawer = binding.drawerLayout
+
         navigation = binding.navigationView
 
         navHeaderBinding = NavHeaderBinding.inflate(layoutInflater).apply {
@@ -128,8 +132,6 @@ class MainActivity : DaggerAppCompatActivity(), NavigationHost {
             )
             finishAffinity()
         })
-
-        model.theme.observe(this, Observer(::updateForTheme))
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {

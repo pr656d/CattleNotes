@@ -17,13 +17,17 @@
 package com.pr656d.shared.domain.settings
 
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.domain.UseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class GetAutomaticMilkingCollectionUseCase @Inject constructor(
-    private val preferenceStorageRepository: PreferenceStorageRepository
-) : UseCase<Unit, Boolean>() {
-    override fun execute(parameters: Unit): Boolean {
-        return preferenceStorageRepository.getAutomaticMilkingCollection()
-    }
+    private val preferenceStorageRepository: PreferenceStorageRepository,
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+) : UseCase<Unit, Boolean>(defaultDispatcher) {
+
+    override fun execute(parameters: Unit): Boolean =
+        preferenceStorageRepository.getAutomaticMilkingCollection()
+
 }

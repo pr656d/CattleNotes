@@ -17,16 +17,20 @@
 package com.pr656d.shared.domain.login
 
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
-import com.pr656d.shared.domain.MediatorUseCase
+import com.pr656d.shared.di.DefaultDispatcher
+import com.pr656d.shared.domain.FlowUseCase
 import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 open class ObserveLoginCompletedUseCase  @Inject constructor(
-    private val preferenceStorageRepository: PreferenceStorageRepository
-) : MediatorUseCase<Unit, Boolean>() {
-    override fun execute(parameters: Unit) {
-        result.addSource(preferenceStorageRepository.getObservableLoginCompleted()) {
-            result.postValue(Result.Success(it))
-        }
-    }
+    private val preferenceStorageRepository: PreferenceStorageRepository,
+    @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
+) : FlowUseCase<Unit, Boolean>(defaultDispatcher) {
+
+    override fun execute(parameters: Unit): Flow<Result<Boolean>> =
+        preferenceStorageRepository.getObservableLoginCompleted().map { Result.Success(it) }
+
 }

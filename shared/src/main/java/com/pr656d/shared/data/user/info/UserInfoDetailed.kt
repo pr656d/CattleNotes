@@ -22,8 +22,7 @@ import com.google.firebase.auth.UserInfo
 /**
  *  Interface to decouple the user info from firebase.
  */
-interface UserInfoDetailed : UserInfoBasic,
-    FirestoreUserInfo
+interface UserInfoDetailed : UserInfoBasic, FirestoreUserInfo
 
 interface UserInfoBasic {
 

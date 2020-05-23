@@ -36,6 +36,7 @@ import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Co
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toAddEditCattle
 import com.pr656d.cattlenotes.ui.cattle.detail.CattleDetailFragmentDirections.Companion.toBreedingHistory
 import com.pr656d.shared.domain.result.EventObserver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 class CattleDetailFragment : NavigationFragment() {
@@ -54,6 +55,7 @@ class CattleDetailFragment : NavigationFragment() {
 
     private val args by navArgs<CattleDetailFragmentArgs>()
 
+    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,6 +66,7 @@ class CattleDetailFragment : NavigationFragment() {
         }
     }
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -88,6 +91,7 @@ class CattleDetailFragment : NavigationFragment() {
         return binding.root
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -162,6 +166,7 @@ class CattleDetailFragment : NavigationFragment() {
         })
     }
 
+    @ExperimentalCoroutinesApi
     private fun onBackPressed(): Boolean {
         return if (::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state == STATE_EXPANDED) {
             // collapse or hide the sheet

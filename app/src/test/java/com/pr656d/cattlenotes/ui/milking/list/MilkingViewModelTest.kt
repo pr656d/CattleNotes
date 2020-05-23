@@ -17,13 +17,10 @@
 package com.pr656d.cattlenotes.ui.milking.list
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeMilkRepository
-import com.pr656d.cattlenotes.test.util.fakes.FakePerformanceHelper
-import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
+import com.pr656d.cattlenotes.test.fakes.FakePerformanceHelper
+import com.pr656d.cattlenotes.test.fakes.data.milk.FakeMilkRepository
+import com.pr656d.cattlenotes.test.fakes.data.prefs.FakePreferenceStorageRepository
 import com.pr656d.model.Milk
 import com.pr656d.shared.data.milk.MilkRepository
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
@@ -33,7 +30,12 @@ import com.pr656d.shared.domain.milk.LoadMilkListUseCase
 import com.pr656d.shared.domain.milk.sms.GetAvailableMilkSmsSourcesUseCase
 import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
 import com.pr656d.shared.domain.milk.sms.SetPreferredMilkSmsSourceUseCase
+import com.pr656d.test.MainCoroutineRule
 import com.pr656d.test.TestData
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
@@ -42,32 +44,34 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for [MilkingViewModel].
  */
+@ExperimentalCoroutinesApi
 class MilkingViewModelTest {
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private val milkRepository = object : FakeMilkRepository() {
-        override fun getAllMilk(): LiveData<List<Milk>> {
-            return MutableLiveData(emptyList())
-        }
+        override fun getAllMilk(): Flow<List<Milk>> = flowOf(emptyList())
     }
 
     private fun createMilkingViewModel(
         fakeMilkRepository: MilkRepository = milkRepository,
         fakePreferenceStorageRepository: PreferenceStorageRepository = FakePreferenceStorageRepository()
     ): MilkingViewModel {
+        val coroutineDispatcher = coroutineRule.testDispatcher
+
         return MilkingViewModel(
-            loadMilkListUseCase = LoadMilkListUseCase(fakeMilkRepository),
-            getAvailableMilkSmsSourcesUseCase = GetAvailableMilkSmsSourcesUseCase(),
-            getPreferredMilkSmsSourceUseCase = GetPreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository),
-            setPreferredMilkSmsSourceUseCase = SetPreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository),
-            loadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(fakeMilkRepository, FakePerformanceHelper()),
-            addAllMilkUseCase = AddAllMilkUseCase(fakeMilkRepository)
+            LoadMilkListUseCase(fakeMilkRepository, coroutineDispatcher),
+            GetAvailableMilkSmsSourcesUseCase(coroutineDispatcher),
+            GetPreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository, coroutineDispatcher),
+            SetPreferredMilkSmsSourceUseCase(fakePreferenceStorageRepository, coroutineDispatcher),
+            LoadAllNewMilkFromSmsUseCase(fakeMilkRepository,
+                FakePerformanceHelper(), coroutineDispatcher),
+            AddAllMilkUseCase(fakeMilkRepository, coroutineDispatcher)
         ).apply { observeUnobserved() }
     }
 
@@ -75,7 +79,6 @@ class MilkingViewModelTest {
         loading.observeForever {  }
         milkList.observeForever {  }
         smsSource.observeForever {  }
-        newMilkListFromSms.observeForever {  }
         permissionsGranted.observeForever {  }
         showPermissionExplanation.observeForever {  }
         availableMilkSmsSources.observeForever {  }
@@ -84,7 +87,7 @@ class MilkingViewModelTest {
     }
 
     @Test
-    fun requestPermissionCalled_requestPermissions() {
+    fun requestPermissionCalled_requestPermissions() = coroutineRule.runBlockingTest {
         val viewModel = createMilkingViewModel()
 
         // Call request permission
@@ -95,7 +98,7 @@ class MilkingViewModelTest {
     }
 
     @Test
-    fun setPermissionsGranted() {
+    fun setPermissionsGranted() = coroutineRule.runBlockingTest {
         val viewModel = createMilkingViewModel()
 
         // Call request permission
@@ -108,7 +111,7 @@ class MilkingViewModelTest {
     }
 
     @Test
-    fun initiallyPermissionNotGranted() {
+    fun initiallyPermissionNotGranted() = coroutineRule.runBlockingTest {
         val viewModel = createMilkingViewModel()
 
         // Assume we get false initially.
@@ -118,7 +121,7 @@ class MilkingViewModelTest {
     }
 
     @Test
-    fun requestForPermissionCalledAndPermissionGrantedButSmsSourceNotSet_navigateToSmsSourceSelector() {
+    fun requestForPermissionCalledAndPermissionGrantedButSmsSourceNotSet_navigateToSmsSourceSelector() = coroutineRule.runBlockingTest {
         val viewModel = createMilkingViewModel()
 
         // Request for permission.
@@ -138,11 +141,9 @@ class MilkingViewModelTest {
         val actualNewMilkListFromSms = TestData.milkList
 
         val fakeMilkRepository: MilkRepository = object : FakeMilkRepository() {
-            override fun getAllMilk(): LiveData<List<Milk>> = MutableLiveData(emptyList())
+            override fun getAllMilk(): Flow<List<Milk>> = flowOf(emptyList())
 
-            override fun getAllMilkUnobserved(): List<Milk> = emptyList()
-
-            override fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> =
+            override suspend fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> =
                 TestData.milkList
         }
 
@@ -159,7 +160,10 @@ class MilkingViewModelTest {
         // Set sms source
         viewModel.setSmsSource(actualSmsSource)
 
-        val newMilkListFromSms = LiveDataTestUtil.getValue(viewModel.newMilkListFromSms)
+        val newMilkListFromSms =
+            LiveDataTestUtil.getValue(viewModel.saveNewMilkConfirmationDialog)
+                ?.getContentIfNotHandled()
+
         assertThat(actualNewMilkListFromSms, isEqualTo(newMilkListFromSms))
     }
 
@@ -169,15 +173,13 @@ class MilkingViewModelTest {
      * start sync with sms messages.
      */
     @Test
-    fun syncWithSmsMessagesCalledInitially() {
+    fun syncWithSmsMessagesCalledInitially() = coroutineRule.runBlockingTest {
         val actualSmsSource = Milk.Source.Sms.BGAMAMCS
 
         val fakeMilkRepository: MilkRepository = object : FakeMilkRepository() {
-            override fun getAllMilk(): LiveData<List<Milk>> = MutableLiveData(emptyList())
+            override fun getAllMilk(): Flow<List<Milk>> = flowOf(emptyList())
 
-            override fun getAllMilkUnobserved(): List<Milk> = emptyList()
-
-            override fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> =
+            override suspend fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> =
                 TestData.milkList
         }
 
@@ -197,9 +199,7 @@ class MilkingViewModelTest {
         assertThat(
             Unit,
             isEqualTo(
-                LiveDataTestUtil
-                    .getValue(viewModel.requestPermissions)
-                    ?.getContentIfNotHandled()
+                LiveDataTestUtil.getValue(viewModel.requestPermissions)?.getContentIfNotHandled()
             )
         )
 
@@ -210,21 +210,20 @@ class MilkingViewModelTest {
         assertThat(
             Unit,
             isEqualTo(
-                LiveDataTestUtil
-                    .getValue(viewModel.navigateToSmsSourceSelector)
-                    ?.getContentIfNotHandled()
+                LiveDataTestUtil.getValue(viewModel.navigateToSmsSourceSelector)?.getContentIfNotHandled()
             )
         )
 
         // Sms source is set.
         viewModel.setSmsSource(actualSmsSource)
 
-        val newMilkListFromSms = LiveDataTestUtil.getValue(viewModel.newMilkListFromSms)
+        val newMilkListFromSms = LiveDataTestUtil.getValue(viewModel.saveNewMilkConfirmationDialog)
+            ?.getContentIfNotHandled()
         assertThat(actualNewMilkListFromSms, isEqualTo(newMilkListFromSms))
     }
 
     @Test
-    fun syncWithSmsMessagesCalledButSmsSourceNotSet_navigateToSmsSourceSelector() {
+    fun syncWithSmsMessagesCalledButSmsSourceNotSet_navigateToSmsSourceSelector() = coroutineRule.runBlockingTest {
         val viewModel = createMilkingViewModel()
 
         // Call sync with messages
@@ -236,21 +235,20 @@ class MilkingViewModelTest {
     }
 
     @Test
-    fun syncWithSmsMessagesCalledAndSmsSourceIsSet_loadAllNewMilkFromSms() {
+    fun syncWithSmsMessagesCalledAndSmsSourceIsSet_loadAllNewMilkFromSms() = coroutineRule.runBlockingTest {
         val actualSmsSource = Milk.Source.Sms.BGAMAMCS
 
         val fakeMilkRepository: MilkRepository = object : FakeMilkRepository() {
-            override fun getAllMilk(): LiveData<List<Milk>> = MutableLiveData(emptyList())
+            override fun getAllMilk(): Flow<List<Milk>> = flowOf(emptyList())
 
-            override fun getAllMilkUnobserved(): List<Milk> = listOf(TestData.milk1, TestData.milk2)
-
-            override fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> = listOf(
+            override suspend fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> = listOf(
                 TestData.milk1, TestData.milk2,
                 TestData.milk3, TestData.milk4
             )
         }
 
         val actualNewMilkListFromSms = listOf(
+            TestData.milk1, TestData.milk2,
             TestData.milk3, TestData.milk4
         )
 
@@ -273,26 +271,26 @@ class MilkingViewModelTest {
         val smsSource = LiveDataTestUtil.getValue(viewModel.smsSource)
         assertThat(actualSmsSource, isEqualTo(smsSource))
 
-        val newMilkListFromSms = LiveDataTestUtil.getValue(viewModel.newMilkListFromSms)
+        val newMilkListFromSms = LiveDataTestUtil.getValue(viewModel.saveNewMilkConfirmationDialog)
+            ?.getContentIfNotHandled()
         assertThat(actualNewMilkListFromSms, isEqualTo(newMilkListFromSms))
     }
 
     @Test
-    fun syncWithSmsMessagesCalledSmsSourceIsAlreadyAvailable_loadAllNewMilkFromSms() {
+    fun syncWithSmsMessagesCalledSmsSourceIsAlreadyAvailable_loadAllNewMilkFromSms() = coroutineRule.runBlockingTest {
         val actualSmsSource = Milk.Source.Sms.BGAMAMCS
 
         val fakeMilkRepository: MilkRepository = object : FakeMilkRepository() {
-            override fun getAllMilk(): LiveData<List<Milk>> = MutableLiveData(emptyList())
+            override fun getAllMilk(): Flow<List<Milk>> = flowOf(emptyList())
 
-            override fun getAllMilkUnobserved(): List<Milk> = listOf(TestData.milk1, TestData.milk2)
-
-            override fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> = listOf(
+            override suspend fun getAllMilkFromSms(smsSource: Milk.Source.Sms): List<Milk> = listOf(
                 TestData.milk1, TestData.milk2,
                 TestData.milk3, TestData.milk4
             )
         }
 
         val actualNewMilkListFromSms = listOf(
+            TestData.milk1, TestData.milk2,
             TestData.milk3, TestData.milk4
         )
 
@@ -314,12 +312,13 @@ class MilkingViewModelTest {
         val smsSource = LiveDataTestUtil.getValue(viewModel.smsSource)
         assertThat(actualSmsSource, isEqualTo(smsSource))
 
-        val newMilkListFromSms = LiveDataTestUtil.getValue(viewModel.newMilkListFromSms)
+        val newMilkListFromSms = LiveDataTestUtil.getValue(viewModel.saveNewMilkConfirmationDialog)
+            ?.getContentIfNotHandled()
         assertThat(actualNewMilkListFromSms, isEqualTo(newMilkListFromSms))
     }
 
     @Test
-    fun changeSmsSourceCalled_navigateToSmsSourceSelector() {
+    fun changeSmsSourceCalled_navigateToSmsSourceSelector() = coroutineRule.runBlockingTest {
         val viewModel = createMilkingViewModel()
 
         // Call change sms source

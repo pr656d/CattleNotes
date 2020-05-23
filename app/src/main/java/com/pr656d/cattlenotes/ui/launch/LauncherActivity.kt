@@ -15,6 +15,7 @@
  */
 
 package com.pr656d.cattlenotes.ui.launch
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -38,12 +39,12 @@ class LauncherActivity : DaggerAppCompatActivity() {
 
         val viewModel by viewModels<LaunchViewModel> { viewModelFactory }
 
-        viewModel.launchDestination.observe(this, EventObserver { destination ->
-            val intent = when (destination) {
-                LaunchDestination.MainActivity -> Intent(this, MainActivity::class.java)
-                LaunchDestination.LoginActivity -> Intent(this, LoginActivity::class.java)
+        viewModel.launchDestination.observe(this, EventObserver {
+            val destination = when (it) {
+                LaunchDestination.MainActivity -> MainActivity::class.java
+                LaunchDestination.LoginActivity -> LoginActivity::class.java
             }
-            startActivity(intent)
+            startActivity(Intent(this, destination))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
         })

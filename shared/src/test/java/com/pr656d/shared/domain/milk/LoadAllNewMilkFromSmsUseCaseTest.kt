@@ -17,69 +17,91 @@
 package com.pr656d.shared.domain.milk
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
 import com.pr656d.model.Milk
 import com.pr656d.shared.domain.result.Result
-import com.pr656d.shared.test.util.fakes.FakePerformanceHelper
+import com.pr656d.shared.fakes.FakePerformanceHelper
+import com.pr656d.shared.fakes.milk.FakeMilkRepository
+import com.pr656d.test.MainCoroutineRule
 import com.pr656d.test.TestData
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.hamcrest.Matchers.equalTo as isEqualTo
 
+@ExperimentalCoroutinesApi
 class LoadAllNewMilkFromSmsUseCaseTest {
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    // Overrides Dispatchers.Main used in Coroutines
+    @get:Rule
+    var coroutineRule = MainCoroutineRule()
+
+    private fun createLoadAllNewMilkFromSmsUseCase(
+        milkRepository: FakeMilkRepository = FakeMilkRepository()
+    ) : LoadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(
+        milkRepository,
+        FakePerformanceHelper(), coroutineRule.testDispatcher
+    )
+
     @Test
-    fun bothDataSourceHasNoData_returnEmptyList() {
-        val useCase = LoadAllNewMilkFromSmsUseCase(
-            mock {
-                on { getAllMilkUnobserved() }.doReturn(emptyList<Milk>())
-                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(emptyList<Milk>())
-            },
-            FakePerformanceHelper()
+    fun bothDataSourceHasNoData_returnEmptyList() = coroutineRule.runBlockingTest {
+        val useCase = createLoadAllNewMilkFromSmsUseCase(
+            object : FakeMilkRepository() {
+                override fun getAllMilk(): Flow<List<Milk>> = flowOf(emptyList())
+
+                override suspend fun getAllMilkFromSms(
+                    smsSource: Milk.Source.Sms
+                ): List<Milk> = emptyList()
+            }
         )
 
-        val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
+        val result = (useCase(Milk.Source.Sms.BGAMAMCS) as? Result.Success)?.data
 
-        assertThat(0, isEqualTo(result.size))
+        assertThat(0, isEqualTo(result?.size))
     }
 
     @Test
-    fun localDbHasNoDataSmsSourceHasData_returnSmsList() {
-        val useCase = LoadAllNewMilkFromSmsUseCase(
-            mock {
-                on { getAllMilkUnobserved() }.doReturn(emptyList<Milk>())
-                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(TestData.milkList)
-            },
-            FakePerformanceHelper()
+    fun localDbHasNoDataSmsSourceHasData_returnSmsList() = coroutineRule.runBlockingTest {
+        val useCase = createLoadAllNewMilkFromSmsUseCase(
+            object : FakeMilkRepository() {
+                override fun getAllMilk(): Flow<List<Milk>> = flowOf(emptyList())
+
+                override suspend fun getAllMilkFromSms(
+                    smsSource: Milk.Source.Sms
+                ): List<Milk> = TestData.milkList
+            }
         )
 
-        val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
+        val result = (useCase(Milk.Source.Sms.BGAMAMCS) as? Result.Success)?.data
 
         assertThat(TestData.milkList, isEqualTo(result))
     }
 
     @Test
-    fun localDbHasDataAndSmsSourceHasNoData_returnEmptyList() {
-        val useCase = LoadAllNewMilkFromSmsUseCase(
-            mock {
-                on { getAllMilkUnobserved() }.doReturn(TestData.milkList)
-                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(emptyList<Milk>())
-            },
-            FakePerformanceHelper()
+    fun localDbHasDataAndSmsSourceHasNoData_returnEmptyList() = coroutineRule.runBlockingTest {
+        val useCase = createLoadAllNewMilkFromSmsUseCase(
+            object : FakeMilkRepository() {
+                override fun getAllMilk(): Flow<List<Milk>> = flowOf(TestData.milkList)
+
+                override suspend fun getAllMilkFromSms(
+                    smsSource: Milk.Source.Sms
+                ): List<Milk> = emptyList()
+            }
         )
 
-        val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
+        val result = (useCase(Milk.Source.Sms.BGAMAMCS) as? Result.Success)?.data
 
-        assertThat(0, isEqualTo(result.size))
+        assertThat(0, isEqualTo(result?.size))
     }
 
     @Test
-    fun localDbHasDataAndSmsSourceHasData_returnNewDataList() {
+    fun localDbHasDataAndSmsSourceHasData_returnNewDataList() = coroutineRule.runBlockingTest {
         val listFromLocalDbSource = listOf(
             TestData.milk1, TestData.milk2
         )
@@ -88,21 +110,23 @@ class LoadAllNewMilkFromSmsUseCaseTest {
             TestData.milk3, TestData.milk4
         )
 
-        val useCase = LoadAllNewMilkFromSmsUseCase(
-            mock {
-                on { getAllMilkUnobserved() }.doReturn(listFromLocalDbSource)
-                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(listFromSmsSource)
-            },
-            FakePerformanceHelper()
+        val useCase = createLoadAllNewMilkFromSmsUseCase(
+            object : FakeMilkRepository() {
+                override fun getAllMilk(): Flow<List<Milk>> = flowOf(listFromLocalDbSource)
+
+                override suspend fun getAllMilkFromSms(
+                    smsSource: Milk.Source.Sms
+                ): List<Milk> = listFromSmsSource
+            }
         )
 
-        val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
+        val result = (useCase(Milk.Source.Sms.BGAMAMCS) as? Result.Success)?.data
 
         assertThat(listFromSmsSource, isEqualTo(result))
     }
 
     @Test
-    fun duplicateDataInSmsSourceNoNewDataInSms_returnEmptyList() {
+    fun duplicateDataInSmsSourceNoNewDataInSms_returnEmptyList() = coroutineRule.runBlockingTest {
         val listFromLocalDbSource = listOf(
             TestData.milk1, TestData.milk2
         )
@@ -111,21 +135,23 @@ class LoadAllNewMilkFromSmsUseCaseTest {
             TestData.milk1, TestData.milk2
         )
 
-        val useCase = LoadAllNewMilkFromSmsUseCase(
-            mock {
-                on { getAllMilkUnobserved() }.doReturn(listFromLocalDbSource)
-                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(listFromSmsSource)
-            },
-            FakePerformanceHelper()
+        val useCase = createLoadAllNewMilkFromSmsUseCase(
+            object : FakeMilkRepository() {
+                override fun getAllMilk(): Flow<List<Milk>> = flowOf(listFromLocalDbSource)
+
+                override suspend fun getAllMilkFromSms(
+                    smsSource: Milk.Source.Sms
+                ): List<Milk> = listFromSmsSource
+            }
         )
 
-        val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
+        val result = (useCase(Milk.Source.Sms.BGAMAMCS) as? Result.Success)?.data
 
-        assertThat(0, isEqualTo(result.size))
+        assertThat(0, isEqualTo(result?.size))
     }
 
     @Test
-    fun someDataAreDuplicateInSmsSource_returnNewDataList() {
+    fun someDataAreDuplicateInSmsSource_returnNewDataList() = coroutineRule.runBlockingTest {
         val listFromLocalDbSource = listOf(
             TestData.milk1, TestData.milk2
         )
@@ -134,15 +160,17 @@ class LoadAllNewMilkFromSmsUseCaseTest {
             TestData.milk1, TestData.milk4
         )
 
-        val useCase = LoadAllNewMilkFromSmsUseCase(
-            mock {
-                on { getAllMilkUnobserved() }.doReturn(listFromLocalDbSource)
-                on { getAllMilkFromSms(Milk.Source.Sms.BGAMAMCS) }.doReturn(listFromSmsSource)
-            },
-            FakePerformanceHelper()
+        val useCase = createLoadAllNewMilkFromSmsUseCase(
+            object : FakeMilkRepository() {
+                override fun getAllMilk(): Flow<List<Milk>> = flowOf(listFromLocalDbSource)
+
+                override suspend fun getAllMilkFromSms(
+                    smsSource: Milk.Source.Sms
+                ): List<Milk> = listFromSmsSource
+            }
         )
 
-        val result = (useCase.executeNow(Milk.Source.Sms.BGAMAMCS) as Result.Success).data
+        val result = (useCase(Milk.Source.Sms.BGAMAMCS) as? Result.Success)?.data
 
         assertThat(listOf(TestData.milk4), isEqualTo(result))
     }

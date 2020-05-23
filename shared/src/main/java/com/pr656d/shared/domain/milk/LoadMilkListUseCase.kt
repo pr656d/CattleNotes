@@ -16,15 +16,22 @@
 
 package com.pr656d.shared.domain.milk
 
-import androidx.lifecycle.LiveData
 import com.pr656d.model.Milk
 import com.pr656d.shared.data.milk.MilkRepository
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.FlowUseCase
+import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 open class LoadMilkListUseCase @Inject constructor(
-    private val milkRepository: MilkRepository
-) {
-    operator fun invoke(): LiveData<List<Milk>> {
-        return milkRepository.getAllMilk()
-    }
+    private val milkRepository: MilkRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : FlowUseCase<Unit, List<Milk>>(ioDispatcher) {
+
+    override fun execute(parameters: Unit): Flow<Result<List<Milk>>> =
+        milkRepository.getAllMilk().map { Result.Success(it) }
+
 }

@@ -16,6 +16,8 @@
 
 package com.pr656d.shared.domain.result
 
+import androidx.lifecycle.MutableLiveData
+import com.pr656d.shared.domain.result.Result.Error
 import com.pr656d.shared.domain.result.Result.Success
 
 /**
@@ -43,6 +45,24 @@ sealed class Result<out R> {
 val Result<*>.succeeded
     get() = this is Success && data != null
 
+/**
+ * `true` if [Result] is of type [Error].
+ */
+val Result<*>.failed
+    get() = this is Error
+
+val <T> Result<T>.data: T?
+    get() = (this as? Success)?.data
+
 fun <T> Result<T>.successOr(fallback: T): T {
     return (this as? Success<T>)?.data ?: fallback
+}
+
+/**
+ * Updates value of [liveData] if [Result] is of type [Success]
+ */
+inline fun <reified T> Result<T>.updateOnSuccess(liveData: MutableLiveData<T>) {
+    if (this is Success) {
+        liveData.postValue(data)
+    }
 }

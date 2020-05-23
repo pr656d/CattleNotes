@@ -16,8 +16,12 @@
 
 package com.pr656d.shared.performance
 
-interface PerformanceHelper {
+import com.pr656d.shared.utils.FirebasePerformanceHelper
 
+/**
+ * @see FirebasePerformanceHelper
+ */
+interface PerformanceHelper {
     /**  Start trace for [traceKey]  */
     fun startTrace(traceKey: String)
 

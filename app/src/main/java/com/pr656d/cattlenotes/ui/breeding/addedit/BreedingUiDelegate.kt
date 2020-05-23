@@ -21,7 +21,10 @@ import com.pr656d.model.Breeding
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.breeding.detail.GetBreedingByIdUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
+import com.pr656d.shared.domain.result.successOr
 import com.pr656d.shared.utils.BreedingUtil
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
 import org.threeten.bp.LocalDate
 import javax.inject.Inject
 
@@ -85,6 +88,7 @@ interface BreedingUiDelegate {
     val calvingDoneOn: MediatorLiveData<LocalDate>
 }
 
+@ExperimentalCoroutinesApi
 class BreedingUiImplDelegate @Inject constructor(
     getCattleByIdUseCase: GetCattleByIdUseCase,
     getBreedingByIdUseCase: GetBreedingByIdUseCase
@@ -95,9 +99,17 @@ class BreedingUiImplDelegate @Inject constructor(
     override val breedingId: MutableLiveData<String> = MutableLiveData()
 
     /* Cattle */
-    override val cattle = cattleId.switchMap { getCattleByIdUseCase(it) }
+    override val cattle: LiveData<Cattle?> = cattleId.switchMap { id ->
+        getCattleByIdUseCase(id)
+            .map { it.successOr(null) }
+            .asLiveData()
+    }
 
-    override val oldBreeding: LiveData<Breeding?> = breedingId.switchMap { getBreedingByIdUseCase(it) }
+    override val oldBreeding: LiveData<Breeding?> = breedingId.switchMap { id ->
+        getBreedingByIdUseCase(id)
+            .map { it.successOr(null) }
+            .asLiveData()
+    }
 
     override val active: MutableLiveData<Boolean> = MutableLiveData(false)
 

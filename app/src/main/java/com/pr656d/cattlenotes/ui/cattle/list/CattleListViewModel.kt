@@ -20,33 +20,38 @@ import androidx.lifecycle.*
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.cattle.list.LoadCattleListUseCase
 import com.pr656d.shared.domain.result.Event
+import com.pr656d.shared.domain.result.successOr
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class CattleListViewModel @Inject constructor(
     loadCattleListUseCase: LoadCattleListUseCase
 ) : ViewModel(), CattleActionListener {
 
-    val cattleList: LiveData<List<Cattle>> = loadCattleListUseCase()
+    @ExperimentalCoroutinesApi
+    val cattleList: LiveData<List<Cattle>> = loadCattleListUseCase(Unit)
+        .map {
+            _loading.postValue(false)
+            it.successOr(emptyList())
+        }
+        .asLiveData()
 
     private val _launchAddCattleScreen = MutableLiveData<Event<Unit>>()
-    val launchAddCattleScreen: LiveData<Event<Unit>> = _launchAddCattleScreen
+    val launchAddCattleScreen: LiveData<Event<Unit>>
+        get() = _launchAddCattleScreen
 
     private val _launchCattleDetail = MutableLiveData<Event<Cattle>>()
-    val launchCattleDetail: LiveData<Event<Cattle>> = _launchCattleDetail
+    val launchCattleDetail: LiveData<Event<Cattle>>
+        get() = _launchCattleDetail
 
-    private val _loading = MediatorLiveData<Boolean>().apply { value = true }
+    private val _loading = MutableLiveData(true)
     val loading: LiveData<Boolean>
         get() = _loading
 
+    @ExperimentalCoroutinesApi
     val isEmpty: LiveData<Boolean>
-
-    init {
-        isEmpty = cattleList.map { it.isNullOrEmpty() }
-
-        _loading.addSource(cattleList) {
-            _loading.value = false
-        }
-    }
+        get() = cattleList.map { it.isNullOrEmpty() }
 
     fun addCattle() {
         _launchAddCattleScreen.value = Event(Unit)

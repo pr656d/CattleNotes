@@ -19,7 +19,10 @@ package com.pr656d.shared.sms.parser
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pr656d.model.Milk
 import com.pr656d.shared.utils.TimeUtils
+import com.pr656d.test.MainCoroutineRule
 import com.pr656d.test.TestData
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Rule
 import org.junit.Test
@@ -28,14 +31,19 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for [BGAMAMCSSmsParser].
  */
+@ExperimentalCoroutinesApi
 class BGAMAMCSSmsParserTest {
 
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    // Overrides Dispatchers.Main used in Coroutines
+    @get:Rule
+    var coroutineRule = MainCoroutineRule()
+
     @Test
-    fun getCodeAndCustomerIdTest() {
+    fun getCodeAndCustomerIdTest() = coroutineRule.runBlockingTest {
         val actualDairyCode = 123
         val actualCustomerId = 456
 
@@ -48,7 +56,7 @@ class BGAMAMCSSmsParserTest {
     }
 
     @Test
-    fun getZonedDateTimeTest() {
+    fun getZonedDateTimeTest() = coroutineRule.runBlockingTest {
         val actualDateTime = TimeUtils.toZonedDateTime(
             16, 1, 2020, 6, 41
         )
@@ -71,49 +79,49 @@ class BGAMAMCSSmsParserTest {
     }*/
 
     @Test
-    fun getMilkOfTest() {
+    fun getMilkOfTest() = coroutineRule.runBlockingTest {
         val str = "Milk-C"
         assertThat(Milk.MilkOf.Cow, isEqualTo(BGAMAMCSSmsParser.getMilkOf(str)))
     }
 
     @Test
-    fun getQuantityTest() {
+    fun getQuantityTest() = coroutineRule.runBlockingTest {
         val str = "Qty-45.21"
         assertThat(45.21f, isEqualTo(BGAMAMCSSmsParser.getQuantity(str)))
     }
 
     @Test
-    fun getFatTest() {
+    fun getFatTest() = coroutineRule.runBlockingTest {
         val str = "Fat-3.4"
         assertThat(3.4f, isEqualTo(BGAMAMCSSmsParser.getFat(str)))
     }
 
     @Test
-    fun getAmountTest() {
+    fun getAmountTest() = coroutineRule.runBlockingTest {
         val str = "Amt-1057.09"
         assertThat(1057.09f, isEqualTo(BGAMAMCSSmsParser.getAmount(str)))
     }
 
     @Test
-    fun getTotalQuantityTest() {
+    fun getTotalQuantityTest() = coroutineRule.runBlockingTest {
         val str = "TQty-391.7"
         assertThat(391.7f, isEqualTo(BGAMAMCSSmsParser.getTotalQuantity(str)))
     }
 
     @Test
-    fun getTotalAmountTest() {
+    fun getTotalAmountTest() = coroutineRule.runBlockingTest {
         val str = "TAmt-11282.60"
         assertThat(11282.60f, isEqualTo(BGAMAMCSSmsParser.getTotalAmount(str)))
     }
 
     @Test
-    fun getLinkTest() {
+    fun getLinkTest() = coroutineRule.runBlockingTest {
         val str = "https://goo.gl/UY1HAC"
         assertThat("https://goo.gl/UY1HAC", isEqualTo(BGAMAMCSSmsParser.getLink(str)))
     }
 
     @Test
-    fun getMilkingDataTest() {
+    fun getMilkingDataTest() = coroutineRule.runBlockingTest {
         val data = TestData.milk1
         assertThat(data, isEqualTo(BGAMAMCSSmsParser.getMilk(TestData.milkMessage1)))
     }

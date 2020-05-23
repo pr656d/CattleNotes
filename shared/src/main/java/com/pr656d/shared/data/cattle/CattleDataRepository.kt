@@ -16,10 +16,10 @@
 
 package com.pr656d.shared.data.cattle
 
-import androidx.lifecycle.LiveData
 import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.datasource.CattleDataSource
-import com.pr656d.shared.data.db.CattleDao
+import com.pr656d.shared.data.db.dao.CattleDao
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
@@ -29,20 +29,27 @@ import javax.inject.Inject
  * Local DB as well as at data source to optimise operation count.
  */
 interface CattleRepository {
-    fun addCattle(cattle: Cattle)
+    suspend fun addCattle(cattle: Cattle): Long
 
-    fun getAllCattle(): LiveData<List<Cattle>>
+    suspend fun addAllCattle(cattleList: List<Cattle>): List<Long>
 
-    fun getCattleById(id: String): LiveData<Cattle?>
+    /**
+     * Loads data from data source and saves into db.
+     */
+    suspend fun load()
 
-    fun getCattleByTagNumber(tagNumber: Long): LiveData<Cattle?>
+    fun getAllCattle(): Flow<List<Cattle>>
 
-    fun deleteCattle(cattle: Cattle)
+    fun getCattleById(id: String): Flow<Cattle?>
 
-    fun updateCattle(cattle: Cattle)
+    fun getCattleByTagNumber(tagNumber: Long): Flow<Cattle?>
+
+    suspend fun deleteCattle(cattle: Cattle)
+
+    suspend fun updateCattle(cattle: Cattle)
 
     /** Returns cattle with matching tag number exist or not */
-    fun isCattleExistByTagNumber(tagNumber: Long): Boolean
+    suspend fun isCattleExistByTagNumber(tagNumber: Long): Boolean
 }
 
 open class CattleDataRepository @Inject constructor(
@@ -50,44 +57,44 @@ open class CattleDataRepository @Inject constructor(
     private val cattleDataSource: CattleDataSource
 ) : CattleRepository {
 
-    /**
-     * Add cattle at Local DB and at data source also. To optimise CRUD operations count.
-     */
-    override fun addCattle(cattle: Cattle) {
-        cattleDao.insert(cattle)
+    override suspend fun addCattle(cattle: Cattle): Long {
         cattleDataSource.addCattle(cattle)
+        return cattleDao.insert(cattle)
     }
 
-    override fun getAllCattle(): LiveData<List<Cattle>> {
+    override suspend fun addAllCattle(cattleList: List<Cattle>): List<Long> {
+        cattleDataSource.addAllCattle(cattleList)
+        return cattleDao.insertAll(cattleList)
+    }
+
+    override suspend fun load() {
+        val list = cattleDataSource.load()
+        cattleDao.insertAll(list)
+    }
+
+    override fun getAllCattle(): Flow<List<Cattle>> {
         return cattleDao.getAll()
     }
 
-    override fun getCattleById(id: String): LiveData<Cattle?> {
+    override fun getCattleById(id: String): Flow<Cattle?> {
         return cattleDao.getById(id)
     }
 
-    override fun getCattleByTagNumber(tagNumber: Long): LiveData<Cattle?> {
-        return cattleDao.getByTagNumber(tagNumber)
+    override fun getCattleByTagNumber(tagNumber: Long): Flow<Cattle?> {
+        return getCattleByTagNumber(tagNumber)
     }
 
-    /**
-     * Delete cattle at Local DB and at data source also. To optimise CRUD operations count.
-     */
-    override fun deleteCattle(cattle: Cattle) {
-        cattleDao.delete(cattle)
+    override suspend fun deleteCattle(cattle: Cattle) {
         cattleDataSource.deleteCattle(cattle)
+        cattleDao.delete(cattle)
     }
 
-    /**
-     * Update cattle at Local DB and at data source also. To optimise CRUD operations count.
-     */
-    override fun updateCattle(cattle: Cattle) {
-        cattleDao.update(cattle)
+    override suspend fun updateCattle(cattle: Cattle) {
         cattleDataSource.updateCattle(cattle)
+        cattleDao.update(cattle)
     }
 
-    override fun isCattleExistByTagNumber(tagNumber: Long): Boolean {
-        // If count is more than 0 than it exists.
+    override suspend fun isCattleExistByTagNumber(tagNumber: Long): Boolean {
         return cattleDao.getRowCountWithMatchingTagNumber(tagNumber) > 0
     }
 }

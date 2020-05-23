@@ -18,12 +18,14 @@ package com.pr656d.cattlenotes.ui.milking.add
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeMilkRepository
+import com.pr656d.cattlenotes.test.fakes.data.milk.FakeMilkRepository
 import com.pr656d.model.Milk
 import com.pr656d.shared.data.milk.MilkRepository
 import com.pr656d.shared.domain.milk.AddMilkUseCase
+import com.pr656d.test.MainCoroutineRule
 import com.pr656d.test.TestData
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertNotNull
 import org.junit.Rule
@@ -33,21 +35,24 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for [AddMilkViewModel].
  */
+@ExperimentalCoroutinesApi
 class AddMilkViewModelTest {
 
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private fun createAddMilkViewModel(
         milkRepository: MilkRepository = FakeMilkRepository()
     ) : AddMilkViewModel {
+        val coroutineDispatcher = coroutineRule.testDispatcher
+
         return AddMilkViewModel(
-            AddMilkUseCase(milkRepository)
+            AddMilkUseCase(milkRepository, coroutineDispatcher)
         ).apply { observeUnobserved() }
     }
 
@@ -64,7 +69,7 @@ class AddMilkViewModelTest {
     }
 
     @Test
-    fun saveMilkCalledButAllFieldsEmpty_showMessage() {
+    fun saveMilkCalledButAllFieldsEmpty_showMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddMilkViewModel()
 
         // Call save milk
@@ -74,7 +79,7 @@ class AddMilkViewModelTest {
     }
 
     @Test
-    fun saveCalledWithAllFieldsValid_dismissOnSuccess() {
+    fun saveCalledWithAllFieldsValid_dismissOnSuccess() = coroutineRule.runBlockingTest {
         val viewModel = createAddMilkViewModel()
 
         val actualMilk = TestData.milk1
@@ -94,10 +99,10 @@ class AddMilkViewModelTest {
     }
 
     @Test
-    fun saveCalledWithAllFieldsValid_showMessageOnError() {
+    fun saveCalledWithAllFieldsValid_showMessageOnError() = coroutineRule.runBlockingTest {
         val viewModel = createAddMilkViewModel(
             object : FakeMilkRepository() {
-                override fun addMilk(milk: Milk) {
+                override suspend fun addMilk(milk: Milk): Long {
                     throw Exception("Error!")
                 }
             }

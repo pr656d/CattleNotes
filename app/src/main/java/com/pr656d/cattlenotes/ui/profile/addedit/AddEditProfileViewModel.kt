@@ -19,9 +19,12 @@ package com.pr656d.cattlenotes.ui.profile.addedit
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.pr656d.cattlenotes.ui.profile.ProfileDelegate
 import com.pr656d.shared.domain.result.Event
-import com.pr656d.shared.domain.result.Result
+import com.pr656d.shared.domain.result.succeeded
+import com.pr656d.shared.domain.result.successOr
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AddEditProfileViewModel @Inject constructor(
@@ -37,19 +40,23 @@ class AddEditProfileViewModel @Inject constructor(
         get() = _loading
 
     init {
-        _navigateUp.addSource(updateUserInfoDetailedResult) { result ->
-            (result as? Result.Success)?.data?.getContentIfNotHandled()?.let {
-                if (it.first is Result.Success && it.second is Result.Success)
-                    navigateUp()
-            }
-        }
-
         _loading.addSource(currentUserInfo) {
             _loading.postValue(false)
         }
 
         _loading.addSource(savingProfile) {
             _loading.postValue(it)
+        }
+    }
+
+    fun save() {
+        viewModelScope.launch {
+            val result = saveProfile()
+
+            result.successOr(null)?.getContentIfNotHandled()?.let {
+                if (it.first.succeeded && it.second.succeeded)
+                    navigateUp()
+            }
         }
     }
 

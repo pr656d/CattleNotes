@@ -29,6 +29,7 @@ import com.pr656d.cattlenotes.ui.milking.list.MilkingViewModel
 import com.pr656d.cattlenotes.utils.parentViewModelProvider
 import com.pr656d.model.Milk
 import dagger.android.support.DaggerAppCompatDialogFragment
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
@@ -39,6 +40,7 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
 
     private lateinit var listAdapter: ArrayAdapter<SmsSourceHolder>
 
+    @ExperimentalCoroutinesApi
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         viewModel = parentViewModelProvider(viewModelFactory)
 
@@ -56,6 +58,7 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
             .create()
     }
 
+    @ExperimentalCoroutinesApi
     @SuppressLint("FragmentLiveDataObserve")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

@@ -23,48 +23,67 @@ import com.pr656d.model.AnimalType
 import com.pr656d.model.Cattle
 import com.pr656d.shared.domain.cattle.addedit.DeleteCattleUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
-import com.pr656d.shared.domain.cattle.detail.GetParentCattleUseCase
 import com.pr656d.shared.domain.result.Event
-import com.pr656d.shared.domain.result.Result
-import com.pr656d.shared.domain.result.Result.Error
-import com.pr656d.shared.domain.result.Result.Success
+import com.pr656d.shared.domain.result.succeeded
+import com.pr656d.shared.domain.result.successOr
 import com.pr656d.shared.utils.nameOrTagNumber
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class CattleDetailViewModel @Inject constructor(
     private val getCattleByIdUseCase: GetCattleByIdUseCase,
-    private val getParentCattleUseCase: GetParentCattleUseCase,
     private val deleteCattleUseCase: DeleteCattleUseCase
 ) : ViewModel() {
-
-    private val deleteCattleResult = MutableLiveData<Result<Unit>>()
-
     private val cattleId = MutableLiveData<String>()
 
-    val cattle: LiveData<Cattle?> = cattleId.switchMap { getCattleByIdUseCase(it) }
+    val cattle: LiveData<Cattle?> = cattleId.switchMap { id ->
+        _loading.postValue(true)
+
+        getCattleByIdUseCase(id)
+            .map {
+                _loading.postValue(false)
+                it.successOr(null)
+            }
+            .asLiveData()
+    }
 
     val isCattleTypeBull: LiveData<Boolean> = cattle.map { it?.type is AnimalType.Bull }
 
-    /**
-     * Cattle's parent detail
-     */
-    private val parentId: LiveData<String?> = cattle.map { it?.parent }
+    /**  Cattle's parent detail  */
+    val parentCattle: LiveData<Cattle?> = cattle.switchMap {
+        val parentId = it?.parent
+            ?: return@switchMap MutableLiveData<Cattle?>(null)
 
-    val parentCattle: LiveData<Cattle?> = parentId.switchMap { id ->
-        id?.let { getParentCattleUseCase(id) } ?: MutableLiveData<Cattle?>(null)
+        _loadingParent.postValue(true)
+
+        getCattleByIdUseCase(parentId)
+            .map { result ->
+                _loading.postValue(false)
+                result.successOr(null)
+            }
+            .asLiveData()
     }
 
     val parent:LiveData<String?> = parentCattle.map { it?.nameOrTagNumber() }
 
     val isParentCattleTypeBull: LiveData<Boolean> = parentCattle.map { it?.type is AnimalType.Bull }
 
-    /**
-     * Parent cattle's parent detail
-     */
-    private val parentParentId: LiveData<String?> = parentCattle.map { it?.parent }
+    /**  Parent cattle's parent detail.  */
+    val parentParentCattle: LiveData<Cattle?> = parentCattle.switchMap {
+        val parentId = it?.parent
+            ?: return@switchMap MutableLiveData<Cattle?>(null)
 
-    val parentParentCattle: LiveData<Cattle?> = parentParentId.switchMap { id ->
-        id?.let { getParentCattleUseCase(id) } ?: MutableLiveData<Cattle?>(null)
+        _loadingParent.postValue(true)
+
+        getCattleByIdUseCase(parentId)
+            .map { result ->
+                _loadingParent.postValue(false)
+                result.successOr(null)
+            }
+            .asLiveData()
     }
 
     val parentParent:LiveData<String?> = parentParentCattle.map { it?.nameOrTagNumber() }
@@ -93,11 +112,11 @@ class CattleDetailViewModel @Inject constructor(
     val navigateUp: LiveData<Event<Unit>>
         get() = _navigateUp
 
-    private val _loading = MediatorLiveData<Boolean>().apply { value = true }
+    private val _loading = MutableLiveData(true)
     val loading: LiveData<Boolean>
         get() = _loading
 
-    private val _loadingParent = MediatorLiveData<Boolean>().apply { value = true }
+    private val _loadingParent = MutableLiveData(true)
     val loadingParent: LiveData<Boolean>
         get() = _loadingParent
 
@@ -108,30 +127,6 @@ class CattleDetailViewModel @Inject constructor(
     init {
         _showMessage.addSource(cattle) {
             if (it == null) showMessage(R.string.error_cattle_not_found)
-        }
-
-        _loading.addSource(cattle) {
-            _loading.value = false
-        }
-
-        _loading.addSource(deleteCattleResult) {
-            _loading.value = false
-        }
-
-        _navigateUp.addSource(deleteCattleResult) { result ->
-            (result as? Success)?.let {
-                navigateUp()
-            }
-        }
-
-        _showMessage.addSource(deleteCattleResult) { result ->
-            (result as? Error)?.let {
-                showMessage()
-            }
-        }
-
-        _loadingParent.addSource(parentCattle) {
-            _loadingParent.value = false
         }
     }
 
@@ -162,10 +157,22 @@ class CattleDetailViewModel @Inject constructor(
     }
 
     fun deleteCattle(deleteConfirmation: Boolean = false) {
-        if (deleteConfirmation)
-            deleteCattleUseCase(cattle.value!!, deleteCattleResult)
-        else
+        if (deleteConfirmation) {
+            viewModelScope.launch {
+                _loading.postValue(true)
+
+                val result = deleteCattleUseCase(cattle.value!!)
+
+                if (result.succeeded)
+                    navigateUp()
+                else
+                    showMessage()
+
+                _loading.postValue(false)
+            }
+        } else {
             deleteCattleConfirmation()
+        }
     }
 
     private fun deleteCattleConfirmation() {

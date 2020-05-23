@@ -16,108 +16,107 @@
 
 package com.pr656d.shared.data.login.datasources
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
-import com.pr656d.shared.data.db.AppDatabaseDao
+import com.pr656d.shared.data.db.dao.AppDatabaseDao
 import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.data.user.info.FirebaseUserInfo
 import com.pr656d.shared.data.user.info.UserInfoBasic
+import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
-import com.pr656d.shared.domain.internal.DefaultScheduler
-import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.fcm.FcmTokenUpdater
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
 import timber.log.Timber
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class FirebaseAuthStateUserDataSource @Inject constructor(
-    private val firebase: FirebaseAuth,
+    private val firebaseAuth: FirebaseAuth,
     appDatabaseDao: AppDatabaseDao,
     tokenUpdater: FcmTokenUpdater,
     preferenceStorageRepository: PreferenceStorageRepository,
     dbLoader: DbLoader,
-    breedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater
+    breedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater,
+    @DefaultDispatcher coroutineDispatcher: CoroutineDispatcher
 ) : AuthStateUserDataSource {
 
-    private val currentFirebaseUserObservable = MutableLiveData<Result<UserInfoBasic?>>()
+    private val logoutScope = CoroutineScope(coroutineDispatcher + Job())
 
-    private var isAlreadyListening = false
+    // Channel that keeps track of User Authentication
+    private val channel = ConflatedBroadcastChannel<UserInfoBasic?>()
 
+    private var isListening = false
     private var lastUid: String? = null
 
+    // Save auth as global.
     private lateinit var auth: FirebaseAuth
 
     // Listener that saves the [FirebaseUser], fetches the ID token
     // and updates the user ID observable.
     private val authStateListener: ((FirebaseAuth) -> Unit) = { auth ->
-        // Initialize auth as global
+        /** Save the latest copy of auth */
         this.auth = auth
 
-        DefaultScheduler.execute {
-            Timber.d("Received a FirebaseAuth update.")
-            // Post the current user for observers
-            currentFirebaseUserObservable.postValue(
-                Result.Success(
-                    FirebaseUserInfo(this.auth.currentUser)
-                )
-            )
-
-            this.auth.currentUser?.let { currentUser ->
-                // Save the FCM ID token in firestore
-                tokenUpdater.updateTokenForUser(currentUser.uid)
-            }
-        }
-
-        // Log out
-        if (this.auth.currentUser == null) {
-            // Cancel all the breeding alarms.
-            breedingNotificationAlarmUpdater.cancelAll(onComplete = {
-                DefaultScheduler.execute {
-                    // Wait until alarm cancellation completes before erasing data.
-                    appDatabaseDao.clear()
-                }
-            })
-            dbLoader.stop()
-            preferenceStorageRepository.clear()
-        }
-
         // Log in
-        this.auth.currentUser?.let {
-            if (lastUid != this.auth.uid) { // Prevent duplicates
+        auth.currentUser?.let {
+            // Save the FCM ID token in firestore
+            tokenUpdater.updateTokenForUser(it.uid)
+
+            if (lastUid != auth.uid) { // Prevent duplicates
                 dbLoader.initialize()
                 // Update all the breeding alarms.
                 breedingNotificationAlarmUpdater.updateAll(it.uid)
             }
         }
+
+        // Log out
+        if (auth.currentUser == null) {
+            // Launch new coroutine.
+            logoutScope.launch {
+                // Cancel all the breeding alarms.
+                breedingNotificationAlarmUpdater.cancelAll()
+                appDatabaseDao.clear()
+                preferenceStorageRepository.clear()
+            }
+        }
+
         // Save the last UID to prevent setting too many alarms.
         lastUid = this.auth.uid
-    }
 
-    override fun startListening() {
-        if (!isAlreadyListening) {
-            firebase.addAuthStateListener(authStateListener)
-            isAlreadyListening = true
+        // Post the current user for observers
+        if (!channel.isClosedForSend) {
+            channel.offer(FirebaseUserInfo(auth.currentUser))
+        } else {
+            unregisterListener()
         }
     }
 
-    override fun getBasicUserInfo(): LiveData<Result<UserInfoBasic?>> {
-        return currentFirebaseUserObservable
+    // Synchronized method, multiple calls to this method at the same time isn't allowed since
+    // isListening is read and can be modified
+    @FlowPreview
+    @Synchronized
+    override fun getBasicUserInfo(): Flow<UserInfoBasic?> {
+        if (!isListening) {
+            firebaseAuth.addAuthStateListener(authStateListener)
+            isListening = true
+        }
+        return channel.asFlow()
     }
 
-    override fun clearListener() {
-        firebase.removeAuthStateListener(authStateListener)
+    private fun unregisterListener() {
+        firebaseAuth.removeAuthStateListener(authStateListener)
     }
 
     override fun reload() {
         auth.currentUser
             ?.reload()
             ?.addOnSuccessListener {
-                currentFirebaseUserObservable.postValue(
-                    Result.Success(
-                        FirebaseUserInfo(auth.currentUser)
-                    )
-                )
+                if (!channel.isClosedForSend) {
+                    channel.offer(FirebaseUserInfo(auth.currentUser))
+                }
             }
             ?.addOnFailureListener {
                 Timber.d("Firebase reload failed")

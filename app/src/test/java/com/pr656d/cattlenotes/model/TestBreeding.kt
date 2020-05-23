@@ -17,11 +17,12 @@
 package com.pr656d.cattlenotes.model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
 import com.pr656d.model.Breeding
 import com.pr656d.model.Breeding.ArtificialInsemination
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.shared.utils.BreedingUtil
+import com.pr656d.test.MainCoroutineRule
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertNull
 import org.junit.Rule
@@ -30,14 +31,15 @@ import org.threeten.bp.LocalDate
 import java.util.*
 import org.hamcrest.Matchers.equalTo as isEqualTo
 
+@ExperimentalCoroutinesApi
 class TestBreeding {
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private fun createBreeding(
         repeatHeatStatus: Boolean? = null,

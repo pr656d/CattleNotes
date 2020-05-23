@@ -17,12 +17,9 @@
 package com.pr656d.cattlenotes.ui.cattle.addedit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.R
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeCattleRepository
+import com.pr656d.cattlenotes.test.fakes.data.cattle.FakeCattleRepository
 import com.pr656d.model.AnimalType
 import com.pr656d.model.Cattle
 import com.pr656d.shared.data.cattle.CattleRepository
@@ -32,11 +29,16 @@ import com.pr656d.shared.domain.cattle.addedit.UpdateCattleUseCase
 import com.pr656d.shared.domain.cattle.addedit.parent.GetParentListUseCase
 import com.pr656d.shared.domain.cattle.detail.GetCattleByIdUseCase
 import com.pr656d.shared.domain.cattle.detail.GetParentCattleUseCase
-import com.pr656d.shared.domain.cattle.list.LoadCattleListUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleTagNumberValidatorUseCase
 import com.pr656d.shared.domain.cattle.validator.CattleValidator.VALID_FIELD
 import com.pr656d.shared.utils.nameOrTagNumber
+import com.pr656d.test.MainCoroutineRule
 import com.pr656d.test.TestData
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.*
 import org.junit.Rule
@@ -47,51 +49,47 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for the [AddEditCattleViewModel]
  */
+@ExperimentalCoroutinesApi
 class AddEditCattleViewModelTest {
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private val cattleRepository = object : FakeCattleRepository() {
-        override fun getAllCattle(): LiveData<List<Cattle>> {
-            val result = MutableLiveData<List<Cattle>>()
-            result.postValue(TestData.cattleList)
-            return result
+        override fun getAllCattle(): Flow<List<Cattle>> {
+            return flowOf(TestData.cattleList)
         }
 
-        override fun getCattleById(id: String): LiveData<Cattle?> {
-            return MutableLiveData<Cattle?>().apply {
-                value = TestData.cattleList.firstOrNull { it.id == id }
+        override fun getCattleById(id: String): Flow<Cattle?> {
+            return flow {
+                emit(TestData.cattleList.firstOrNull { it.id == id })
             }
         }
 
-        override fun isCattleExistByTagNumber(tagNumber: Long): Boolean {
+        override suspend fun isCattleExistByTagNumber(tagNumber: Long): Boolean {
             return TestData.cattleList.find { it.tagNumber == tagNumber } != null
         }
     }
 
     private fun createAddEditCattleViewModel(
-        repository: CattleRepository = cattleRepository,
-        addCattleUseCase: AddCattleUseCase = AddCattleUseCase(repository),
-        updateCattleUseCase: UpdateCattleUseCase = UpdateCattleUseCase(repository),
-        cattleTagNumberValidatorUseCase: CattleTagNumberValidatorUseCase =
-            CattleTagNumberValidatorUseCase(IsCattleExistWithTagNumberUseCase(repository)),
-        getParentListUseCase: GetParentListUseCase =
-            GetParentListUseCase(LoadCattleListUseCase(repository)),
-        getCattleByIdUseCase: GetCattleByIdUseCase = GetCattleByIdUseCase(repository),
-        getParentCattleUseCase: GetParentCattleUseCase = GetParentCattleUseCase(repository)
+        repository: CattleRepository = cattleRepository
     ): AddEditCattleViewModel {
+        val coroutineDispatcher = coroutineRule.testDispatcher
+
         return AddEditCattleViewModel(
-            addCattleUseCase = addCattleUseCase,
-            updateCattleUseCase = updateCattleUseCase,
-            getParentListUseCase = getParentListUseCase,
-            cattleTagNumberValidatorUseCase = cattleTagNumberValidatorUseCase,
-            getCattleByIdUseCase = getCattleByIdUseCase,
-            getParentCattleUseCase = getParentCattleUseCase
+            addCattleUseCase = AddCattleUseCase(repository, coroutineDispatcher),
+            updateCattleUseCase = UpdateCattleUseCase(repository, coroutineDispatcher),
+            getParentListUseCase =  GetParentListUseCase(repository, coroutineDispatcher),
+            cattleTagNumberValidatorUseCase = CattleTagNumberValidatorUseCase(
+                IsCattleExistWithTagNumberUseCase(repository, coroutineDispatcher),
+                coroutineDispatcher
+            ),
+            getCattleByIdUseCase = GetCattleByIdUseCase(repository, coroutineDispatcher),
+            getParentCattleUseCase = GetParentCattleUseCase(repository, coroutineDispatcher)
         ).apply { observeUnobserved() }
     }
 
@@ -123,7 +121,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun saveCalledWithAllFieldsEmpty_showMessage() {
+    fun saveCalledWithAllFieldsEmpty_showMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Call save
@@ -138,7 +136,7 @@ class AddEditCattleViewModelTest {
      * Tag number should contain digits only with length 19.
      */
     @Test
-    fun saveCalledByProvidingValidTagNumberOnly_showMessage() {
+    fun saveCalledByProvidingValidTagNumberOnly_showMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Set valid tag number
@@ -155,7 +153,7 @@ class AddEditCattleViewModelTest {
      * Save is called but tag number contains string which is invalid.
      */
     @Test
-    fun saveCalledByProvidingInValidTagNumberContainsString_showMessage() {
+    fun saveCalledByProvidingInvalidTagNumberContainsString_showMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Set invalid tag number which contains String only.
@@ -172,7 +170,7 @@ class AddEditCattleViewModelTest {
      * Save is called but tag number contains string and digit combination which is invalid.
      */
     @Test
-    fun saveCalledByProvidingInValidTagNumberContainsStringAndDigits_showMessage() {
+    fun saveCalledByProvidingInvalidTagNumberContainsStringAndDigits_showMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Set invalid tag number which contains String and digit.
@@ -189,7 +187,7 @@ class AddEditCattleViewModelTest {
      * Save is called but tag number contains string which is invalid.
      */
     @Test
-    fun saveCalledByProvidingInValidTagNumberLengthExceed_showMessage() {
+    fun saveCalledByProvidingInvalidTagNumberLengthExceed_showMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Set invalid tag number which contains digit but exceeds length.
@@ -206,7 +204,7 @@ class AddEditCattleViewModelTest {
      * Save is called but tag number but cattle already exist with same tag number which is invalid.
      */
     @Test
-    fun saveCalledByProvidingInValidTagNumberCattleAlreadyExist_showMessage() {
+    fun saveCalledByProvidingInvalidTagNumberCattleAlreadyExist_showMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Set invalid tag number which contains existing cattle tag number.
@@ -220,7 +218,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun tagNumberIsValid_setTagNumberErrorMessageIsValid() {
+    fun tagNumberIsValid_setTagNumberErrorMessageIsValid() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Valid tag number
@@ -231,7 +229,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun tagNumberIsInValidContainsString_setTagNumberErrorMessage() {
+    fun tagNumberIsInvalidContainsString_setTagNumberErrorMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Invalid tag number
@@ -242,7 +240,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun tagNumberIsInvalidContainsDigitAndString_setTagNumberErrorMessage() {
+    fun tagNumberIsInvalidContainsDigitAndString_setTagNumberErrorMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Invalid tag number
@@ -253,7 +251,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun tagNumberIsInValidLengthExceed_setTagNumberErrorMessage() {
+    fun tagNumberIsInValidLengthExceed_setTagNumberErrorMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Invalid tag number
@@ -264,7 +262,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun tagNumberIsNotValidCattleAlreadyExist_setTagNumberErrorMessage() {
+    fun tagNumberIsNotValidCattleAlreadyExist_setTagNumberErrorMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val alreadyExistTagNumber = TestData.cattle1.tagNumber
@@ -277,7 +275,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun allFieldsValid_callAddCattleAndNavigateUp() {
+    fun allFieldsValid_callAddCattleAndNavigateUp() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Valid tag number.
@@ -303,7 +301,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun allFieldsValid_callUpdateCattleAndNavigateUp() {
+    fun allFieldsValid_callUpdateCattleAndNavigateUp() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val cattle = TestData.cattle2
@@ -331,7 +329,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun editingCattleButChangedNothing_navigateUp() {
+    fun editingCattleButChangedNothing_navigateUp() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val cattle = TestData.cattle2
@@ -349,7 +347,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun pickParentIsCalledAndParentIsAvailable_selectingParentIsTrue() {
+    fun pickParentIsCalledAndParentIsAvailable_selectingParentIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val cattle = TestData.cattle2
@@ -363,7 +361,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun pickParentIsCalledAndTagNumberNotAvailable_selectingParentIsFalse() {
+    fun pickParentIsCalledAndTagNumberNotAvailable_selectingParentIsFalse() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         viewModel.pickParent()
@@ -373,7 +371,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun pickParentIsCalledAndTagNumberNotAvailable_showMessage() {
+    fun pickParentIsCalledAndTagNumberNotAvailable_showMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         viewModel.pickParent()
@@ -383,7 +381,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun pickParentIsCalledParentIsSelected_setParent() {
+    fun pickParentIsCalledParentIsSelected_setParent() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val cattle = TestData.cattle4
@@ -406,7 +404,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun addCattleWithAllFieldsFilled_navigateUpOnSuccess() {
+    fun addCattleWithAllFieldsFilled_navigateUpOnSuccess() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         viewModel.apply {
@@ -429,16 +427,28 @@ class AddEditCattleViewModelTest {
         assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
     }
 
-    private object FailingAddCattleUseCase : AddCattleUseCase(FakeCattleRepository()) {
-        override fun execute(parameters: Cattle) {
-            throw Exception("Error!")
-        }
-    }
-
     @Test
-    fun addingNewCattleWithAllFieldsFilled_showErrorOnFailure() {
+    fun addingNewCattleWithAllFieldsFilled_showErrorOnFailure() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel(
-            addCattleUseCase = FailingAddCattleUseCase
+            object : FakeCattleRepository() {
+                override fun getAllCattle(): Flow<List<Cattle>> {
+                    return flowOf(TestData.cattleList)
+                }
+
+                override fun getCattleById(id: String): Flow<Cattle?> {
+                    return flow {
+                        emit(TestData.cattleList.firstOrNull { it.id == id })
+                    }
+                }
+
+                override suspend fun isCattleExistByTagNumber(tagNumber: Long): Boolean {
+                    return TestData.cattleList.find { it.tagNumber == tagNumber } != null
+                }
+
+                override suspend fun addCattle(cattle: Cattle): Long {
+                    throw Exception("Error!")
+                }
+            }
         )
 
         viewModel.apply {
@@ -462,7 +472,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun tagNumberAvailable_fetchParentList() {
+    fun tagNumberAvailable_fetchParentList() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Tag number which doesn't already exist
@@ -473,7 +483,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun pickParentCalledButTagNumberAlreadyExist_showMessage() {
+    fun pickParentCalledButTagNumberAlreadyExist_showMessage() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Tag number which already exist
@@ -486,12 +496,10 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun pickParentCalled_parentListIsEmpty() {
+    fun pickParentCalled_parentListIsEmpty() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel(
             object : FakeCattleRepository() {
-                override fun getAllCattle(): LiveData<List<Cattle>> {
-                    return MutableLiveData(emptyList())
-                }
+                override fun getAllCattle(): Flow<List<Cattle>> = flowOf(emptyList())
             }
         )
 
@@ -502,12 +510,10 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun parentListIsEmpty_isEmptyParentListIsTrue() {
+    fun parentListIsEmpty_isEmptyParentListIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel(
             object : FakeCattleRepository() {
-                override fun getAllCattle(): LiveData<List<Cattle>> {
-                    return MutableLiveData(emptyList())
-                }
+                override fun getAllCattle(): Flow<List<Cattle>> = flowOf(emptyList())
             }
         )
 
@@ -518,7 +524,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun backPressedAndAllFieldsEmpty_navigateUp() {
+    fun backPressedAndAllFieldsEmpty_navigateUp() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Back pressed
@@ -529,7 +535,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun backPressedAndAllFieldsNotEmpty_showBackConfirmationDialog() {
+    fun backPressedAndAllFieldsNotEmpty_showBackConfirmationDialog() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Set tag number
@@ -543,7 +549,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun backPressedIsConfirmed_navigateUp() {
+    fun backPressedIsConfirmed_navigateUp() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Set tag number
@@ -559,7 +565,7 @@ class AddEditCattleViewModelTest {
     /** Region : Add [Cattle] */
 
     @Test
-    fun addCattle_editingIsFalse() {
+    fun addCattle_editingIsFalse() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val editing = LiveDataTestUtil.getValue(viewModel.editing)!!
@@ -567,7 +573,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun changeBreedListAsTypeChanges() {
+    fun changeBreedListAsTypeChanges() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val cattle = TestData.cattle1
@@ -601,7 +607,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun cattleTypeIsBull_resetGroupAndLactation() {
+    fun cattleTypeIsBull_resetGroupAndLactation() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         // Set tag number
@@ -614,7 +620,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun saveCattleTypeBull_navigateUpOnSuccess() {
+    fun saveCattleTypeBull_navigateUpOnSuccess() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         viewModel.tagNumber.value = "2131"
@@ -631,7 +637,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun setParentCalled_setParent() {
+    fun setParentCalled_setParent() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val actualParentCattle = TestData.cattle2
@@ -648,7 +654,7 @@ class AddEditCattleViewModelTest {
     /** Region : Edit [Cattle] */
 
     @Test
-    fun editCattle_editingIsTrue() {
+    fun editCattle_editingIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val cattle = TestData.cattleList.random()
@@ -661,7 +667,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun editingCattleTypeChanged_changeBreedAccordingly() {
+    fun editingCattleTypeChanged_changeBreedAccordingly() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val cattle = TestData.cattle1
@@ -691,7 +697,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun editingBullCattle_resetBreedAndLactation() {
+    fun editingBullCattle_resetBreedAndLactation() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val bullCattle = TestData.cattleBull
@@ -703,7 +709,7 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun editingCattleTypeChangedToBull_resetBreedAndLactation() {
+    fun editingCattleTypeChangedToBull_resetBreedAndLactation() = coroutineRule.runBlockingTest {
         val viewModel = createAddEditCattleViewModel()
 
         val bullCattle = TestData.cattle1

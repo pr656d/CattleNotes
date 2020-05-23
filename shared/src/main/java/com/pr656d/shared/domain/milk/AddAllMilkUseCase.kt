@@ -18,13 +18,18 @@ package com.pr656d.shared.domain.milk
 
 import com.pr656d.model.Milk
 import com.pr656d.shared.data.milk.MilkRepository
-import com.pr656d.shared.domain.UseCase
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.SuspendUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class AddAllMilkUseCase @Inject constructor(
-    private val milkRepository: MilkRepository
-) : UseCase<List<Milk>, Unit>() {
-    override fun execute(parameters: List<Milk>) {
+    private val milkRepository: MilkRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : SuspendUseCase<List<Milk>, Unit>(ioDispatcher) {
+
+    override suspend fun execute(parameters: List<Milk>) {
         milkRepository.addAllMilk(parameters)
     }
+
 }

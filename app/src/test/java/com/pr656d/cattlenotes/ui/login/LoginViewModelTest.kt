@@ -21,11 +21,10 @@ import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakePreferenceStorageRepository
-import com.pr656d.cattlenotes.test.util.fakes.FakeProfileDelegate
-import com.pr656d.cattlenotes.test.util.fakes.FakeThemedActivityDelegate
-import com.pr656d.cattlenotes.test.util.fakes.FakeUserInfoRepository
+import com.pr656d.cattlenotes.test.fakes.FakeProfileDelegate
+import com.pr656d.cattlenotes.test.fakes.FakeThemedActivityDelegate
+import com.pr656d.cattlenotes.test.fakes.data.prefs.FakePreferenceStorageRepository
+import com.pr656d.cattlenotes.test.fakes.data.user.FakeUserInfoRepository
 import com.pr656d.shared.data.db.updater.DbLoader
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.data.user.repository.UserInfoRepository
@@ -35,6 +34,10 @@ import com.pr656d.shared.domain.login.SetFirstTimeProfileSetupCompletedUseCase
 import com.pr656d.shared.domain.login.SetLoginCompletedUseCase
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.utils.NetworkHelper
+import com.pr656d.test.MainCoroutineRule
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
@@ -45,15 +48,16 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for [LoginViewModel].
  */
+@ExperimentalCoroutinesApi
 class LoginViewModelTest {
 
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private val mockDbLoader: DbLoader = mock {}
 
@@ -63,19 +67,21 @@ class LoginViewModelTest {
         networkHelper: NetworkHelper = mock {
             on { isNetworkConnected() }.doReturn(true)
         },
-        dbLoader: DbLoader = mockDbLoader
+        dbLoader: DbLoader = mockDbLoader,
+        coroutineDispatcher: CoroutineDispatcher = coroutineRule.testDispatcher
     ): LoginViewModel {
         return LoginViewModel(
             FakeProfileDelegate(
                 userInfoRepository = userInfoRepository,
-                networkHelper = networkHelper
+                networkHelper = networkHelper,
+                coroutineDispatcher = coroutineDispatcher
             ),
             FakeThemedActivityDelegate(),
-            GetFirstTimeProfileSetupCompletedUseCase(preferenceStorageRepository),
-            SetFirstTimeProfileSetupCompletedUseCase(preferenceStorageRepository),
+            GetFirstTimeProfileSetupCompletedUseCase(preferenceStorageRepository, coroutineDispatcher),
+            SetFirstTimeProfileSetupCompletedUseCase(preferenceStorageRepository, coroutineDispatcher),
             networkHelper,
-            SetLoginCompletedUseCase(preferenceStorageRepository),
-            LoadDataUseCase(dbLoader)
+            SetLoginCompletedUseCase(preferenceStorageRepository, coroutineDispatcher),
+            LoadDataUseCase(dbLoader, coroutineDispatcher)
         ).apply { observeUnobserved() }
     }
 
@@ -98,7 +104,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun loginClicked_launchFirebaseAuthUi() {
+    fun loginClicked_launchFirebaseAuthUi() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel()
 
         // Login clicked
@@ -109,7 +115,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun loginClicked_logginInIsTrue() {
+    fun loginClicked_logginInIsTrue() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel()
 
         // Login clicked
@@ -120,7 +126,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun firstTimeProfileSetupNotCompletedButLoginCompleted_launchSetupProfileScreen() {
+    fun firstTimeProfileSetupNotCompletedButLoginCompleted_launchSetupProfileScreen() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel(
             // Given that user is logged in and not completed first time profile setup.
             object : FakePreferenceStorageRepository() {
@@ -134,7 +140,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun onLoginSuccessIsNewUser_launchSetupProfileScreen() {
+    fun onLoginSuccessIsNewUser_launchSetupProfileScreen() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel()
 
         // Login success
@@ -145,7 +151,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun onLoginSuccessIsExistingUser_launchMainScreen() {
+    fun onLoginSuccessIsExistingUser_launchMainScreen() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel()
 
         // Login success
@@ -156,7 +162,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun onLoginSuccessIfExistingUser_loadData() {
+    fun onLoginSuccessIfExistingUser_loadData() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel()
 
         // Login success
@@ -167,31 +173,31 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun saveProfileCalled_navigateToMainScreenOnSuccess() {
+    fun saveProfileCalled_navigateToMainScreenOnSuccess() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel()
 
         // Call save profile
-        viewModel.saveProfile()
+        viewModel.save()
 
         val launchMainScreen = LiveDataTestUtil.getValue(viewModel.launchMainScreen)
         assertThat(Unit, isEqualTo(launchMainScreen?.getContentIfNotHandled()))
     }
 
     @Test
-    fun saveProfileCalledButNetworkNotAvailable_showUpdateErrorMessage() {
+    fun saveProfileCalledButNetworkNotAvailable_showUpdateErrorMessage() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel(
             networkHelper = mock { on { isNetworkConnected() }.doReturn(false) }
         )
 
         // Call save profile
-        viewModel.saveProfile()
+        viewModel.save()
 
         val updateErrorMessage = LiveDataTestUtil.getValue(viewModel.updateErrorMessage)
         assertNotNull(updateErrorMessage)
     }
 
     @Test
-    fun updateResultBothError_showUpdateErrorMessage() {
+    fun updateResultBothError_showUpdateErrorMessage() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel(
             userInfoRepository = FakeUserInfoRepository(
                 Pair(Result.Error(Exception("Error!")), Result.Error(Exception("Error!")))
@@ -199,14 +205,14 @@ class LoginViewModelTest {
         )
 
         // Call save profile
-        viewModel.saveProfile()
+        viewModel.save()
 
         val updateErrorMessage = LiveDataTestUtil.getValue(viewModel.updateErrorMessage)
         assertNotNull(updateErrorMessage)
     }
 
     @Test
-    fun updateResultFirstIsError_showUpdateErrorMessage() {
+    fun updateResultFirstIsError_showUpdateErrorMessage() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel(
             userInfoRepository = FakeUserInfoRepository(
                 Pair(Result.Error(Exception("Error!")), Result.Success(Unit))
@@ -214,14 +220,14 @@ class LoginViewModelTest {
         )
 
         // Call save profile
-        viewModel.saveProfile()
+        viewModel.save()
 
         val updateErrorMessage = LiveDataTestUtil.getValue(viewModel.updateErrorMessage)
         assertNotNull(updateErrorMessage)
     }
 
     @Test
-    fun updateResultSecondIsError_showUpdateErrorMessage() {
+    fun updateResultSecondIsError_showUpdateErrorMessage() = coroutineRule.runBlockingTest {
         val viewModel = createLoginViewModel(
             userInfoRepository = FakeUserInfoRepository(
                 Pair(Result.Success(Unit), Result.Error(Exception("Error!")))
@@ -229,7 +235,7 @@ class LoginViewModelTest {
         )
 
         // Call save profile
-        viewModel.saveProfile()
+        viewModel.save()
 
         val updateErrorMessage = LiveDataTestUtil.getValue(viewModel.updateErrorMessage)
         assertNotNull(updateErrorMessage)

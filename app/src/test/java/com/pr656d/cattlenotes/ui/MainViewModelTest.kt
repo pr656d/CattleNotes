@@ -20,12 +20,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import com.pr656d.androidtest.util.LiveDataTestUtil
-import com.pr656d.cattlenotes.test.util.SyncTaskExecutorRule
-import com.pr656d.cattlenotes.test.util.fakes.FakeObserveUserAuthStateUseCase
-import com.pr656d.cattlenotes.test.util.fakes.FakeThemedActivityDelegate
+import com.pr656d.cattlenotes.test.fakes.FakeObserveUserAuthStateUseCase
+import com.pr656d.cattlenotes.test.fakes.FakeThemedActivityDelegate
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate
 import com.pr656d.shared.domain.auth.ObserveUserAuthStateUseCase
-import com.pr656d.shared.domain.result.Result
+import com.pr656d.test.MainCoroutineRule
+import com.pr656d.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThat
 import org.junit.Rule
@@ -35,15 +36,16 @@ import org.hamcrest.Matchers.equalTo as isEqualTo
 /**
  * Unit tests for [MainViewModel].
  */
+@ExperimentalCoroutinesApi
 class MainViewModelTest {
 
     // Executes tasks in the Architecture Components in the same thread
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    // Executes tasks in a synchronous [TaskScheduler]
+    // Overrides Dispatchers.Main used in Coroutines
     @get:Rule
-    var syncTaskExecutorRule = SyncTaskExecutorRule()
+    var coroutineRule = MainCoroutineRule()
 
     private fun createMainViewModel(
         themedActivityDelegate: ThemedActivityDelegate = FakeThemedActivityDelegate(),
@@ -53,12 +55,13 @@ class MainViewModelTest {
     }
 
     @Test
-    fun userNotSignedIn_redirectToLoginActivity() {
+    fun userNotSignedIn_redirectToLoginActivity() = coroutineRule.runBlockingTest {
         // Given that is not signed in.
         val viewModel = createMainViewModel(
             observeUserAuthStateUseCase = FakeObserveUserAuthStateUseCase(
-                Result.Success(mock { on { isSignedIn() }.doReturn(false) }),
-                Result.Success(mock {})
+                mock { on { isSignedIn() }.doReturn(false) },
+                mock {},
+                coroutineRule.testDispatcher
             )
         )
 
@@ -67,12 +70,13 @@ class MainViewModelTest {
     }
 
     @Test
-    fun firebaseUserIsSignedIn_stayOnMainActivity() {
+    fun firebaseUserIsSignedIn_stayOnMainActivity() = coroutineRule.runBlockingTest {
         // Given that firebase user is signed in.
         val viewModel = createMainViewModel(
             observeUserAuthStateUseCase = FakeObserveUserAuthStateUseCase(
-                Result.Success(mock { on { isSignedIn() }.doReturn(true) }),
-                Result.Success(mock {})
+                mock { on { isSignedIn() }.doReturn(true) },
+                mock {},
+                coroutineRule.testDispatcher
             )
         )
 

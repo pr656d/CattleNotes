@@ -16,15 +16,22 @@
 
 package com.pr656d.shared.domain.breeding.detail
 
-import androidx.lifecycle.LiveData
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.data.breeding.BreedingRepository
+import com.pr656d.shared.di.IoDispatcher
+import com.pr656d.shared.domain.FlowUseCase
+import com.pr656d.shared.domain.result.Result
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetBreedingWithCattleByIdUseCase @Inject constructor(
-    private val breedingRepository: BreedingRepository
-) {
-    operator fun invoke(breedingId: String): LiveData<BreedingWithCattle?> {
-        return breedingRepository.getBreedingWithCattle(breedingId)
-    }
+    private val breedingRepository: BreedingRepository,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : FlowUseCase<String, BreedingWithCattle?>(ioDispatcher) {
+
+    override fun execute(parameters: String): Flow<Result<BreedingWithCattle?>> =
+        breedingRepository.getBreedingWithCattle(parameters).map { Result.Success(it) }
+
 }
