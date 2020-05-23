@@ -1,4 +1,4 @@
-# Cattle Notes
+# Cattle Notes  [![Build Status](https://travis-ci.com/pr656d/CattleNOTES.svg?token=XKzGx5G9zSSfxy3fjRts&branch=master)](https://travis-ci.com/pr656d/CattleNOTES)
 Provides an all-in-one-place for efficient monitoring of a cattle farm, and assists farmers to easily
 track the breeding activities of their cattle. The app auto-records as well as allows the user to
 manually add the milk details.
