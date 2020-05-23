@@ -63,12 +63,10 @@ android {
         }
     }
 
-    // debug and release variants share the same source dir
     sourceSets {
-        debug.java.srcDir 'src/debugRelease/java'
-        release.java.srcDir 'src/debugRelease/java'
+        debug.java.srcDir 'src/debug/java'
+        release.java.srcDir 'src/release/java'
     }
-
 
     testBuildType "staging"
 
