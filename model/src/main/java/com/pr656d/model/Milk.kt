@@ -110,11 +110,6 @@ data class Milk(
                 field
             else
                 throw IllegalArgumentException("Milk id is blank")
-        set(value) =
-            if (value.isNotBlank())
-                field = value
-            else
-                throw IllegalArgumentException("Milk id is blank")
 
     sealed class MilkOf(val displayName: String) {
         companion object {

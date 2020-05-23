@@ -82,17 +82,13 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
      * This function reads all SMS of [Milk.Source.Sms] and parses each message into [Milk] and
      * @return list of Milk.
      */
-    @ExperimentalStdlibApi
     override suspend fun getAllMilk(smsSource: Milk.Source.Sms): List<Milk> = coroutineScope {
         createSmsCursor(smsSource)
-            ?.use { cursor ->
-                buildList {
-                    while (cursor.moveToNext()) {
-                        add(async {
-                            getMilk(smsSource, cursor.getString(cursor.getColumnIndex(BODY)))
-                        })
-                    }
-                }.awaitAll()
+            ?.use {
+                generateSequence { if (it.moveToNext()) it else null }
+                    .map { async { getMilk(smsSource, it.getString(it.getColumnIndex(BODY))) } }
+                    .toList()
+                    .awaitAll()
             } ?: emptyList()
     }
 
