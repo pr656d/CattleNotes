@@ -196,4 +196,4 @@ fabric.properties
 !/gradle/wrapper/gradle-wrapper.jar
 
 # google services config files #
-/app/google-services.json
+*google-services.json
