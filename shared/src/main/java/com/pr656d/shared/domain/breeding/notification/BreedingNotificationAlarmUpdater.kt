@@ -22,14 +22,11 @@ import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.di.IoDispatcher
 import com.pr656d.shared.notifications.BreedingAlarmManager
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.threeten.bp.LocalTime
 import timber.log.Timber
 import javax.inject.Inject
@@ -73,6 +70,7 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
         }
     }
 
+    @ExperimentalStdlibApi
     override fun updateAll(userId: String) {
         alarmUpdaterScope.launch {
             // Go through every breeding and make sure alarm is set for the notification.
@@ -100,22 +98,27 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
         }
     }
 
-    private suspend fun processBreedings(userId: String, breedingList: List<Breeding>) {
-        Timber.d("Setting all the alarms of breeding for user : $userId")
+    @ExperimentalStdlibApi
+    private suspend fun processBreedings(userId: String, breedingList: List<Breeding>) =
+        coroutineScope {
+            Timber.d("Setting all the alarms of breeding for user : $userId")
 
-        val timeTaken = measureTimeMillis {
-            breedingList.forEach { breeding ->
-                breedingAlarmManager.setAlarmForBreeding(breeding)
+            val timeTaken = measureTimeMillis {
+                buildList {
+                    breedingList.forEach { breeding ->
+                        add(async { breedingAlarmManager.setAlarmForBreeding(breeding) })
+                    }
+                }.awaitAll()
             }
-        }
 
-        Timber.d("Work finished of setting all the alarms of breeding in $timeTaken ms")
-    }
+            Timber.d("Work finished of setting all the ${breedingList.size} alarms of breeding in $timeTaken ms")
+        }
 
     private fun clear() {
         lastPreferredTimeForBreedingReminder = null
     }
 
+    @ExperimentalStdlibApi
     override suspend fun cancelAll() {
         Timber.d("Cancelling all the breeding alarm")
         val list = breedingRepository.getAllBreeding().firstOrNull() ?: return
@@ -125,6 +128,7 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
         clear()
     }
 
+    @ExperimentalStdlibApi
     override suspend fun cancelByCattleId(cattleId: String) {
         Timber.d("Cancelling all the breeding alarm for cattle : $cattleId")
 
@@ -139,9 +143,18 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
         breedingAlarmManager.cancelAlarmForBreeding(breedingId)
     }
 
-    private fun cancelAllBreeding(breedingList: List<Breeding>) {
-        breedingList.forEach { breeding ->
-            breedingAlarmManager.cancelAlarmForBreeding(breeding.id)
+    @ExperimentalStdlibApi
+    private suspend fun cancelAllBreeding(breedingList: List<Breeding>) = coroutineScope {
+        Timber.d("Cancelling all the alarms of breeding")
+
+        val timeTaken = measureTimeMillis {
+            buildList {
+                breedingList.forEach { breeding ->
+                    add(async { breedingAlarmManager.setAlarmForBreeding(breeding) })
+                }
+            }.awaitAll()
         }
+
+        Timber.d("Work finished of cancelling all the ${breedingList.size} alarms of breeding in $timeTaken ms")
     }
 }
