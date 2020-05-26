@@ -26,7 +26,7 @@ import com.pr656d.shared.domain.result.successOr
 import com.pr656d.shared.domain.result.updateOnSuccess
 import com.pr656d.shared.domain.settings.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalTime
@@ -39,7 +39,7 @@ class SettingsViewModel @Inject constructor(
     getAutomaticMilkingCollectionUseCase: GetAutomaticMilkingCollectionUseCase,
     private val setAutomaticMilkingCollectionUseCase: SetAutomaticMilkingCollectionUseCase,
     private val observePreferredTimeOfBreedingReminderUseCase: ObservePreferredTimeOfBreedingReminderUseCase,
-    private val getPreferredMilkSmsSourceUseCase: GetPreferredMilkSmsSourceUseCase,
+    getPreferredMilkSmsSourceUseCase: GetPreferredMilkSmsSourceUseCase,
     private val setPreferredTimeOfBreedingReminderUseCase: SetPreferredTimeOfBreedingReminderUseCase
 ) : ViewModel() {
 
@@ -72,17 +72,17 @@ class SettingsViewModel @Inject constructor(
         get() = _navigateToOpenSourceLicenses
 
     @ExperimentalCoroutinesApi
-    val preferredTimeOfBreedingReminder: LiveData<LocalTime>
-        get() = liveData {
-            observePreferredTimeOfBreedingReminderUseCase(Unit)
-                .map { it.successOr(null) }
-                .collect { it?.let { emit(it) } }
-        }
+    val preferredTimeOfBreedingReminder: LiveData<LocalTime> =
+        observePreferredTimeOfBreedingReminderUseCase(Unit)
+            .map { it.successOr(null) }
+            .filterNotNull()
+            .asLiveData()
 
-    val milkSmsSender: LiveData<Int?>
-        get() = liveData {
-            emit(getPreferredMilkSmsSourceUseCase().successOr(null)?.getStringId())
-        }
+    val milkSmsSender: LiveData<Int?> = liveData {
+        getPreferredMilkSmsSourceUseCase().successOr(null)
+            ?.getStringId()
+            .let { emit(it) }
+    }
 
     private val _navigateToSmsSourceSelector = MutableLiveData<Event<Unit>>()
     val navigateToSmsSourceSelector: LiveData<Event<Unit>>

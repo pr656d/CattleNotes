@@ -153,6 +153,8 @@ class MilkingViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            _loading.postValue(true)
+
             // Sms sender available.
             loadAllNewMilkFromSmsUseCase(_smsSource.value!!).let { result ->
                 (result as? Result.Success)?.data?.let {
@@ -162,6 +164,8 @@ class MilkingViewModel @Inject constructor(
                 (result as? Result.Error)?.exception?.let {
                     _showMessage.postValue(Event(R.string.error_unknown))
                 }
+
+                _loading.postValue(false)
             }
         }
     }

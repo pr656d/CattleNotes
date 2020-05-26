@@ -25,8 +25,9 @@ import com.pr656d.shared.sms.parser.BGAMAMCSSmsParser
 import com.pr656d.shared.utils.FirestoreUtil
 import com.pr656d.shared.utils.getDisplayMessageBodyOrThrow
 import com.pr656d.shared.utils.getSmsSourceOrThrow
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.produce
+import kotlinx.coroutines.channels.toList
 import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
@@ -82,13 +83,16 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
      * This function reads all SMS of [Milk.Source.Sms] and parses each message into [Milk] and
      * @return list of Milk.
      */
+    @ExperimentalCoroutinesApi
     override suspend fun getAllMilk(smsSource: Milk.Source.Sms): List<Milk> = coroutineScope {
         createSmsCursor(smsSource)
             ?.use {
-                generateSequence { if (it.moveToNext()) it else null }
-                    .map { async { getMilk(smsSource, it.getString(it.getColumnIndex(BODY))) } }
-                    .toList()
-                    .awaitAll()
+                produce {
+                    while (it.moveToNext()) {
+                        val milk = getMilk(smsSource, it.getString(it.getColumnIndex(BODY)))
+                        send(milk)
+                    }
+                }.toList()
             } ?: emptyList()
     }
 

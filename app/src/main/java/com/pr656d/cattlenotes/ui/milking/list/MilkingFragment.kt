@@ -30,6 +30,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.databinding.FragmentMilkingBinding
 import com.pr656d.cattlenotes.ui.NavigationFragment
@@ -37,6 +38,7 @@ import com.pr656d.cattlenotes.ui.milking.add.AddMilkDialogFragment
 import com.pr656d.cattlenotes.ui.milking.sms.SelectMilkSmsSenderDialogFragment
 import com.pr656d.cattlenotes.utils.isPermissionGranted
 import com.pr656d.shared.domain.result.EventObserver
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 class MilkingFragment : NavigationFragment() {
@@ -81,6 +83,7 @@ class MilkingFragment : NavigationFragment() {
         return binding.root
     }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -150,6 +153,10 @@ class MilkingFragment : NavigationFragment() {
 
         model.smsSource.observe(viewLifecycleOwner, Observer {
             // Just observe so that value can be updated.
+        })
+
+        model.showMessage.observe(viewLifecycleOwner, EventObserver {
+            Snackbar.make(requireView(), it, Snackbar.LENGTH_SHORT).show()
         })
     }
 

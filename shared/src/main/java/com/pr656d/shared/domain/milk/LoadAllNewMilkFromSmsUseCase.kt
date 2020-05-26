@@ -40,11 +40,11 @@ open class LoadAllNewMilkFromSmsUseCase @Inject constructor(
     override suspend fun execute(parameters: Milk.Source.Sms): List<Milk> = coroutineScope {
         performanceHelper.startTrace(TRACE_KEY_LOAD_ALL_NEW_MILK_FROM_SMS)
 
+        val smsMilkList = async { milkRepository.getAllMilkFromSms(parameters) }
+
         val dbMilkList = async {
             milkRepository.getAllMilk().firstOrNull() ?: emptyList()
         }
-
-        val smsMilkList = async { milkRepository.getAllMilkFromSms(parameters) }
 
         /**  Remove elements exist in db from smsMilkList. */
         val list = smsMilkList.await().minus(dbMilkList.await())

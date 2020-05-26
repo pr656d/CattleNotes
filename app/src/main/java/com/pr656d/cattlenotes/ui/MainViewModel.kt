@@ -18,13 +18,13 @@ package com.pr656d.cattlenotes.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.asLiveData
 import com.pr656d.cattlenotes.ui.settings.theme.ThemedActivityDelegate
 import com.pr656d.shared.domain.auth.ObserveUserAuthStateUseCase
 import com.pr656d.shared.domain.result.Event
 import com.pr656d.shared.domain.result.successOr
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -35,11 +35,14 @@ class MainViewModel @Inject constructor(
     ThemedActivityDelegate by themedActivityDelegate {
 
     @ExperimentalCoroutinesApi
-    val redirectToLoginScreen: LiveData<Event<Unit>> = liveData {
-        observeAuthStateUseCase(Any()).map { result ->
-            result.successOr(null)?.isSignedIn() == true
-        }.collect { isSignedIn ->
-            if (!isSignedIn) emit(Event(Unit))
+    val redirectToLoginScreen: LiveData<Event<Unit>> = observeAuthStateUseCase(Any())
+        .map { result ->
+            val isSignedIn = result.successOr(null)?.isSignedIn() == true
+            if (!isSignedIn)
+                Event(Unit)
+            else
+                null
         }
-    }
+        .filterNotNull()
+        .asLiveData()
 }

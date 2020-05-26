@@ -27,10 +27,10 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import timber.log.Timber
 import javax.inject.Inject
 
-@FlowPreview
 @ExperimentalCoroutinesApi
 class ObserveFirestoreUserInfoDataSourceImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
@@ -42,6 +42,7 @@ class ObserveFirestoreUserInfoDataSourceImpl @Inject constructor(
 
     private var userInfoChangedListenerSubscription: ListenerRegistration? = null
 
+    @FlowPreview
     override fun getFirebaseUserInfo(): Flow<FirestoreUserInfo?> {
         // Remove previous subscriptions, if exists.
         userInfoChangedListenerSubscription?.remove()
@@ -57,8 +58,6 @@ class ObserveFirestoreUserInfoDataSourceImpl @Inject constructor(
                     if (snapshot == null || !snapshot.exists()) {
                         // When the account signs in for the first time the document doesn't exist.
                         Timber.d("Document for snapshot $userId doesn't exist")
-                        if (!channel.isClosedForSend)
-                            channel.offer(null)
                     }
 
                     snapshot?.let {
@@ -78,7 +77,7 @@ class ObserveFirestoreUserInfoDataSourceImpl @Inject constructor(
                 .addSnapshotListener(userInfoChangedListener)
         }
 
-        return channel.asFlow()
+        return channel.asFlow().distinctUntilChanged()
     }
 
     private fun removeUser() {

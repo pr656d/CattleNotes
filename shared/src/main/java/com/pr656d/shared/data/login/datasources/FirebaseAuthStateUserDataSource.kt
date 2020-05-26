@@ -29,6 +29,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -103,7 +104,7 @@ class FirebaseAuthStateUserDataSource @Inject constructor(
             firebaseAuth.addAuthStateListener(authStateListener)
             isListening = true
         }
-        return channel.asFlow()
+        return channel.asFlow().distinctUntilChanged()
     }
 
     private fun unregisterListener() {

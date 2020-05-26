@@ -120,7 +120,7 @@ class SmsBroadcastReceiver : DaggerBroadcastReceiver() {
 
                 // Check if milk sms source matches preferred milk sms source.
                 if (smsSource != preferredMilkSmsSource) {
-                    Timber.d("Found milk source $smsSource but preferred milk source is $preferredMilkSmsSource.")
+                    Timber.d("Found milk source ${smsSource.ORIGINATING_ADDRESS} but preferred milk source is $preferredMilkSmsSource.")
                     continue
                 }
 
