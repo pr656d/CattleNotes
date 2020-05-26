@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.milking.list.MilkingViewModel
+import com.pr656d.cattlenotes.utils.getStringId
 import com.pr656d.cattlenotes.utils.parentViewModelProvider
 import com.pr656d.model.Milk
 import dagger.android.support.DaggerAppCompatDialogFragment
@@ -40,6 +41,8 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
 
     private lateinit var listAdapter: ArrayAdapter<SmsSourceHolder>
 
+    private var selectedSmsSource: Milk.Source.Sms? = null
+
     @ExperimentalCoroutinesApi
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         viewModel = parentViewModelProvider(viewModelFactory)
@@ -49,11 +52,13 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.sms_source_title)
-            .setSingleChoiceItems(listAdapter, -1) { dialog, position ->
+            .setPositiveButton(R.string.ok, null)   // We will handle it later
+            .setNegativeButton(R.string.cancel, null) // We will handle it later
+            .setNeutralButton(R.string.reset, null)   // We will handle it later
+            .setSingleChoiceItems(listAdapter, -1) { _, position ->
                 listAdapter.getItem(position)?.smsSource?.let {
-                    viewModel.setSmsSource(it)
+                    selectedSmsSource = it
                 }
-                dialog.dismiss()
             }
             .create()
     }
@@ -78,6 +83,33 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
         })
 
         viewModel.smsSource.observe(this, Observer(::updateSelectedItem))
+
+        val alertDialog = (requireDialog() as AlertDialog)
+
+        alertDialog.setOnShowListener {
+            /** Handle button click to disable auto dismiss.*/
+            alertDialog
+                .getButton(AlertDialog.BUTTON_POSITIVE)
+                .setOnClickListener {
+                    viewModel.setSmsSource(selectedSmsSource)
+                    dismiss()
+                }
+
+            /** Handle button click to disable auto dismiss.*/
+            alertDialog
+                .getButton(AlertDialog.BUTTON_NEGATIVE)
+                .setOnClickListener {
+                    dismiss()
+                }
+
+            /** Handle button click to disable auto dismiss. */
+            alertDialog
+                .getButton(AlertDialog.BUTTON_NEUTRAL)
+                .setOnClickListener {
+                    selectedSmsSource = null
+                    updateSelectedItem(null)
+                }
+        }
     }
 
     private fun updateSelectedItem(selected: Milk.Source.Sms?) {
@@ -87,9 +119,8 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
         (dialog as AlertDialog).listView.setItemChecked(selectedPosition, true)
     }
 
-    private fun getTitleForMilkSmsSource(milkSmsSource: Milk.Source.Sms) = when(milkSmsSource) {
-        Milk.Source.Sms.BGAMAMCS -> getString(R.string.bgamamcs)
-    }
+    private fun getTitleForMilkSmsSource(milkSmsSource: Milk.Source.Sms) =
+        getString(milkSmsSource.getStringId())
 
     companion object {
         fun newInstance() =

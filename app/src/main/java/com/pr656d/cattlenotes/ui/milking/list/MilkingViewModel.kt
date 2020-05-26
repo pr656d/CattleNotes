@@ -170,7 +170,7 @@ class MilkingViewModel @Inject constructor(
         }
     }
 
-    fun setSmsSource(smsSource: Milk.Source.Sms) {
+    fun setSmsSource(smsSource: Milk.Source.Sms?) {
         viewModelScope.launch {
             setPreferredMilkSmsSourceUseCase(smsSource)
         }

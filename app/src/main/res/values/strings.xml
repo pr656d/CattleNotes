@@ -28,6 +28,7 @@
     <string name="just_save">Just save</string>
     <string name="go_back">Go Back</string>
     <string name="retry">Retry</string>
+    <string name="reset">Reset</string>
     <string name="edit">Edit</string>
     <string name="more">More</string>
     <string name="remove_text">Remove %1$s?</string>

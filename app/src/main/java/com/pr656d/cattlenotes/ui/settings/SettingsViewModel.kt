@@ -38,7 +38,7 @@ class SettingsViewModel @Inject constructor(
     getAvailableThemesUseCase: GetAvailableThemesUseCase,
     getAutomaticMilkingCollectionUseCase: GetAutomaticMilkingCollectionUseCase,
     private val setAutomaticMilkingCollectionUseCase: SetAutomaticMilkingCollectionUseCase,
-    private val observePreferredTimeOfBreedingReminderUseCase: ObservePreferredTimeOfBreedingReminderUseCase,
+    observePreferredTimeOfBreedingReminderUseCase: ObservePreferredTimeOfBreedingReminderUseCase,
     getPreferredMilkSmsSourceUseCase: GetPreferredMilkSmsSourceUseCase,
     private val setPreferredTimeOfBreedingReminderUseCase: SetPreferredTimeOfBreedingReminderUseCase
 ) : ViewModel() {
