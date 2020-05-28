@@ -36,10 +36,10 @@ class SettingsViewModel @Inject constructor(
     getThemeUseCase: GetThemeUseCase,
     private val setThemeUseCase: SetThemeUseCase,
     getAvailableThemesUseCase: GetAvailableThemesUseCase,
-    getAutomaticMilkingCollectionUseCase: GetAutomaticMilkingCollectionUseCase,
+    private val getAutomaticMilkingCollectionUseCase: GetAutomaticMilkingCollectionUseCase,
     private val setAutomaticMilkingCollectionUseCase: SetAutomaticMilkingCollectionUseCase,
     observePreferredTimeOfBreedingReminderUseCase: ObservePreferredTimeOfBreedingReminderUseCase,
-    getPreferredMilkSmsSourceUseCase: GetPreferredMilkSmsSourceUseCase,
+    private val getPreferredMilkSmsSourceUseCase: GetPreferredMilkSmsSourceUseCase,
     private val setPreferredTimeOfBreedingReminderUseCase: SetPreferredTimeOfBreedingReminderUseCase
 ) : ViewModel() {
 
@@ -78,11 +78,7 @@ class SettingsViewModel @Inject constructor(
             .filterNotNull()
             .asLiveData()
 
-    val milkSmsSender: LiveData<Int?> = liveData {
-        getPreferredMilkSmsSourceUseCase().successOr(null)
-            ?.getStringId()
-            .let { emit(it) }
-    }
+    val milkSmsSender = MutableLiveData<Int?>()
 
     private val _navigateToSmsSourceSelector = MutableLiveData<Event<Unit>>()
     val navigateToSmsSourceSelector: LiveData<Event<Unit>>
@@ -91,6 +87,16 @@ class SettingsViewModel @Inject constructor(
     val automaticMilkingCollection = MutableLiveData<Boolean>()
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            getPreferredMilkSmsSourceUseCase().successOr(null).let {
+                milkSmsSender.postValue(it?.getStringId())
+            }
+        }
+
         viewModelScope.launch {
             getAutomaticMilkingCollectionUseCase().successOr(null).let {
                 automaticMilkingCollection.postValue(it ?: true)

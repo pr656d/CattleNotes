@@ -24,6 +24,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -73,6 +74,16 @@ class SettingsFragment : NavigationFragment() {
 
         model.navigateToSmsSourceSelector.observe(viewLifecycleOwner, EventObserver {
             SelectMilkSmsSenderDialogFragment.newInstance()
+                .apply {
+                    viewLifecycleOwnerLiveData.observe(
+                        this@SettingsFragment.viewLifecycleOwner,
+                        Observer {
+                            // It will be null when onDestroyView will be called.
+                            if (it == null) {
+                                model.refresh()
+                            }
+                        })
+                }
                 .show(childFragmentManager, null)
         })
 
