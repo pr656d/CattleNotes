@@ -28,7 +28,7 @@ buildscript {
         buildToolsVersion = '29.0.2'
 
         // App dependencies
-        androidGradlePluginVersion = '3.6.3'
+        androidGradlePluginVersion = '4.0.0'
         appcompatVersion = '1.1.0'
         activityVersion = '1.1.0'
         archTestingVersion = '2.0.0'
