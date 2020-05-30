@@ -69,9 +69,12 @@ fun Cattle.nameOrTagNumber(): String = if (!this.name.isNullOrBlank()) name!! el
  * Returns [Milk.Source.Sms] on bases of [SmsMessage.getOriginatingAddress].
  */
 @Throws(NotAMilkSmsException::class)
-fun SmsMessage.getSmsSourceOrThrow() = Milk.Source.Sms.INSTANCES.values.find {
-    it.ORIGINATING_ADDRESS == originatingAddress
-} ?: throw NotAMilkSmsException(this)
+fun SmsMessage.getSmsSourceOrThrow() = originatingAddress.getSmsSource()
+
+@Throws(NotAMilkSmsException::class)
+fun String?.getSmsSource() = Milk.Source.Sms.INSTANCES.values.find {
+    it.ORIGINATING_ADDRESS == this
+} ?: throw NotAMilkSmsException()
 
 @Throws(Exception::class)
 fun SmsMessage.getDisplayMessageBodyOrThrow(): String =

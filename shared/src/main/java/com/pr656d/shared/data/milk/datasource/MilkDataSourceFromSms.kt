@@ -63,10 +63,7 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
         val milkSmsSender = smsMessage.getSmsSourceOrThrow()
         val messageBody = smsMessage.getDisplayMessageBodyOrThrow()
 
-        return getMilk(milkSmsSender, messageBody).apply {
-            // This milk is new, Assign new id.
-            id = FirestoreUtil.autoId()
-        }
+        return getMilk(milkSmsSender, messageBody)
     }
 
     /**
@@ -76,6 +73,9 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
         /**  Add new branch for new parser.  */
         return when(smsSource) {
             Milk.Source.Sms.BGAMAMCS -> BGAMAMCSSmsParser.getMilk(messageBody)
+        }.apply {
+            // This milk is new, Assign new id.
+            id = FirestoreUtil.autoId()
         }
     }
 

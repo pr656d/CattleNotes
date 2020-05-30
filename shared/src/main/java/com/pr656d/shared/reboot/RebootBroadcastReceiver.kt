@@ -18,8 +18,10 @@ package com.pr656d.shared.reboot
 
 import android.content.Context
 import android.content.Intent
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
-import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
+import com.pr656d.shared.data.work.breeding.BreedingNotificationAlarmUpdaterWorker
 import dagger.android.DaggerBroadcastReceiver
 import timber.log.Timber
 import javax.inject.Inject
@@ -29,8 +31,6 @@ import javax.inject.Inject
  */
 class RebootBroadcastReceiver : DaggerBroadcastReceiver() {
 
-    @Inject lateinit var breedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater
-
     @Inject lateinit var authIdDataSource: AuthIdDataSource
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -38,14 +38,18 @@ class RebootBroadcastReceiver : DaggerBroadcastReceiver() {
 
         Timber.d("Received reboot broadcast")
 
-        val userId = authIdDataSource.getUserId() ?: let {
+        authIdDataSource.getUserId() ?: let {
             Timber.w("User id not found")
             return
         }
 
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
-            Timber.d("Resetting all the breeding alarm")
-            breedingNotificationAlarmUpdater.updateAll(userId)
+            val workRequest = OneTimeWorkRequestBuilder<BreedingNotificationAlarmUpdaterWorker>()
+                .build()
+
+            WorkManager.getInstance(context).enqueue(workRequest)
+
+            Timber.d("Worker scheduled to update all notifications")
         }
     }
 }

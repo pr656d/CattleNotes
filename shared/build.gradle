@@ -61,6 +61,11 @@ dependencies {
     implementation "androidx.room:room-runtime:$rootProject.roomVersion"
     implementation "androidx.room:room-ktx:$rootProject.roomVersion"
     kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+    api("androidx.work:work-runtime-ktx:$workVersion") {
+        // WorkManager uses its own version of listenablefuture extracted from guava.
+        // This is required to avoid conflicts.
+        exclude group: 'com.google.guava', module: 'listenablefuture'
+    }
 
     // JetPack
     implementation "androidx.core:core-ktx:$rootProject.corektxVersion"

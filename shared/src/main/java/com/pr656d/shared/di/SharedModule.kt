@@ -17,6 +17,7 @@
 package com.pr656d.shared.di
 
 import android.content.Context
+import androidx.work.Configuration
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.pr656d.shared.data.breeding.BreedingRepository
@@ -30,6 +31,7 @@ import com.pr656d.shared.data.milk.datasource.MilkDataSource
 import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSms
 import com.pr656d.shared.data.milk.datasource.MilkDataSourceFromSmsImpl
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
+import com.pr656d.shared.data.work.CattleNotesWorkerFactory
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdater
 import com.pr656d.shared.domain.breeding.notification.BreedingNotificationAlarmUpdaterImp
 import com.pr656d.shared.notifications.BreedingAlarmManager
@@ -100,4 +102,14 @@ class SharedModule {
     fun provideMilkDataSourceFromSms(
         context: Context
     ) : MilkDataSourceFromSms = MilkDataSourceFromSmsImpl(context)
+
+    @Singleton
+    @Provides
+    fun provideWorkManagerConfiguration(
+        cattleNotesWorkerFactory: CattleNotesWorkerFactory
+    ): Configuration {
+        return Configuration.Builder()
+            .setWorkerFactory(cattleNotesWorkerFactory)
+            .build()
+    }
 }

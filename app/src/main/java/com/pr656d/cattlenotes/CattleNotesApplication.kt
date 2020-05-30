@@ -17,6 +17,7 @@
 package com.pr656d.cattlenotes
 
 import android.os.StrictMode
+import androidx.work.Configuration
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.pr656d.cattlenotes.di.DaggerAppComponent
 import com.pr656d.cattlenotes.utils.CrashlyticsTree
@@ -29,9 +30,15 @@ import javax.inject.Inject
 /**
  * Initialization of libraries.
  */
-class CattleNotesApplication : DaggerApplication() {
+class CattleNotesApplication : DaggerApplication(), Configuration.Provider {
     // Needs to be initialized at application startup.
     @Inject lateinit var analyticsHelper: AnalyticsHelper
+
+    @Inject lateinit var workConfiguration: Configuration
+
+    override fun getWorkManagerConfiguration(): Configuration {
+        return workConfiguration
+    }
 
     override fun onCreate() {
         // ThreeTenBP for times and dates, called before super to be available for objects
