@@ -65,6 +65,11 @@
 
                 <include
                     layout="@layout/layout_item_milk_content"
+                    bind:title="@{@string/milk_of}"
+                    bind:value="@{String.valueOf(data.milkOf.displayName)}" />
+
+                <include
+                    layout="@layout/layout_item_milk_content"
                     bind:title="@{@string/amount}"
                     bind:unit="@{@string/rupee}"
                     bind:value="@{String.valueOf(data.amount)}" />
