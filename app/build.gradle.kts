@@ -172,7 +172,7 @@ dependencies {
     // Local Unit tests
     testImplementation(Library.junit)
     testImplementation(Library.coroutinesTest)
-    testImplementation(Library.coroutinesTest)
+    testImplementation(Library.mockitoKotlin)
     testImplementation(Library.mockitoCore)
     testImplementation(Library.hamcrest)
     kaptTest(Library.daggerCompiler)
