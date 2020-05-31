@@ -14,27 +14,30 @@
  * limitations under the License.
  */
 
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+plugins {
+    id(BuildPlugins.javaLibraryPlugin)
+    id(BuildPlugins.kotlinPlugin)
+}
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+
+    // Kotlin
+    implementation(Library.kotlinStdlibJdk7)
 
     // ThreeTenBP for the shared module only. Date and time API for Java.
-    api "org.threeten:threetenbp:$rootProject.threetenbpVersion:no-tzdb"
+    api(Library.threeTenBpNoTzdb)
 
     // JetPack
-    implementation "androidx.core:core-ktx:$rootProject.corektxVersion"
+    implementation(Library.androidxCoreKtx)
 
     // Room
-    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
-    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+    implementation(Library.roomRuntime)
+    implementation(Library.roomKtx)
 
     // Firebase
-    implementation "com.google.firebase:firebase-firestore-ktx:$firebaseFirestoreVersion"
+    implementation(Library.firebaseFirestoreKtx)
 
     // Json Parser
-    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
-
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlinVersion"
+    implementation(Library.gson)
 }

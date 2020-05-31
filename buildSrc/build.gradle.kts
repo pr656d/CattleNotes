@@ -14,19 +14,14 @@
  * limitations under the License.
  */
 
-apply plugin: 'java-library'
-apply plugin: 'kotlin'
+repositories {
+    jcenter()
+}
 
-dependencies {
-    implementation project(":model")
+plugins {
+    `kotlin-dsl`
+}
 
-    // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-
-    // ThreeTenBP for the shared module only. Date and time API for Java.
-    testImplementation "org.threeten:threetenbp:$rootProject.threetenbpVersion"
-    compileOnly "org.threeten:threetenbp:$rootProject.threetenbpVersion:no-tzdb"
-
-    implementation "junit:junit:$rootProject.junitVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$rootProject.coroutinesVersion"
+kotlinDslPluginOptions {
+    // experimentalWarning.set(false)
 }

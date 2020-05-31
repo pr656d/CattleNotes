@@ -14,9 +14,21 @@
  * limitations under the License.
  */
 
-include ':app'
-rootProject.name='Cattle NOTES'
-include ':shared'
-include ':model'
-include ':test-shared'
-include ':androidTest-shared'
+plugins {
+    id(BuildPlugins.javaLibraryPlugin)
+    id(BuildPlugins.kotlinPlugin)
+}
+
+dependencies {
+    implementation(project(":model"))
+
+    // Kotlin
+    implementation(Library.kotlinStdlibJdk7)
+
+    // ThreeTenBP for the shared module only. Date and time API for Java.
+    testImplementation(Library.threeTenBp)
+    compileOnly(Library.threeTenBpNoTzdb)
+
+    implementation(Library.junit)
+    implementation(Library.coroutinesTest)
+}
