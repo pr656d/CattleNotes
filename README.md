@@ -11,18 +11,45 @@ manually add the milk details.
 1. **Cattle**
     - Store cattle information like tag number, name, breed, type, group, date of birth, etc.
 
+    <div style="padding : 20px">
+    <img align="center" src="screenshots/cattle.png" alt="Cattle Screen" width="255" height="520">
+    <img align="center" src="screenshots/cattleAdd.png" alt="Add cattle" width="255" height="520">
+    <img align="center" src="screenshots/cattleDetail.png" alt="Cattle Detail" width="255" height="520">
+    </div>
+
 2. **Breeding**
     - Store breeding information for each and every cattle.
     - Get breeding reminders on desired time of the breeding day.
 
-3. **Milking**
+    <div style="padding : 20px">
+    <img align="center" src="screenshots/breedingAdd.png" alt="Breeding Screen" width="255" height="520">
+    <img align="center" src="screenshots/breedingAdd2.png" alt="Add breeding expanded" width="255" height="520">
+    <img align="center" src="screenshots/breedingHistory.png" alt="Breeding History" width="255" height="520">
+    </div>
+
+3. **Timeline**
+    - Shows next breeding events.
+    
+    <div style="padding : 20px">
+    <img align="center" src="screenshots/timeline.png" alt="Timeline Screen" width="255" height="520">
+    </div>
+
+4. **Milking**
     - **Automatic Milk Collection**
         - Saves milk information whenever SMS is received.
         - **Supported milk SMS senders**
             - BGAMAMCS (Amul)
-    
+
+        <div style="padding : 20px">
+        <img align="center" src="screenshots/milking.png" alt="Timeline Screen" width="255" height="520">
+        </div>
+
     - **Manual**
         - Add and delete milk information manually.
+
+        <div style="padding : 20px">
+        <img align="center" src="screenshots/milkingAddManual.png" alt="Timeline Screen" width="255" height="520">
+        </div>
 
 4. **User profile**
 
