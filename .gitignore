@@ -197,3 +197,5 @@ fabric.properties
 
 # google services config files #
 *google-services.json
+# Staging contains dummy config file. It's fine to commit.
+!/app/staging/google-services.json
