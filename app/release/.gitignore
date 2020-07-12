@@ -1,0 +1,6 @@
+# Ignore Google services config
+google-services.json
+
+# Ignore generated apk
+app-release.apk
+output.json
