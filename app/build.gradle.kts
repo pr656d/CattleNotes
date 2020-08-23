@@ -42,6 +42,18 @@ android {
     }
 
     buildTypes {
+        maybeCreate("staging")
+        getByName("staging") {
+            initWith(getByName("debug"))
+            versionNameSuffix = "-staging"
+
+            // Specifies a sorted list of fallback build types that the
+            // plugin should try to use when a dependency does not include a
+            // "staging" build type.
+            // Used with :test-shared, which doesn't have a staging variant.
+            matchingFallbacks = listOf("debug")
+        }
+
         getByName("debug") {
             versionNameSuffix = "-debug"
             manifestPlaceholders = mapOf("crashlyticsEnabled" to false)
@@ -64,23 +76,12 @@ android {
                 "proguard-rules.pro"
             )
         }
-
-        create("staging") {
-            initWith(getByName("debug"))
-            versionNameSuffix = "-staging"
-
-            // Specifies a sorted list of fallback build types that the
-            // plugin should try to use when a dependency does not include a
-            // "staging" build type.
-            // Used with :test-shared, which doesn't have a staging variant.
-            matchingFallbacks = listOf("debug")
-        }
     }
 
     sourceSets {
+        getByName("staging").java.srcDir("src/staging/java")
         getByName("debug").java.srcDir("src/debug/java")
         getByName("release").java.srcDir("src/release/java")
-        getByName("staging").java.srcDir("src/staging/java")
     }
 
     testBuildType = "staging"

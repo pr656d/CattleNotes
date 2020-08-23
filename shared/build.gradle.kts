@@ -36,6 +36,18 @@ android {
     }
 
     buildTypes {
+        maybeCreate("staging")
+        getByName("staging") {
+            initWith(getByName("debug"))
+            versionNameSuffix = "-staging"
+
+            // Specifies a sorted list of fallback build types that the
+            // plugin should try to use when a dependency does not include a
+            // "staging" build type.
+            // Used with :test-shared, which doesn't have a staging variant.
+            matchingFallbacks = listOf("debug")
+        }
+
         getByName("debug") {
 
         }
@@ -48,6 +60,14 @@ android {
             )
         }
     }
+
+    sourceSets {
+        getByName("staging").java.srcDir("src/staging/java")
+        getByName("debug").java.srcDir("src/debug/java")
+        getByName("release").java.srcDir("src/release/java")
+    }
+
+    testBuildType = "staging"
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
