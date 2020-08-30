@@ -1,6 +1,6 @@
 # Cattle Notes
 
-[![Build Status](https://travis-ci.com/pr656d/CattleNOTES.svg?token=XKzGx5G9zSSfxy3fjRts&branch=master)](https://travis-ci.com/pr656d/CattleNOTES)
+[![Travis](https://travis-ci.com/pr656d/CattleNOTES.svg?token=XKzGx5G9zSSfxy3fjRts&branch=master)](https://travis-ci.com/pr656d/CattleNOTES) [![Github Actions Unit Test](https://github.com/pr656d/CattleNotes/workflows/Android%20Unit%20Test/badge.svg)](https://github.com/pr656d/CattleNotes/actions?query=workflow%3A%22Android+Unit+Test%22) [![Github Actions Validate Gradle Wrapper](https://github.com/pr656d/CattleNotes/workflows/Validate%20Gradle%20Wrapper/badge.svg)](https://github.com/pr656d/CattleNotes/actions?query=workflow%3A%22Validate+Gradle+Wrapper%22)
 
 Provides an all-in-one-place for efficient monitoring of a cattle farm, and assists farmers to easily
 track the breeding activities of their cattle. The app auto-records as well as allows the user to
@@ -92,6 +92,8 @@ manually add the milk details.
 - [Espresso](https://developer.android.com/training/testing/espresso/)
 
 - [Travis](http://travis-ci.com/)
+
+- [Github Actions](https://github.com/features/actions)
 
 # Development Environment
 
