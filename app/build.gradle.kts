@@ -135,9 +135,6 @@ dependencies {
     implementation(Library.threeTenABp)
     testImplementation(Library.threeTenBp)
 
-    // Kotlin
-    implementation(Library.kotlinStdlibJdk7)
-
     // Firebase
     implementation(Library.firebaseAuthUi)
     implementation(Library.firebaseCrashlytics)

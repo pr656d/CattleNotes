@@ -22,9 +22,6 @@ plugins {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
-    // Kotlin
-    implementation(Library.kotlinStdlibJdk7)
-
     // ThreeTenBP for the shared module only. Date and time API for Java.
     api(Library.threeTenBpNoTzdb)
 

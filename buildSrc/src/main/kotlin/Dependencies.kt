@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-const val kotlinVersion = "1.3.72"
+const val kotlinVersion = "1.4.0"
 
 object Module {
     const val app = ":app"
@@ -107,9 +107,6 @@ object Versions {
 }
 
 object Library {
-    // Kotlin
-    const val kotlinStdlibJdk7 = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlinVersion}"
-
     // UI
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appcompatVersion}"
     const val cardView = "androidx.cardview:cardview:${Versions.supportLibraryVersion}"

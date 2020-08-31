@@ -99,9 +99,6 @@ dependencies {
     testImplementation(Library.threeTenBp)
     compileOnly(Library.threeTenBpNoTzdb)
 
-    // Kotlin
-    implementation(Library.kotlinStdlibJdk7)
-
     // Coroutines
     api(Library.coroutinesCore)
     api(Library.coroutinesAndroid)

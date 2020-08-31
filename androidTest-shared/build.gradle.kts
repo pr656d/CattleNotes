@@ -35,8 +35,6 @@ android {
 }
 
 dependencies {
-    implementation(Library.kotlinStdlibJdk7)
-
     // Architecture Components
     implementation(Library.lifecycleExtensions)
     implementation(Library.lifecycleLiveData)
