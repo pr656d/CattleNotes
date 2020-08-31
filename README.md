@@ -1,6 +1,6 @@
 # Cattle Notes
 
-[![Travis](https://travis-ci.com/pr656d/CattleNOTES.svg?token=XKzGx5G9zSSfxy3fjRts&branch=master)](https://travis-ci.com/pr656d/CattleNOTES) [![Github Actions Unit Test](https://github.com/pr656d/CattleNotes/workflows/Android%20Unit%20Test/badge.svg)](https://github.com/pr656d/CattleNotes/actions?query=workflow%3A%22Android+Unit+Test%22) [![Github Actions Validate Gradle Wrapper](https://github.com/pr656d/CattleNotes/workflows/Validate%20Gradle%20Wrapper/badge.svg)](https://github.com/pr656d/CattleNotes/actions?query=workflow%3A%22Validate+Gradle+Wrapper%22)
+[![Travis](https://travis-ci.com/pr656d/CattleNOTES.svg?token=XKzGx5G9zSSfxy3fjRts&branch=master)](https://travis-ci.com/pr656d/CattleNOTES) [![Github Actions Unit Test](https://github.com/pr656d/CattleNotes/workflows/Android%20Unit%20Test/badge.svg)](https://github.com/pr656d/CattleNotes/actions?query=workflow%3A%22Android+Unit+Test%22) [![Github Actions Validate Gradle Wrapper](https://github.com/pr656d/CattleNotes/workflows/Validate%20Gradle%20Wrapper/badge.svg)](https://github.com/pr656d/CattleNotes/actions?query=workflow%3A%22Validate+Gradle+Wrapper%22) [![Bitrise](https://app.bitrise.io/app/55efcf038c3d0627/status.svg?token=h1tuSpdLMFKzyiPh9ThjNg&branch=main)](https://app.bitrise.io/app/55efcf038c3d0627)
 
 Provides an all-in-one-place for efficient monitoring of a cattle farm, and assists farmers to easily
 track the breeding activities of their cattle. The app auto-records as well as allows the user to
