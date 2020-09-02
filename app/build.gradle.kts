@@ -15,47 +15,40 @@
  */
 
 plugins {
-    id(BuildPlugins.androidApplicationPlugin)
-    id(BuildPlugins.kotlinAndroidPlugin)
-    id(BuildPlugins.kotlinKaptPlugin)
-    id(BuildPlugins.kotlinAndroidExtensionsPlugin)
-    id(BuildPlugins.androidOssLicensesPlugin)
-    id(BuildPlugins.kotlinNavigationSafeArgsPlugin)
-    id(BuildPlugins.firebaseCrashlyticsPlugin)
-    id(BuildPlugins.firebasePerformancePlugin)
-    id(BuildPlugins.googleServicesPlugin)
+    id(Plugins.ANDROID_APPLICATION)
+    kotlin(Plugins.Kotlin.ANDROID)
+    kotlin(Plugins.Kotlin.KAPT)
+    kotlin(Plugins.Kotlin.ANDROID_EXTENSIONS)
+    id(Plugins.OSS_LICENSES)
+    id(Plugins.NAVIGATION_SAFEARGS)
+    id(Plugins.FIREBASE_CRASHLYTICS)
+    id(Plugins.FIREBASE_PERFORMANCE)
 }
 
 android {
-    compileSdkVersion(AndroidSdk.compile)
-    buildToolsVersion(AndroidSdk.buildToolsVersion)
+    compileSdkVersion(App.Sdk.COMPILE)
+    buildToolsVersion(App.Sdk.BUILD_TOOLS_VERSION)
 
     defaultConfig {
-        applicationId = App.applicationId
-        minSdkVersion(AndroidSdk.min)
-        targetSdkVersion(AndroidSdk.target)
-        versionCode = App.versionCode
-        versionName = App.versionName
+        applicationId = App.ID
+        minSdkVersion(App.Sdk.MIN)
+        targetSdkVersion(App.Sdk.TARGET)
+        versionCode = App.VERSION_CODE
+        versionName = App.VERSION_NAME
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        multiDexEnabled = true
         manifestPlaceholders = mapOf("crashlyticsEnabled" to true)
+        vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.incremental"] = "true"
+            }
+        }
     }
 
     buildTypes {
-        maybeCreate("staging")
-        getByName("staging") {
-            initWith(getByName("debug"))
-            versionNameSuffix = "-staging"
-
-            // Specifies a sorted list of fallback build types that the
-            // plugin should try to use when a dependency does not include a
-            // "staging" build type.
-            // Used with :test-shared, which doesn't have a staging variant.
-            matchingFallbacks = listOf("debug")
-        }
-
-        getByName("debug") {
-            versionNameSuffix = "-debug"
+        getByName(App.BuildType.DEBUG) {
+            versionNameSuffix = "-${App.BuildType.DEBUG}"
             manifestPlaceholders = mapOf("crashlyticsEnabled" to false)
             ext["firebaseCrashlytics"] = false
             /*
@@ -67,7 +60,7 @@ android {
             */
         }
 
-        getByName("release") {
+        getByName(App.BuildType.RELEASE) {
             manifestPlaceholders = mapOf("crashlyticsEnabled" to true)
             ext["firebaseCrashlytics"] = true
             isMinifyEnabled = true  // To enable proguard
@@ -76,21 +69,35 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        maybeCreate(App.BuildType.STAGING)
+        getByName(App.BuildType.STAGING) {
+            initWith(getByName(App.BuildType.DEBUG))
+            versionNameSuffix = "-${App.BuildType.STAGING}"
+
+            // Specifies a sorted list of fallback build types that the
+            // plugin should try to use when a dependency does not include a
+            // "staging" build type.
+            // Used with :test-shared, which doesn't have a staging variant.
+            matchingFallbacks = listOf(App.BuildType.DEBUG)
+        }
     }
 
     sourceSets {
-        getByName("staging").java.srcDir("src/staging/java")
-        getByName("debug").java.srcDir("src/debug/java")
-        getByName("release").java.srcDir("src/release/java")
+        getByName(App.BuildType.DEBUG).java.srcDir("src/${App.BuildType.DEBUG}/java")
+        getByName(App.BuildType.RELEASE).java.srcDir("src/${App.BuildType.RELEASE}/java")
+        getByName(App.BuildType.STAGING).java.srcDir("src/${App.BuildType.STAGING}/java")
     }
 
-    testBuildType = "staging"
+    testBuildType = App.BuildType.STAGING
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    // To avoid the compile error: "Cannot inline bytecode built with JVM target 1.8
+    // into bytecode that is being built with JVM target 1.6"
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
@@ -101,86 +108,81 @@ android {
 }
 
 dependencies {
-    implementation(project(Module.shared))
-    testImplementation(project(Module.test_shared))
-    testImplementation(project(Module.androidTest_shared))
+    implementation(project(Module.SHARED))
+    testImplementation(project(Module.TEST_SHARED))
+    testImplementation(project(Module.ANDROID_TEST_SHARED))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     // UI
-    implementation(Library.appCompat)
-    implementation(Library.cardView)
-    implementation(Library.constraintLayout)
-    implementation(Library.material)
-    implementation(Library.recyclerView)
-    implementation(Library.flexbox)
+    implementation(Library.APP_COMPAT)
+    implementation(Library.CARD_VIEW)
+    implementation(Library.CONSTRAINT_LAYOUT)
+    implementation(Library.MATERIAL)
+    implementation(Library.RECYCLER_VIEW)
+    implementation(Library.FLEX_BOX)
 
     // Architecture Components
-    implementation(Library.lifecycleExtensions)
-    kapt(Library.lifecycleCommonJava8)
-    implementation(Library.roomRuntime)
-    implementation(Library.roomKtx)
-    kapt(Library.roomCompiler)
+    implementation(Library.LIFECYCLE_EXTENSIONS)
+    kapt(Library.LIFECYCLE_COMMON_JAVA_8)
+    implementation(Library.ROOM_RUNTIME)
+    implementation(Library.ROOM_KTX)
+    kapt(Library.ROOM_COMPILER)
 
     // JetPack
-    implementation(Library.androidxCoreKtx)
-    implementation(Library.activityKtx)
-    implementation(Library.fragmentKtx)
-    implementation(Library.lifecycleRuntimeKtx)
-    implementation(Library.navigationUiKtx)
-    implementation(Library.navigationFragmentKtx)
-    implementation(Library.lifecycleViewModelKtx)
-    implementation(Library.lifecycleLiveDataKtx)
+    implementation(Library.CORE_KTX)
+    implementation(Library.ACTIVITY_KTX)
+    implementation(Library.FRAGMENT_KTX)
+    implementation(Library.LIFECYCLE_RUNTIME_KTX)
+    implementation(Library.NAVIGATION_UI_KTX)
+    implementation(Library.NAVIGATION_FRAGMENT_KTX)
+    implementation(Library.VIEWMODEL_KTX)
+    implementation(Library.LIVEDATA_KTX)
 
     // Date and time API for Java.
-    implementation(Library.threeTenABp)
-    testImplementation(Library.threeTenBp)
+    implementation(Library.THREETENABP)
+    testImplementation(Library.THREETENBP)
 
     // Firebase
-    implementation(Library.firebaseAuthUi)
-    implementation(Library.firebaseCrashlytics)
-
-    // Multidex
-    implementation(Library.multidex)
+    implementation(Library.FIREBASE_AUTH_UI)
 
     // Dagger
-    implementation(Library.daggerAndroid)
-    implementation(Library.daggerAndroidSupport)
-    kapt(Library.daggerCompiler)
-    kapt(Library.daggerAndroidProcessor)
+    implementation(Library.DAGGER_ANDROID)
+    implementation(Library.DAGGER_ANDROID_SUPPORT)
+    kapt(Library.DAGGER_COMPILER)
+    kapt(Library.DAGGER_ANDROID_PROCESSOR)
 
     // Glide
-    implementation(Library.glide)
-    kapt(Library.glideCompiler)
+    implementation(Library.GLIDE)
+    kapt(Library.GLIDE_COMPILER)
 
     // Timber
-    implementation(Library.timber)
+    implementation(Library.TIMBER)
 
     // Json Parser
-    implementation(Library.gson)
-
-    // Debugging
-    debugImplementation(Library.amitshekharDebugDb)
+    implementation(Library.GSON)
 
     // Open-source licences
-    implementation(Library.playOssLicenses)
+    implementation(Library.OSS_LICENSES)
 
     // Leak canary
 //    debugImplementation (Library.leakCanary)
 
     // Local Unit tests
-    testImplementation(Library.junit)
-    testImplementation(Library.coroutinesTest)
-    testImplementation(Library.mockitoKotlin)
-    testImplementation(Library.mockitoCore)
-    testImplementation(Library.hamcrest)
-    kaptTest(Library.daggerCompiler)
-    testImplementation(Library.archCoreTesting)
+    testImplementation(Library.JUNIT)
+    testImplementation(Library.COROUTINES_TEST)
+    testImplementation(Library.MOCKITO_KOTLIN)
+    testImplementation(Library.MOCKITO_CORE)
+    testImplementation(Library.HAMCREST)
+    kaptTest(Library.DAGGER_COMPILER)
+    testImplementation(Library.ARCH_CORE_TESTING)
 
     // UI Testing
-    androidTestImplementation(Library.testRunner)
-    androidTestImplementation(Library.testExtJunit)
-    androidTestImplementation(Library.espressoCore)
-    androidTestImplementation(Library.espressoContrib)
-    androidTestImplementation(Library.testRules)
-    kaptAndroidTest(Library.daggerCompiler)
+    androidTestImplementation(Library.TEST_RUNNER)
+    androidTestImplementation(Library.TEST_EXT_JUNIT)
+    androidTestImplementation(Library.ESPRESSO_CORE)
+    androidTestImplementation(Library.ESPRESSO_CONTRIB)
+    androidTestImplementation(Library.TEST_RULES)
+    kaptAndroidTest(Library.DAGGER_COMPILER)
 }
+
+apply(plugin = Plugins.GOOGLE_SERVICES)

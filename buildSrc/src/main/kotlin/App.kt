@@ -15,8 +15,20 @@
  */
 
 object App {
-    const val applicationId = "com.pr656d.cattlenotes"
+    const val ID = "com.pr656d.cattlenotes"
+    const val VERSION_NAME = "0.3.7"   // X.Y.Z; X = Major, Y = minor, Z = Patch level
+    const val VERSION_CODE = 307 // XYYZZ
 
-    const val versionName = "0.3.7"   // X.Y.Z; X = Major, Y = minor, Z = Patch level
-    const val versionCode = 307 // XYYZZ
+    object Sdk {
+        const val BUILD_TOOLS_VERSION = "29.0.2"
+        const val MIN = 21
+        const val TARGET = 29
+        const val COMPILE = 29
+    }
+
+    object BuildType {
+        const val DEBUG = "debug"
+        const val RELEASE = "release"
+        const val STAGING = "staging"
+    }
 }

@@ -17,7 +17,7 @@
 package com.pr656d.cattlenotes.utils
 
 import android.util.Log
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import timber.log.Timber
 
 class CrashlyticsTree : Timber.Tree() {
@@ -27,14 +27,16 @@ class CrashlyticsTree : Timber.Tree() {
             return
         }
 
-        Crashlytics.setInt(CRASHLYTICS_KEY_PRIORITY, priority)
-        Crashlytics.setString(CRASHLYTICS_KEY_TAG, tag)
-        Crashlytics.setString(CRASHLYTICS_KEY_MESSAGE, message)
+        val crashlytics = FirebaseCrashlytics.getInstance()
+
+        crashlytics.setCustomKey(CRASHLYTICS_KEY_PRIORITY, priority)
+        crashlytics.setCustomKey(CRASHLYTICS_KEY_TAG, tag ?: CRASHLYTICS_NO_TAG)
+        crashlytics.setCustomKey(CRASHLYTICS_KEY_MESSAGE, message)
 
         if (t == null) {
-            Crashlytics.logException(Exception(message))
+            crashlytics.recordException(Exception(message))
         } else {
-            Crashlytics.logException(t)
+            crashlytics.recordException(t)
         }
     }
 
@@ -42,5 +44,6 @@ class CrashlyticsTree : Timber.Tree() {
         private const val CRASHLYTICS_KEY_PRIORITY = "priority"
         private const val CRASHLYTICS_KEY_TAG = "tag"
         private const val CRASHLYTICS_KEY_MESSAGE = "message"
+        private const val CRASHLYTICS_NO_TAG = "no-tag"
     }
 }

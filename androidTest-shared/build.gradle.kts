@@ -15,20 +15,20 @@
  */
 
 plugins {
-    id(BuildPlugins.androidLibraryPlugin)
-    id(BuildPlugins.kotlinAndroidPlugin)
-    id(BuildPlugins.kotlinAndroidExtensionsPlugin)
+    id(Plugins.ANDROID_LIBRARY)
+    kotlin(Plugins.Kotlin.ANDROID)
+    kotlin(Plugins.Kotlin.ANDROID_EXTENSIONS)
 }
 
 android {
-    compileSdkVersion(AndroidSdk.compile)
-    buildToolsVersion(AndroidSdk.buildToolsVersion)
+    compileSdkVersion(App.Sdk.COMPILE)
+    buildToolsVersion(App.Sdk.BUILD_TOOLS_VERSION)
 
     defaultConfig {
-        minSdkVersion(AndroidSdk.min)
-        targetSdkVersion(AndroidSdk.target)
-        versionCode = App.versionCode
-        versionName = App.versionName
+        minSdkVersion(App.Sdk.MIN)
+        targetSdkVersion(App.Sdk.TARGET)
+        versionCode = App.VERSION_CODE
+        versionName = App.VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,7 +36,7 @@ android {
 
 dependencies {
     // Architecture Components
-    implementation(Library.lifecycleExtensions)
-    implementation(Library.lifecycleLiveData)
-    implementation(Library.lifecycleViewModel)
+    implementation(Library.LIFECYCLE_EXTENSIONS)
+    implementation(Library.LIVEDATA)
+    implementation(Library.VIEWMODEL)
 }

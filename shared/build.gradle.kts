@@ -15,44 +15,44 @@
  */
 
 plugins {
-    id(BuildPlugins.androidLibraryPlugin)
-    id(BuildPlugins.kotlinAndroidPlugin)
-    id(BuildPlugins.kotlinKaptPlugin)
-    id(BuildPlugins.kotlinAndroidExtensionsPlugin)
+    id(Plugins.ANDROID_LIBRARY)
+    kotlin(Plugins.Kotlin.ANDROID)
+    kotlin(Plugins.Kotlin.KAPT)
+    kotlin(Plugins.Kotlin.ANDROID_EXTENSIONS)
 }
 
 android {
-    compileSdkVersion(AndroidSdk.compile)
-    buildToolsVersion(AndroidSdk.buildToolsVersion)
+    compileSdkVersion(App.Sdk.COMPILE)
+    buildToolsVersion(App.Sdk.BUILD_TOOLS_VERSION)
 
     defaultConfig {
-        minSdkVersion(AndroidSdk.min)
-        targetSdkVersion(AndroidSdk.target)
-        versionCode = App.versionCode
-        versionName = App.versionName
+        minSdkVersion(App.Sdk.MIN)
+        targetSdkVersion(App.Sdk.TARGET)
+        versionCode = App.VERSION_CODE
+        versionName = App.VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
-        maybeCreate("staging")
-        getByName("staging") {
-            initWith(getByName("debug"))
-            versionNameSuffix = "-staging"
+        maybeCreate(App.BuildType.STAGING)
+        getByName(App.BuildType.STAGING) {
+            initWith(getByName(App.BuildType.DEBUG))
+            versionNameSuffix = "-${App.BuildType.STAGING}"
 
             // Specifies a sorted list of fallback build types that the
             // plugin should try to use when a dependency does not include a
             // "staging" build type.
             // Used with :test-shared, which doesn't have a staging variant.
-            matchingFallbacks = listOf("debug")
+            matchingFallbacks = listOf(App.BuildType.DEBUG)
         }
 
-        getByName("debug") {
+        getByName(App.BuildType.DEBUG) {
 
         }
 
-        getByName("release") {
+        getByName(App.BuildType.RELEASE) {
             isMinifyEnabled = true  // To enable proguard
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -62,12 +62,12 @@ android {
     }
 
     sourceSets {
-        getByName("staging").java.srcDir("src/staging/java")
-        getByName("debug").java.srcDir("src/debug/java")
-        getByName("release").java.srcDir("src/release/java")
+        getByName(App.BuildType.DEBUG).java.srcDir("src/${App.BuildType.DEBUG}/java")
+        getByName(App.BuildType.RELEASE).java.srcDir("src/${App.BuildType.RELEASE}/java")
+        getByName(App.BuildType.STAGING).java.srcDir("src/${App.BuildType.STAGING}/java")
     }
 
-    testBuildType = "staging"
+    testBuildType = App.BuildType.STAGING
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
@@ -75,61 +75,59 @@ android {
 }
 
 dependencies {
-    api(project(Module.model))
+    api(project(Module.MODEL))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    testImplementation(project(Module.test_shared))
-    testImplementation(project(Module.androidTest_shared))
+    testImplementation(project(Module.TEST_SHARED))
+    testImplementation(project(Module.ANDROID_TEST_SHARED))
 
     // Architecture Components
-    implementation(Library.lifecycleExtensions)
-    kapt(Library.lifecycleCommonJava8)
-    implementation(Library.roomRuntime)
-    implementation(Library.roomKtx)
-    kapt(Library.roomCompiler)
-    api(Library.workRuntimeKtx) {
+    implementation(Library.LIFECYCLE_EXTENSIONS)
+    kapt(Library.LIFECYCLE_COMMON_JAVA_8)
+    implementation(Library.ROOM_RUNTIME)
+    implementation(Library.ROOM_KTX)
+    kapt(Library.ROOM_COMPILER)
+    api(Library.WORK_RUNTIME) {
         // WorkManager uses its own version of listenablefuture extracted from guava.
         // This is required to avoid conflicts.
         exclude(group = "com.google.guava", module = "listenablefuture")
     }
 
     // JetPack
-    implementation(Library.androidxCoreKtx)
+    implementation(Library.CORE_KTX)
 
     // ThreeTenBP for the shared module only. Date and time API for Java.
-    testImplementation(Library.threeTenBp)
-    compileOnly(Library.threeTenBpNoTzdb)
+    testImplementation(Library.THREETENBP)
+    compileOnly(Library.THREETENBP_NO_TZDB)
 
     // Coroutines
-    api(Library.coroutinesCore)
-    api(Library.coroutinesAndroid)
-
-    // Multidex
-    implementation(Library.multidex)
+    api(Library.COROUTINES_CORE)
+    api(Library.COROUTINES_ANDROID)
 
     // Dagger
-    implementation(Library.daggerAndroid)
-    implementation(Library.daggerAndroidSupport)
-    kapt(Library.daggerCompiler)
-    kapt(Library.daggerAndroidProcessor)
+    implementation(Library.DAGGER_ANDROID)
+    implementation(Library.DAGGER_ANDROID_SUPPORT)
+    kapt(Library.DAGGER_COMPILER)
+    kapt(Library.DAGGER_ANDROID_PROCESSOR)
 
     // Timber
-    api(Library.timber)
+    api(Library.TIMBER)
 
     // Firebase
-    api(Library.firebaseCore)
-    api(Library.firebaseAuth)
-    api(Library.firebaseCommonKtx)
-    api(Library.firebaseAnalytics)
-    api(Library.firebasePerformance)
-    api(Library.firebaseFirestore)
-    api(Library.firebaseFirestoreKtx)
-    api(Library.firebaseMessaging)
+    api(Library.FIREBASE_CORE)
+    api(Library.FIREBASE_AUTH)
+    api(Library.FIREBASE_COMMON_KTX)
+    api(Library.FIREBASE_ANALYTICS_KTX)
+    api(Library.FIREBASE_CRASHLYTICS_KTX)
+    api(Library.FIREBASE_PERFORMANCE)
+    api(Library.FIREBASE_FIRESTORE)
+    api(Library.FIREBASE_FIRESTORE_KTX)
+    api(Library.FIREBASE_MESSAGING)
 
     // Local Unit tests
-    testImplementation(Library.junit)
-    testImplementation(Library.coroutinesTest)
-    testImplementation(Library.mockitoCore)
-    testImplementation(Library.mockitoKotlin)
-    testImplementation(Library.hamcrest)
-    testImplementation(Library.archCoreTesting)
+    testImplementation(Library.JUNIT)
+    testImplementation(Library.COROUTINES_TEST)
+    testImplementation(Library.MOCKITO_CORE)
+    testImplementation(Library.MOCKITO_KOTLIN)
+    testImplementation(Library.HAMCREST)
+    testImplementation(Library.ARCH_CORE_TESTING)
 }

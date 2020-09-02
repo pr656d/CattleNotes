@@ -15,17 +15,17 @@
  */
 
 plugins {
-    id(BuildPlugins.javaLibraryPlugin)
-    id(BuildPlugins.kotlinPlugin)
+    id(Plugins.JAVA_LIBRARY)
+    id(Plugins.KOTLIN)
 }
 
 dependencies {
-    implementation(project(":model"))
+    implementation(project(":${Module.MODEL}"))
 
     // ThreeTenBP for the shared module only. Date and time API for Java.
-    testImplementation(Library.threeTenBp)
-    compileOnly(Library.threeTenBpNoTzdb)
+    testImplementation(Library.THREETENBP)
+    compileOnly(Library.THREETENBP_NO_TZDB)
 
-    implementation(Library.junit)
-    implementation(Library.coroutinesTest)
+    implementation(Library.JUNIT)
+    implementation(Library.COROUTINES_TEST)
 }

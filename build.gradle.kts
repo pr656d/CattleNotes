@@ -22,13 +22,13 @@ buildscript {
     }
 
     dependencies {
-        classpath(BuildPlugins.androidGradlePlugin)
-        classpath(BuildPlugins.kotlinGradlePlugin)
-        classpath(BuildPlugins.googleServices)
-        classpath(BuildPlugins.firebaseCrashlyticsGradle)
-        classpath(BuildPlugins.firebasePerformancePluginGradle)
-        classpath(BuildPlugins.kotlinNavigationSafeArgsPluginGradle)
-        classpath(BuildPlugins.androidOssLicensesPluginGradle)
+        classpath(ClassPath.ANDROID_BUILD)
+        classpath(ClassPath.KOTLIN)
+        classpath(ClassPath.GOOGLE_SERVICES)
+        classpath(ClassPath.FIREBASE_CRASHLYTICS)
+        classpath(ClassPath.FIREBASE_PERFORMANCE)
+        classpath(ClassPath.NAVIGATION_SAFE_ARGS)
+        classpath(ClassPath.OSS_LICENSES)
     }
 }
 

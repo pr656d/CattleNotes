@@ -15,26 +15,26 @@
  */
 
 plugins {
-    id(BuildPlugins.javaLibraryPlugin)
-    id(BuildPlugins.kotlinPlugin)
+    id(Plugins.JAVA_LIBRARY)
+    id(Plugins.KOTLIN)
 }
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     // ThreeTenBP for the shared module only. Date and time API for Java.
-    api(Library.threeTenBpNoTzdb)
+    api(Library.THREETENBP_NO_TZDB)
 
     // JetPack
-    implementation(Library.androidxCoreKtx)
+    implementation(Library.CORE_KTX)
 
     // Room
-    implementation(Library.roomRuntime)
-    implementation(Library.roomKtx)
+    implementation(Library.ROOM_RUNTIME)
+    implementation(Library.ROOM_KTX)
 
     // Firebase
-    implementation(Library.firebaseFirestoreKtx)
+    implementation(Library.FIREBASE_FIRESTORE_KTX)
 
     // Json Parser
-    implementation(Library.gson)
+    implementation(Library.GSON)
 }
