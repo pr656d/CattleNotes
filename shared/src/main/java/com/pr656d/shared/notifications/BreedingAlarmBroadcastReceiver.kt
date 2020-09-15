@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.notifications
 
-import android.app.*
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.ACTION_VIEW
@@ -24,19 +26,27 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.WorkerThread
 import androidx.core.app.NotificationCompat
+import androidx.core.app.TaskStackBuilder
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
-import com.pr656d.model.Breeding.BreedingEvent.*
+import com.pr656d.model.Breeding.BreedingEvent.Calving
+import com.pr656d.model.Breeding.BreedingEvent.DryOff
+import com.pr656d.model.Breeding.BreedingEvent.PregnancyCheck
+import com.pr656d.model.Breeding.BreedingEvent.RepeatHeat
 import com.pr656d.model.BreedingWithCattle
 import com.pr656d.shared.R
 import com.pr656d.shared.domain.breeding.detail.GetBreedingWithCattleByIdUseCase
 import com.pr656d.shared.domain.result.Result
 import com.pr656d.shared.utils.nameOrTagNumber
 import dagger.android.DaggerBroadcastReceiver
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 /**
  * Receives broadcast intents with information for breeding notifications.
@@ -102,7 +112,10 @@ class BreedingAlarmBroadcastReceiver : DaggerBroadcastReceiver() {
                 is PregnancyCheck -> R.string.pregnancy_check
                 is DryOff -> R.string.dry_off
                 is Calving -> R.string.calving
-                null -> throw IllegalStateException("Next breeding event type can not be $type for breeding ${data.breeding.id}")
+                null -> throw IllegalStateException(
+                    "Next breeding event type can not be " +
+                        "$type for breeding ${data.breeding.id}"
+                )
             }
         )
 
@@ -125,7 +138,7 @@ class BreedingAlarmBroadcastReceiver : DaggerBroadcastReceiver() {
             .setContentText("$typeDisplayName of ${data.cattle.nameOrTagNumber()}")
             .setContentIntent(resultPendingIntent)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setSmallIcon(R.drawable.logo)  // TODO ("Logo") : Put better logo
+            .setSmallIcon(R.drawable.logo) // TODO ("Logo") : Put better logo
             .setAutoCancel(true)
             .build()
 
@@ -137,7 +150,8 @@ class BreedingAlarmBroadcastReceiver : DaggerBroadcastReceiver() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun makeNotificationChannelForBreedingReminder(
-        context: Context, notificationManager: NotificationManager
+        context: Context,
+        notificationManager: NotificationManager
     ) {
         notificationManager.createNotificationChannel(
             // Create channel

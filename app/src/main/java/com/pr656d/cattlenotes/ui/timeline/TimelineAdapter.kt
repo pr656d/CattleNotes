@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.timeline
 
 import android.content.Context
@@ -86,13 +85,13 @@ class TimelineViewHolder(
      */
     private fun onCheckedChanged(@IdRes checkedId: Int, selectedOption: Boolean?) {
         if (uiBehaviour.selectedOption == selectedOption)
-            return  // Prevent same option click.
+            return // Prevent same option click.
 
         uiBehaviour.selectedOption = selectedOption
 
         if (checkedId == binding.radioButtonNeutral.id) {
-            onCancelClicked()   // None means cancelled state
-            return  // Ignore
+            onCancelClicked() // None means cancelled state
+            return // Ignore
         }
 
         // Show more actions
@@ -188,22 +187,26 @@ class TimelineViewHolder(
             when (uiBehaviour.breedingEventType) {
                 is BreedingEvent.RepeatHeat -> data.copy(
                     breeding = data.breeding.copy(
-                        repeatHeat = data.breeding.repeatHeat.copy(status = newStatus, doneOn =  doneOn)
+                        repeatHeat = data.breeding.repeatHeat
+                            .copy(status = newStatus, doneOn = doneOn)
                     )
                 )
                 is BreedingEvent.PregnancyCheck -> data.copy(
                     breeding = data.breeding.copy(
-                        pregnancyCheck = data.breeding.pregnancyCheck.copy(status = newStatus, doneOn =  doneOn)
+                        pregnancyCheck = data.breeding.pregnancyCheck
+                            .copy(status = newStatus, doneOn = doneOn)
                     )
                 )
                 is BreedingEvent.DryOff -> data.copy(
                     breeding = data.breeding.copy(
-                        dryOff = data.breeding.dryOff.copy(status = newStatus, doneOn =  doneOn)
+                        dryOff = data.breeding.dryOff
+                            .copy(status = newStatus, doneOn = doneOn)
                     )
                 )
                 is BreedingEvent.Calving -> data.copy(
                     breeding = data.breeding.copy(
-                        calving = data.breeding.calving.copy(status = newStatus, doneOn =  doneOn)
+                        calving = data.breeding.calving
+                            .copy(status = newStatus, doneOn = doneOn)
                     )
                 )
             }

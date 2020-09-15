@@ -8,6 +8,7 @@ object Plugins {
     const val NAVIGATION_SAFEARGS = "androidx.navigation.safeargs.kotlin"
     const val FIREBASE_CRASHLYTICS = "com.google.firebase.crashlytics"
     const val FIREBASE_PERFORMANCE = "com.google.firebase.firebase-perf"
+    const val SPOTLESS = "com.diffplug.spotless"
 
     /**
      * Plugins which can be applied as

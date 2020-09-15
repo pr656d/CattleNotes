@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.milking.list
 
 import android.Manifest
@@ -88,7 +87,7 @@ class MilkingFragment : NavigationFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setOnMenuItemClickListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.menu_item_sync_with_sms -> {
                     model.syncWithSmsMessages()
                     true
@@ -108,56 +107,77 @@ class MilkingFragment : NavigationFragment() {
             }
         }
 
-        model.requestPermissions.observe(viewLifecycleOwner, EventObserver {
-            requestPermission()
-        })
-
-        model.showPermissionExplanation.observe(viewLifecycleOwner, EventObserver {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.sms_permission_required)
-                .setMessage(R.string.sms_permission_explanation_for_amc_feature)
-                .setPositiveButton(R.string.ok) { _, _ ->
-                    model.requestPermission()
-                }
-                .create()
-                .show()
-        })
-
-        model.navigateToSmsSourceSelector.observe(viewLifecycleOwner, EventObserver {
-            SelectMilkSmsSenderDialogFragment.newInstance()
-                .show(childFragmentManager, null)
-        })
-
-        model.saveNewMilkConfirmationDialog.observe(viewLifecycleOwner, EventObserver {
-            val dialog = MaterialAlertDialogBuilder(requireContext())
-
-            if (it.isEmpty()) {
-                dialog
-                    .setTitle(R.string.no_milk_found)
-                    .setPositiveButton(R.string.ok, null)
-            } else {
-                dialog
-                    .setTitle(getString(R.string.milk_found, it.count()))
-                    .setPositiveButton(R.string.save) { _, _ ->
-                        model.saveMilk(it)
-                    }
-                    .setNegativeButton(R.string.cancel, null)
+        model.requestPermissions.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                requestPermission()
             }
+        )
 
-            dialog.create().show()
-        })
+        model.showPermissionExplanation.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.sms_permission_required)
+                    .setMessage(R.string.sms_permission_explanation_for_amc_feature)
+                    .setPositiveButton(R.string.ok) { _, _ ->
+                        model.requestPermission()
+                    }
+                    .create()
+                    .show()
+            }
+        )
 
-        model.navigateToAddMilk.observe(viewLifecycleOwner, EventObserver {
-            AddMilkDialogFragment().show(childFragmentManager, null)
-        })
+        model.navigateToSmsSourceSelector.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                SelectMilkSmsSenderDialogFragment.newInstance()
+                    .show(childFragmentManager, null)
+            }
+        )
 
-        model.smsSource.observe(viewLifecycleOwner, Observer {
-            // Just observe so that value can be updated.
-        })
+        model.saveNewMilkConfirmationDialog.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                val dialog = MaterialAlertDialogBuilder(requireContext())
 
-        model.showMessage.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(requireView(), it, Snackbar.LENGTH_SHORT).show()
-        })
+                if (it.isEmpty()) {
+                    dialog
+                        .setTitle(R.string.no_milk_found)
+                        .setPositiveButton(R.string.ok, null)
+                } else {
+                    dialog
+                        .setTitle(getString(R.string.milk_found, it.count()))
+                        .setPositiveButton(R.string.save) { _, _ ->
+                            model.saveMilk(it)
+                        }
+                        .setNegativeButton(R.string.cancel, null)
+                }
+
+                dialog.create().show()
+            }
+        )
+
+        model.navigateToAddMilk.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                AddMilkDialogFragment().show(childFragmentManager, null)
+            }
+        )
+
+        model.smsSource.observe(
+            viewLifecycleOwner,
+            Observer {
+                // Just observe so that value can be updated.
+            }
+        )
+
+        model.showMessage.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                Snackbar.make(requireView(), it, Snackbar.LENGTH_SHORT).show()
+            }
+        )
     }
 
     /**
@@ -189,7 +209,8 @@ class MilkingFragment : NavigationFragment() {
             if (it.isEmpty()) return
         }.toTypedArray()
 
-        requestPermissions(pendingPermissions,
+        requestPermissions(
+            pendingPermissions,
             PERMISSION_REQUEST_AT_MILKING
         )
     }

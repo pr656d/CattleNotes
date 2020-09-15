@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.cattle.list
 
 import android.graphics.Canvas
@@ -28,7 +27,6 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.pr656d.cattlenotes.R
 import com.pr656d.model.Cattle
-
 
 @BindingAdapter(value = ["cattleListItems", "cattleListViewModel"], requireAll = true)
 fun cattleListItems(
@@ -75,7 +73,7 @@ fun showCattleListDivider(recyclerView: RecyclerView, value: Boolean) {
                 val tvName = parent.findViewById<TextView>(R.id.tvName) ?: return
 
                 val dividerLeft = parent.paddingStart + ivProfileImage.marginStart +
-                        ivProfileImage.width + tvTagNumber.marginStart
+                    ivProfileImage.width + tvTagNumber.marginStart
 
                 val dividerRight = parent.width - parent.paddingEnd - tvName.marginEnd
 

@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.cattle.detail
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -34,7 +33,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Assert.*
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.hamcrest.Matchers.equalTo as isEqualTo
@@ -53,16 +54,12 @@ class CattleDetailViewModelTest {
     var coroutineRule = MainCoroutineRule()
 
     private val cattleRepository = object : FakeCattleRepository() {
-        override fun getCattleById(id: String): Flow<Cattle?> {
-            return flow {
-                emit(TestData.cattleList.firstOrNull { it.id == id })
-            }
+        override fun getCattleById(id: String): Flow<Cattle?> = flow {
+            emit(TestData.cattleList.firstOrNull { it.id == id })
         }
 
-        override fun getCattleByTagNumber(tagNumber: Long): Flow<Cattle?> {
-            return flow {
-                emit(TestData.cattleList.firstOrNull { it.tagNumber == tagNumber })
-            }
+        override fun getCattleByTagNumber(tagNumber: Long): Flow<Cattle?> = flow {
+            emit(TestData.cattleList.firstOrNull { it.tagNumber == tagNumber })
         }
     }
 
@@ -78,8 +75,8 @@ class CattleDetailViewModelTest {
     }
 
     private fun CattleDetailViewModel.observeUnobserved() {
-        cattle.observeForever {  }
-        isCattleTypeBull.observeForever {  }
+        cattle.observeForever { }
+        isCattleTypeBull.observeForever { }
     }
 
     @Test
@@ -141,32 +138,35 @@ class CattleDetailViewModelTest {
     }
 
     @Test
-    fun deleteCattleIsCalledWithDeleteConfirmationIsFalse_launchDeleteConfirmation() = coroutineRule.runBlockingTest {
-        val viewModel = createCattleDetailViewModel()
+    fun deleteCattleIsCalledWithDeleteConfirmationIsFalse_launchDeleteConfirmation() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createCattleDetailViewModel()
 
-        // Delete cattle confirmation called
-        viewModel.deleteCattle()
+            // Delete cattle confirmation called
+            viewModel.deleteCattle()
 
-        val launchDeleteConfirmation = LiveDataTestUtil.getValue(viewModel.launchDeleteConfirmation)
-        assertThat(Unit, isEqualTo(launchDeleteConfirmation?.getContentIfNotHandled()))
-    }
+            val launchDeleteConfirmation =
+                LiveDataTestUtil.getValue(viewModel.launchDeleteConfirmation)
+            assertThat(Unit, isEqualTo(launchDeleteConfirmation?.getContentIfNotHandled()))
+        }
 
     @Test
-    fun deleteCattleIsCalledWithDeleteConfirmationIsTrue_navigateUpOnSuccess() = coroutineRule.runBlockingTest {
-        // Returns any random cattle from the list
-        val cattle = TestData.cattleList.random()
+    fun deleteCattleIsCalledWithDeleteConfirmationIsTrue_navigateUpOnSuccess() =
+        coroutineRule.runBlockingTest {
+            // Returns any random cattle from the list
+            val cattle = TestData.cattleList.random()
 
-        val viewModel = createCattleDetailViewModel()
+            val viewModel = createCattleDetailViewModel()
 
-        // Fetch cattle first
-        viewModel.fetchCattle(cattle.id)
+            // Fetch cattle first
+            viewModel.fetchCattle(cattle.id)
 
-        // Delete cattle confirmation called
-        viewModel.deleteCattle(deleteConfirmation = true)
+            // Delete cattle confirmation called
+            viewModel.deleteCattle(deleteConfirmation = true)
 
-        val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
-        assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
-    }
+            val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
+            assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
+        }
 
     @Test
     fun showAllBreedingIsCalled_launchAllBreeding() = coroutineRule.runBlockingTest {
@@ -253,6 +253,14 @@ class CattleDetailViewModelTest {
     fun deleteCattleIsCalled_showMessageOnError() = coroutineRule.runBlockingTest {
         val viewModel = createCattleDetailViewModel(
             object : FakeCattleRepository() {
+                override fun getCattleById(id: String): Flow<Cattle?> = flow {
+                    emit(TestData.cattleList.firstOrNull { it.id == id })
+                }
+
+                override fun getCattleByTagNumber(tagNumber: Long): Flow<Cattle?> = flow {
+                    emit(TestData.cattleList.firstOrNull { it.tagNumber == tagNumber })
+                }
+
                 override suspend fun deleteCattle(cattle: Cattle) {
                     throw Exception("Error!")
                 }
@@ -266,7 +274,7 @@ class CattleDetailViewModelTest {
 
         viewModel.deleteCattle(true)
 
-        val showMessage  = LiveDataTestUtil.getValue(viewModel.showMessage)
+        val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
         assertNotNull(showMessage?.getContentIfNotHandled())
     }
 

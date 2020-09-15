@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.login
 
 import android.app.Activity
@@ -78,20 +77,29 @@ class LoginActivity : DaggerAppCompatActivity() {
             analyticsHelper.setScreenView(destinationLabel, this)
         }
 
-        model.launchSetupProfileScreen.observe(this, EventObserver {
-            navigateTo(toSetupProfile())
-        })
+        model.launchSetupProfileScreen.observe(
+            this,
+            EventObserver {
+                navigateTo(toSetupProfile())
+            }
+        )
 
-        model.launchLoginScreen.observe(this, EventObserver {
-            navigateTo(R.id.loginScreen)
-        })
+        model.launchLoginScreen.observe(
+            this,
+            EventObserver {
+                navigateTo(R.id.loginScreen)
+            }
+        )
 
-        model.launchMainScreen.observe(this, EventObserver {
-            startActivity(
-                Intent(this, MainActivity::class.java)
-            )
-            finish()
-        })
+        model.launchMainScreen.observe(
+            this,
+            EventObserver {
+                startActivity(
+                    Intent(this, MainActivity::class.java)
+                )
+                finish()
+            }
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

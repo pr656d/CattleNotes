@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.data.db
 
 import androidx.room.TypeConverter
@@ -54,7 +53,9 @@ class Converters {
     @TypeConverter
     fun fromStringToGroup(value: String?): Cattle.Group? = value?.let {
         Cattle.Group.INSTANCES[it]
-            ?: throw IllegalArgumentException("Invalid String: Can not convert $value to Cattle.Group")
+            ?: throw IllegalArgumentException(
+                "Invalid String: Can not convert $value to Cattle.Group"
+            )
     }
 
     @TypeConverter
@@ -72,7 +73,7 @@ class Converters {
         ?: throw IllegalArgumentException("Invalid String : Can not convert $value to Milk.Source")
 
     @TypeConverter
-    fun fromImageToString(value: Cattle.Image?): String? = value?.let{
+    fun fromImageToString(value: Cattle.Image?): String? = value?.let {
         "${it.localPath}/#SEPERATOR#/${it.remotePath}"
     }
 

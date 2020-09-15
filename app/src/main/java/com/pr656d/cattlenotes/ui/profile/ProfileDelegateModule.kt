@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.profile
 
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +20,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.pr656d.shared.data.login.datasources.AuthIdDataSource
 import com.pr656d.shared.data.login.datasources.ObserveFirebaseUserInfoDataSource
 import com.pr656d.shared.data.login.datasources.ReloadFirebaseUserInfo
-import com.pr656d.shared.data.user.info.datasources.*
+import com.pr656d.shared.data.user.info.datasources.UpdateFirestoreUserInfoDataSource
+import com.pr656d.shared.data.user.info.datasources.UpdateFirestoreUserInfoDataSourceImpl
+import com.pr656d.shared.data.user.info.datasources.UpdateUserInfoBasicDataSource
+import com.pr656d.shared.data.user.info.datasources.UpdateUserInfoBasicDataSourceImpl
+import com.pr656d.shared.data.user.info.datasources.UpdateUserInfoDetailedDataSource
+import com.pr656d.shared.data.user.info.datasources.UpdateUserInfoDetailedDataSourceImpl
 import com.pr656d.shared.data.user.repository.UserInfoDataRepository
 import com.pr656d.shared.data.user.repository.UserInfoRepository
 import com.pr656d.shared.di.IoDispatcher
@@ -52,7 +56,7 @@ class ProfileDelegateModule {
     @Provides
     fun provideUserInfoRepository(
         updateUserInfoDetailedDataSource: UpdateUserInfoDetailedDataSource
-    ) : UserInfoRepository = UserInfoDataRepository(
+    ): UserInfoRepository = UserInfoDataRepository(
         updateUserInfoDetailedDataSource
     )
 
@@ -63,8 +67,8 @@ class ProfileDelegateModule {
         observeUserInfoDetailed: ObserveUserInfoDetailed,
         updateUserInfoDetailedUseCase: UpdateUserInfoDetailedUseCase,
         networkHelper: NetworkHelper
-    ) : ProfileDelegate {
-        return ProfileDelegateImp (
+    ): ProfileDelegate {
+        return ProfileDelegateImp(
             observeUserInfoDetailed,
             updateUserInfoDetailedUseCase,
             networkHelper
@@ -86,7 +90,7 @@ class ProfileDelegateModule {
     @Provides
     fun provideReloadFirebaseUserInfo(
         observeFirebaseUserInfoDataSource: ObserveFirebaseUserInfoDataSource
-    ) : ReloadFirebaseUserInfo = observeFirebaseUserInfoDataSource
+    ): ReloadFirebaseUserInfo = observeFirebaseUserInfoDataSource
 
     @Singleton
     @Provides

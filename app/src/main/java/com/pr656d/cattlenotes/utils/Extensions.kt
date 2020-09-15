@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.utils
 
 import android.annotation.SuppressLint
@@ -106,7 +105,7 @@ fun View.pickADate(
     // Disable future date selection
     dialog.datePicker.maxDate = System.currentTimeMillis()
 
-    dialog.show()   // Show the dialog.
+    dialog.show() // Show the dialog.
 }
 // end region
 
@@ -147,7 +146,7 @@ fun View.pickATime(
             onTimeCancelled()
     }
 
-    dialog.show()   // Show the dialog.
+    dialog.show() // Show the dialog.
 }
 // end region
 
@@ -156,8 +155,11 @@ fun View.pickADateTime(
     onDateTimeCancelled: () -> Unit = {},
     onDateTimeSet: (
         view: View,
-        dd: Int, mm: Int, yyyy: Int,
-        hour: Int, minute: Int
+        dd: Int,
+        mm: Int,
+        yyyy: Int,
+        hour: Int,
+        minute: Int
     ) -> Unit
 ) {
     pickADate(
@@ -222,8 +224,10 @@ fun AppCompatActivity.updateForTheme(theme: Theme) = when (theme) {
 // region Permissions
 
 fun Context.isPermissionGranted(permission: String) =
-    (ContextCompat.checkSelfPermission(this, permission)
-        == PackageManager.PERMISSION_GRANTED)
+    (
+        ContextCompat.checkSelfPermission(this, permission)
+            == PackageManager.PERMISSION_GRANTED
+        )
 
 // end region
 
@@ -261,7 +265,7 @@ fun newStaticLayout(
 
 // region milk sms source
 @StringRes
-fun Milk.Source.Sms.getStringId(): Int = when(this) {
+fun Milk.Source.Sms.getStringId(): Int = when (this) {
     Milk.Source.Sms.BGAMAMCS -> R.string.bgamamcs
 }
 // end region

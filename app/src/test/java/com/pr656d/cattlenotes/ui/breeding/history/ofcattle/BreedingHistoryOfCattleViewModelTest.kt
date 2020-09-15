@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.breeding.history.ofcattle
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -70,7 +69,7 @@ class BreedingHistoryOfCattleViewModelTest {
             flowOf(breedingListOfCattle)
     }
 
-    private val mockBreedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater = mock{}
+    private val mockBreedingNotificationAlarmUpdater: BreedingNotificationAlarmUpdater = mock {}
 
     private fun createBreedingHistoryOfCattleViewModel(
         cattleRepository: CattleRepository = fakeCattleRepository,
@@ -87,7 +86,7 @@ class BreedingHistoryOfCattleViewModelTest {
             ),
             GetCattleByIdUseCase(cattleRepository, coroutineDispatcher)
         ).apply {
-            cattle.observeForever {  }
+            cattle.observeForever { }
         }
     }
 
@@ -136,7 +135,7 @@ class BreedingHistoryOfCattleViewModelTest {
 
     @Test
     fun deleteBreedingCalledWithConfirmation_deleteBreeding() = coroutineRule.runBlockingTest {
-        val mockBreedingRepository = mock<BreedingRepository> {  }
+        val mockBreedingRepository = mock<BreedingRepository> { }
 
         val viewModel = createBreedingHistoryOfCattleViewModel(
             breedingRepository = mockBreedingRepository
@@ -186,7 +185,7 @@ class BreedingHistoryOfCattleViewModelTest {
         // Call delete breeding
         viewModel.deleteBreeding(breeding, true)
 
-        val showMessage  = LiveDataTestUtil.getValue(viewModel.showMessage)
+        val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
         assertNotNull(showMessage?.getContentIfNotHandled())
     }
 }

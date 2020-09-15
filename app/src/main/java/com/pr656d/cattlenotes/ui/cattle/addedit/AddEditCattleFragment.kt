@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.cattle.addedit
 
 import android.os.Bundle
@@ -28,7 +27,9 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -96,7 +97,9 @@ class AddEditCattleFragment : NavigationFragment() {
                 binding.toolbar.setTitle(R.string.add_cattle)
         }
 
-        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.parent_list_sheet) as View)
+        bottomSheetBehavior = BottomSheetBehavior.from(
+            view.findViewById(R.id.parent_list_sheet) as View
+        )
 
         bottomSheetBehavior.addBottomSheetCallback(
             object : BottomSheetBehavior.BottomSheetCallback() {
@@ -129,28 +132,37 @@ class AddEditCattleFragment : NavigationFragment() {
             }
         }
 
-        model.showBackConfirmationDialog.observe(viewLifecycleOwner, EventObserver {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.back_pressed_message)
-                .setMessage(R.string.changes_not_saved_message)
-                .setPositiveButton(R.string.go_back) { _, _ ->
-                    model.onBackPressed(true)
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .create()
-                .show()
-        })
+        model.showBackConfirmationDialog.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.back_pressed_message)
+                    .setMessage(R.string.changes_not_saved_message)
+                    .setPositiveButton(R.string.go_back) { _, _ ->
+                        model.onBackPressed(true)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .create()
+                    .show()
+            }
+        )
 
-        model.navigateUp.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigateUp()
-        })
+        model.navigateUp.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigateUp()
+            }
+        )
 
-        model.showMessage.observe(viewLifecycleOwner, EventObserver {
-            hideKeyboard(requireView())
-            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
-                .setAnchorView(binding.fabButtonSaveCattle)
-                .show()
-        })
+        model.showMessage.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                hideKeyboard(requireView())
+                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT)
+                    .setAnchorView(binding.fabButtonSaveCattle)
+                    .show()
+            }
+        )
     }
 
     @ExperimentalCoroutinesApi
@@ -165,7 +177,7 @@ class AddEditCattleFragment : NavigationFragment() {
             return true
         }
 
-        if(::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state != STATE_EXPANDED) {
+        if (::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state != STATE_EXPANDED) {
             model.onBackPressed()
             return true
         }

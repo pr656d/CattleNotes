@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.domain.breeding.notification
 
 import com.pr656d.model.Breeding
@@ -22,7 +21,6 @@ import com.pr656d.shared.data.prefs.PreferenceStorageRepository
 import com.pr656d.shared.di.DefaultDispatcher
 import com.pr656d.shared.di.IoDispatcher
 import com.pr656d.shared.notifications.BreedingAlarmManager
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOn
@@ -32,6 +30,13 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.system.measureTimeMillis
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * Sets a notification for each breeding and observers for any changes and
@@ -111,7 +116,10 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
                 }.awaitAll()
             }
 
-            Timber.d("Work finished of setting all the ${breedingList.size} alarms of breeding in $timeTaken ms")
+            Timber.d(
+                "Work finished of setting all the ${breedingList.size}" +
+                    " alarms of breeding in $timeTaken ms"
+            )
         }
 
     private fun clear() {
@@ -155,6 +163,9 @@ class BreedingNotificationAlarmUpdaterImp @Inject constructor(
             }.awaitAll()
         }
 
-        Timber.d("Work finished of cancelling all the ${breedingList.size} alarms of breeding in $timeTaken ms")
+        Timber.d(
+            "Work finished of cancelling all the ${breedingList.size}" +
+                " alarms of breeding in $timeTaken ms"
+        )
     }
 }

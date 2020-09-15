@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.data.work.milk
 
 import android.content.Context
@@ -71,7 +70,8 @@ class AddMilkFromSmsWorker(
             if (smsSource != preferredMilkSmsSource) {
                 Timber.d(
                     """SMS source and preferred SMS source does not match.
-                    |Found milk source ${smsSource.ORIGINATING_ADDRESS} but preferred milk source is $preferredMilkSmsSource.""".trimMargin()
+                    |Found milk source ${smsSource.ORIGINATING_ADDRESS} but
+                    preferred milk source is $preferredMilkSmsSource.""".trimMargin()
                 )
 
                 // Do not need to execute further as SMS sources does not match.

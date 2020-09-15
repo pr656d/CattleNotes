@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.profile
 
 import android.os.Bundle
@@ -57,7 +56,7 @@ class ProfileFragment : NavigationFragment() {
         }
 
         binding.toolbar.setOnMenuItemClickListener { menuItem ->
-            when(menuItem.itemId) {
+            when (menuItem.itemId) {
                 R.id.menu_item_logout -> {
                     model.logout()
                     true
@@ -80,34 +79,49 @@ class ProfileFragment : NavigationFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.selectedGenderId.observe(viewLifecycleOwner, Observer {
-            if (it == null)
-                genderGroup.clearChecked()
-            else
-                genderGroup.check(it)
-        })
+        model.selectedGenderId.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it == null)
+                    genderGroup.clearChecked()
+                else
+                    genderGroup.check(it)
+            }
+        )
 
-        model.navigateUp.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigateUp()
-        })
+        model.navigateUp.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigateUp()
+            }
+        )
 
-        model.launchEditProfile.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toAddEditProfile())
-        })
+        model.launchEditProfile.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigate(toAddEditProfile())
+            }
+        )
 
-        model.launchLogout.observe(viewLifecycleOwner, EventObserver {
-            firebaseAuth.signOut()
-        })
+        model.launchLogout.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                firebaseAuth.signOut()
+            }
+        )
 
-        model.showLogoutConfirmation.observe(viewLifecycleOwner, EventObserver {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.logout_message)
-                .setPositiveButton(R.string.logout) { _, _ ->
-                    model.logout(logoutConfirmation = true)
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .create()
-                .show()
-        })
+        model.showLogoutConfirmation.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.logout_message)
+                    .setPositiveButton(R.string.logout) { _, _ ->
+                        model.logout(logoutConfirmation = true)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .create()
+                    .show()
+            }
+        )
     }
 }

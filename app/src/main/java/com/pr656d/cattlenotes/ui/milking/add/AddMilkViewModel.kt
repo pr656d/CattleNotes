@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.milking.add
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.viewModelScope
 import com.pr656d.cattlenotes.R
 import com.pr656d.model.Milk
 import com.pr656d.shared.domain.milk.AddMilkUseCase
@@ -98,8 +101,8 @@ class AddMilkViewModel @Inject constructor(
 
     private fun isAllFieldsValid(): Boolean {
         return dateTimeErrorMessage.value == MilkValidator.VALID_FIELD &&
-                quantityErrorMessage.value == MilkValidator.VALID_FIELD &&
-                fatErrorMessage.value == MilkValidator.VALID_FIELD &&
-                milkOfErrorMessage.value == MilkValidator.VALID_FIELD
+            quantityErrorMessage.value == MilkValidator.VALID_FIELD &&
+            fatErrorMessage.value == MilkValidator.VALID_FIELD &&
+            milkOfErrorMessage.value == MilkValidator.VALID_FIELD
     }
 }

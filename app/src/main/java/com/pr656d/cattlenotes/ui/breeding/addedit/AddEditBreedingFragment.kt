@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import android.os.Bundle
@@ -77,56 +76,74 @@ class AddEditBreedingFragment : NavigationFragment() {
                 binding.toolbar.setTitle(R.string.add_new_breeding)
         }
 
-        model.showMessage.observe(viewLifecycleOwner, EventObserver {
-            Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()
-        })
+        model.showMessage.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                Snackbar.make(requireView(), getString(it), Snackbar.LENGTH_SHORT).show()
+            }
+        )
 
-        model.showBackConfirmationDialog.observe(viewLifecycleOwner, EventObserver {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.back_pressed_message)
-                .setMessage(R.string.changes_not_saved_message)
-                .setPositiveButton(R.string.go_back) { _, _ ->
-                    model.onBackPressed(true)
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .create()
-                .show()
-        })
+        model.showBackConfirmationDialog.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.back_pressed_message)
+                    .setMessage(R.string.changes_not_saved_message)
+                    .setPositiveButton(R.string.go_back) { _, _ ->
+                        model.onBackPressed(true)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .create()
+                    .show()
+            }
+        )
 
-        model.navigateUp.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigateUp()
-        })
+        model.navigateUp.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigateUp()
+            }
+        )
 
-        model.showBreedingCompletedDialog.observe(viewLifecycleOwner, EventObserver {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.breeding_cycle_complete)
-                .setMessage(R.string.breeding_cycle_complete_message)
-                .setPositiveButton(R.string.save) { _, _ ->
-                    model.save(breedingCompletedConfirmation = true)
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .create()
-                .show()
-        })
+        model.showBreedingCompletedDialog.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.breeding_cycle_complete)
+                    .setMessage(R.string.breeding_cycle_complete_message)
+                    .setPositiveButton(R.string.save) { _, _ ->
+                        model.save(breedingCompletedConfirmation = true)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .create()
+                    .show()
+            }
+        )
 
-        model.showBreedingCompletedDialogWithAddCattleOption.observe(viewLifecycleOwner, EventObserver {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.breeding_cycle_complete)
-                .setMessage(R.string.breeding_cycle_complete_message)
-                .setPositiveButton(R.string.just_save) { _, _ ->
-                    model.save(breedingCompletedConfirmation = true)
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .setNeutralButton(R.string.save_and_add_new_cattle) { _, _ ->
-                    model.save(breedingCompletedConfirmation = true, saveAndAddNewCattle = true)
-                }
-                .create()
-                .show()
-        })
+        model.showBreedingCompletedDialogWithAddCattleOption.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.breeding_cycle_complete)
+                    .setMessage(R.string.breeding_cycle_complete_message)
+                    .setPositiveButton(R.string.just_save) { _, _ ->
+                        model.save(breedingCompletedConfirmation = true)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .setNeutralButton(R.string.save_and_add_new_cattle) { _, _ ->
+                        model.save(breedingCompletedConfirmation = true, saveAndAddNewCattle = true)
+                    }
+                    .create()
+                    .show()
+            }
+        )
 
-        model.launchAddNewCattleScreen.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toAddEditCattle(parentId = it.id))
-        })
+        model.launchAddNewCattleScreen.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigate(toAddEditCattle(parentId = it.id))
+            }
+        )
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             model.onBackPressed()

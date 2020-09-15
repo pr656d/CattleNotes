@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.utils
 
 import android.telephony.SmsMessage
@@ -35,7 +34,7 @@ fun String.toGroup(): Cattle.Group? = Converters().fromStringToGroup(this)
 fun Char.toMilkOf(): Milk.MilkOf = Milk.MilkOf.INSTANCES.filterKeys {
     // Compare with first letter of key.
     it.first() == this
-}.values.first()    // Return the first match.
+}.values.first() // Return the first match.
 
 fun String.toMilkOf(): Milk.MilkOf = Converters().fromStringToMilkOf(this)
 
@@ -43,7 +42,9 @@ fun String.toMilkSource(): Milk.Source = Converters().fromStringToMilkSource(thi
 
 fun String.toMilkSmsSource(): Milk.Source.Sms =
     Converters().fromStringToMilkSource(this) as? Milk.Source.Sms
-        ?: throw IllegalArgumentException("Invalid String : Can not convert $this to Milk.Source.Sms")
+        ?: throw IllegalArgumentException(
+            "Invalid String : Can not convert $this to Milk.Source.Sms"
+        )
 
 // region Time
 fun Long.toLocalDate(): LocalDate = TimeUtils.toLocalDate(this)
@@ -60,7 +61,10 @@ fun Long.toZonedDateTime(): ZonedDateTime = TimeUtils.toZonedDateTime(this)
 // end region
 
 // region Cattle
-fun Cattle.nameOrTagNumber(): String = if (!this.name.isNullOrBlank()) name!! else tagNumber.toString()
+fun Cattle.nameOrTagNumber(): String = if (!this.name.isNullOrBlank())
+    name!!
+else
+    tagNumber.toString()
 // end region
 
 // region SMS

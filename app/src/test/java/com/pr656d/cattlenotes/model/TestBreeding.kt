@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -22,13 +21,13 @@ import com.pr656d.model.Breeding.ArtificialInsemination
 import com.pr656d.model.Breeding.BreedingEvent
 import com.pr656d.shared.utils.BreedingUtil
 import com.pr656d.test.MainCoroutineRule
+import java.util.UUID
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.threeten.bp.LocalDate
-import java.util.*
 import org.hamcrest.Matchers.equalTo as isEqualTo
 
 @ExperimentalCoroutinesApi
@@ -46,7 +45,7 @@ class TestBreeding {
         pregnancyCheckStatus: Boolean? = null,
         dryOffStatus: Boolean? = null,
         calvingStatus: Boolean? = null
-    ) : Breeding {
+    ): Breeding {
         val aiDate = LocalDate.now()
 
         return Breeding(

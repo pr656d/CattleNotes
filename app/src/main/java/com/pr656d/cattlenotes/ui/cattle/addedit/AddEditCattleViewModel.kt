@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,11 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.cattle.addedit
 
 import androidx.annotation.StringRes
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
+import androidx.lifecycle.viewModelScope
 import com.pr656d.cattlenotes.R
 import com.pr656d.cattlenotes.ui.cattle.addedit.parent.ParentActionListener
 import com.pr656d.model.AnimalType
@@ -118,7 +124,7 @@ class AddEditCattleViewModel @Inject constructor(
     // Make it open to test
     val parentCattle = MediatorLiveData<Cattle?>()
 
-    val parent:LiveData<String?> = parentCattle.map { it?.nameOrTagNumber() }
+    val parent: LiveData<String?> = parentCattle.map { it?.nameOrTagNumber() }
 
     val homeBorn = MediatorLiveData<Boolean>()
 
@@ -312,24 +318,24 @@ class AddEditCattleViewModel @Inject constructor(
 
     private fun isAllFieldsValid(): Boolean {
         return tagNumberErrorMessage.value == VALID_FIELD &&
-                typeErrorMessage.value == VALID_FIELD &&
-                breedErrorMessage.value == VALID_FIELD &&
-                groupErrorMessage.value == VALID_FIELD &&
-                lactationErrorMessage.value == VALID_FIELD
+            typeErrorMessage.value == VALID_FIELD &&
+            breedErrorMessage.value == VALID_FIELD &&
+            groupErrorMessage.value == VALID_FIELD &&
+            lactationErrorMessage.value == VALID_FIELD
     }
 
     private fun isAllFieldsEmpty(): Boolean {
         return tagNumber.value.isNullOrEmpty() &&
-                name.value.isNullOrEmpty() &&
-                type.value.isNullOrEmpty() &&
-                breed.value.isNullOrEmpty() &&
-                group.value.isNullOrEmpty() &&
-                lactation.value.isNullOrEmpty() &&
-                dob.value == null &&
-                parent.value.isNullOrEmpty() &&
-                (homeBorn.value == null || homeBorn.value == false) &&
-                purchaseAmount.value.isNullOrEmpty() &&
-                purchaseDate.value == null
+            name.value.isNullOrEmpty() &&
+            type.value.isNullOrEmpty() &&
+            breed.value.isNullOrEmpty() &&
+            group.value.isNullOrEmpty() &&
+            lactation.value.isNullOrEmpty() &&
+            dob.value == null &&
+            parent.value.isNullOrEmpty() &&
+            (homeBorn.value == null || homeBorn.value == false) &&
+            purchaseAmount.value.isNullOrEmpty() &&
+            purchaseDate.value == null
     }
 
     override fun parentSelected(cattle: Cattle) {

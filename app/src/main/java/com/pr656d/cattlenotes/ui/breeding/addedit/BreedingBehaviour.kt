@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import androidx.lifecycle.LiveData
@@ -62,7 +61,6 @@ interface BreedingBehaviour : BreedingUiDelegate {
      */
     val resetStrawCode: LiveData<Boolean>
 
-
     /* Repeat Heat */
 
     /**
@@ -89,7 +87,6 @@ interface BreedingBehaviour : BreedingUiDelegate {
      * When repeat heat status is not positive reset it.
      */
     val resetRepeatHeatDateActual: LiveData<Boolean>
-
 
     /* Pregnancy Check */
 
@@ -118,7 +115,6 @@ interface BreedingBehaviour : BreedingUiDelegate {
      */
     val resetPregnancyCheckDateActual: LiveData<Boolean>
 
-
     /* Dry Off */
 
     /**
@@ -145,7 +141,6 @@ interface BreedingBehaviour : BreedingUiDelegate {
      * When dry off status is not positive then reset it.
      */
     val resetDryOffDateActual: LiveData<Boolean>
-
 
     /* Calving */
 
@@ -285,7 +280,6 @@ class BreedingBehaviourImpl @Inject constructor(
     override val resetRepeatHeatDateActual: LiveData<Boolean>
         get() = repeatHeatStatus.map { it != true }
 
-
     /* Pregnancy Check */
 
     /**
@@ -318,7 +312,6 @@ class BreedingBehaviourImpl @Inject constructor(
     override val resetPregnancyCheckDateActual: LiveData<Boolean>
         get() = pregnancyCheckStatus.map { it == null }
 
-
     /* Dry Off */
 
     /**
@@ -350,7 +343,6 @@ class BreedingBehaviourImpl @Inject constructor(
      */
     override val resetDryOffDateActual: LiveData<Boolean>
         get() = dryOffStatus.map { it != true }
-
 
     /* Calving */
 

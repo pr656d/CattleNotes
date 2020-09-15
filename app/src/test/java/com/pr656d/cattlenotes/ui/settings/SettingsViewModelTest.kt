@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.settings
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -21,7 +20,13 @@ import com.pr656d.androidtest.util.LiveDataTestUtil
 import com.pr656d.cattlenotes.test.fakes.data.prefs.FakePreferenceStorageRepository
 import com.pr656d.model.Theme
 import com.pr656d.shared.domain.milk.sms.GetPreferredMilkSmsSourceUseCase
-import com.pr656d.shared.domain.settings.*
+import com.pr656d.shared.domain.settings.GetAutomaticMilkingCollectionUseCase
+import com.pr656d.shared.domain.settings.GetAvailableThemesUseCase
+import com.pr656d.shared.domain.settings.GetThemeUseCase
+import com.pr656d.shared.domain.settings.ObservePreferredTimeOfBreedingReminderUseCase
+import com.pr656d.shared.domain.settings.SetAutomaticMilkingCollectionUseCase
+import com.pr656d.shared.domain.settings.SetPreferredTimeOfBreedingReminderUseCase
+import com.pr656d.shared.domain.settings.SetThemeUseCase
 import com.pr656d.test.MainCoroutineRule
 import com.pr656d.test.runBlockingTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -56,7 +61,8 @@ class SettingsViewModelTest {
         }
 
     private fun createSettingsViewModel(
-        fakePreferenceStorageRepository: FakePreferenceStorageRepository = preferenceStorageRepository
+        fakePreferenceStorageRepository: FakePreferenceStorageRepository =
+            preferenceStorageRepository
     ): SettingsViewModel {
         val coroutineDispatcher = coroutineRule.testDispatcher
 
@@ -96,20 +102,21 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun onBreedingReminderClicked_navigateToBreedingReminderTimeSelector() = coroutineRule.runBlockingTest {
-        val viewModel = createSettingsViewModel()
+    fun onBreedingReminderClicked_navigateToBreedingReminderTimeSelector() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createSettingsViewModel()
 
-        // Call onBreedingReminderClicked
-        viewModel.onBreedingReminderClicked()
+            // Call onBreedingReminderClicked
+            viewModel.onBreedingReminderClicked()
 
-        val navigateToBreedingReminderTimeSelector =
-            LiveDataTestUtil.getValue(viewModel.navigateToBreedingReminderTimeSelector)
+            val navigateToBreedingReminderTimeSelector =
+                LiveDataTestUtil.getValue(viewModel.navigateToBreedingReminderTimeSelector)
 
-        assertThat(
-            Unit,
-            isEqualTo(navigateToBreedingReminderTimeSelector?.getContentIfNotHandled())
-        )
-    }
+            assertThat(
+                Unit,
+                isEqualTo(navigateToBreedingReminderTimeSelector?.getContentIfNotHandled())
+            )
+        }
 
     @Test
     fun onMilkSmsSenderClicked_navigateToSmsSourceSelector() = coroutineRule.runBlockingTest {
@@ -125,17 +132,18 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun toggleAutomaticMilkCollectionCalled_setAutomaticMilkingCollection() = coroutineRule.runBlockingTest {
-        val viewModel = createSettingsViewModel()
+    fun toggleAutomaticMilkCollectionCalled_setAutomaticMilkingCollection() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createSettingsViewModel()
 
-        // Call toggleAutomaticMilkCollection
-        viewModel.toggleAutomaticMilkCollection(false)
+            // Call toggleAutomaticMilkCollection
+            viewModel.toggleAutomaticMilkCollection(false)
 
-        val automaticMilkingCollection =
-            LiveDataTestUtil.getValue(viewModel.automaticMilkingCollection)
+            val automaticMilkingCollection =
+                LiveDataTestUtil.getValue(viewModel.automaticMilkingCollection)
 
-        assertThat(true, isEqualTo(automaticMilkingCollection))
-    }
+            assertThat(true, isEqualTo(automaticMilkingCollection))
+        }
 
     @Test
     fun creditsClicked_navigateToCredits() = coroutineRule.runBlockingTest {

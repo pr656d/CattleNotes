@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.utils
 
 import android.content.Context
 import com.pr656d.shared.R
-import org.threeten.bp.*
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
 import org.threeten.bp.format.DateTimeFormatter
 
 object TimeUtils {
@@ -32,7 +36,7 @@ object TimeUtils {
     /**
      * Return [LocalDate] of epoch day.
      */
-    fun toLocalDate(epochDay : Long): LocalDate = LocalDate.ofEpochDay(epochDay)
+    fun toLocalDate(epochDay: Long): LocalDate = LocalDate.ofEpochDay(epochDay)
 
     /**
      * Return [LocalDate] from string.
@@ -56,12 +60,22 @@ object TimeUtils {
      * Return [ZonedDateTime] of [dayOfMonth], [month] and [year].
      */
     fun toZonedDateTime(
-        dayOfMonth: Int, month: Int, year: Int,
-        hour: Int = 0, minute: Int = 0, second: Int = 0, nanoSecond: Int = 0,
+        dayOfMonth: Int,
+        month: Int,
+        year: Int,
+        hour: Int = 0,
+        minute: Int = 0,
+        second: Int = 0,
+        nanoSecond: Int = 0,
         zoneId: ZoneId = ZoneId.systemDefault()
     ): ZonedDateTime = ZonedDateTime.of(
-        year, month, dayOfMonth,
-        hour, minute, second, nanoSecond,
+        year,
+        month,
+        dayOfMonth,
+        hour,
+        minute,
+        second,
+        nanoSecond,
         zoneId
     )
 
@@ -153,8 +167,13 @@ object TimeUtils {
      * dayOfMonth, Month, Year, Hour, Minute, Second, NanoSecond and ZoneId.
      */
     fun toEpochMilli(
-        dd: Int, mm: Int, yyyy: Int,
-        hour: Int = 0, minute: Int = 0, second: Int = 0, nanoSecond: Int = 0,
+        dd: Int,
+        mm: Int,
+        yyyy: Int,
+        hour: Int = 0,
+        minute: Int = 0,
+        second: Int = 0,
+        nanoSecond: Int = 0,
         zoneId: ZoneId = ZoneId.systemDefault()
     ): Long = toZonedDateTime(dd, mm, yyyy, hour, minute, second, nanoSecond, zoneId)
         .toInstant()
@@ -201,7 +220,7 @@ object TimeUtils {
         getDayPartingString(context, time.toLocalTime())
 
     /** Return a string part of day based on time */
-    fun getDayPartingString(context: Context, time: LocalTime): String = when(time.hour) {
+    fun getDayPartingString(context: Context, time: LocalTime): String = when (time.hour) {
         in 0..11 -> context.getString(R.string.morning)
         in 12..15 -> context.getString(R.string.afternoon)
         in 16..20 -> context.getString(R.string.evening)

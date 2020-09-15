@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.domain.login
 
 import com.pr656d.shared.data.prefs.PreferenceStorageRepository
@@ -25,12 +24,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-open class ObserveLoginCompletedUseCase  @Inject constructor(
+open class ObserveLoginCompletedUseCase @Inject constructor(
     private val preferenceStorageRepository: PreferenceStorageRepository,
     @DefaultDispatcher defaultDispatcher: CoroutineDispatcher
 ) : FlowUseCase<Unit, Boolean>(defaultDispatcher) {
 
     override fun execute(parameters: Unit): Flow<Result<Boolean>> =
         preferenceStorageRepository.getObservableLoginCompleted().map { Result.Success(it) }
-
 }

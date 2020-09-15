@@ -10,4 +10,5 @@ object ClassPath {
         "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.NAVIGATION_UI_KTX}"
     const val OSS_LICENSES =
         "com.google.android.gms:oss-licenses-plugin:${Versions.OSS_PLUGIN}"
+    const val SPOTLESS = "com.diffplug.spotless:spotless-plugin-gradle:${Versions.SPOTLESS}"
 }

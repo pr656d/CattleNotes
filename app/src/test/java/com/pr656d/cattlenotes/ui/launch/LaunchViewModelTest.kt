@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.launch
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -69,29 +68,30 @@ class LaunchViewModelTest {
     }
 
     @Test
-    fun completedLogInAndFirstTimeProfileSetup_navigateToMainActivity() = coroutineRule.runBlockingTest {
-        // Given that user is *not* logged in and *not* completed first time profile setup.
-        val preferenceStorageRepository = object : FakePreferenceStorageRepository() {
-            override fun getLoginCompleted(): Boolean = true
-            override fun getFirstTimeProfileSetupCompleted(): Boolean = true
-        }
+    fun completedLogInAndFirstTimeProfileSetup_navigateToMainActivity() =
+        coroutineRule.runBlockingTest {
+            // Given that user is *not* logged in and *not* completed first time profile setup.
+            val preferenceStorageRepository = object : FakePreferenceStorageRepository() {
+                override fun getLoginCompleted(): Boolean = true
+                override fun getFirstTimeProfileSetupCompleted(): Boolean = true
+            }
 
-        val getLoginAndAllStepsCompletedUseCase =
-            GetLoginAndAllStepsCompletedUseCase(
-                preferenceStorageRepository,
-                coroutineRule.testDispatcher
+            val getLoginAndAllStepsCompletedUseCase =
+                GetLoginAndAllStepsCompletedUseCase(
+                    preferenceStorageRepository,
+                    coroutineRule.testDispatcher
+                )
+
+            val viewModel = LaunchViewModel(getLoginAndAllStepsCompletedUseCase)
+
+            // When launchDestination is observed
+            // Then verify user is navigated to the login activity
+            val navigateEvent = LiveDataTestUtil.getValue(viewModel.launchDestination)
+            assertThat(
+                LaunchDestination.MainActivity,
+                isEqualTo(navigateEvent?.getContentIfNotHandled())
             )
-
-        val viewModel = LaunchViewModel(getLoginAndAllStepsCompletedUseCase)
-
-        // When launchDestination is observed
-        // Then verify user is navigated to the login activity
-        val navigateEvent = LiveDataTestUtil.getValue(viewModel.launchDestination)
-        assertThat(
-            LaunchDestination.MainActivity,
-            isEqualTo(navigateEvent?.getContentIfNotHandled())
-        )
-    }
+        }
 
     @Test
     fun notCompletedFirstTimeSetupProfileSetup_navigateToLoginActivity() =

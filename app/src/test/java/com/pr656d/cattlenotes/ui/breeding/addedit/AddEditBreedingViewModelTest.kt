@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.breeding.addedit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -34,7 +33,11 @@ import com.pr656d.test.runBlockingTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertThat
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.threeten.bp.LocalDate
@@ -119,29 +122,29 @@ class AddEditBreedingViewModelTest {
     }
 
     private fun AddEditBreedingViewModel.observeUnobserved() {
-        cattle.observeForever {  }
-        oldBreeding.observeForever {  }
+        cattle.observeForever { }
+        oldBreeding.observeForever { }
         /*  AI  */
-        aiDate.observeForever {  }
-        didBy.observeForever {  }
-        bullName.observeForever {  }
-        strawCode.observeForever {  }
+        aiDate.observeForever { }
+        didBy.observeForever { }
+        bullName.observeForever { }
+        strawCode.observeForever { }
         /*  Repeat heat  */
-        repeatHeatExpectedOn.observeForever {  }
-        repeatHeatStatus.observeForever {  }
-        repeatHeatDoneOn.observeForever {  }
+        repeatHeatExpectedOn.observeForever { }
+        repeatHeatStatus.observeForever { }
+        repeatHeatDoneOn.observeForever { }
         /*  Pregnancy check  */
-        pregnancyCheckExpectedOn.observeForever {  }
-        pregnancyCheckStatus.observeForever {  }
-        pregnancyCheckDoneOn.observeForever {  }
+        pregnancyCheckExpectedOn.observeForever { }
+        pregnancyCheckStatus.observeForever { }
+        pregnancyCheckDoneOn.observeForever { }
         /*  Dry off  */
-        dryOffExpectedOn.observeForever {  }
-        dryOffStatus.observeForever {  }
-        dryOffDoneOn.observeForever {  }
+        dryOffExpectedOn.observeForever { }
+        dryOffStatus.observeForever { }
+        dryOffDoneOn.observeForever { }
         /*  Calving  */
-        calvingExpectedOn.observeForever {  }
-        calvingStatus.observeForever {  }
-        calvingDoneOn.observeForever {  }
+        calvingExpectedOn.observeForever { }
+        calvingStatus.observeForever { }
+        calvingDoneOn.observeForever { }
     }
 
     @Test
@@ -226,30 +229,31 @@ class AddEditBreedingViewModelTest {
      * When aiDate is set and back is pressed with back confirmation as true navigate up.
      */
     @Test
-    fun onBackPressedCalledAiDateIsSetAndBackConfirmationIsTrue_navigateUp() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun onBackPressedCalledAiDateIsSetAndBackConfirmationIsTrue_navigateUp() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Make sure we have aiDate.
-        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
-        assertTrue(hasAiDate)
+            // Make sure we have aiDate.
+            val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+            assertTrue(hasAiDate)
 
-        // Call onBackPressed with out back confirmation
-        viewModel.onBackPressed()
+            // Call onBackPressed with out back confirmation
+            viewModel.onBackPressed()
 
-        // Check we have showed back confirmation earlier
-        val showBackConfirmationDialog =
-            LiveDataTestUtil.getValue(viewModel.showBackConfirmationDialog)
-        assertThat(Unit, isEqualTo(showBackConfirmationDialog?.peekContent()))
+            // Check we have showed back confirmation earlier
+            val showBackConfirmationDialog =
+                LiveDataTestUtil.getValue(viewModel.showBackConfirmationDialog)
+            assertThat(Unit, isEqualTo(showBackConfirmationDialog?.peekContent()))
 
-        // Call onBackPressed with back confirmation
-        viewModel.onBackPressed(backConfirmation = true)
+            // Call onBackPressed with back confirmation
+            viewModel.onBackPressed(backConfirmation = true)
 
-        val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
-        assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
-    }
+            val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
+            assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
+        }
 
     @Test
     fun saveCalled_showMessageOnError() = coroutineRule.runBlockingTest {
@@ -261,6 +265,7 @@ class AddEditBreedingViewModelTest {
                 override suspend fun addBreeding(breeding: Breeding): Long {
                     throw Exception("Error!")
                 }
+
                 override suspend fun updateBreeding(breeding: Breeding) {
                     throw Exception("Error!")
                 }
@@ -304,82 +309,94 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun editingExistingBreedingCycleBindDataCalled_verifyBindingOfData() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun editingExistingBreedingCycleBindDataCalled_verifyBindingOfData() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        val actualOldBreedingCycle = TestData.breedingInitial
+            val actualOldBreedingCycle = TestData.breedingInitial
 
-        // Set old breeding
-        viewModel.setBreeding(actualOldBreedingCycle.id)
+            // Set old breeding
+            viewModel.setBreeding(actualOldBreedingCycle.id)
 
-        // AI
-        val aiDate = LiveDataTestUtil.getValue(viewModel.aiDate)
-        assertThat(actualOldBreedingCycle.artificialInsemination.date, isEqualTo(aiDate))
+            // AI
+            val aiDate = LiveDataTestUtil.getValue(viewModel.aiDate)
+            assertThat(actualOldBreedingCycle.artificialInsemination.date, isEqualTo(aiDate))
 
-        // Repeat Heat
-        val repeatHeatExpectedOn = LiveDataTestUtil.getValue(viewModel.repeatHeatExpectedOn)
-        assertThat(actualOldBreedingCycle.repeatHeat.expectedOn, isEqualTo(repeatHeatExpectedOn))
+            // Repeat Heat
+            val repeatHeatExpectedOn = LiveDataTestUtil.getValue(viewModel.repeatHeatExpectedOn)
+            assertThat(
+                actualOldBreedingCycle.repeatHeat.expectedOn,
+                isEqualTo(repeatHeatExpectedOn)
+            )
 
-        val repeatHeatStatus = LiveDataTestUtil.getValue(viewModel.repeatHeatStatus)
-        assertThat(actualOldBreedingCycle.repeatHeat.status, isEqualTo(repeatHeatStatus))
+            val repeatHeatStatus = LiveDataTestUtil.getValue(viewModel.repeatHeatStatus)
+            assertThat(actualOldBreedingCycle.repeatHeat.status, isEqualTo(repeatHeatStatus))
 
-        val repeatHeatDoneOn = LiveDataTestUtil.getValue(viewModel.repeatHeatDoneOn)
-        assertThat(actualOldBreedingCycle.repeatHeat.doneOn, isEqualTo(repeatHeatDoneOn))
+            val repeatHeatDoneOn = LiveDataTestUtil.getValue(viewModel.repeatHeatDoneOn)
+            assertThat(actualOldBreedingCycle.repeatHeat.doneOn, isEqualTo(repeatHeatDoneOn))
 
-        // Pregnancy check
-        val pregnancyCheckExpectedOn = LiveDataTestUtil.getValue(viewModel.pregnancyCheckExpectedOn)
-        assertThat(
-            actualOldBreedingCycle.pregnancyCheck.expectedOn,
-            isEqualTo(pregnancyCheckExpectedOn)
-        )
+            // Pregnancy check
+            val pregnancyCheckExpectedOn =
+                LiveDataTestUtil.getValue(viewModel.pregnancyCheckExpectedOn)
+            assertThat(
+                actualOldBreedingCycle.pregnancyCheck.expectedOn,
+                isEqualTo(pregnancyCheckExpectedOn)
+            )
 
-        val pregnancyCheckStatus = LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatus)
-        assertThat(actualOldBreedingCycle.pregnancyCheck.status, isEqualTo(pregnancyCheckStatus))
+            val pregnancyCheckStatus = LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatus)
+            assertThat(
+                actualOldBreedingCycle.pregnancyCheck.status,
+                isEqualTo(pregnancyCheckStatus)
+            )
 
-        val pregnancyCheckDoneOn = LiveDataTestUtil.getValue(viewModel.pregnancyCheckDoneOn)
-        assertThat(actualOldBreedingCycle.pregnancyCheck.doneOn, isEqualTo(pregnancyCheckDoneOn))
+            val pregnancyCheckDoneOn = LiveDataTestUtil.getValue(viewModel.pregnancyCheckDoneOn)
+            assertThat(
+                actualOldBreedingCycle.pregnancyCheck.doneOn,
+                isEqualTo(pregnancyCheckDoneOn)
+            )
 
-        // Dry off
-        val dryOffExpectedOn = LiveDataTestUtil.getValue(viewModel.dryOffExpectedOn)
-        assertThat(actualOldBreedingCycle.dryOff.expectedOn, isEqualTo(dryOffExpectedOn))
+            // Dry off
+            val dryOffExpectedOn = LiveDataTestUtil.getValue(viewModel.dryOffExpectedOn)
+            assertThat(actualOldBreedingCycle.dryOff.expectedOn, isEqualTo(dryOffExpectedOn))
 
-        val dryOffStatus = LiveDataTestUtil.getValue(viewModel.dryOffStatus)
-        assertThat(actualOldBreedingCycle.dryOff.status, isEqualTo(dryOffStatus))
+            val dryOffStatus = LiveDataTestUtil.getValue(viewModel.dryOffStatus)
+            assertThat(actualOldBreedingCycle.dryOff.status, isEqualTo(dryOffStatus))
 
-        val dryOffDoneOn = LiveDataTestUtil.getValue(viewModel.dryOffDoneOn)
-        assertThat(actualOldBreedingCycle.dryOff.doneOn, isEqualTo(dryOffDoneOn))
+            val dryOffDoneOn = LiveDataTestUtil.getValue(viewModel.dryOffDoneOn)
+            assertThat(actualOldBreedingCycle.dryOff.doneOn, isEqualTo(dryOffDoneOn))
 
-        // Calving
-        val calvingExpectedOn = LiveDataTestUtil.getValue(viewModel.calvingExpectedOn)
-        assertThat(actualOldBreedingCycle.calving.expectedOn, isEqualTo(calvingExpectedOn))
+            // Calving
+            val calvingExpectedOn = LiveDataTestUtil.getValue(viewModel.calvingExpectedOn)
+            assertThat(actualOldBreedingCycle.calving.expectedOn, isEqualTo(calvingExpectedOn))
 
-        val calvingStatus = LiveDataTestUtil.getValue(viewModel.calvingStatus)
-        assertThat(actualOldBreedingCycle.calving.status, isEqualTo(calvingStatus))
+            val calvingStatus = LiveDataTestUtil.getValue(viewModel.calvingStatus)
+            assertThat(actualOldBreedingCycle.calving.status, isEqualTo(calvingStatus))
 
-        val calvingDoneOn = LiveDataTestUtil.getValue(viewModel.calvingDoneOn)
-        assertThat(actualOldBreedingCycle.calving.doneOn, isEqualTo(calvingDoneOn))
-    }
+            val calvingDoneOn = LiveDataTestUtil.getValue(viewModel.calvingDoneOn)
+            assertThat(actualOldBreedingCycle.calving.doneOn, isEqualTo(calvingDoneOn))
+        }
 
     /**
      * When editing existing breeding back pressed without saving. Show back confirmation.
      */
     @Test
-    fun onBackPressedWhileEditingExistingBreeding_showBackPressed() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun onBackPressedWhileEditingExistingBreeding_showBackPressed() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set breeding cycle
-        viewModel.setBreeding(TestData.breedingInitial.id)
+            // Set breeding cycle
+            viewModel.setBreeding(TestData.breedingInitial.id)
 
-        // AiDate gets changed.
-        viewModel.aiDate.value = null
+            // AiDate gets changed.
+            viewModel.aiDate.value = null
 
-        // Call onBackPressed
-        viewModel.onBackPressed()
+            // Call onBackPressed
+            viewModel.onBackPressed()
 
-        val showBackConfirmationDialog =
-            LiveDataTestUtil.getValue(viewModel.showBackConfirmationDialog)
-        assertThat(Unit, isEqualTo(showBackConfirmationDialog?.getContentIfNotHandled()))
-    }
+            val showBackConfirmationDialog =
+                LiveDataTestUtil.getValue(viewModel.showBackConfirmationDialog)
+            assertThat(Unit, isEqualTo(showBackConfirmationDialog?.getContentIfNotHandled()))
+        }
 
     /* Breeding behaviour */
 
@@ -796,121 +813,132 @@ class AddEditBreedingViewModelTest {
      *  When repeat heat status is positive and save called, show breeding completed dialog.
      */
     @Test
-    fun saveCalledAndRepeatHeatStatusPositive_showBreedingCompletedDialog() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun saveCalledAndRepeatHeatStatusPositive_showBreedingCompletedDialog() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set cattle
-        viewModel.setCattle(TestData.cattle1.id)
+            // Set cattle
+            viewModel.setCattle(TestData.cattle1.id)
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Make sure we have aiDate.
-        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
-        assertTrue(hasAiDate)
+            // Make sure we have aiDate.
+            val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+            assertTrue(hasAiDate)
 
-        // Set repeat heat status positive
-        viewModel.repeatHeatStatus.value = true
+            // Set repeat heat status positive
+            viewModel.repeatHeatStatus.value = true
 
-        // Call save
-        viewModel.save()
+            // Call save
+            viewModel.save()
 
-        val showBreedingCompletedDialog = LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
-        assertThat(Unit, isEqualTo(showBreedingCompletedDialog?.getContentIfNotHandled()))
-    }
+            val showBreedingCompletedDialog =
+                LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
+            assertThat(Unit, isEqualTo(showBreedingCompletedDialog?.getContentIfNotHandled()))
+        }
 
     /**
      *  When repeat heat status is negative, pregnancy check status is negative
      *  and save called, show breeding completed dialog.
      */
     @Test
-    fun saveCalledAndPregnancyCheckStatusNegative_showBreedingCompletedDialog() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun saveCalledAndPregnancyCheckStatusNegative_showBreedingCompletedDialog() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set cattle
-        viewModel.setCattle(TestData.cattle1.id)
+            // Set cattle
+            viewModel.setCattle(TestData.cattle1.id)
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Make sure we have aiDate.
-        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
-        assertTrue(hasAiDate)
+            // Make sure we have aiDate.
+            val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+            assertTrue(hasAiDate)
 
-        // Set repeat heat status positive
-        viewModel.repeatHeatStatus.value = false
+            // Set repeat heat status positive
+            viewModel.repeatHeatStatus.value = false
 
-        // Set pregnancy check status negative
-        viewModel.pregnancyCheckStatus.value = false
+            // Set pregnancy check status negative
+            viewModel.pregnancyCheckStatus.value = false
 
-        // Call save
-        viewModel.save()
+            // Call save
+            viewModel.save()
 
-        val showBreedingCompletedDialog = LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
-        assertThat(Unit, isEqualTo(showBreedingCompletedDialog?.getContentIfNotHandled()))
-    }
-
-    @Test
-    fun saveCalledWithCalvingStatusIsTrue_showSaveAndAddNewCattleDialog() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
-
-        // Set cattle
-        viewModel.setCattle(TestData.cattle1.id)
-
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
-
-        // Make sure we have aiDate.
-        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
-        assertTrue(hasAiDate)
-
-        // Set repeat heat status negative
-        viewModel.repeatHeatStatus.value = false
-
-        // Pregnancy check status positive
-        viewModel.pregnancyCheckStatus.value = true
-
-        // Dry off status positive
-        viewModel.dryOffStatus.value = true
-
-        // Calving status positive
-        viewModel.calvingStatus.value = true
-
-        // Call save
-        viewModel.save()
-
-        // Check we don't show showBreedingCompletedDialog dialog.
-        val showBreedingCompletedDialog = LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
-        assertNull(showBreedingCompletedDialog?.getContentIfNotHandled())
-
-        // Check we show showBreedingCompletedDialogWithAddCattleOption dialog.
-        val showBreedingCompletedDialogWithAddCattleOption = LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialogWithAddCattleOption)
-        assertThat(Unit, isEqualTo(showBreedingCompletedDialogWithAddCattleOption?.getContentIfNotHandled()))
-    }
+            val showBreedingCompletedDialog =
+                LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
+            assertThat(Unit, isEqualTo(showBreedingCompletedDialog?.getContentIfNotHandled()))
+        }
 
     @Test
-    fun saveCalledAndBreedingCompletedConfirmationIsTrue_navigateUpOnSuccess() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun saveCalledWithCalvingStatusIsTrue_showSaveAndAddNewCattleDialog() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set cattle
-        viewModel.setCattle(TestData.cattle1.id)
+            // Set cattle
+            viewModel.setCattle(TestData.cattle1.id)
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Set repeat heat status positive
-        viewModel.repeatHeatStatus.value = true
+            // Make sure we have aiDate.
+            val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+            assertTrue(hasAiDate)
 
-        // Make sure we have aiDate.
-        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
-        assertTrue(hasAiDate)
+            // Set repeat heat status negative
+            viewModel.repeatHeatStatus.value = false
 
-        // Call save with breeding confirmation is true
-        viewModel.save(breedingCompletedConfirmation = true)
+            // Pregnancy check status positive
+            viewModel.pregnancyCheckStatus.value = true
 
-        val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
-        assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
-    }
+            // Dry off status positive
+            viewModel.dryOffStatus.value = true
+
+            // Calving status positive
+            viewModel.calvingStatus.value = true
+
+            // Call save
+            viewModel.save()
+
+            // Check we don't show showBreedingCompletedDialog dialog.
+            val showBreedingCompletedDialog =
+                LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialog)
+            assertNull(showBreedingCompletedDialog?.getContentIfNotHandled())
+
+            // Check we show showBreedingCompletedDialogWithAddCattleOption dialog.
+            val showBreedingCompletedDialogWithAddCattleOption =
+                LiveDataTestUtil.getValue(viewModel.showBreedingCompletedDialogWithAddCattleOption)
+            assertThat(
+                Unit,
+                isEqualTo(showBreedingCompletedDialogWithAddCattleOption?.getContentIfNotHandled())
+            )
+        }
+
+    @Test
+    fun saveCalledAndBreedingCompletedConfirmationIsTrue_navigateUpOnSuccess() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
+
+            // Set cattle
+            viewModel.setCattle(TestData.cattle1.id)
+
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
+
+            // Set repeat heat status positive
+            viewModel.repeatHeatStatus.value = true
+
+            // Make sure we have aiDate.
+            val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+            assertTrue(hasAiDate)
+
+            // Call save with breeding confirmation is true
+            viewModel.save(breedingCompletedConfirmation = true)
+
+            val navigateUp = LiveDataTestUtil.getValue(viewModel.navigateUp)
+            assertThat(Unit, isEqualTo(navigateUp?.getContentIfNotHandled()))
+        }
 
     /**
      *  When repeat heat status is negative show
@@ -1970,107 +1998,111 @@ class AddEditBreedingViewModelTest {
      *          -> dry off positive -> Repeat heat none
      */
     @Test
-    fun whenAiDateIsSetRepeatHeatIsNegativePregnancyCheckIsPositiveDryOffIsPositiveAndRepeatHeatIsNone() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun whenAiIsSetRHIsNegativePCIsPositiveDryOffIsPositiveAndRepeatHeatIsNone() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Set repeat heat status positive
-        viewModel.repeatHeatStatus.value = false
+            // Set repeat heat status positive
+            viewModel.repeatHeatStatus.value = false
 
-        // Set pregnancy check status positive
-        viewModel.pregnancyCheckStatus.value = true
+            // Set pregnancy check status positive
+            viewModel.pregnancyCheckStatus.value = true
 
-        // Set dry off status none
-        viewModel.dryOffStatus.value = true
+            // Set dry off status none
+            viewModel.dryOffStatus.value = true
 
-        // Set repeat heat status again none
-        viewModel.repeatHeatStatus.value = null
+            // Set repeat heat status again none
+            viewModel.repeatHeatStatus.value = null
 
-        // Make sure we have aiDate.
-        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
-        assertTrue(hasAiDate)
+            // Make sure we have aiDate.
+            val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+            assertTrue(hasAiDate)
 
-        /* AI */
+            /* AI */
 
-        val didByVisibility = LiveDataTestUtil.getValue(viewModel.didByVisibility)!!
-        assertTrue(didByVisibility)
+            val didByVisibility = LiveDataTestUtil.getValue(viewModel.didByVisibility)!!
+            assertTrue(didByVisibility)
 
-        val bullNameVisibility = LiveDataTestUtil.getValue(viewModel.bullNameVisibility)!!
-        assertTrue(bullNameVisibility)
+            val bullNameVisibility = LiveDataTestUtil.getValue(viewModel.bullNameVisibility)!!
+            assertTrue(bullNameVisibility)
 
-        val strawCodeVisibility = LiveDataTestUtil.getValue(viewModel.strawCodeVisibility)!!
-        assertTrue(strawCodeVisibility)
+            val strawCodeVisibility = LiveDataTestUtil.getValue(viewModel.strawCodeVisibility)!!
+            assertTrue(strawCodeVisibility)
 
-        /* Repeat heat */
+            /* Repeat heat */
 
-        val repeatHeatTitleVisibility =
-            LiveDataTestUtil.getValue(viewModel.repeatHeatTitleVisibility)!!
-        assertTrue(repeatHeatTitleVisibility)
+            val repeatHeatTitleVisibility =
+                LiveDataTestUtil.getValue(viewModel.repeatHeatTitleVisibility)!!
+            assertTrue(repeatHeatTitleVisibility)
 
-        val repeatHeatDateExpectedVisibility =
-            LiveDataTestUtil.getValue(viewModel.repeatHeatDateExpectedVisibility)!!
-        assertTrue(repeatHeatDateExpectedVisibility)
+            val repeatHeatDateExpectedVisibility =
+                LiveDataTestUtil.getValue(viewModel.repeatHeatDateExpectedVisibility)!!
+            assertTrue(repeatHeatDateExpectedVisibility)
 
-        val repeatHeatStatusVisibility =
-            LiveDataTestUtil.getValue(viewModel.repeatHeatStatusVisibility)!!
-        assertTrue(repeatHeatStatusVisibility)
+            val repeatHeatStatusVisibility =
+                LiveDataTestUtil.getValue(viewModel.repeatHeatStatusVisibility)!!
+            assertTrue(repeatHeatStatusVisibility)
 
-        val repeatHeatDateActualVisibility =
-            LiveDataTestUtil.getValue(viewModel.repeatHeatDateActualVisibility)!!
-        assertFalse(repeatHeatDateActualVisibility)
+            val repeatHeatDateActualVisibility =
+                LiveDataTestUtil.getValue(viewModel.repeatHeatDateActualVisibility)!!
+            assertFalse(repeatHeatDateActualVisibility)
 
-        /* Pregnancy check */
+            /* Pregnancy check */
 
-        val pregnancyCheckTitleVisibility =
-            LiveDataTestUtil.getValue(viewModel.pregnancyCheckTitleVisibility)!!
-        assertFalse(pregnancyCheckTitleVisibility)
+            val pregnancyCheckTitleVisibility =
+                LiveDataTestUtil.getValue(viewModel.pregnancyCheckTitleVisibility)!!
+            assertFalse(pregnancyCheckTitleVisibility)
 
-        val pregnancyCheckDateExpectedVisibility =
-            LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateExpectedVisibility)!!
-        assertFalse(pregnancyCheckDateExpectedVisibility)
+            val pregnancyCheckDateExpectedVisibility =
+                LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateExpectedVisibility)!!
+            assertFalse(pregnancyCheckDateExpectedVisibility)
 
-        val pregnancyCheckStatusVisibility =
-            LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatusVisibility)!!
-        assertFalse(pregnancyCheckStatusVisibility)
+            val pregnancyCheckStatusVisibility =
+                LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatusVisibility)!!
+            assertFalse(pregnancyCheckStatusVisibility)
 
-        val pregnancyCheckDateActualVisibility =
-            LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateActualVisibility)!!
-        assertFalse(pregnancyCheckDateActualVisibility)
+            val pregnancyCheckDateActualVisibility =
+                LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateActualVisibility)!!
+            assertFalse(pregnancyCheckDateActualVisibility)
 
-        /* Dry off */
+            /* Dry off */
 
-        val dryOffTitleVisibility = LiveDataTestUtil.getValue(viewModel.dryOffTitleVisibility)!!
-        assertFalse(dryOffTitleVisibility)
+            val dryOffTitleVisibility = LiveDataTestUtil.getValue(viewModel.dryOffTitleVisibility)!!
+            assertFalse(dryOffTitleVisibility)
 
-        val dryOffDateExpectedVisibility =
-            LiveDataTestUtil.getValue(viewModel.dryOffDateExpectedVisibility)!!
-        assertFalse(dryOffDateExpectedVisibility)
+            val dryOffDateExpectedVisibility =
+                LiveDataTestUtil.getValue(viewModel.dryOffDateExpectedVisibility)!!
+            assertFalse(dryOffDateExpectedVisibility)
 
-        val dryOffStatusVisibility = LiveDataTestUtil.getValue(viewModel.dryOffStatusVisibility)!!
-        assertFalse(dryOffStatusVisibility)
+            val dryOffStatusVisibility =
+                LiveDataTestUtil.getValue(viewModel.dryOffStatusVisibility)!!
+            assertFalse(dryOffStatusVisibility)
 
-        val dryOffDateActualVisibility =
-            LiveDataTestUtil.getValue(viewModel.dryOffDateActualVisibility)!!
-        assertFalse(dryOffDateActualVisibility)
+            val dryOffDateActualVisibility =
+                LiveDataTestUtil.getValue(viewModel.dryOffDateActualVisibility)!!
+            assertFalse(dryOffDateActualVisibility)
 
-        /* Calving */
+            /* Calving */
 
-        val calvingTitleVisibility = LiveDataTestUtil.getValue(viewModel.calvingTitleVisibility)!!
-        assertFalse(calvingTitleVisibility)
+            val calvingTitleVisibility =
+                LiveDataTestUtil.getValue(viewModel.calvingTitleVisibility)!!
+            assertFalse(calvingTitleVisibility)
 
-        val calvingDateExpectedVisibility =
-            LiveDataTestUtil.getValue(viewModel.calvingDateExpectedVisibility)!!
-        assertFalse(calvingDateExpectedVisibility)
+            val calvingDateExpectedVisibility =
+                LiveDataTestUtil.getValue(viewModel.calvingDateExpectedVisibility)!!
+            assertFalse(calvingDateExpectedVisibility)
 
-        val calvingStatusVisibility = LiveDataTestUtil.getValue(viewModel.calvingStatusVisibility)!!
-        assertFalse(calvingStatusVisibility)
+            val calvingStatusVisibility =
+                LiveDataTestUtil.getValue(viewModel.calvingStatusVisibility)!!
+            assertFalse(calvingStatusVisibility)
 
-        val calvingDateActualVisibility =
-            LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
-        assertFalse(calvingDateActualVisibility)
-    }
+            val calvingDateActualVisibility =
+                LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
+            assertFalse(calvingDateActualVisibility)
+        }
 
     @Test
     fun aiDateIsRemoved_resetEveryThing() = coroutineRule.runBlockingTest {
@@ -2203,130 +2235,135 @@ class AddEditBreedingViewModelTest {
     }
 
     @Test
-    fun repeatHeatStatusIsNoneFromPositive_resetRepeatHeatDateActualIsTrue() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun repeatHeatStatusIsNoneFromPositive_resetRepeatHeatDateActualIsTrue() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Set repeat heat status as Positive
-        viewModel.repeatHeatStatus.value = true
+            // Set repeat heat status as Positive
+            viewModel.repeatHeatStatus.value = true
 
-        // Set repeat heat date done on
-        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+            // Set repeat heat date done on
+            viewModel.repeatHeatDoneOn.value = LocalDate.now()
 
-        // Set repeat heat status as None
-        viewModel.repeatHeatStatus.value = null
+            // Set repeat heat status as None
+            viewModel.repeatHeatStatus.value = null
 
-        val resetRepeatHeatDateActual =
-            LiveDataTestUtil.getValue(viewModel.resetRepeatHeatDateActual)!!
-        assertTrue(resetRepeatHeatDateActual)
-    }
-
-    @Test
-    fun repeatHeatStatusIsNegativeFromNone_resetRepeatHeatDateActualIsTrue() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
-
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
-
-        // Set repeat heat status as None
-        viewModel.repeatHeatStatus.value = null
-
-        // Set repeat heat date done on
-        viewModel.repeatHeatDoneOn.value = LocalDate.now()
-
-        // Set repeat heat status as Negative
-        viewModel.repeatHeatStatus.value = false
-
-        val resetRepeatHeatDateActual =
-            LiveDataTestUtil.getValue(viewModel.resetRepeatHeatDateActual)!!
-        assertTrue(resetRepeatHeatDateActual)
-    }
+            val resetRepeatHeatDateActual =
+                LiveDataTestUtil.getValue(viewModel.resetRepeatHeatDateActual)!!
+            assertTrue(resetRepeatHeatDateActual)
+        }
 
     @Test
-    fun pregnancyCheckStatusIsNoneFromPositive_resetPregnancyCheckDateActualIsTrue() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun repeatHeatStatusIsNegativeFromNone_resetRepeatHeatDateActualIsTrue() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Set repeat heat status as Positive
-        viewModel.repeatHeatStatus.value = false
+            // Set repeat heat status as None
+            viewModel.repeatHeatStatus.value = null
 
-        // Set repeat heat date done on
-        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+            // Set repeat heat date done on
+            viewModel.repeatHeatDoneOn.value = LocalDate.now()
 
-        // Set pregnancy check status positive
-        viewModel.pregnancyCheckStatus.value = true
+            // Set repeat heat status as Negative
+            viewModel.repeatHeatStatus.value = false
 
-        // Set pregnancy check done on
-        viewModel.pregnancyCheckDoneOn.value = LocalDate.now()
-
-        // Set pregnancy check status none
-        viewModel.pregnancyCheckStatus.value = null
-
-        val resetPregnancyCheckDateActual =
-            LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
-        assertTrue(resetPregnancyCheckDateActual)
-    }
+            val resetRepeatHeatDateActual =
+                LiveDataTestUtil.getValue(viewModel.resetRepeatHeatDateActual)!!
+            assertTrue(resetRepeatHeatDateActual)
+        }
 
     @Test
-    fun pregnancyCheckStatusIsNoneFromNegative_resetPregnancyCheckDateActualIsTrue() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun pregnancyCheckStatusIsNoneFromPositive_resetPregnancyCheckDateActualIsTrue() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Set repeat heat status as Positive
-        viewModel.repeatHeatStatus.value = false
+            // Set repeat heat status as Positive
+            viewModel.repeatHeatStatus.value = false
 
-        // Set repeat heat date done on
-        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+            // Set repeat heat date done on
+            viewModel.repeatHeatDoneOn.value = LocalDate.now()
 
-        // Set pregnancy check status negative
-        viewModel.pregnancyCheckStatus.value = false
+            // Set pregnancy check status positive
+            viewModel.pregnancyCheckStatus.value = true
 
-        // Set pregnancy check done on
-        viewModel.pregnancyCheckDoneOn.value = LocalDate.now()
+            // Set pregnancy check done on
+            viewModel.pregnancyCheckDoneOn.value = LocalDate.now()
 
-        // Set pregnancy check status none
-        viewModel.pregnancyCheckStatus.value = null
+            // Set pregnancy check status none
+            viewModel.pregnancyCheckStatus.value = null
 
-        val resetPregnancyCheckDateActual =
-            LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
-        assertTrue(resetPregnancyCheckDateActual)
-    }
+            val resetPregnancyCheckDateActual =
+                LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
+            assertTrue(resetPregnancyCheckDateActual)
+        }
 
     @Test
-    fun dryOffStatusIsNoneFromPositive_resetDryOffDateActualIsTrue() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun pregnancyCheckStatusIsNoneFromNegative_resetPregnancyCheckDateActualIsTrue() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Set repeat heat status as Positive
-        viewModel.repeatHeatStatus.value = false
+            // Set repeat heat status as Positive
+            viewModel.repeatHeatStatus.value = false
 
-        // Set repeat heat date done on
-        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+            // Set repeat heat date done on
+            viewModel.repeatHeatDoneOn.value = LocalDate.now()
 
-        // Set pregnancy check status as Positive
-        viewModel.pregnancyCheckStatus.value = true
+            // Set pregnancy check status negative
+            viewModel.pregnancyCheckStatus.value = false
 
-        // Set dry off status as Positive
-        viewModel.dryOffStatus.value = true
+            // Set pregnancy check done on
+            viewModel.pregnancyCheckDoneOn.value = LocalDate.now()
 
-        // Set dry off date done on
-        viewModel.dryOffDoneOn.value = LocalDate.now()
+            // Set pregnancy check status none
+            viewModel.pregnancyCheckStatus.value = null
 
-        // Set dry off status as None
-        viewModel.dryOffStatus.value = null
+            val resetPregnancyCheckDateActual =
+                LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
+            assertTrue(resetPregnancyCheckDateActual)
+        }
 
-        val resetDryOffDateActual =
-            LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!
-        assertTrue(resetDryOffDateActual)
-    }
+    @Test
+    fun dryOffStatusIsNoneFromPositive_resetDryOffDateActualIsTrue() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
+
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
+
+            // Set repeat heat status as Positive
+            viewModel.repeatHeatStatus.value = false
+
+            // Set repeat heat date done on
+            viewModel.repeatHeatDoneOn.value = LocalDate.now()
+
+            // Set pregnancy check status as Positive
+            viewModel.pregnancyCheckStatus.value = true
+
+            // Set dry off status as Positive
+            viewModel.dryOffStatus.value = true
+
+            // Set dry off date done on
+            viewModel.dryOffDoneOn.value = LocalDate.now()
+
+            // Set dry off status as None
+            viewModel.dryOffStatus.value = null
+
+            val resetDryOffDateActual =
+                LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!
+            assertTrue(resetDryOffDateActual)
+        }
 
     @Test
     fun calvingIsNoneFromPositive_resetCalvingDateActualIsTrue() = coroutineRule.runBlockingTest {
@@ -2406,7 +2443,7 @@ class AddEditBreedingViewModelTest {
 
         // Repeat heat
         val repeatHeatStatus = LiveDataTestUtil.getValue(viewModel.repeatHeatStatus)!!
-        assertTrue(repeatHeatStatus)    // Verify repeat heat status is positive
+        assertTrue(repeatHeatStatus) // Verify repeat heat status is positive
 
         val repeatHeatDateExpectedVisibility =
             LiveDataTestUtil.getValue(viewModel.repeatHeatDateExpectedVisibility)!!
@@ -2422,7 +2459,7 @@ class AddEditBreedingViewModelTest {
 
         // Pregnancy check
         val pregnancyCheckStatus = LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatus)
-        assertNull(pregnancyCheckStatus)    // Verify pregnancy check status status is null
+        assertNull(pregnancyCheckStatus) // Verify pregnancy check status status is null
 
         val resetPregnancyCheckDateActual =
             LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
@@ -2442,7 +2479,7 @@ class AddEditBreedingViewModelTest {
 
         // Dry Off
         val dryOffStatus = LiveDataTestUtil.getValue(viewModel.dryOffStatus)
-        assertNull(dryOffStatus)    // Verify dry off status status is null
+        assertNull(dryOffStatus) // Verify dry off status status is null
 
         val resetDryOffDateActual =
             LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!
@@ -2462,7 +2499,7 @@ class AddEditBreedingViewModelTest {
 
         // Calving
         val calvingStatus = LiveDataTestUtil.getValue(viewModel.calvingStatus)
-        assertNull(calvingStatus)    // Verify calving status status is null
+        assertNull(calvingStatus) // Verify calving status status is null
 
         val resetCalvingDateActual =
             LiveDataTestUtil.getValue(viewModel.resetCalvingDateActual)!!
@@ -2480,7 +2517,6 @@ class AddEditBreedingViewModelTest {
             LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
         assertFalse(calvingDateActualVisibility)
     }
-
 
     /**
      * When we reached to calving and pregnancy check status gets negative then
@@ -2488,147 +2524,149 @@ class AddEditBreedingViewModelTest {
      * Visibility of dry off and calving should be false.
      */
     @Test
-    fun reachedToCalvingIsPositive_pregnancyCheckChangedToNegative() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun reachedToCalvingIsPositive_pregnancyCheckChangedToNegative() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Set repeat heat status as Positive
-        viewModel.repeatHeatStatus.value = false
+            // Set repeat heat status as Positive
+            viewModel.repeatHeatStatus.value = false
 
-        // Set repeat heat date done on
-        viewModel.repeatHeatDoneOn.value = LocalDate.now()
+            // Set repeat heat date done on
+            viewModel.repeatHeatDoneOn.value = LocalDate.now()
 
-        // Set pregnancy check status as Positive
-        viewModel.pregnancyCheckStatus.value = true
+            // Set pregnancy check status as Positive
+            viewModel.pregnancyCheckStatus.value = true
 
-        // Set dry off status as Positive
-        viewModel.dryOffStatus.value = true
+            // Set dry off status as Positive
+            viewModel.dryOffStatus.value = true
 
-        // Set dry off date done on
-        viewModel.dryOffDoneOn.value = LocalDate.now()
+            // Set dry off date done on
+            viewModel.dryOffDoneOn.value = LocalDate.now()
 
-        // Set calving status as Positive
-        viewModel.calvingStatus.value = true
+            // Set calving status as Positive
+            viewModel.calvingStatus.value = true
 
-        // Set calving date done on
-        viewModel.calvingDoneOn.value = LocalDate.now()
+            // Set calving date done on
+            viewModel.calvingDoneOn.value = LocalDate.now()
 
-        // Set pregnancy check negative
-        viewModel.pregnancyCheckStatus.value = false
+            // Set pregnancy check negative
+            viewModel.pregnancyCheckStatus.value = false
 
-        /**
-         * Start checking.
-         */
+            /**
+             * Start checking.
+             */
 
-        // Repeat heat
-        val repeatHeatStatus = LiveDataTestUtil.getValue(viewModel.repeatHeatStatus)!!
-        assertFalse(repeatHeatStatus)    // Verify repeat heat status is negative
+            // Repeat heat
+            val repeatHeatStatus = LiveDataTestUtil.getValue(viewModel.repeatHeatStatus)!!
+            assertFalse(repeatHeatStatus) // Verify repeat heat status is negative
 
-        val repeatHeatDateExpectedVisibility =
-            LiveDataTestUtil.getValue(viewModel.repeatHeatDateExpectedVisibility)!!
-        assertTrue(repeatHeatDateExpectedVisibility)
+            val repeatHeatDateExpectedVisibility =
+                LiveDataTestUtil.getValue(viewModel.repeatHeatDateExpectedVisibility)!!
+            assertTrue(repeatHeatDateExpectedVisibility)
 
-        val repeatHeatStatusVisibility =
-            LiveDataTestUtil.getValue(viewModel.repeatHeatStatusVisibility)!!
-        assertTrue(repeatHeatStatusVisibility)
+            val repeatHeatStatusVisibility =
+                LiveDataTestUtil.getValue(viewModel.repeatHeatStatusVisibility)!!
+            assertTrue(repeatHeatStatusVisibility)
 
-        val repeatHeatDateActualVisibility =
-            LiveDataTestUtil.getValue(viewModel.repeatHeatDateActualVisibility)!!
-        assertFalse(repeatHeatDateActualVisibility)
+            val repeatHeatDateActualVisibility =
+                LiveDataTestUtil.getValue(viewModel.repeatHeatDateActualVisibility)!!
+            assertFalse(repeatHeatDateActualVisibility)
 
-        // Pregnancy check
-        val pregnancyCheckStatus = LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatus)!!
-        assertFalse(pregnancyCheckStatus)    // Verify pregnancy check status status is negative
+            // Pregnancy check
+            val pregnancyCheckStatus = LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatus)!!
+            assertFalse(pregnancyCheckStatus) // Verify pregnancy check status status is negative
 
-        val resetPregnancyCheckDateActual =
-            LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
-        assertFalse(resetPregnancyCheckDateActual)
+            val resetPregnancyCheckDateActual =
+                LiveDataTestUtil.getValue(viewModel.resetPregnancyCheckDateActual)!!
+            assertFalse(resetPregnancyCheckDateActual)
 
-        val pregnancyCheckDateExpectedVisibility =
-            LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateExpectedVisibility)!!
-        assertTrue(pregnancyCheckDateExpectedVisibility)
+            val pregnancyCheckDateExpectedVisibility =
+                LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateExpectedVisibility)!!
+            assertTrue(pregnancyCheckDateExpectedVisibility)
 
-        val pregnancyCheckStatusVisibility =
-            LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatusVisibility)!!
-        assertTrue(pregnancyCheckStatusVisibility)
+            val pregnancyCheckStatusVisibility =
+                LiveDataTestUtil.getValue(viewModel.pregnancyCheckStatusVisibility)!!
+            assertTrue(pregnancyCheckStatusVisibility)
 
-        val pregnancyCheckDateActualVisibility =
-            LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateActualVisibility)!!
-        assertTrue(pregnancyCheckDateActualVisibility)
+            val pregnancyCheckDateActualVisibility =
+                LiveDataTestUtil.getValue(viewModel.pregnancyCheckDateActualVisibility)!!
+            assertTrue(pregnancyCheckDateActualVisibility)
 
-        // Dry Off
-        val dryOffStatus = LiveDataTestUtil.getValue(viewModel.dryOffStatus)
-        assertNull(dryOffStatus)    // Verify dry off status status is null
+            // Dry Off
+            val dryOffStatus = LiveDataTestUtil.getValue(viewModel.dryOffStatus)
+            assertNull(dryOffStatus) // Verify dry off status status is null
 
-        val resetDryOffDateActual =
-            LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!
-        assertTrue(resetDryOffDateActual)
+            val resetDryOffDateActual =
+                LiveDataTestUtil.getValue(viewModel.resetDryOffDateActual)!!
+            assertTrue(resetDryOffDateActual)
 
-        val dryOffDateExpectedVisibility =
-            LiveDataTestUtil.getValue(viewModel.dryOffDateExpectedVisibility)!!
-        assertFalse(dryOffDateExpectedVisibility)
+            val dryOffDateExpectedVisibility =
+                LiveDataTestUtil.getValue(viewModel.dryOffDateExpectedVisibility)!!
+            assertFalse(dryOffDateExpectedVisibility)
 
-        val dryOffStatusVisibility =
-            LiveDataTestUtil.getValue(viewModel.dryOffStatusVisibility)!!
-        assertFalse(dryOffStatusVisibility)
+            val dryOffStatusVisibility =
+                LiveDataTestUtil.getValue(viewModel.dryOffStatusVisibility)!!
+            assertFalse(dryOffStatusVisibility)
 
-        val dryOffDateActualVisibility =
-            LiveDataTestUtil.getValue(viewModel.dryOffDateActualVisibility)!!
-        assertFalse(dryOffDateActualVisibility)
+            val dryOffDateActualVisibility =
+                LiveDataTestUtil.getValue(viewModel.dryOffDateActualVisibility)!!
+            assertFalse(dryOffDateActualVisibility)
 
-        // Calving
-        val calvingStatus = LiveDataTestUtil.getValue(viewModel.calvingStatus)
-        assertNull(calvingStatus)    // Verify calving status status is null
+            // Calving
+            val calvingStatus = LiveDataTestUtil.getValue(viewModel.calvingStatus)
+            assertNull(calvingStatus) // Verify calving status status is null
 
-        val resetCalvingDateActual =
-            LiveDataTestUtil.getValue(viewModel.resetCalvingDateActual)!!
-        assertTrue(resetCalvingDateActual)
+            val resetCalvingDateActual =
+                LiveDataTestUtil.getValue(viewModel.resetCalvingDateActual)!!
+            assertTrue(resetCalvingDateActual)
 
-        val calvingDateExpectedVisibility =
-            LiveDataTestUtil.getValue(viewModel.calvingDateExpectedVisibility)!!
-        assertFalse(calvingDateExpectedVisibility)
+            val calvingDateExpectedVisibility =
+                LiveDataTestUtil.getValue(viewModel.calvingDateExpectedVisibility)!!
+            assertFalse(calvingDateExpectedVisibility)
 
-        val calvingStatusVisibility =
-            LiveDataTestUtil.getValue(viewModel.calvingStatusVisibility)!!
-        assertFalse(calvingStatusVisibility)
+            val calvingStatusVisibility =
+                LiveDataTestUtil.getValue(viewModel.calvingStatusVisibility)!!
+            assertFalse(calvingStatusVisibility)
 
-        val calvingDateActualVisibility =
-            LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
-        assertFalse(calvingDateActualVisibility)
-    }
+            val calvingDateActualVisibility =
+                LiveDataTestUtil.getValue(viewModel.calvingDateActualVisibility)!!
+            assertFalse(calvingDateActualVisibility)
+        }
 
     @Test
-    fun saveCalledForSaveAndAddNewCattle_launchAddNewCattleOnSuccess() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditBreedingViewModel()
+    fun saveCalledForSaveAndAddNewCattle_launchAddNewCattleOnSuccess() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditBreedingViewModel()
 
-        // Set cattle
-        viewModel.setCattle(TestData.cattle1.id)
+            // Set cattle
+            viewModel.setCattle(TestData.cattle1.id)
 
-        // Set aiDate
-        viewModel.aiDate.value = LocalDate.now()
+            // Set aiDate
+            viewModel.aiDate.value = LocalDate.now()
 
-        // Make sure we have aiDate.
-        val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
-        assertTrue(hasAiDate)
+            // Make sure we have aiDate.
+            val hasAiDate = LiveDataTestUtil.getValue(viewModel.hasAiDate)!!
+            assertTrue(hasAiDate)
 
-        // Set repeat heat status negative
-        viewModel.repeatHeatStatus.value = false
+            // Set repeat heat status negative
+            viewModel.repeatHeatStatus.value = false
 
-        // Pregnancy check status positive
-        viewModel.pregnancyCheckStatus.value = true
+            // Pregnancy check status positive
+            viewModel.pregnancyCheckStatus.value = true
 
-        // Dry off status positive
-        viewModel.dryOffStatus.value = true
+            // Dry off status positive
+            viewModel.dryOffStatus.value = true
 
-        // Calving status positive
-        viewModel.calvingStatus.value = true
+            // Calving status positive
+            viewModel.calvingStatus.value = true
 
-        // Call save
-        viewModel.save(breedingCompletedConfirmation = true, saveAndAddNewCattle = true)
+            // Call save
+            viewModel.save(breedingCompletedConfirmation = true, saveAndAddNewCattle = true)
 
-        val launchAddNewCattle = LiveDataTestUtil.getValue(viewModel.launchAddNewCattleScreen)
-        assertThat(TestData.cattle1, isEqualTo(launchAddNewCattle?.getContentIfNotHandled()))
-    }
+            val launchAddNewCattle = LiveDataTestUtil.getValue(viewModel.launchAddNewCattleScreen)
+            assertThat(TestData.cattle1, isEqualTo(launchAddNewCattle?.getContentIfNotHandled()))
+        }
 }

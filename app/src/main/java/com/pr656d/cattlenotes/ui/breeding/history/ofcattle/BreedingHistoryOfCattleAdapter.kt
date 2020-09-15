@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.breeding.history.ofcattle
 
 import android.transition.TransitionInflater
@@ -106,32 +105,32 @@ class BreedingHistoryOfCattleListViewHolder(
 
         val repeatHeatDoneOnVisibility: Boolean
             get() = expanded &&
-                    breeding.repeatHeat.status == true &&
-                    breeding.repeatHeat.doneOn != null
+                breeding.repeatHeat.status == true &&
+                breeding.repeatHeat.doneOn != null
 
         val pregnancyCheckVisibility: Boolean
             get() = expanded && breeding.repeatHeat.status == false
 
         val pregnancyCheckDoneOnVisibility: Boolean
             get() = expanded &&
-                    breeding.pregnancyCheck.status != null &&
-                    breeding.pregnancyCheck.doneOn != null
+                breeding.pregnancyCheck.status != null &&
+                breeding.pregnancyCheck.doneOn != null
 
         val dryOffVisibility: Boolean
             get() = expanded && breeding.pregnancyCheck.status == true
 
         val dryOffDoneOnVisibility: Boolean
             get() = expanded &&
-                    breeding.dryOff.status == true &&
-                    breeding.dryOff.doneOn != null
+                breeding.dryOff.status == true &&
+                breeding.dryOff.doneOn != null
 
         val calvingVisibility: Boolean
             get() = expanded && breeding.dryOff.status == true
 
         val calvingDoneOnVisibility: Boolean
             get() = expanded &&
-                    breeding.calving.status == true &&
-                    breeding.calving.doneOn != null
+                breeding.calving.status == true &&
+                breeding.calving.doneOn != null
     }
 }
 

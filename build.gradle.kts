@@ -1,3 +1,5 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
+
 /*
 * Copyright (c) 2020 Cattle Notes. All rights reserved.
 *
@@ -29,7 +31,12 @@ buildscript {
         classpath(ClassPath.FIREBASE_PERFORMANCE)
         classpath(ClassPath.NAVIGATION_SAFE_ARGS)
         classpath(ClassPath.OSS_LICENSES)
+        classpath(ClassPath.SPOTLESS)
     }
+}
+
+plugins {
+    id(Plugins.SPOTLESS) version Versions.SPOTLESS
 }
 
 allprojects {
@@ -39,6 +46,37 @@ allprojects {
     }
 }
 
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
+subprojects {
+    apply(plugin = Plugins.SPOTLESS)
+    configure<SpotlessExtension> {
+        kotlin {
+            target("**/*.kt")
+            ktlint(Versions.KTLINT).userData(
+                mapOf(
+                    "max_line_length" to "100",
+                    "disabled_rules" to "import-ordering",
+                    "indent_size" to "4",
+                    "continuation_indent_size" to "4"
+                )
+            )
+            trimTrailingWhitespace()
+            indentWithSpaces()
+            endWithNewline()
+            licenseHeaderFile(project.rootProject.file("copyright.kt"))
+        }
+        kotlinGradle {
+            // same as kotlin, but for .gradle.kts files (defaults to '*.gradle.kts')
+            target("**/*.gradle.kts")
+            ktlint(Versions.KTLINT)
+            licenseHeaderFile(project.rootProject.file("copyright.kt"), "(plugins |import |include)")
+        }
+    }
+
+    tasks.whenTaskAdded {
+        when (name) {
+            "preBuild" -> {
+                dependsOn("spotlessApply", "spotlessCheck")
+            }
+        }
+    }
 }

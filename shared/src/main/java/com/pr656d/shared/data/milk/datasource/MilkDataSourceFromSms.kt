@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.data.milk.datasource
 
 import android.content.Context
 import android.database.Cursor
-import android.provider.Telephony.Sms.*
+import android.media.tv.TvContract.Channels.CONTENT_URI
+import android.provider.CalendarContract.Calendars.DEFAULT_SORT_ORDER
+import android.provider.Telephony.TextBasedSmsColumns.ADDRESS
+import android.provider.Telephony.TextBasedSmsColumns.BODY
+import android.provider.Telephony.TextBasedSmsColumns.DATE
+import android.provider.Telephony.TextBasedSmsColumns.TYPE
 import android.telephony.SmsMessage
 import com.pr656d.model.Milk
 import com.pr656d.shared.sms.parser.BGAMAMCSSmsParser
@@ -71,7 +75,7 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
      */
     override suspend fun getMilk(smsSource: Milk.Source.Sms, messageBody: String): Milk {
         /**  Add new branch for new parser.  */
-        return when(smsSource) {
+        return when (smsSource) {
             Milk.Source.Sms.BGAMAMCS -> BGAMAMCSSmsParser.getMilk(messageBody)
         }.apply {
             // This milk is new, Assign new id.
@@ -103,7 +107,10 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
         val contentResolver = context.contentResolver ?: return null
 
         val projection = listOf(
-            ADDRESS, BODY, DATE, TYPE
+            ADDRESS,
+            BODY,
+            DATE,
+            TYPE
         ).toTypedArray()
 
         return contentResolver.query(
@@ -115,4 +122,3 @@ class MilkDataSourceFromSmsImpl @Inject constructor(
         )
     }
 }
-

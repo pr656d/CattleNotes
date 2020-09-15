@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.milking.add
 
 import android.app.Dialog
@@ -53,8 +52,8 @@ class AddMilkDialogFragment : DaggerAppCompatDialogFragment() {
         // We can do that by making an empty dialog and adding the content later.
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle(R.string.add_milk)
-            .setPositiveButton(R.string.save, null)     // We will handle button click later.
-            .setNegativeButton(R.string.discard, null)  // We will handle button click later.
+            .setPositiveButton(R.string.save, null) // We will handle button click later.
+            .setNegativeButton(R.string.discard, null) // We will handle button click later.
             .create()
     }
 
@@ -70,9 +69,12 @@ class AddMilkDialogFragment : DaggerAppCompatDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        model.dismiss.observe(viewLifecycleOwner, EventObserver {
-            dismiss()
-        })
+        model.dismiss.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                dismiss()
+            }
+        )
 
         binding.executeAfter {
             viewModel = model
@@ -101,8 +103,11 @@ class AddMilkDialogFragment : DaggerAppCompatDialogFragment() {
                 }
         }
 
-        model.showMessage.observe(viewLifecycleOwner, EventObserver {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
-        })
+        model.showMessage.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+        )
     }
 }

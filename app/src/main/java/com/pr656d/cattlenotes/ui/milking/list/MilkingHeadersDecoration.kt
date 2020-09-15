@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.milking.list
 
 import android.content.Context
@@ -24,7 +23,11 @@ import android.text.Layout.Alignment.ALIGN_CENTER
 import android.text.StaticLayout
 import android.text.TextPaint
 import android.view.View
-import androidx.core.content.res.*
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.res.getColorOrThrow
+import androidx.core.content.res.getDimensionOrThrow
+import androidx.core.content.res.getDimensionPixelSizeOrThrow
+import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.graphics.withTranslation
 import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
@@ -75,7 +78,9 @@ class MilkingHeadersDecoration(
         val minHeight = ceil(paint.textSize).toInt()
         decorHeight = max(height, minHeight)
 
-        verticalBias = attrs.getFloat(R.styleable.DateHeader_verticalBias, 0.5f).coerceIn(0f, 1f)
+        verticalBias = attrs
+            .getFloat(R.styleable.DateHeader_verticalBias, 0.5f)
+            .coerceIn(0f, 1f)
 
         attrs.recycle()
     }
@@ -121,6 +126,14 @@ class MilkingHeadersDecoration(
         time: ZonedDateTime
     ): StaticLayout {
         val text = TimeUtils.getLabelForMilkingHeader(context, time)
-        return newStaticLayout(text, paint, textWidth, ALIGN_CENTER, 1f, 0f, false)
+        return newStaticLayout(
+            text,
+            paint,
+            textWidth,
+            ALIGN_CENTER,
+            1f,
+            0f,
+            false
+        )
     }
 }

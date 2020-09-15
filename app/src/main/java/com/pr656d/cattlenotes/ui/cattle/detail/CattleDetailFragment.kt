@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.cattle.detail
 
 import android.os.Bundle
@@ -26,7 +25,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.pr656d.cattlenotes.R
@@ -104,71 +105,94 @@ class CattleDetailFragment : NavigationFragment() {
             STATE_COLLAPSED
 
         bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                // On drag it can be collapsed, hide if it is.
-                if (newState == STATE_COLLAPSED && bottomSheetBehavior.skipCollapsed)
-                    bottomSheetBehavior.state = STATE_HIDDEN
+                BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    // On drag it can be collapsed, hide if it is.
+                    if (newState == STATE_COLLAPSED && bottomSheetBehavior.skipCollapsed)
+                        bottomSheetBehavior.state = STATE_HIDDEN
 
-                val state = if (newState == STATE_EXPANDED) {
-                    View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
-                } else {
-                    View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+                    val state = if (newState == STATE_EXPANDED) {
+                        View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+                    } else {
+                        View.IMPORTANT_FOR_ACCESSIBILITY_AUTO
+                    }
+                    binding.layoutContainer.importantForAccessibility = state
+                    binding.appBarLayout.importantForAccessibility = state
                 }
-                binding.layoutContainer.importantForAccessibility = state
-                binding.appBarLayout.importantForAccessibility = state
-            }
 
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-        })
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+            })
 
         binding.includeCattleDetail.layoutParent.setEndIconOnClickListener {
             model.showParentDetail()
         }
 
-        model.showParentDetail.observe(viewLifecycleOwner, EventObserver {
-            bottomSheetBehavior.state = STATE_EXPANDED
-        })
+        model.showParentDetail.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                bottomSheetBehavior.state = STATE_EXPANDED
+            }
+        )
 
-        model.launchAllBreeding.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toBreedingHistory(it.id))
-        })
+        model.launchAllBreeding.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigate(toBreedingHistory(it.id))
+            }
+        )
 
-        model.launchAddBreeding.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toAddBreeding(it.id))
-        })
+        model.launchAddBreeding.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigate(toAddBreeding(it.id))
+            }
+        )
 
-        model.launchEditCattle.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigate(toAddEditCattle(it.id))
-        })
+        model.launchEditCattle.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigate(toAddEditCattle(it.id))
+            }
+        )
 
-        model.launchDeleteConfirmation.observe(viewLifecycleOwner, EventObserver {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle(R.string.delete_cattle_title)
-                .setMessage(R.string.delete_cattle_message)
-                .setPositiveButton(R.string.delete) { _, _ ->
-                    model.deleteCattle(deleteConfirmation = true)
-                }
-                .setNegativeButton(R.string.cancel, null)
-                .create()
-                .show()
-        })
+        model.launchDeleteConfirmation.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.delete_cattle_title)
+                    .setMessage(R.string.delete_cattle_message)
+                    .setPositiveButton(R.string.delete) { _, _ ->
+                        model.deleteCattle(deleteConfirmation = true)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .create()
+                    .show()
+            }
+        )
 
-        model.navigateUp.observe(viewLifecycleOwner, EventObserver {
-            findNavController().navigateUp()
-        })
+        model.navigateUp.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                findNavController().navigateUp()
+            }
+        )
 
-        model.showMessage.observe(viewLifecycleOwner, EventObserver {
-            Snackbar
-                .make(requireView(), it, Snackbar.LENGTH_LONG)
-                .setAnchorView(binding.fabButtonEditCattle)
-                .show()
-        })
+        model.showMessage.observe(
+            viewLifecycleOwner,
+            EventObserver {
+                Snackbar
+                    .make(requireView(), it, Snackbar.LENGTH_LONG)
+                    .setAnchorView(binding.fabButtonEditCattle)
+                    .show()
+            }
+        )
     }
 
     @ExperimentalCoroutinesApi
     private fun onBackPressed(): Boolean {
-        return if (::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state == STATE_EXPANDED) {
+        return if (
+            ::bottomSheetBehavior.isInitialized && bottomSheetBehavior.state == STATE_EXPANDED
+        ) {
             // collapse or hide the sheet
             if (bottomSheetBehavior.isHideable && bottomSheetBehavior.skipCollapsed) {
                 bottomSheetBehavior.state = STATE_HIDDEN

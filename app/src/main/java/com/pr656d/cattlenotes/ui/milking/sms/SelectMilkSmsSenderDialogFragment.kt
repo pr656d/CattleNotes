@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.milking.sms
 
 import android.annotation.SuppressLint
@@ -47,14 +46,16 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         viewModel = parentViewModelProvider(viewModelFactory)
 
-        listAdapter = ArrayAdapter(requireContext(),
-            android.R.layout.simple_list_item_single_choice)
+        listAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_single_choice
+        )
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(R.string.sms_source_title)
-            .setPositiveButton(R.string.ok, null)   // We will handle it later
+            .setPositiveButton(R.string.ok, null) // We will handle it later
             .setNegativeButton(R.string.cancel, null) // We will handle it later
-            .setNeutralButton(R.string.reset, null)   // We will handle it later
+            .setNeutralButton(R.string.reset, null) // We will handle it later
             .setSingleChoiceItems(listAdapter, -1) { _, position ->
                 listAdapter.getItem(position)?.smsSource?.let {
                     selectedSmsSource = it
@@ -68,19 +69,24 @@ class SelectMilkSmsSenderDialogFragment : DaggerAppCompatDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.availableMilkSmsSources.observe(this, Observer { sources ->
-            listAdapter.clear()
-            listAdapter.addAll(sources.map { source ->
-                SmsSourceHolder(
-                    source,
-                    getTitleForMilkSmsSource(source)
+        viewModel.availableMilkSmsSources.observe(
+            this,
+            Observer { sources ->
+                listAdapter.clear()
+                listAdapter.addAll(
+                    sources.map { source ->
+                        SmsSourceHolder(
+                            source,
+                            getTitleForMilkSmsSource(source)
+                        )
+                    }
                 )
-            })
 
-            viewModel.smsSource.value?.let {
-                updateSelectedItem(it)
+                viewModel.smsSource.value?.let {
+                    updateSelectedItem(it)
+                }
             }
-        })
+        )
 
         viewModel.smsSource.observe(this, Observer(::updateSelectedItem))
 

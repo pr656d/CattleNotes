@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Cattle Notes. All rights reserved.
+ * Copyright $YEAR Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,3 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pr656d.shared.analytics
-
-import android.app.Activity
-
-/** Analytics API */
-interface AnalyticsHelper {
-    /** Record screen view */
-    fun setScreenView(screenName: String, activity: Activity)
-
-    /** Record a UI event, e.g. user clicks a button */
-    fun logUiEvent(itemId: String, action: String)
-}

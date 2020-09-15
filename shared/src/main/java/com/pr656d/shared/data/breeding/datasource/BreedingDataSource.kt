@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.data.breeding.datasource
 
 import com.google.firebase.firestore.DocumentSnapshot
@@ -42,8 +41,8 @@ import kotlin.coroutines.resumeWithException
  */
 interface BreedingDataSource {
     /**
-    * Load breeding list from data source.
-    */
+     * Load breeding list from data source.
+     */
     suspend fun load(): List<Breeding>
 
     /**
@@ -98,7 +97,7 @@ class FirestoreBreedingDataSource @Inject constructor(
                 .addOnFailureListener {
                     Timber.d("load() failed at breeding data source : ${it.message}")
 
-                    if(!continuation.isActive) return@addOnFailureListener
+                    if (!continuation.isActive) return@addOnFailureListener
 
                     continuation.resumeWithException(it)
                 }
@@ -185,14 +184,15 @@ class FirestoreBreedingDataSource @Inject constructor(
             Breeding(
                 id = document.id,
                 cattleId = get(KEY_CATTLE_ID) as String,
-                artificialInsemination = (get(KEY_ARTIFICIAL_INSEMINATION) as HashMap<*, *>).let { ai ->
-                    ArtificialInsemination(
-                        (ai[KEY_AI_DATE] as Long).toLocalDate(),
-                        didBy = ai[KEY_AI_DID_BY] as? String,
-                        bullName = ai[KEY_AI_BULL_NAME] as? String,
-                        strawCode = ai[KEY_AI_STRAW_CODE] as? String
-                    )
-                },
+                artificialInsemination = (get(KEY_ARTIFICIAL_INSEMINATION) as HashMap<*, *>)
+                    .let { ai ->
+                        ArtificialInsemination(
+                            (ai[KEY_AI_DATE] as Long).toLocalDate(),
+                            didBy = ai[KEY_AI_DID_BY] as? String,
+                            bullName = ai[KEY_AI_BULL_NAME] as? String,
+                            strawCode = ai[KEY_AI_STRAW_CODE] as? String
+                        )
+                    },
                 repeatHeat = (get(KEY_REPEAT_HEAT) as HashMap<*, *>).let { data ->
                     BreedingEvent.RepeatHeat(
                         expectedOn = (data[KEY_BREEDING_EVENT_EXPECTED_ON] as Long).toLocalDate(),

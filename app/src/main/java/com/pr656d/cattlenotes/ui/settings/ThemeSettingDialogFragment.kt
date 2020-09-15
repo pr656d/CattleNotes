@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.settings
 
 import android.annotation.SuppressLint
@@ -39,30 +38,36 @@ class ThemeSettingDialogFragment : DaggerAppCompatDialogFragment() {
     private lateinit var listAdapter: ArrayAdapter<ThemeHolder>
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        listAdapter = ArrayAdapter(requireContext(),
-                android.R.layout.simple_list_item_single_choice)
+        listAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_single_choice
+        )
 
         return MaterialAlertDialogBuilder(context)
-                .setTitle(R.string.theme_title)
-                .setSingleChoiceItems(listAdapter, 0) { dialog, position ->
-                    listAdapter.getItem(position)?.theme?.let {
-                        viewModel.setTheme(it)
-                    }
-                    dialog.dismiss()
+            .setTitle(R.string.theme_title)
+            .setSingleChoiceItems(listAdapter, 0) { dialog, position ->
+                listAdapter.getItem(position)?.theme?.let {
+                    viewModel.setTheme(it)
                 }
-                .create()
+                dialog.dismiss()
+            }
+            .create()
     }
 
     @SuppressLint("FragmentLiveDataObserve")
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.availableThemes.observe(this, Observer { themes ->
+        viewModel.availableThemes.observe(this) { themes ->
             listAdapter.clear()
-            listAdapter.addAll(themes.map { theme -> ThemeHolder(theme, getTitleForTheme(theme)) })
+            listAdapter.addAll(
+                themes.map { theme ->
+                    ThemeHolder(theme, getTitleForTheme(theme))
+                }
+            )
 
             updateSelectedItem(viewModel.theme.value)
-        })
+        }
 
         viewModel.theme.observe(this, Observer(::updateSelectedItem))
     }

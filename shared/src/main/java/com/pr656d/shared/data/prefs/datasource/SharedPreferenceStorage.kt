@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.data.prefs.datasource
 
 import android.content.Context
@@ -81,8 +80,8 @@ interface PreferenceStorage {
 @ExperimentalCoroutinesApi
 @FlowPreview
 @Singleton
-class SharedPreferenceStorage @Inject constructor(context: Context)
-    : PreferenceStorage {
+class SharedPreferenceStorage @Inject constructor(context: Context) :
+    PreferenceStorage {
 
     private val selectedThemeChannel: ConflatedBroadcastChannel<String?> by lazy {
         ConflatedBroadcastChannel<String?>().apply {
@@ -110,7 +109,8 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
 
     private val prefs: Lazy<SharedPreferences> = lazy { // Lazy to prevent IO access to main thread.
         context.applicationContext.getSharedPreferences(
-            PREFS_NAME, Context.MODE_PRIVATE
+            PREFS_NAME,
+            Context.MODE_PRIVATE
         ).apply {
             registerOnSharedPreferenceChangeListener(changeListener)
         }
@@ -138,7 +138,6 @@ class SharedPreferenceStorage @Inject constructor(context: Context)
     override var observableLoginCompleted: Flow<Boolean>
         get() = loginCompletedChannel.asFlow()
         set(_) = throw IllegalAccessException("This property can't be changed")
-
 
     override var onboardingCompleted by BooleanPreference(
         prefs,

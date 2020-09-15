@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.shared.domain.milk
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -44,9 +43,10 @@ class LoadAllNewMilkFromSmsUseCaseTest {
 
     private fun createLoadAllNewMilkFromSmsUseCase(
         milkRepository: FakeMilkRepository = FakeMilkRepository()
-    ) : LoadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(
+    ): LoadAllNewMilkFromSmsUseCase = LoadAllNewMilkFromSmsUseCase(
         milkRepository,
-        FakePerformanceHelper(), coroutineRule.testDispatcher
+        FakePerformanceHelper(),
+        coroutineRule.testDispatcher
     )
 
     @Test
@@ -103,11 +103,13 @@ class LoadAllNewMilkFromSmsUseCaseTest {
     @Test
     fun localDbHasDataAndSmsSourceHasData_returnNewDataList() = coroutineRule.runBlockingTest {
         val listFromLocalDbSource = listOf(
-            TestData.milk1, TestData.milk2
+            TestData.milk1,
+            TestData.milk2
         )
 
         val listFromSmsSource = listOf(
-            TestData.milk3, TestData.milk4
+            TestData.milk3,
+            TestData.milk4
         )
 
         val useCase = createLoadAllNewMilkFromSmsUseCase(
@@ -128,11 +130,13 @@ class LoadAllNewMilkFromSmsUseCaseTest {
     @Test
     fun duplicateDataInSmsSourceNoNewDataInSms_returnEmptyList() = coroutineRule.runBlockingTest {
         val listFromLocalDbSource = listOf(
-            TestData.milk1, TestData.milk2
+            TestData.milk1,
+            TestData.milk2
         )
 
         val listFromSmsSource = listOf(
-            TestData.milk1, TestData.milk2
+            TestData.milk1,
+            TestData.milk2
         )
 
         val useCase = createLoadAllNewMilkFromSmsUseCase(
@@ -153,11 +157,13 @@ class LoadAllNewMilkFromSmsUseCaseTest {
     @Test
     fun someDataAreDuplicateInSmsSource_returnNewDataList() = coroutineRule.runBlockingTest {
         val listFromLocalDbSource = listOf(
-            TestData.milk1, TestData.milk2
+            TestData.milk1,
+            TestData.milk2
         )
 
         val listFromSmsSource = listOf(
-            TestData.milk1, TestData.milk4
+            TestData.milk1,
+            TestData.milk4
         )
 
         val useCase = createLoadAllNewMilkFromSmsUseCase(

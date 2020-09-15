@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2020 Cattle Notes. All rights reserved.
+ * Copyright 2020 Cattle Notes. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pr656d.cattlenotes.ui.cattle.addedit
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -40,7 +39,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.threeten.bp.LocalDate
@@ -83,7 +86,7 @@ class AddEditCattleViewModelTest {
         return AddEditCattleViewModel(
             addCattleUseCase = AddCattleUseCase(repository, coroutineDispatcher),
             updateCattleUseCase = UpdateCattleUseCase(repository, coroutineDispatcher),
-            getParentListUseCase =  GetParentListUseCase(repository, coroutineDispatcher),
+            getParentListUseCase = GetParentListUseCase(repository, coroutineDispatcher),
             cattleTagNumberValidatorUseCase = CattleTagNumberValidatorUseCase(
                 IsCattleExistWithTagNumberUseCase(repository, coroutineDispatcher),
                 coroutineDispatcher
@@ -98,26 +101,26 @@ class AddEditCattleViewModelTest {
          * Live data which have to explicitly gets observed as they were
          * observed in xml by data binding.
          */
-        oldCattle.observeForever {  }
-        tagNumber.observeForever {  }
-        name.observeForever {  }
-        type.observeForever {  }
-        typeList.observeForever {  }
-        breed.observeForever {  }
-        breedList.observeForever {  }
-        group.observeForever {  }
-        lactation.observeForever {  }
-        dob.observeForever {  }
-        parent.observeForever {  }
-        homeBorn.observeForever {  }
-        purchaseAmount.observeForever {  }
-        purchaseDate.observeForever {  }
-        tagNumberErrorMessage.observeForever {  }
-        typeErrorMessage.observeForever {  }
-        breedErrorMessage.observeForever {  }
-        groupErrorMessage.observeForever {  }
-        lactationErrorMessage.observeForever {  }
-        parentList.observeForever {  }
+        oldCattle.observeForever { }
+        tagNumber.observeForever { }
+        name.observeForever { }
+        type.observeForever { }
+        typeList.observeForever { }
+        breed.observeForever { }
+        breedList.observeForever { }
+        group.observeForever { }
+        lactation.observeForever { }
+        dob.observeForever { }
+        parent.observeForever { }
+        homeBorn.observeForever { }
+        purchaseAmount.observeForever { }
+        purchaseDate.observeForever { }
+        tagNumberErrorMessage.observeForever { }
+        typeErrorMessage.observeForever { }
+        breedErrorMessage.observeForever { }
+        groupErrorMessage.observeForever { }
+        lactationErrorMessage.observeForever { }
+        parentList.observeForever { }
     }
 
     @Test
@@ -153,69 +156,73 @@ class AddEditCattleViewModelTest {
      * Save is called but tag number contains string which is invalid.
      */
     @Test
-    fun saveCalledByProvidingInvalidTagNumberContainsString_showMessage() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun saveCalledByProvidingInvalidTagNumberContainsString_showMessage() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        // Set invalid tag number which contains String only.
-        viewModel.tagNumber.postValue("contains_string")
+            // Set invalid tag number which contains String only.
+            viewModel.tagNumber.postValue("contains_string")
 
-        // Call save
-        viewModel.save()
+            // Call save
+            viewModel.save()
 
-        val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
-        assertNotNull(showMessage?.getContentIfNotHandled())
-    }
+            val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
+            assertNotNull(showMessage?.getContentIfNotHandled())
+        }
 
     /**
      * Save is called but tag number contains string and digit combination which is invalid.
      */
     @Test
-    fun saveCalledByProvidingInvalidTagNumberContainsStringAndDigits_showMessage() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun saveCalledByProvidingInvalidTagNumberContainsStringAndDigits_showMessage() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        // Set invalid tag number which contains String and digit.
-        viewModel.tagNumber.postValue("62187368String")
+            // Set invalid tag number which contains String and digit.
+            viewModel.tagNumber.postValue("62187368String")
 
-        // Call save
-        viewModel.save()
+            // Call save
+            viewModel.save()
 
-        val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
-        assertNotNull(showMessage?.getContentIfNotHandled())
-    }
+            val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
+            assertNotNull(showMessage?.getContentIfNotHandled())
+        }
 
     /**
      * Save is called but tag number contains string which is invalid.
      */
     @Test
-    fun saveCalledByProvidingInvalidTagNumberLengthExceed_showMessage() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun saveCalledByProvidingInvalidTagNumberLengthExceed_showMessage() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        // Set invalid tag number which contains digit but exceeds length.
-        viewModel.tagNumber.postValue("12345678901234567890")
+            // Set invalid tag number which contains digit but exceeds length.
+            viewModel.tagNumber.postValue("12345678901234567890")
 
-        // Call save
-        viewModel.save()
+            // Call save
+            viewModel.save()
 
-        val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
-        assertNotNull(showMessage?.getContentIfNotHandled())
-    }
+            val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
+            assertNotNull(showMessage?.getContentIfNotHandled())
+        }
 
     /**
      * Save is called but tag number but cattle already exist with same tag number which is invalid.
      */
     @Test
-    fun saveCalledByProvidingInvalidTagNumberCattleAlreadyExist_showMessage() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun saveCalledByProvidingInvalidTagNumberCattleAlreadyExist_showMessage() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        // Set invalid tag number which contains existing cattle tag number.
-        viewModel.tagNumber.postValue("1")
+            // Set invalid tag number which contains existing cattle tag number.
+            viewModel.tagNumber.postValue("1")
 
-        // Call save
-        viewModel.save()
+            // Call save
+            viewModel.save()
 
-        val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
-        assertNotNull(showMessage?.getContentIfNotHandled())
-    }
+            val showMessage = LiveDataTestUtil.getValue(viewModel.showMessage)
+            assertNotNull(showMessage?.getContentIfNotHandled())
+        }
 
     @Test
     fun tagNumberIsValid_setTagNumberErrorMessageIsValid() = coroutineRule.runBlockingTest {
@@ -229,26 +236,28 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun tagNumberIsInvalidContainsString_setTagNumberErrorMessage() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun tagNumberIsInvalidContainsString_setTagNumberErrorMessage() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        // Invalid tag number
-        viewModel.tagNumber.postValue("some_string")
+            // Invalid tag number
+            viewModel.tagNumber.postValue("some_string")
 
-        val tagNumberErrorMessage = LiveDataTestUtil.getValue(viewModel.tagNumberErrorMessage)
-        assertNotEquals(VALID_FIELD, tagNumberErrorMessage)
-    }
+            val tagNumberErrorMessage = LiveDataTestUtil.getValue(viewModel.tagNumberErrorMessage)
+            assertNotEquals(VALID_FIELD, tagNumberErrorMessage)
+        }
 
     @Test
-    fun tagNumberIsInvalidContainsDigitAndString_setTagNumberErrorMessage() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun tagNumberIsInvalidContainsDigitAndString_setTagNumberErrorMessage() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        // Invalid tag number
-        viewModel.tagNumber.postValue("21398st87ring")
+            // Invalid tag number
+            viewModel.tagNumber.postValue("21398st87ring")
 
-        val tagNumberErrorMessage = LiveDataTestUtil.getValue(viewModel.tagNumberErrorMessage)
-        assertNotEquals(VALID_FIELD, tagNumberErrorMessage)
-    }
+            val tagNumberErrorMessage = LiveDataTestUtil.getValue(viewModel.tagNumberErrorMessage)
+            assertNotEquals(VALID_FIELD, tagNumberErrorMessage)
+        }
 
     @Test
     fun tagNumberIsInValidLengthExceed_setTagNumberErrorMessage() = coroutineRule.runBlockingTest {
@@ -262,17 +271,18 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun tagNumberIsNotValidCattleAlreadyExist_setTagNumberErrorMessage() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun tagNumberIsNotValidCattleAlreadyExist_setTagNumberErrorMessage() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        val alreadyExistTagNumber = TestData.cattle1.tagNumber
+            val alreadyExistTagNumber = TestData.cattle1.tagNumber
 
-        // Invalid tag number. This cattle already exist.
-        viewModel.tagNumber.postValue(alreadyExistTagNumber.toString())
+            // Invalid tag number. This cattle already exist.
+            viewModel.tagNumber.postValue(alreadyExistTagNumber.toString())
 
-        val tagNumberErrorMessage = LiveDataTestUtil.getValue(viewModel.tagNumberErrorMessage)
-        assertNotEquals(VALID_FIELD, tagNumberErrorMessage)
-    }
+            val tagNumberErrorMessage = LiveDataTestUtil.getValue(viewModel.tagNumberErrorMessage)
+            assertNotEquals(VALID_FIELD, tagNumberErrorMessage)
+        }
 
     @Test
     fun allFieldsValid_callAddCattleAndNavigateUp() = coroutineRule.runBlockingTest {
@@ -347,28 +357,30 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun pickParentIsCalledAndParentIsAvailable_selectingParentIsTrue() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun pickParentIsCalledAndParentIsAvailable_selectingParentIsTrue() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        val cattle = TestData.cattle2
+            val cattle = TestData.cattle2
 
-        viewModel.setCattle(cattle.id)
+            viewModel.setCattle(cattle.id)
 
-        viewModel.pickParent()
+            viewModel.pickParent()
 
-        val selectingParent = LiveDataTestUtil.getValue(viewModel.selectingParent)!!
-        assertTrue(selectingParent)
-    }
+            val selectingParent = LiveDataTestUtil.getValue(viewModel.selectingParent)!!
+            assertTrue(selectingParent)
+        }
 
     @Test
-    fun pickParentIsCalledAndTagNumberNotAvailable_selectingParentIsFalse() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun pickParentIsCalledAndTagNumberNotAvailable_selectingParentIsFalse() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        viewModel.pickParent()
+            viewModel.pickParent()
 
-        val selectingParent = LiveDataTestUtil.getValue(viewModel.selectingParent)!!
-        assertFalse(selectingParent)
-    }
+            val selectingParent = LiveDataTestUtil.getValue(viewModel.selectingParent)!!
+            assertFalse(selectingParent)
+        }
 
     @Test
     fun pickParentIsCalledAndTagNumberNotAvailable_showMessage() = coroutineRule.runBlockingTest {
@@ -535,18 +547,20 @@ class AddEditCattleViewModelTest {
     }
 
     @Test
-    fun backPressedAndAllFieldsNotEmpty_showBackConfirmationDialog() = coroutineRule.runBlockingTest {
-        val viewModel = createAddEditCattleViewModel()
+    fun backPressedAndAllFieldsNotEmpty_showBackConfirmationDialog() =
+        coroutineRule.runBlockingTest {
+            val viewModel = createAddEditCattleViewModel()
 
-        // Set tag number
-        viewModel.tagNumber.value = "1"
+            // Set tag number
+            viewModel.tagNumber.value = "1"
 
-        // Back pressed
-        viewModel.onBackPressed()
+            // Back pressed
+            viewModel.onBackPressed()
 
-        val showBackConfirmationDialog = LiveDataTestUtil.getValue(viewModel.showBackConfirmationDialog)
-        assertThat(Unit, isEqualTo(showBackConfirmationDialog?.getContentIfNotHandled()))
-    }
+            val showBackConfirmationDialog =
+                LiveDataTestUtil.getValue(viewModel.showBackConfirmationDialog)
+            assertThat(Unit, isEqualTo(showBackConfirmationDialog?.getContentIfNotHandled()))
+        }
 
     @Test
     fun backPressedIsConfirmed_navigateUp() = coroutineRule.runBlockingTest {
